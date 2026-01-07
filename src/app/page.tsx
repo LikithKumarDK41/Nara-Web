@@ -228,7 +228,7 @@ function TextHeroSlider() {
   const slide = HERO_SLIDES[current];
 
   return (
-    <section className="relative w-full h-[300px] md:h-[350px] flex flex-col items-center justify-center text-center overflow-hidden z-0">
+    <section className="relative w-full h-[400px] flex flex-col items-center justify-center text-center overflow-hidden z-0">
       <div className="relative z-10 max-w-4xl px-4 space-y-6">
 
         {/* Animated Text Content */}

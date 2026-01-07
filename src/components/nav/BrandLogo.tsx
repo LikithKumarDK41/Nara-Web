@@ -24,7 +24,7 @@ export default function BrandLogo({
       <div
         className="
           relative flex items-center justify-center
-          h-11 w-11 rounded-full
+          h-11 w-11 rounded-xl
           bg-gradient-to-br from-teal-500 via-cyan-500 to-emerald-400
           shadow-[0_0_14px_rgba(20,184,166,0.45)]
         "
@@ -32,10 +32,11 @@ export default function BrandLogo({
         {/* Inner circle → white in light, black in dark */}
         <div
           className="
-            h-10 w-10 rounded-full
+            h-10 w-10 rounded-[10px]
             bg-white dark:bg-black
             flex items-center justify-center
             transition-colors
+            p-1
           "
         >
           <Image
@@ -44,7 +45,7 @@ export default function BrandLogo({
             width={imgSize}
             height={imgSize}
             priority
-            className="object-contain"
+            className="object-contain rounded-[8px]"
           />
         </div>
       </div>

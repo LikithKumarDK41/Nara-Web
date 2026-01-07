@@ -8,9 +8,9 @@ export function FullScreenLoader() {
         className="
           h-12 w-12 animate-spin rounded-full
           border-4 border-transparent
-          border-t-orange-500
-          border-r-amber-500
-          border-b-yellow-400
+          border-t-teal-500
+          border-r-cyan-400
+          border-b-emerald-400
         "
       />
     </div>
