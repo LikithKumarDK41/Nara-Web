@@ -125,7 +125,7 @@ export default function ToursDashboardPage() {
             <div className="flex items-center gap-3 mb-5 px-1 border-b border-dashed border-teal-500/30 pb-2">
               <Compass className="h-5 w-5 text-teal-500" />
               <h2 className="text-xl font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100">
-                EXPLORE CATEGORIES
+                {t("home.explore_categories")}
               </h2>
             </div>
 
@@ -191,31 +191,32 @@ export default function ToursDashboardPage() {
 /* =======================================================================
    HERO TEXT SLIDER COMPONENT (No Images, Typography Focused)
 ======================================================================= */
-const HERO_SLIDES = [
-  {
-    title: "GOSE CITY",
-    subtitle: "Experience the Ancient Heart of Japan",
-    description: "Walk the paths of emperors and discover the birthplace of Japanese culture."
-  },
-  {
-    title: "SACRED PEAKS",
-    subtitle: "Mt. Kongo & Mt. Katsuragi",
-    description: "Breathtaking views and spiritual trails that connect heaven and earth."
-  },
-  {
-    title: "HIDDEN GEMS",
-    subtitle: "Temples, Shrines & Old Streets",
-    description: "Explore the untouched beauty of historic Gose, away from the crowds."
-  },
-  {
-    title: "LOCAL FLAVORS",
-    subtitle: "Traditional Medicine & Cuisine",
-    description: "Savor the rich heritage of medicinal herbs and authentic local gastronomy."
-  }
-];
-
 function TextHeroSlider() {
+  const { t } = useLocale();
   const [current, setCurrent] = useState(0);
+
+  const HERO_SLIDES = [
+    {
+      title: t("home.hero.slides.0.title"),
+      subtitle: t("home.hero.slides.0.subtitle"),
+      description: t("home.hero.slides.0.description")
+    },
+    {
+      title: t("home.hero.slides.1.title"),
+      subtitle: t("home.hero.slides.1.subtitle"),
+      description: t("home.hero.slides.1.description")
+    },
+    {
+      title: t("home.hero.slides.2.title"),
+      subtitle: t("home.hero.slides.2.subtitle"),
+      description: t("home.hero.slides.2.description")
+    },
+    {
+      title: t("home.hero.slides.3.title"),
+      subtitle: t("home.hero.slides.3.subtitle"),
+      description: t("home.hero.slides.3.description")
+    }
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -292,7 +293,7 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
         <div className="absolute top-5 left-5 z-20">
           <div className="px-4 py-1.5 rounded-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5 shadow-sm border border-teal-100 dark:border-teal-900/50">
             <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500" />
-            <span className="tracking-wide">FEATURED</span>
+            <span className="tracking-wide uppercase">{t("actions.featured")}</span>
           </div>
         </div>
 
@@ -317,7 +318,7 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
 
         <div className="flex items-center justify-between pt-6 mt-auto">
           <span className="text-xs font-bold text-teal-600/70 dark:text-teal-400/70 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-            Explore Link
+            {t("home.explore_link")}
           </span>
           <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-teal-500 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
             <ArrowRight className="w-5 h-5 -ml-0.5" />
@@ -331,6 +332,7 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
 function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "secondary" }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { t } = useLocale();
 
   const handleShortcutClick = (shortcut: any) => {
     try {
@@ -414,7 +416,7 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
                   {item.title}
                 </span>
                 <span className="text-[10px] font-bold tracking-widest text-slate-400 dark:text-teal-500/60 uppercase group-hover:text-teal-500 dark:group-hover:text-teal-400 mt-1 transition-colors">
-                  Open
+                  {t("home.open")}
                 </span>
               </div>
             </div>

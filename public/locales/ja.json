@@ -703,5 +703,34 @@
   "station": "駅",
   "time": {
     "min": "分"
+  },
+  "home": {
+    "explore_categories": "カテゴリーを探す",
+    "explore_link": "詳細を見る",
+    "open": "開く",
+    "hero": {
+      "slides": [
+        {
+          "title": "御所市",
+          "subtitle": "日本の心のふるさとを体験",
+          "description": "天皇ゆかりの道を歩き、日本文化発祥の地を巡る。"
+        },
+        {
+          "title": "聖なる峰",
+          "subtitle": "金剛山・葛城山",
+          "description": "天と地をつなぐ息をのむような絶景と祈りの道。"
+        },
+        {
+          "title": "隠れた名所",
+          "subtitle": "寺社仏閣・古い街並み",
+          "description": "人混みを離れ、歴史ある御所のありのままの美しさを探索。"
+        },
+        {
+          "title": "地元の味",
+          "subtitle": "伝統薬・郷土料理",
+          "description": "薬草の豊かな伝統と本場の郷土料理を味わう。"
+        }
+      ]
+    }
   }
 }

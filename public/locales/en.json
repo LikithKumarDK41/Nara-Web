@@ -703,5 +703,34 @@
   "station": "Station",
   "time": {
     "min": "min"
+  },
+  "home": {
+    "explore_categories": "EXPLORE CATEGORIES",
+    "explore_link": "Explore Link",
+    "open": "Open",
+    "hero": {
+      "slides": [
+        {
+          "title": "GOSE CITY",
+          "subtitle": "Experience the Ancient Heart of Japan",
+          "description": "Walk the paths of emperors and discover the birthplace of Japanese culture."
+        },
+        {
+          "title": "SACRED PEAKS",
+          "subtitle": "Mt. Kongo & Mt. Katsuragi",
+          "description": "Breathtaking views and spiritual trails that connect heaven and earth."
+        },
+        {
+          "title": "HIDDEN GEMS",
+          "subtitle": "Temples, Shrines & Old Streets",
+          "description": "Explore the untouched beauty of historic Gose, away from the crowds."
+        },
+        {
+          "title": "LOCAL FLAVORS",
+          "subtitle": "Traditional Medicine & Cuisine",
+          "description": "Savor the rich heritage of medicinal herbs and authentic local gastronomy."
+        }
+      ]
+    }
   }
 }
