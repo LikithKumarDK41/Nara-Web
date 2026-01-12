@@ -31,10 +31,32 @@ export default function LanguageToggle() {
           ? t("actions.switchToJapanese")
           : t("actions.switchToEnglish")
       }
-      className="flex items-center justify-center w-full h-full cursor-pointer focus:outline-none"
+      className="
+        relative
+        h-9 w-9
+        flex items-center justify-center
+        rounded-full
+        border border-teal-500/40
+        bg-black/80
+        backdrop-blur-md
+        shadow
+        cursor-pointer
+        transition-all
+
+         /* 🌞 Light mode */
+          bg-white
+          border border-teal-400/40
+          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
+
+
+          /* 🌙 Dark mode */
+          dark:bg-black/80
+          dark:border-teal-400/40
+          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+      "
     >
       {/* 🌐 Icon */}
-      <Languages className="h-5 w-5 text-current" />
+      <Languages className="h-4 w-4 text-teal-600 dark:text-teal-300" />
 
       {/* 🔖 TOP badge (shows NEXT language) */}
       {/* <span

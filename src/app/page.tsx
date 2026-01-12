@@ -185,40 +185,67 @@ export default function ToursDashboardPage() {
               <button
                 onClick={() => scrollAbout("left")}
                 className="
-          hidden md:flex
-          absolute left-0 top-1/2 -translate-y-1/2
-          z-10
-          w-9 h-9 rounded-full
-          bg-black/50 backdrop-blur
-          border border-white/10
-          items-center justify-center
-          text-white/70 hover:text-teal-400
-          hover:border-teal-400/60
-          transition
-        "
+    hidden md:flex
+    absolute
+    left-[-18px]
+    top-[72px]
+    z-20
+
+    w-10 h-10
+    rounded-2xl
+
+    bg-white/80 dark:bg-[#0f1115]/80
+    backdrop-blur
+
+    border border-slate-200 dark:border-white/10
+    shadow-lg
+
+    items-center justify-center
+    text-slate-600 dark:text-slate-300
+
+    hover:text-teal-500
+    hover:border-teal-400/50
+    hover:shadow-teal-500/20
+
+    transition-all duration-300
+  "
                 aria-label="Scroll left"
               >
-                ‹
+                <ChevronLeft className="w-5 h-5" />
               </button>
+
 
               {/* RIGHT ARROW (desktop only) */}
               <button
                 onClick={() => scrollAbout("right")}
                 className="
-          hidden md:flex
-          absolute right-0 top-1/2 -translate-y-1/2
-          z-10
-          w-9 h-9 rounded-full
-          bg-black/50 backdrop-blur
-          border border-white/10
-          items-center justify-center
-          text-white/70 hover:text-teal-400
-          hover:border-teal-400/60
-          transition
-        "
+    hidden md:flex
+    absolute
+    right-[-18px]
+    top-[72px]
+    z-20
+
+    w-10 h-10
+    rounded-2xl
+
+    bg-white/80 dark:bg-[#0f1115]/80
+    backdrop-blur
+
+    border border-slate-200 dark:border-white/10
+    shadow-lg
+
+    items-center justify-center
+    text-slate-600 dark:text-slate-300
+
+    hover:text-teal-500
+    hover:border-teal-400/50
+    hover:shadow-teal-500/20
+
+    transition-all duration-300
+  "
                 aria-label="Scroll right"
               >
-                ›
+                <ChevronRight className="w-5 h-5" />
               </button>
 
               {/* ===== Card Row ===== */}
@@ -367,77 +394,89 @@ function TextHeroSlider() {
         sm:min-h-[300px]
         md:min-h-[380px]
         lg:min-h-[420px]
-        flex items-center justify-center
+        flex items-center
       "
     >
-      {/* Bottom fade to clearly END hero */}
-      <div className="absolute bottom-0 left-0 w-full h-24 pointer-events-none" />
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" />
 
-      {/* ================= TEXT CONTENT ================= */}
-      <div className="relative z-10 w-full text-center px-4">
-        {/* Move text slightly UP for visual balance */}
-        <div className="-translate-y-6 sm:-translate-y-8 md:-translate-y-10">
-          <div className="mx-auto max-w-3xl space-y-3 sm:space-y-4">
+      {/* ================= TEXT ================= */}
+      <div className="relative z-10 w-full px-6 md:px-12">
 
-            {/* TITLE */}
-            <h1
-              key={current}
-              className="
-                font-black tracking-tight animate-slideUp
-                text-[clamp(1.8rem,6.5vw,3.5rem)]
-                sm:text-[clamp(2.4rem,6vw,4.5rem)]
-                md:text-[clamp(3rem,6vw,6rem)]
-                leading-tight
-                text-slate-900 dark:text-white
-              "
-            >
-              {slide.title}
-            </h1>
-
-            {/* SUBTITLE + DESCRIPTION */}
-            <div
-              key={`${current}-sub`}
-              className="space-y-1.5 sm:space-y-2 animate-slideUp"
-              style={{ animationDelay: "150ms" }}
-            >
-              <p className="text-[11px] sm:text-sm uppercase tracking-widest font-semibold text-teal-600 dark:text-teal-400">
-                {slide.subtitle}
-              </p>
-
-              <p className="mx-auto max-w-sm text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {slide.description}
-              </p>
-            </div>
+        {/* ⬆ Intentional upward positioning */}
+        <div
+          key={current}
+          className="
+    max-w-4xl
+    mx-auto
+    space-y-5
+    animate-focus-rise
+    text-center
+    -translate-y-6 sm:-translate-y-10 md:-translate-y-14
+  "
+        >
+          {/* Accent line – centered */}
+          <div className="flex justify-center">
+            <span className="h-[2px] w-10 bg-teal-500 rounded-full" />
           </div>
+
+          {/* Title */}
+          <h1
+            className="
+      font-extrabold
+      tracking-tight
+      leading-[1.05]
+      text-slate-900 dark:text-white
+      text-[clamp(2rem,6vw,3.8rem)]
+      md:text-[clamp(3rem,5vw,5rem)]
+    "
+          >
+            {slide.title}
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="
+      uppercase tracking-[0.3em]
+      text-[11px]
+      font-semibold
+      text-teal-600 dark:text-teal-400
+    "
+          >
+            {slide.subtitle}
+          </p>
+
+          {/* Description */}
+          <p
+            className="
+      max-w-md
+      mx-auto
+      text-sm md:text-base
+      leading-relaxed
+      text-slate-600 dark:text-slate-300
+    "
+          >
+            {slide.description}
+          </p>
         </div>
       </div>
 
-      {/* ================= DOTS (RARE ANIMATION) ================= */}
-      <div
-        className="
-          absolute bottom-3 sm:bottom-4 md:bottom-6
-          left-1/2 -translate-x-1/2
-          z-20 flex items-center gap-3
-        "
-      >
+      {/* ================= DOTS ================= */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
         {HERO_SLIDES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
             aria-label={`Go to slide ${idx + 1}`}
             className={`
-              relative overflow-hidden rounded-full
-              transition-all duration-500 ease-out
+              transition-all duration-500
               ${idx === current
-                ? "w-8 h-1.5 bg-teal-400"
-                : "w-1.5 h-1.5 bg-slate-500"
+                ? "w-7 h-1.5 bg-teal-500"
+                : "w-1.5 h-1.5 bg-slate-400"
               }
+              rounded-full
             `}
-          >
-            {idx === current && (
-              <span className="absolute inset-0 animate-breathe bg-teal-300/60" />
-            )}
-          </button>
+          />
         ))}
       </div>
     </section>

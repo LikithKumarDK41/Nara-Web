@@ -21,7 +21,24 @@ export default function UserProfileDropdown({
       <button
         onClick={onViewProfile}
         aria-label="User profile"
-        className="flex items-center justify-center w-full h-full cursor-pointer focus:outline-none"
+        className="
+          h-9 w-9
+          flex items-center justify-center
+          rounded-full
+          backdrop-blur-md
+          transition-all duration-300
+          cursor-pointer
+
+          /* 🌞 Light mode */
+          bg-white
+          border border-teal-400/40
+          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
+
+          /* 🌙 Dark mode */
+          dark:bg-black/80
+          dark:border-teal-400/40
+          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+        "
       >
         {avatar ? (
           <img
@@ -30,7 +47,7 @@ export default function UserProfileDropdown({
             className="h-full w-full rounded-full object-cover"
           />
         ) : (
-          <User className="h-5 w-5 text-current" />
+          <User className="h-4 w-4 text-teal-600 dark:text-teal-300" />
         )}
       </button>
 

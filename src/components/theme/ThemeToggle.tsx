@@ -58,9 +58,24 @@ export default function ThemeToggle() {
           aria-label={t("actions.theme.change")}
           title={t("actions.theme.change")}
           className="
-            flex items-center justify-center w-full h-full
-            cursor-pointer focus:outline-none
+            h-9 w-9
+            flex items-center justify-center
+            rounded-full
             transition-all duration-300
+            cursor-pointer
+            backdrop-blur-md
+
+            /* 🌞 Light mode */
+            bg-white
+            border border-teal-400/40
+            text-teal-600
+            hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
+
+            /* 🌙 Dark mode */
+            dark:bg-black/80
+            dark:border-teal-400/40
+            dark:text-teal-300
+            dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
           "
         >
           {/* Sun */}
@@ -92,19 +107,19 @@ export default function ThemeToggle() {
           backdrop-blur-md
 
           /* Light */
-          bg-white/95
-          border border-teal-500/20
-          text-slate-700
+          bg-white
+          border border-teal-400/30
+          text-gray-800
 
           /* Dark */
-          dark:bg-[#0f1214]/95
-          dark:border-teal-400/20
-          dark:text-slate-200
+          dark:bg-black/90
+          dark:border-teal-400/30
+          dark:text-white
         "
       >
         <DropdownMenuItem
           onClick={() => onPick("light")}
-          className="cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-600 dark:hover:text-teal-400 focus:bg-teal-50 dark:focus:bg-teal-900/30"
+          className="cursor-pointer hover:bg-teal-500/10"
         >
           <Sun className="mr-2 h-4 w-4 text-teal-500" />
           {t("actions.theme.light")}
@@ -112,7 +127,7 @@ export default function ThemeToggle() {
 
         <DropdownMenuItem
           onClick={() => onPick("dark")}
-          className="cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-600 dark:hover:text-teal-400 focus:bg-teal-50 dark:focus:bg-teal-900/30"
+          className="cursor-pointer hover:bg-teal-500/10"
         >
           <Moon className="mr-2 h-4 w-4 text-teal-500" />
           {t("actions.theme.dark")}
@@ -120,7 +135,7 @@ export default function ThemeToggle() {
 
         <DropdownMenuItem
           onClick={() => onPick("system")}
-          className="cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-600 dark:hover:text-teal-400 focus:bg-teal-50 dark:focus:bg-teal-900/30"
+          className="cursor-pointer hover:bg-teal-500/10"
         >
           <Monitor className="mr-2 h-4 w-4 text-teal-500" />
           {t("actions.theme.system")}

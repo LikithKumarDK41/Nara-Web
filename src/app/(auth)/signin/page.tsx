@@ -542,7 +542,7 @@ export default function SignInPage() {
           className="
     w-full rounded-2xl
     bg-inherit
-    border border-amber-500/20 dark:border-amber-400/20
+    border border-teal-500/20 dark:border-teal-400/20
     shadow-xl
   "
         >
@@ -566,9 +566,9 @@ export default function SignInPage() {
 
               <p className="text-lg font-semibold
                 bg-gradient-to-r
-      from-amber-400
-      via-amber-500
-      to-amber-600
+      from-teal-400
+      via-teal-500
+      to-teal-600
                 bg-clip-text text-transparent"
               >
                 {t("auth.welcome_title")}
@@ -586,9 +586,9 @@ export default function SignInPage() {
               <TabsList
                 className="
       relative mx-auto flex w-fit rounded-full p-1
-      bg-amber-50/70 dark:bg-amber-900/20
+      bg-teal-50/70 dark:bg-teal-900/20
       backdrop-blur-md
-      border border-amber-500/20
+      border border-teal-500/20
       shadow-inner gap-1
     "
               >
@@ -597,12 +597,12 @@ export default function SignInPage() {
                   className="
         cursor-pointer px-6 py-2 rounded-full
         transition-all duration-300
-        text-amber-700/60 dark:text-amber-300/60
+        text-teal-700/60 dark:text-teal-300/60
 
         data-[state=active]:bg-gradient-to-r
-        data-[state=active]:from-amber-400
-        data-[state=active]:via-amber-500
-        data-[state=active]:to-amber-600
+        data-[state=active]:from-teal-400
+        data-[state=active]:via-teal-500
+        data-[state=active]:to-teal-600
         data-[state=active]:text-white
       "
                 >
@@ -614,12 +614,12 @@ export default function SignInPage() {
                   className="
         cursor-pointer px-6 py-2 rounded-full
         transition-all duration-300
-        text-amber-700/60 dark:text-amber-300/60
+        text-teal-700/60 dark:text-teal-300/60
 
         data-[state=active]:bg-gradient-to-r
-        data-[state=active]:from-amber-400
-        data-[state=active]:via-amber-500
-        data-[state=active]:to-amber-600
+        data-[state=active]:from-teal-400
+        data-[state=active]:via-teal-500
+        data-[state=active]:to-teal-600
         data-[state=active]:text-white
       "
                 >
@@ -633,7 +633,7 @@ export default function SignInPage() {
 
                   <div className="grid gap-2">
                     {/* Label + Swap */}
-                    <Label className="flex items-center justify-between text-amber-800 dark:text-amber-200">
+                    <Label className="flex items-center justify-between text-teal-800 dark:text-teal-200">
                       <span>
                         {loginType === 'email'
                           ? t("auth.label_email")
@@ -667,9 +667,9 @@ export default function SignInPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={loading}
                         className="
-        focus-visible:ring-amber-500
+        focus-visible:ring-teal-500
         focus-visible:border-0
-        border-amber-300 dark:border-amber-600
+        border-teal-300 dark:border-teal-600
       "
                       />
                     ) : (
@@ -680,8 +680,8 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
             w-[90px]
-            border-amber-300 dark:border-amber-600
-            focus-visible:ring-amber-500
+            border-teal-300 dark:border-teal-600
+            focus-visible:ring-teal-500
             focus-visible:border-0
             rounded-r-none
           "
@@ -714,9 +714,9 @@ export default function SignInPage() {
           flex-1
           -ml-px
           rounded-l-none
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                       </div>
@@ -759,7 +759,7 @@ export default function SignInPage() {
                     <div className="grid gap-2">
                       <Label
                         htmlFor="otp"
-                        className="text-amber-800 dark:text-amber-200"
+                        className="text-teal-800 dark:text-teal-200"
                       >
                         {t("auth.label_otp")}
                       </Label>
@@ -773,9 +773,9 @@ export default function SignInPage() {
                         onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                         disabled={loading}
                         className="
-        focus-visible:ring-amber-500
+        focus-visible:ring-teal-500
         focus-visible:border-0
-        border-amber-300 dark:border-amber-600
+        border-teal-300 dark:border-teal-600
       "
                       />
 
@@ -793,7 +793,7 @@ export default function SignInPage() {
                     className="
     w-full cursor-pointer
     bg-gradient-to-r
-    from-amber-400 via-amber-500 to-amber-600
+    from-teal-400 via-teal-500 to-teal-600
     text-white
     hover:opacity-95
   "
@@ -809,11 +809,11 @@ export default function SignInPage() {
 
                   {/* Divider */}
                   <div className="flex items-center gap-3 pt-6">
-                    <Separator className="flex-1 bg-amber-500/20" />
-                    <span className="text-sm uppercase tracking-wide text-amber-700/70 dark:text-amber-300/70">
+                    <Separator className="flex-1 bg-teal-500/20" />
+                    <span className="text-sm uppercase tracking-wide text-teal-700/70 dark:text-teal-300/70">
                       {t("auth.label_or_continue_with")}
                     </span>
-                    <Separator className="flex-1 bg-amber-500/20" />
+                    <Separator className="flex-1 bg-teal-500/20" />
                   </div>
 
                   {/* Social login */}
@@ -822,11 +822,11 @@ export default function SignInPage() {
                       variant="outline"
                       className="
           w-full h-12 cursor-pointer
-          border-amber-500/30
-          hover:border-amber-500
-          hover:bg-amber-500/10
-          hover:text-amber-800 dark:hover:text-amber-200
-          text-amber-800 dark:text-amber-200
+          border-teal-500/30
+          hover:border-teal-500
+          hover:bg-teal-500/10
+          hover:text-teal-800 dark:hover:text-teal-200
+          text-teal-800 dark:text-teal-200
         "
                       type="button"
                       onClick={() => handleSocial('google')}
@@ -840,10 +840,10 @@ export default function SignInPage() {
                       variant="outline"
                       className="
           w-full h-12 cursor-pointer
-          border-amber-500/30
-          hover:border-amber-500
-          hover:bg-amber-500/10
-          text-amber-800 dark:text-amber-200
+          border-teal-500/30
+          hover:border-teal-500
+          hover:bg-teal-500/10
+          text-teal-800 dark:text-teal-200
         "
                       type="button"
                       onClick={() => handleSocial('facebook')}
@@ -867,7 +867,7 @@ export default function SignInPage() {
                     <>
                       <div className="grid gap-2">
                         <Label htmlFor="emailReg"
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
                         >
                           {t("auth.label_email")}
                         </Label>
@@ -879,9 +879,9 @@ export default function SignInPage() {
                           onChange={(e) => setEmailReg(e.target.value)}
                           disabled={loading}
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                       </div>
@@ -889,7 +889,7 @@ export default function SignInPage() {
                       <Button type="submit" disabled={loading} className="
         w-full cursor-pointer
         bg-gradient-to-r
-        from-amber-400 via-amber-500 to-amber-600
+        from-teal-400 via-teal-500 to-teal-600
         text-white
         hover:opacity-95
       "
@@ -905,20 +905,20 @@ export default function SignInPage() {
                     <>
                       <div className="grid gap-2">
                         <Label
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
                         >{t("auth.label_email")}</Label>
                         <Input type="email" value={emailReg} disabled
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                       </div>
 
                       <div className="grid gap-2">
                         <Label htmlFor="otp"
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
                         >{t("auth.label_otp")}</Label>
                         <Input
                           id="otp"
@@ -929,9 +929,9 @@ export default function SignInPage() {
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                           disabled={loading}
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                         {otpErrors.otp && (
@@ -943,7 +943,7 @@ export default function SignInPage() {
                         className="
         w-full cursor-pointer
         bg-gradient-to-r
-        from-amber-400 via-amber-500 to-amber-600
+        from-teal-400 via-teal-500 to-teal-600
         text-white
         hover:opacity-95
       "
@@ -958,14 +958,14 @@ export default function SignInPage() {
                     <>
                       <div className="grid gap-2">
                         <Label
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_email")}</Label>
                         <Input type="email" value={emailReg} disabled
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                       </div>
@@ -973,7 +973,7 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label htmlFor="name"
 
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
                         >{t("auth.label_name")} *</Label>
                         <Input
                           id="name"
@@ -981,9 +981,9 @@ export default function SignInPage() {
                           onChange={(e) => setName(e.target.value)}
                           disabled={loading}
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                         {regErrors.name && <p className="text-xs text-red-600">{regErrors.name}</p>}
@@ -991,7 +991,7 @@ export default function SignInPage() {
 
                       <div className="grid gap-2">
                         <Label
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_gender")} *</Label>
                         <Select
@@ -1002,9 +1002,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                           >
@@ -1013,7 +1013,7 @@ export default function SignInPage() {
 
                           <SelectContent
                             className="
-      border border-amber-500/20
+      border border-teal-500/20
       bg-background
       shadow-lg
     "
@@ -1028,7 +1028,7 @@ export default function SignInPage() {
 
                       <div className="grid gap-2">
                         <Label
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_age_group")} *</Label>
                         <Select
@@ -1039,9 +1039,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                           >
@@ -1049,7 +1049,7 @@ export default function SignInPage() {
                           </SelectTrigger>
                           <SelectContent
                             className="
-      border border-amber-500/20
+      border border-teal-500/20
       bg-background
       shadow-lg
     "
@@ -1067,7 +1067,7 @@ export default function SignInPage() {
 
                       <div className="grid gap-2">
                         <Label
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_country")} *</Label>
                         <Select
@@ -1078,9 +1078,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                           >
@@ -1088,7 +1088,7 @@ export default function SignInPage() {
                           </SelectTrigger>
                           <SelectContent
                             className="
-      border border-amber-500/20
+      border border-teal-500/20
       bg-background
       shadow-lg
     "
@@ -1105,7 +1105,7 @@ export default function SignInPage() {
 
                       <div className="grid gap-2">
                         <Label htmlFor="nationality"
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_nationality")} *</Label>
                         <Input
@@ -1114,9 +1114,9 @@ export default function SignInPage() {
                           onChange={(e) => setNationality(e.target.value)}
                           disabled={loading}
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                         {regErrors.nationality && <p className="text-xs text-red-600">{regErrors.nationality}</p>}
@@ -1124,7 +1124,7 @@ export default function SignInPage() {
 
                       <div className="grid gap-2">
                         <Label htmlFor="phoneNumber"
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
 
                         >{t("auth.label_phone")} *</Label>
                         <Input
@@ -1136,9 +1136,9 @@ export default function SignInPage() {
                           onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
                           disabled={loading}
                           className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
                         />
                         {regErrors.phoneNumber && <p className="text-xs text-red-600">{regErrors.phoneNumber}</p>}
@@ -1148,7 +1148,7 @@ export default function SignInPage() {
                         className="
         w-full cursor-pointer
         bg-gradient-to-r
-        from-amber-400 via-amber-500 to-amber-600
+        from-teal-400 via-teal-500 to-teal-600
         text-white
         hover:opacity-95
       "
@@ -1161,11 +1161,11 @@ export default function SignInPage() {
                   {!showSocialRegister && (
                     <>
                       <div className="flex items-center gap-3 pt-6">
-                        <Separator className="flex-1 bg-amber-500/20" />
-                        <span className="text-sm uppercase tracking-wide text-amber-700/70 dark:text-amber-300/70">
+                        <Separator className="flex-1 bg-teal-500/20" />
+                        <span className="text-sm uppercase tracking-wide text-teal-700/70 dark:text-teal-300/70">
                           {t("auth.label_or_continue_with")}
                         </span>
-                        <Separator className="flex-1 bg-amber-500/20" />
+                        <Separator className="flex-1 bg-teal-500/20" />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 pt-2">
@@ -1173,10 +1173,10 @@ export default function SignInPage() {
                           variant="outline"
                           className="
           w-full h-12 cursor-pointer
-          border-amber-500/30
-          hover:border-amber-500
-          hover:bg-amber-500/10
-          text-amber-800 dark:text-amber-200
+          border-teal-500/30
+          hover:border-teal-500
+          hover:bg-teal-500/10
+          text-teal-800 dark:text-teal-200
         "
                           type="button"
                           onClick={() => handleSocialRegister('google')}
@@ -1188,10 +1188,10 @@ export default function SignInPage() {
                           variant="outline"
                           className="
           w-full h-12 cursor-pointer
-          border-amber-500/30
-          hover:border-amber-500
-          hover:bg-amber-500/10
-          text-amber-800 dark:text-amber-200
+          border-teal-500/30
+          hover:border-teal-500
+          hover:bg-teal-500/10
+          text-teal-800 dark:text-teal-200
         "
                           type="button"
                           onClick={() => handleSocialRegister('facebook')}
@@ -1211,7 +1211,7 @@ export default function SignInPage() {
           <CardFooter
             className="
     flex flex-col gap-2 text-center text-xs
-    text-amber-800/70 dark:text-amber-200/70
+    text-teal-800/70 dark:text-teal-200/70
   "
           >
             <p>
@@ -1220,9 +1220,9 @@ export default function SignInPage() {
                 href="/privacy-policy"
                 className="
         underline underline-offset-4
-        decoration-amber-500/60
-        hover:text-amber-600
-        hover:decoration-amber-600
+        decoration-teal-500/60
+        hover:text-teal-600
+        hover:decoration-teal-600
         transition-colors
       "
                 target="_blank"

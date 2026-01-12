@@ -187,90 +187,89 @@ export default function HeaderBar({
       {/* =============================
           MOBILE MENU (FLOATING MATCHING PANEL)
       ============================== */}
-      {
-        mobileOpen && (
-          <div className="fixed inset-0 z-[9999] top-[80px] left-0 w-full flex justify-center z-[150] h-[calc(100vh-88px)] overflow-y-auto lg:hidden animate-slideDown">
-            <div className="w-full md:px-0">
-              <div className="gradient-wrapper">
-                <div className="menu-panel bg-gray-50 dark:bg-[rgba(10,10,10,0.92)]">
-                  {/* TOP ROW (Profile + Toggles) */}
-                  <div className="flex justify-end items-center gap-3 px-4 py-3 border-b border-white/10">
-                    <LanguageToggle />
-                    <ThemeToggle />
-                    <AppInfo />
-                    {isLoggedIn && (
-                      <UserProfileDropdown
-                        onViewProfile={() => setProfileOpen(true)}
-                      />
-                    )}
-                    {isLoggedIn && <HeaderLogout />}
-                    {!isLoggedIn && <HeaderLogin />}
-                  </div>
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[9999] top-[80px] left-0 w-full flex justify-center z-[150] h-[calc(100vh-88px)] overflow-y-auto lg:hidden animate-slideDown">
+          <div className="w-full md:px-0">
+            <div className="gradient-wrapper">
+              <div className="menu-panel bg-gray-50 dark:bg-[rgba(10,10,10,0.92)]">
+                {/* TOP ROW (Profile + Toggles) */}
+                <div className="flex justify-end items-center gap-3 px-4 py-3 border-b border-white/10">
+                  <LanguageToggle />
+                  <ThemeToggle />
+                  <AppInfo />
+                  {isLoggedIn && (
+                    <UserProfileDropdown
+                      onViewProfile={() => setProfileOpen(true)}
+                    />
+                  )}
+                  {isLoggedIn && <HeaderLogout />}
+                  {!isLoggedIn && <HeaderLogin />}
+                </div>
 
-                  {/* MENU ITEMS */}
-                  <div className="divide-y divide-white/10">
-                    {MOBILE_NAV_ITEMS.map((item) => {
-                      const Icon = item.icon;
+                {/* MENU ITEMS */}
+                <div className="divide-y divide-white/10">
+                  {MOBILE_NAV_ITEMS.map((item) => {
+                    const Icon = item.icon;
 
-                      // 🔐 ACTION ITEM
-                      if (item.type === "action") {
-                        return (
-                          <button
-                            key={item.action}
-                            onClick={() => {
-                              handleItemClick(item);
-                              setMobileOpen(false);
-                            }}
-                            className="
+                    // 🔐 ACTION ITEM
+                    if (item.type === "action") {
+                      return (
+                        <button
+                          key={item.action}
+                          onClick={() => {
+                            handleItemClick(item);
+                            setMobileOpen(false);
+                          }}
+                          className="
           w-full flex items-center gap-3 px-4 py-4
           text-base transition cursor-pointer
         "
-                          >
-                            <Icon className="h-5 w-5 text-black/80 dark:text-white/80" />
-                            <span className="flex-1 text-left">
-                              {t(item.labelKey)}
-                            </span>
-                          </button>
-                        );
-                      }
+                        >
+                          <Icon className="h-5 w-5 text-black/80 dark:text-white/80" />
+                          <span className="flex-1 text-left">
+                            {t(item.labelKey)}
+                          </span>
+                        </button>
+                      );
+                    }
 
-                      // 🔗 LINK ITEM (TS knows href exists here)
-                      let href = item.href;
+                    // 🔗 LINK ITEM (TS knows href exists here)
+                    let href = item.href;
 
-                      if (item.isVideo) {
-                        const theme = resolvedTheme;
-                        const params = new URLSearchParams({
-                          lang: locale,
-                          theme,
-                        });
+                    if (item.isVideo) {
+                      const theme = resolvedTheme;
+                      const params = new URLSearchParams({
+                        lang: locale,
+                        theme,
+                      });
 
-                        href = `${item.href}?${params.toString()}`;
-                      }
+                      href = `${item.href}?${params.toString()}`;
+                    }
 
-                      return (
-                        <Link
-                          key={item.href}
-                          href={href}
-                          target={item.isVideo ? "_blank" : undefined}
-                          rel={item.isVideo ? "noopener noreferrer" : undefined}
-                          onClick={() => setMobileOpen(false)}
-                          className="
+                    return (
+                      <Link
+                        key={item.href}
+                        href={href}
+                        target={item.isVideo ? "_blank" : undefined}
+                        rel={item.isVideo ? "noopener noreferrer" : undefined}
+                        onClick={() => setMobileOpen(false)}
+                        className="
         w-full flex items-center gap-3 px-4 py-4
         text-base hover:bg-black/5 dark:hover:bg-white/5 transition
       "
-                        >
-                          <Icon className="h-5 w-5 text-black/80 dark:text-white/80 shrink-0" />
-                          <span className="flex-1">{t(item.labelKey)}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
+                      >
+                        <Icon className="h-5 w-5 text-black/80 dark:text-white/80 shrink-0" />
+                        <span className="flex-1">{t(item.labelKey)}</span>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
+
 
       <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
 

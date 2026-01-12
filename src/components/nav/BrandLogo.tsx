@@ -67,7 +67,7 @@ export default function BrandLogo({
             className="
               text-[15px] font-bold tracking-wide
               bg-gradient-to-r from-teal-500 via-cyan-500 to-emerald-400
-              bg-clip-text text-transparent
+              bg-clip-text text-transparent text-left
             "
           >
             御所市観光ナビ
