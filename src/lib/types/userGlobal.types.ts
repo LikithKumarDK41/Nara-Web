@@ -145,16 +145,11 @@ export interface GlobalState {
   loading: boolean;
   error: string | null;
   activeThemeId: string | null;
-
-  // ⭐ Save first-time location
+  activeAboutId: string | null;
   userLocation: {
     lat: number;
     lng: number;
   } | null;
-
-  // ⭐ Whether location has been fetched (success OR failed)
   locationFetched: boolean;
-
-  // ⭐ Whether the user denied location permission
   locationDenied: boolean;
 }

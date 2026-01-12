@@ -266,18 +266,18 @@ export default function ProfileModal({
                 {preview && (
                   <img
                     src={preview}
-                    className="w-32 h-32 rounded-full object-cover border border-amber-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105"
+                    className="w-32 h-32 rounded-full object-cover border border-teal-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105"
                   />
                 )}
 
                 {!preview && (
-                  <div className="w-32 h-32 rounded-full object-cover border border-amber-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105" />
+                  <div className="w-32 h-32 rounded-full object-cover border border-teal-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105" />
                 )}
                 <label
                   htmlFor="profileImage"
                   className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 
              text-white flex items-center justify-center text-xs cursor-pointer shadow-sm 
-             border border-amber-600 transition-all duration-200"
+             border border-teal-600 transition-all duration-200"
                 >
                   <Pencil className="w-4 h-4" />
                 </label>
@@ -294,7 +294,7 @@ export default function ProfileModal({
 
             {/* EMAIL */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.email")}
               </Label>
               <Input
@@ -302,16 +302,16 @@ export default function ProfileModal({
                 value={form.email}
                 disabled
                 className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
               />
             </div>
 
             {/* NAME */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.name")} *
               </Label>
               <Input
@@ -320,16 +320,16 @@ export default function ProfileModal({
                 onChange={handleChange}
                 disabled={loading}
                 className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
               />
             </div>
 
             {/* GENDER */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.gender")} *
               </Label>
               <Select
@@ -340,9 +340,9 @@ export default function ProfileModal({
                 <SelectTrigger
                   className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                 >
@@ -350,7 +350,7 @@ export default function ProfileModal({
                 </SelectTrigger>
                 <SelectContent
                   className="
-                    border border-amber-500/20
+                    border border-teal-500/20
                     bg-background
                     shadow-lg
                   "
@@ -370,7 +370,7 @@ export default function ProfileModal({
 
             {/* AGE GROUP */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.agegroup")} *
               </Label>
               <Select
@@ -381,9 +381,9 @@ export default function ProfileModal({
                 <SelectTrigger
                   className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                 >
@@ -392,7 +392,7 @@ export default function ProfileModal({
 
                 <SelectContent
                   className="
-                    border border-amber-500/20
+                    border border-teal-500/20
                     bg-background
                     shadow-lg
                   "
@@ -409,7 +409,7 @@ export default function ProfileModal({
 
             {/* COUNTRY */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.country")} *
               </Label>
               <Select
@@ -420,9 +420,9 @@ export default function ProfileModal({
                 <SelectTrigger
                   className="
       w-full
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
       focus:ring-0
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
     "
                 >
@@ -430,7 +430,7 @@ export default function ProfileModal({
                 </SelectTrigger>
                 <SelectContent
                   className="
-                 border border-amber-500/20
+                 border border-teal-500/20
                  bg-background
                  shadow-lg
                "
@@ -446,7 +446,7 @@ export default function ProfileModal({
 
             {/* NATIONALITY */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.nationality")} *
               </Label>
               <Input
@@ -455,16 +455,16 @@ export default function ProfileModal({
                 onChange={handleChange}
                 disabled={loading}
                 className="
-          focus-visible:ring-amber-500
+          focus-visible:ring-teal-500
           focus-visible:border-0
-          border-amber-300 dark:border-amber-600
+          border-teal-300 dark:border-teal-600
         "
               />
             </div>
 
             {/* PHONE NUMBER */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.phone")} *
               </Label>
 
@@ -476,9 +476,9 @@ export default function ProfileModal({
                 onChange={handlePhoneChange}
                 disabled={loading}
                 className="
-      focus-visible:ring-amber-500
+      focus-visible:ring-teal-500
       focus-visible:border-0
-      border-amber-300 dark:border-amber-600
+      border-teal-300 dark:border-teal-600
     "
               />
             </div>
@@ -486,12 +486,19 @@ export default function ProfileModal({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {/* SAVE BUTTON */}
               <Button
+                variant="outline"
                 className="
       w-full cursor-pointer
-      bg-gradient-to-r
-      from-amber-400 via-amber-500 to-amber-600
       text-white
-      hover:opacity-95
+      border-red-500/40
+      text-teal-600
+      hover:bg-teal-50
+      hover:border-red-500
+      dark:border-teal-500/30
+      dark:text-teal-400
+      dark:hover:bg-teal-900/20
+      font-medium
+      transition
     "
                 onClick={handleSave}
                 disabled={loading}
@@ -538,7 +545,7 @@ export default function ProfileModal({
 
           <div className="mt-6 flex justify-end gap-3">
             {/* Cancel */}
-            <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>
+            <Button variant="ghost" className="cursor-pointer" onClick={() => setShowDeleteConfirm(false)}>
               {t("profile.cancel")}
             </Button>
 
@@ -546,7 +553,7 @@ export default function ProfileModal({
             <Button
               className="
           bg-red-600 hover:bg-red-700
-          text-white
+          text-white cursor-pointer
         "
               onClick={handleConfirmDelete}
             >

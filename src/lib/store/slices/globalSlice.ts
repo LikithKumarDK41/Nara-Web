@@ -12,7 +12,7 @@ const initialState: GlobalState = {
   loading: false,
   error: null,
   activeThemeId: null,
-
+  activeAboutId: null,
   userLocation: null,
   locationFetched: false,
   locationDenied: false,
@@ -43,13 +43,19 @@ const globalSlice = createSlice({
       state.activeThemeId = null;
     },
 
-    // Save user location first time
+    setActiveAbout(state, action: PayloadAction<string | null>) {
+      state.activeAboutId = action.payload;
+    },
+
+    clearActiveAbout(state) {
+      state.activeAboutId = null;
+    },
+
     setUserLocation(state, action: PayloadAction<{ lat: number; lng: number }>) {
       state.userLocation = action.payload;
       state.locationFetched = true;
     },
 
-    // Live updates after permission is granted
     updateUserLocation(state, action: PayloadAction<{ lat: number; lng: number }>) {
       state.userLocation = action.payload;
     },
@@ -83,6 +89,8 @@ const globalSlice = createSlice({
 export const {
   setActiveTheme,
   clearActiveTheme,
+  setActiveAbout,
+  clearActiveAbout,
   setUserLocation,
   updateUserLocation,
   markLocationFetched,
@@ -94,6 +102,8 @@ export const selectGlobalLoading = (state: RootState) => state.global.loading;
 export const selectGlobalError = (state: RootState) => state.global.error;
 export const selectActiveThemeId = (state: RootState) =>
   state.global.activeThemeId;
+export const selectActiveAboutId = (state: RootState) =>
+  state.global.activeAboutId;
 
 export const selectUserLocation = (state: RootState) =>
   state.global.userLocation;

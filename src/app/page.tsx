@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-import { ImageIcon, ChevronLeft, ChevronRight, Search, MapPinned, ArrowRight, Star, Compass, Play, Pause, BookOpen, Layers, Route } from "lucide-react";
+import { ImageIcon, ChevronLeft, ChevronRight, Search, MapPinned, ArrowRight, Star, Compass, Play, Pause, BookOpen, Layers, Route, ArrowUpRight } from "lucide-react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
 import {
@@ -13,6 +13,7 @@ import {
   selectGlobalLoading,
   setActiveTheme,
 } from "@/lib/store/slices/globalSlice";
+import { setActiveAbout } from "@/lib/store/slices/globalSlice";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
@@ -30,6 +31,7 @@ export default function ToursDashboardPage() {
   const { t } = useLocale();
   const dispatch = useAppDispatch();
   const { show, hide } = useGlobalLoader();
+  const router = useRouter();
 
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
@@ -253,7 +255,7 @@ export default function ToursDashboardPage() {
                 ref={aboutScrollRef}
                 className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
               >
-                {abouts.slice(0, 5).map((item) => (
+                {abouts.map((item) => (
                   <div
                     key={item._id}
                     className="
@@ -269,6 +271,42 @@ export default function ToursDashboardPage() {
         cursor-pointer
       "
                   >
+
+                    {/* ===== Action Icon (Go to About) ===== */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent card click conflicts
+                        dispatch(setActiveAbout(item._id));
+                        router.push("/about");
+                      }}
+                      className="
+    absolute
+    top-3 right-3
+    z-10
+
+    w-9 h-9
+    rounded-xl
+
+    bg-white/90 dark:bg-black/70
+    backdrop-blur
+
+    border border-slate-200 dark:border-white/10
+    shadow-md
+
+    flex items-center justify-center
+
+    text-slate-600 dark:text-slate-300
+    hover:text-teal-500
+    hover:border-teal-400/50
+    hover:shadow-[0_0_12px_rgba(20,184,166,0.35)]
+
+    transition-all duration-300 cursor-pointer
+  "
+                      aria-label="Open About"
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+
                     {/* ===== Image ===== */}
                     <div className="relative h-[150px] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
                       {item.image?.secure_url && (
