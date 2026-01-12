@@ -705,7 +705,9 @@
     "min": "min"
   },
   "home": {
-    "explore_categories": "EXPLORE CATEGORIES",
+    "explore_categories": "AKofun & Heritage Category",
+    "about_nara": "About Kofun & Heritage Sites of Nara",
+    "guide_tour": "Kofun & Heritage Tours",
     "explore_link": "Explore Link",
     "open": "Open",
     "hero": {
@@ -731,6 +733,7 @@
           "description": "Savor the rich heritage of medicinal herbs and authentic local gastronomy."
         }
       ]
-    }
+    },
+    "quick_access": "Quick Access"
   }
 }

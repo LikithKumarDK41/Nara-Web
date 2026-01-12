@@ -705,7 +705,9 @@
     "min": "分"
   },
   "home": {
-    "explore_categories": "カテゴリーを探す",
+    "explore_categories": "カテゴリー",
+    "about_nara": "奈良の古墳・遺跡について",
+    "guide_tour": "古墳・遺跡ツアー",
     "explore_link": "詳細を見る",
     "open": "開く",
     "hero": {
@@ -731,6 +733,7 @@
           "description": "薬草の豊かな伝統と本場の郷土料理を味わう。"
         }
       ]
-    }
+    },
+    "quick_access": "クイックアクセス"
   }
 }

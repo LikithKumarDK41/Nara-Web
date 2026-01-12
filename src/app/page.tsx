@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-import { ImageIcon, ChevronRight, Search, MapPinned, ArrowRight, Star, Compass, Play, Pause } from "lucide-react";
+import { ImageIcon, ChevronLeft, ChevronRight, Search, MapPinned, ArrowRight, Star, Compass, Play, Pause, BookOpen, Layers, Route } from "lucide-react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
 import {
@@ -19,7 +19,9 @@ import { useGlobalLoader } from "@/providers/LoaderProvider";
 import { Button } from "@/components/ui/button";
 import { apiFetchToursVersionTwo } from "@/services/userTourService";
 import type { Tour } from "@/lib/types/userTour.types";
-import { normalizeHTML } from "@/lib/utils";
+import { normalizeHTML, stripHTML } from "@/lib/utils";
+import { apiFetchAbouts } from "@/services/userGlobalservice";
+import { About } from "@/lib/types/userGlobal.types";
 
 /* =======================================================================
    MAIN PAGE - HERO CAROUSEL & COMPACT LAYOUT
@@ -31,6 +33,11 @@ export default function ToursDashboardPage() {
 
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const [abouts, setAbouts] = useState<About[]>([]);
+
+  useEffect(() => {
+    apiFetchAbouts().then(setAbouts).catch(console.error);
+  }, []);
 
   const shortcuts = useAppSelector(selectShortcuts);
   const globalLoading = useAppSelector(selectGlobalLoading);
@@ -97,21 +104,45 @@ export default function ToursDashboardPage() {
     })
   );
 
+  const aboutScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollAbout = (dir: "left" | "right") => {
+    if (!aboutScrollRef.current) return;
+    const offset = dir === "left" ? -280 : 280;
+    aboutScrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+  };
+
   /* -------------------- Render -------------------- */
   return (
     <div className="flex flex-col w-full min-h-screen">
 
       {/* ================= HERO CAROUSEL ================= */}
-      {/* ================= HERO CAROUSEL ================= */}
       <TextHeroSlider />
+
+      {/* ================= SECTION DIVIDER ================= */}
+      <div className="relative z-10 flex justify-center py-6">
+        <div className="flex items-center gap-3 text-slate-400">
+          <span className="h-px w-10 bg-gradient-to-r from-transparent to-teal-500/40" />
+          <span className="text-xs tracking-widest uppercase">
+            {t("home.quick_access")}
+          </span>
+          <span className="h-px w-10 bg-gradient-to-l from-transparent to-teal-500/40" />
+        </div>
+      </div>
 
       {/* ================= PRIMARY SHORTCUTS (Dock Style) ================= */}
       {!globalLoading && sectionOne.length > 0 && (
-        <section className="w-full px-4 mb-12 relative z-20">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="flex flex-wrap justify-center gap-6">
-              <ShortcutRow items={sectionOne} variant="primary" />
-            </div>
+        <section className="w-full p-4">
+          <div
+            className="
+        flex flex-wrap
+        gap-4
+        justify-center
+        md:flex-nowrap md:justify-center
+        md:overflow-visible
+      "
+          >
+            <ShortcutRow items={sectionOne} variant="primary" />
           </div>
         </section>
       )}
@@ -123,7 +154,7 @@ export default function ToursDashboardPage() {
         {!globalLoading && sectionTwo.length > 0 && (
           <section className="py-2">
             <div className="flex items-center gap-3 mb-5 px-1 border-b border-dashed border-teal-500/30 pb-2">
-              <Compass className="h-5 w-5 text-teal-500" />
+              <Layers className="h-5 w-5 text-teal-500" />
               <h2 className="text-xl font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100">
                 {t("home.explore_categories")}
               </h2>
@@ -135,16 +166,119 @@ export default function ToursDashboardPage() {
           </section>
         )}
 
+        {/* ================= ABOUT NARA HERITAGE ================= */}
+        {abouts.length > 0 && (
+          <section className="w-full mt-10 mb-12">
+
+            {/* ===== Section Header (UNCHANGED) ===== */}
+            <div className="flex items-center gap-3 mb-5 px-1 border-b border-dashed border-teal-500/30 pb-2">
+              <BookOpen className="h-5 w-5 text-teal-500" />
+              <h2 className="text-xl font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100">
+                {t("home.about_nara")}
+              </h2>
+            </div>
+
+            {/* ===== Cards + Overlay Arrows ===== */}
+            <div className="relative">
+
+              {/* LEFT ARROW (desktop only) */}
+              <button
+                onClick={() => scrollAbout("left")}
+                className="
+          hidden md:flex
+          absolute left-0 top-1/2 -translate-y-1/2
+          z-10
+          w-9 h-9 rounded-full
+          bg-black/50 backdrop-blur
+          border border-white/10
+          items-center justify-center
+          text-white/70 hover:text-teal-400
+          hover:border-teal-400/60
+          transition
+        "
+                aria-label="Scroll left"
+              >
+                ‹
+              </button>
+
+              {/* RIGHT ARROW (desktop only) */}
+              <button
+                onClick={() => scrollAbout("right")}
+                className="
+          hidden md:flex
+          absolute right-0 top-1/2 -translate-y-1/2
+          z-10
+          w-9 h-9 rounded-full
+          bg-black/50 backdrop-blur
+          border border-white/10
+          items-center justify-center
+          text-white/70 hover:text-teal-400
+          hover:border-teal-400/60
+          transition
+        "
+                aria-label="Scroll right"
+              >
+                ›
+              </button>
+
+              {/* ===== Card Row ===== */}
+              <div
+                ref={aboutScrollRef}
+                className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
+              >
+                {abouts.slice(0, 5).map((item) => (
+                  <div
+                    key={item._id}
+                    className="
+        relative
+        min-w-[260px] max-w-[260px]
+        sm:min-w-[280px]
+        snap-center
+        rounded-2xl overflow-hidden
+        bg-white dark:bg-[#0f1115]
+        border border-slate-200 dark:border-white/10
+        shadow-md hover:shadow-xl
+        transition-all duration-300
+        cursor-pointer
+      "
+                  >
+                    {/* ===== Image ===== */}
+                    <div className="relative h-[150px] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
+                      {item.image?.secure_url && (
+                        <img
+                          src={item.image.secure_url}
+                          alt={item.title ?? "About Nara"}
+                          className="h-full w-full object-cover"
+                        />
+                      )}
+                    </div>
+
+                    {/* ===== Content ===== */}
+                    <div className="p-4 space-y-2">
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-2">
+                        {item.title ?? ""}
+                      </h3>
+
+                      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">
+                        {stripHTML(item.content?.brief)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </section>
+        )}
+
         {/* ================= FEATURED TOURS ================= */}
         {!loading && hasTours && (
           <section>
             <div className="flex items-center justify-between mb-6 px-1 border-b border-dashed border-teal-500/30 pb-2">
               <div className="flex items-center gap-3">
-                <div className="h-5 w-5 rounded-full bg-teal-500 flex items-center justify-center">
-                  <Star className="h-3 w-3 text-white fill-current" />
-                </div>
+                <Route className="h-5 w-5 text-teal-500" />
                 <h2 className="text-xl font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-                  {t("tour_guide")}
+                  {t("home.guide_tour")}
                 </h2>
               </div>
               <Button variant="ghost" size="sm" className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30" asChild>
@@ -165,10 +299,11 @@ export default function ToursDashboardPage() {
 
             {/* Mobile Show More */}
             <div className="mt-8 md:hidden flex justify-center">
-              <Button className="rounded-full w-full bg-teal-600/10 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-200 dark:border-teal-800" asChild>
-                <Link href="/tours">
-                  {t("actions.show_more")}
-                </Link>
+              <Button
+                className="rounded-full w-auto px-6 bg-teal-600/10 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-200 dark:border-teal-800"
+                asChild
+              >
+                <Link href="/tours">{t("actions.show_more")}</Link>
               </Button>
             </div>
 
@@ -186,9 +321,6 @@ export default function ToursDashboardPage() {
 }
 
 /* =======================================================================
-   HERO CAROUSEL COMPONENT
-======================================================================= */
-/* =======================================================================
    HERO TEXT SLIDER COMPONENT (No Images, Typography Focused)
 ======================================================================= */
 function TextHeroSlider() {
@@ -199,23 +331,23 @@ function TextHeroSlider() {
     {
       title: t("home.hero.slides.0.title"),
       subtitle: t("home.hero.slides.0.subtitle"),
-      description: t("home.hero.slides.0.description")
+      description: t("home.hero.slides.0.description"),
     },
     {
       title: t("home.hero.slides.1.title"),
       subtitle: t("home.hero.slides.1.subtitle"),
-      description: t("home.hero.slides.1.description")
+      description: t("home.hero.slides.1.description"),
     },
     {
       title: t("home.hero.slides.2.title"),
       subtitle: t("home.hero.slides.2.subtitle"),
-      description: t("home.hero.slides.2.description")
+      description: t("home.hero.slides.2.description"),
     },
     {
       title: t("home.hero.slides.3.title"),
       subtitle: t("home.hero.slides.3.subtitle"),
-      description: t("home.hero.slides.3.description")
-    }
+      description: t("home.hero.slides.3.description"),
+    },
   ];
 
   useEffect(() => {
@@ -228,39 +360,85 @@ function TextHeroSlider() {
   const slide = HERO_SLIDES[current];
 
   return (
-    <section className="relative w-full h-[400px] flex flex-col items-center justify-center text-center overflow-hidden z-0">
-      <div className="relative z-10 max-w-4xl px-4 space-y-6">
+    <section
+      className="
+        relative w-full overflow-hidden
+        min-h-[220px]
+        sm:min-h-[300px]
+        md:min-h-[380px]
+        lg:min-h-[420px]
+        flex items-center justify-center
+      "
+    >
+      {/* Bottom fade to clearly END hero */}
+      <div className="absolute bottom-0 left-0 w-full h-24 pointer-events-none" />
 
-        {/* Animated Text Content */}
-        <div className="space-y-4">
-          <h1 key={current} className="text-6xl md:text-8xl font-black tracking-tighter text-slate-900 dark:text-white drop-shadow-sm animate-slideUp backdrop-blur-0">
-            {slide.title}
-          </h1>
+      {/* ================= TEXT CONTENT ================= */}
+      <div className="relative z-10 w-full text-center px-4">
+        {/* Move text slightly UP for visual balance */}
+        <div className="-translate-y-6 sm:-translate-y-8 md:-translate-y-10">
+          <div className="mx-auto max-w-3xl space-y-3 sm:space-y-4">
 
-          <div key={`${current}-sub`} className="space-y-3 animate-slideUp" style={{ animationDelay: "150ms" }}>
-            <p className="text-lg md:text-xl font-light text-teal-600 dark:text-teal-400 tracking-wide uppercase">
-              {slide.subtitle}
-            </p>
-            <p className="text-sm md:text-base text-slate-600 dark:text-slate-200 max-w-xl mx-auto leading-relaxed font-medium">
-              {slide.description}
-            </p>
+            {/* TITLE */}
+            <h1
+              key={current}
+              className="
+                font-black tracking-tight animate-slideUp
+                text-[clamp(1.8rem,6.5vw,3.5rem)]
+                sm:text-[clamp(2.4rem,6vw,4.5rem)]
+                md:text-[clamp(3rem,6vw,6rem)]
+                leading-tight
+                text-slate-900 dark:text-white
+              "
+            >
+              {slide.title}
+            </h1>
+
+            {/* SUBTITLE + DESCRIPTION */}
+            <div
+              key={`${current}-sub`}
+              className="space-y-1.5 sm:space-y-2 animate-slideUp"
+              style={{ animationDelay: "150ms" }}
+            >
+              <p className="text-[11px] sm:text-sm uppercase tracking-widest font-semibold text-teal-600 dark:text-teal-400">
+                {slide.subtitle}
+              </p>
+
+              <p className="mx-auto max-w-sm text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {slide.description}
+              </p>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Navigation Dots (Custom) - Integrated & Styled */}
-        <div className="mt-8 md:mt-10 flex items-center justify-center gap-3 px-6 py-2.5 rounded-full animate-slideUp" style={{ animationDelay: "400ms" }}>
-          {HERO_SLIDES.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrent(idx)}
-              className={`
-                 rounded-full transition-all duration-500 ease-out
-                 ${idx === current ? "w-8 h-1.5 bg-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.6)]" : "w-1.5 h-1.5 bg-slate-600 dark:bg-slate-700 hover:bg-slate-500"}
-               `}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+      {/* ================= DOTS (RARE ANIMATION) ================= */}
+      <div
+        className="
+          absolute bottom-3 sm:bottom-4 md:bottom-6
+          left-1/2 -translate-x-1/2
+          z-20 flex items-center gap-3
+        "
+      >
+        {HERO_SLIDES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+            className={`
+              relative overflow-hidden rounded-full
+              transition-all duration-500 ease-out
+              ${idx === current
+                ? "w-8 h-1.5 bg-teal-400"
+                : "w-1.5 h-1.5 bg-slate-500"
+              }
+            `}
+          >
+            {idx === current && (
+              <span className="absolute inset-0 animate-breathe bg-teal-300/60" />
+            )}
+          </button>
+        ))}
       </div>
     </section>
   );
@@ -391,34 +569,37 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
               key={item._id}
               onClick={() => handleShortcutClick(item)}
               className={`
-                 ${baseCardStyles}
-                 flex-col sm:flex-row justify-center sm:justify-start items-center gap-4 px-6 py-5
-                 w-40 sm:w-64 h-auto min-h-[90px]
-                 rounded-2xl
-                 shadow-lg shadow-slate-200/50 dark:shadow-black/20 hover:shadow-teal-500/10 dark:hover:shadow-teal-900/10
-                 bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
-              `}
+    ${baseCardStyles}
+    flex flex-col items-center justify-center
+    min-w-[140px] max-w-[140px]
+    h-[110px]
+    snap-center
+    rounded-2xl
+    shadow-md
+    bg-white dark:bg-[#0f1115]
+  `}
             >
-              {/* Icon Container - Matching Category Style but Larger */}
-              <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
+              {/* Icon */}
+              <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
                 {item.icon?.secure_url ? (
-                  <div className="w-6 h-6 text-current">
-                    <img src={item.icon.secure_url} alt={item.title} className="w-full h-full object-contain" style={{ filter: "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)" }} />
-                  </div>
+                  <img
+                    src={item.icon.secure_url}
+                    alt={item.title}
+                    className="w-6 h-6 object-contain"
+                    style={{
+                      filter:
+                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                    }}
+                  />
                 ) : (
                   <MapPinned className="w-6 h-6" />
                 )}
               </div>
 
-              {/* Text Content */}
-              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <span className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-white text-base leading-tight">
-                  {item.title}
-                </span>
-                <span className="text-[10px] font-bold tracking-widest text-slate-400 dark:text-teal-500/60 uppercase group-hover:text-teal-500 dark:group-hover:text-teal-400 mt-1 transition-colors">
-                  {t("home.open")}
-                </span>
-              </div>
+              {/* Text */}
+              <span className="text-sm font-bold text-center text-slate-800 dark:text-slate-200 leading-tight">
+                {item.title}
+              </span>
             </div>
           )
         }

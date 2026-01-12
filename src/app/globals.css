@@ -715,3 +715,25 @@ body {
     /* Allow parent color (Teal) to dictate SVG color */
   }
 }
+
+/* Home Page Hero Slider */
+@keyframes breathe {
+  0% {
+    opacity: 0.4;
+    transform: scaleX(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1.4);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: scaleX(1);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 2.5s ease-in-out infinite;
+}
