@@ -130,33 +130,16 @@ export default function HeaderBar({
               <div className="ml-auto flex items-center gap-3">
                 {/* DESKTOP ICONS - Matching Theme Colors */}
                 <div className="hidden lg:flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                    <LanguageToggle />
-                  </div>
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                    <ThemeToggle />
-                  </div>
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                    <AppInfo />
-                  </div>
-
+                  <LanguageToggle />
+                  <ThemeToggle />
+                  <AppInfo />
                   {isLoggedIn && (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                      <UserProfileDropdown
-                        onViewProfile={() => setProfileOpen(true)}
-                      />
-                    </div>
+                    <UserProfileDropdown
+                      onViewProfile={() => setProfileOpen(true)}
+                    />
                   )}
-                  {isLoggedIn && (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                      <HeaderLogout />
-                    </div>
-                  )}
-                  {!isLoggedIn && (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-teal-600/20 dark:border-teal-400/30 bg-teal-50/50 dark:bg-black/40 text-teal-600 dark:text-teal-400 hover:border-teal-500 hover:bg-teal-100 dark:hover:bg-teal-900/40 transition-all">
-                      <HeaderLogin />
-                    </div>
-                  )}
+                  {isLoggedIn && <HeaderLogout />}
+                  {!isLoggedIn && <HeaderLogin />}
                 </div>
 
                 {/* MOBILE HAMBURGER */}

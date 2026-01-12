@@ -32,11 +32,13 @@ export default function UserProfileDropdown({
           /* 🌞 Light mode */
           bg-white
           border border-teal-400/40
+          text-teal-600
           hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
 
           /* 🌙 Dark mode */
           dark:bg-black/80
           dark:border-teal-400/40
+          dark:text-teal-300
           dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
         "
       >

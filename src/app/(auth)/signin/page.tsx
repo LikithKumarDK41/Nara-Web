@@ -550,7 +550,7 @@ export default function SignInPage() {
           <CardHeader className="relative space-y-6 text-center">
 
             {/* 🌐 Locale Switcher — Top Right */}
-            <div className="absolute top-[-12px] right-2 z-10">
+            <div className="absolute top-[-18px] right-1 z-10">
               <LanguageToggle />
             </div>
 
