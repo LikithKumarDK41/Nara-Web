@@ -3,6 +3,8 @@ import api from "@/lib/api";
 
 import type { Shortcut, About, EventItem, PlaceItem, ThemeItem, SubthemeItem, SearchFilter, SearchSuggestion } from "@/lib/types/userGlobal.types";
 
+import type { Monument } from "@/lib/types/userTour.types";
+
 /* ===== Shortcuts API'S ===== */
 
 export type ShortcutsEnvelope =
@@ -384,5 +386,74 @@ export async function apiUploadProfileImage(userId: string, file: File) {
 
   return data;
 }
+
+export async function apiFetchAboutById(id: string) {
+  try {
+    const { data } = await api.get(`/v1/abouts/${id}`);
+
+    if (data?.abouts) return data.abouts;
+
+    return data;
+  } catch (err: any) {
+    throw new Error(parseAxiosError(err, "Failed to load about"));
+  }
+}
+
+/* ===== Monuments by Theme API ===== */
+export interface MonumentsEnvelope {
+  monuments?: {
+    total: number;
+    results: Monument[];
+  };
+  results?: Monument[];
+}
+
+function extractMonuments(data: MonumentsEnvelope): Monument[] {
+  if (Array.isArray(data)) return data;
+
+  if (data?.monuments?.results && Array.isArray(data.monuments.results)) {
+    return data.monuments.results;
+  }
+
+  if (Array.isArray(data?.results)) {
+    return data.results;
+  }
+
+  return [];
+}
+
+/* ===== Generic Fetch By Link ===== */
+
+export async function apiFetchByLink<T = any>(
+  resource: string,
+  filter?: Record<string, any>
+): Promise<T[]> {
+  try {
+    let url = `/v1/${resource}`;
+
+    if (filter) {
+      url += `?filter=${encodeURIComponent(JSON.stringify(filter))}`;
+    }
+
+    const { data } = await api.get<any>(url);
+
+    // Handle all known response shapes
+    if (Array.isArray(data)) return data;
+
+    if (data?.[resource]?.results) return data[resource].results;
+
+    if (data?.results) return data.results;
+
+    return [];
+  } catch (err: any) {
+    throw new Error(
+      parseAxiosError(err, `Failed to load ${resource}`)
+    );
+  }
+}
+
+
+
+
 
 

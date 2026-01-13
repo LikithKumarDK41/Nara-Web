@@ -48,3 +48,29 @@ export const normalizeHTML = (html?: string): string => {
     // paragraph with <br>
     .replace(/<p>\s*<br\s*\/?>\s*<\/p>/gi, "<br/>");
 };
+
+// src/lib/utils/parseApiLink.ts
+export function parseApiLink(link: string): {
+  resource: string;
+  filter?: Record<string, any>;
+} | null {
+  if (!link) return null;
+
+  try {
+    const [path, query] = link.split("?");
+    const resource = path.replace("/", ""); // "monuments", "subthemes"
+
+    if (!query) return { resource };
+
+    const params = new URLSearchParams(query);
+    const filterParam = params.get("filter");
+
+    const filter = filterParam ? JSON.parse(filterParam) : undefined;
+
+    return { resource, filter };
+  } catch (err) {
+    console.error("Invalid API link:", link, err);
+    return null;
+  }
+}
+
