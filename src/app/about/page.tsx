@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
     ArrowLeft,
     BookOpen,
     MapPin,
-    Compass,
-    Image as ImageIcon,
-    Share2,
     ChevronRight,
     Maximize2,
     ArrowRight,
@@ -16,7 +13,7 @@ import {
     Star,
     Route,
     Layers,
-    Tag
+    
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -24,7 +21,6 @@ import { apiFetchAboutById, apiFetchByLink, apiFetchSubthemesWithQuery } from "@
 import { selectActiveAboutId } from "@/lib/store/slices/globalSlice";
 import { normalizeHTML } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import { parseApiLink } from "@/lib/utils";
 
 import type { Monument } from "@/lib/types/userTour.types";
@@ -40,7 +36,6 @@ export default function AboutDetailPage() {
     const [about, setAbout] = useState<About | null>(null);
     const [monuments, setMonuments] = useState<Monument[]>([]);
     const [loading, setLoading] = useState(true);
-    const [loadingMonuments, setLoadingMonuments] = useState(false);
     const [showImage, setShowImage] = useState(false);
     const { show, hide } = useGlobalLoader();
 
@@ -60,21 +55,46 @@ export default function AboutDetailPage() {
             return;
         }
 
-        setLoading(true);
-        apiFetchAboutById(activeAboutId)
-            .then(setAbout)
-            .catch(() => setAbout(null))
-            .finally(() => setLoading(false));
+        let cancelled = false;
+        const fetchAbout = async () => {
+            try {
+                setLoading(true);
+                show();
+
+                const data = await apiFetchAboutById(activeAboutId);
+                if (!cancelled) setAbout(data);
+            } catch (err) {
+                if (!cancelled) setAbout(null);
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                    hide();
+                }
+            }
+        };
+
+        fetchAbout();
+
+        return () => {
+            cancelled = true;
+        };
     }, [activeAboutId]);
 
 
+    const parsedLink = useMemo(() => {
+        if (!about?.link) return null;
+        try {
+            return parseApiLink(about.link);
+        } catch (err) {
+            console.error("Failed to parse link", err);
+            return null;
+        }
+    }, [about?.link]);
+
     useEffect(() => {
-        if (!about?.link) return;
+        if (!parsedLink) return;
 
-        const parsed = parseApiLink(about.link);
-        if (!parsed) return;
-
-        const { resource, filter } = parsed;
+        const { resource, filter } = parsedLink;
 
         setResourceType(resource as any);
 
@@ -82,7 +102,7 @@ export default function AboutDetailPage() {
 
         const fetchData = async () => {
             try {
-                show(); // ✅ safe to use
+                show();
 
                 if (resource === "monuments") {
                     const data = await apiFetchByLink<Monument>("monuments", filter);
@@ -90,8 +110,7 @@ export default function AboutDetailPage() {
                         setMonuments(data);
                         setSubthemes([]);
                     }
-                }
-                else if (resource === "subthemes") {
+                } else if (resource === "subthemes") {
                     const data = await apiFetchSubthemesWithQuery({ filter });
                     if (!cancelled) {
                         setSubthemes(data);
@@ -110,21 +129,18 @@ export default function AboutDetailPage() {
         return () => {
             cancelled = true;
         };
-    }, [about]); // ✅ ONLY about
+    }, [parsedLink, show, hide]);
 
-    const fetchSubthemes = async () => {
+    const fetchSubthemes = useCallback(async () => {
         try {
-            show(); // 🔥 Global loader ON
+            show();
 
-            // Reset UI state
             setView("subthemes");
-            setResourceType("subthemes"); // ✅ IMPORTANT
+            setResourceType("subthemes");
             setMonuments([]);
             setActiveSubtheme(null);
 
-            // Parse filter from about.link (if any)
-            const parsed = parseApiLink(about?.link);
-            const filter = parsed?.filter || {};
+            const filter = parsedLink?.filter || {};
 
             const data = await apiFetchSubthemesWithQuery({
                 filter,
@@ -135,15 +151,15 @@ export default function AboutDetailPage() {
         } catch (err) {
             console.error("Failed to fetch subthemes", err);
         } finally {
-            hide(); // 🔥 Global loader OFF
+            hide();
         }
-    };
+    }, [parsedLink, show, hide]);
 
-    const handleExploreSubtheme = async (subthemeId: string) => {
+    const handleExploreSubtheme = useCallback(async (subthemeId: string) => {
         try {
-            show(); // 🔥 GLOBAL LOADER ON
+            show();
 
-            const subtheme = subthemes.find(s => s._id === subthemeId) || null;
+            const subtheme = subthemes.find((s) => s._id === subthemeId) || null;
             setResourceType("monuments");
             setActiveSubtheme(subtheme);
 
@@ -156,9 +172,9 @@ export default function AboutDetailPage() {
         } catch (err) {
             console.error(err);
         } finally {
-            hide(); // 🔥 GLOBAL LOADER OFF
+            hide();
         }
-    };
+    }, [subthemes, show, hide]);
 
     return (
         <div className="text-slate-100 min-h-screen">
