@@ -38,7 +38,24 @@ export default function ToursDashboardPage() {
   const [abouts, setAbouts] = useState<About[]>([]);
 
   useEffect(() => {
-    apiFetchAbouts().then(setAbouts).catch(console.error);
+    let mounted = true;
+    const loadAbouts = async () => {
+      try {
+        show();
+        const data = await apiFetchAbouts();
+        if (mounted) setAbouts(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (mounted) hide();
+      }
+    };
+
+    loadAbouts();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const shortcuts = useAppSelector(selectShortcuts);
@@ -532,12 +549,12 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
       style={{ transitionDelay: `${idx * 50}ms` }}
       onClick={() => (window.location.href = `/tours/detail?id=${tour._id}`)}
     >
-      <div className="relative h-[65%] w-full overflow-hidden">
+      <div className="relative h-[180px] w-full overflow-hidden flex-shrink-0">
         {tour.image?.secure_url ? (
           <img
             src={tour.image.secure_url}
             alt={tour.title}
-            className="h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
