@@ -406,7 +406,7 @@ export default function NavigationOverlay({
           className="
       pointer-events-auto inline-flex items-center
       rounded-full border
-      border-orange-400/30 dark:border-amber-500/30
+      border-teal-400/30 dark:border-teal-500/30
       bg-white/70 dark:bg-slate-900/60
       backdrop-blur-xl
       px-1 py-1 shadow-lg gap-1
@@ -419,8 +419,8 @@ export default function NavigationOverlay({
             className={`
         cursor-pointer px-3 py-1.5 rounded-full text-sm transition-all
         ${!listOpen
-                ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
-                : "text-orange-600 dark:text-amber-400 hover:bg-orange-50/60 dark:hover:bg-orange-900/30"
+                ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                : "text-teal-600 dark:text-teal-400 hover:bg-teal-50/60 dark:hover:bg-teal-900/30"
               }
       `}
           >
@@ -434,8 +434,8 @@ export default function NavigationOverlay({
             className={`
         cursor-pointer px-3 py-1.5 rounded-full text-sm transition-all
         ${listOpen
-                ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
-                : "text-orange-600 dark:text-amber-400 hover:bg-orange-50/60 dark:hover:bg-orange-900/30"
+                ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                : "text-teal-600 dark:text-teal-400 hover:bg-teal-50/60 dark:hover:bg-teal-900/30"
               }
       `}
           >
@@ -453,7 +453,7 @@ export default function NavigationOverlay({
             className="
       cursor-pointer pointer-events-auto
       rounded-full px-6 shadow-lg
-      bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500
+      bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500
       text-white
       hover:opacity-90
       active:scale-[0.98]

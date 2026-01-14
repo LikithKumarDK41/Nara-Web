@@ -132,7 +132,7 @@ export default function MapTimelineRight({
   if (initialLoading) {
     return (
       <div className="relative mx-auto w-full max-w-6xl animate-pulse">
-        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-orange-300 rounded-full" />
+        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-teal-300 rounded-full" />
         <ul className="space-y-16 md:space-y-20">
           {Array.from({ length: 3 }).map((_, i) => (
             <li key={i} className="grid grid-cols-[90px_1fr] gap-6 items-start">
@@ -153,7 +153,7 @@ export default function MapTimelineRight({
   return (
     <>
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-b from-orange-500 via-orange-400 to-orange-600 rounded-full" />
+        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-b from-teal-500 via-teal-400 to-teal-600 rounded-full" />
 
         <ul className="space-y-16 md:space-y-20">
           {tourpoints.map((p, i) => {
@@ -177,15 +177,13 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li
-                    className={`grid grid-cols-[90px_1fr] gap-1 ${
-                      hideBottom ? "pb-8" : "md:pb-10 pb-0"
-                    }`}
+                    className={`grid grid-cols-[90px_1fr] gap-1 ${hideBottom ? "pb-8" : "md:pb-10 pb-0"
+                      }`}
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-orange-500 ${
-                          hideTop ? "top-[50%]" : "top-0"
-                        } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${hideTop ? "top-[50%]" : "top-0"
+                          } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
                       <div className="absolute left-[52px] top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div
@@ -252,7 +250,7 @@ export default function MapTimelineRight({
                     />
                     <div className="col-start-2 p-6 rounded-2xl bg-yellow-50 dark:bg-zinc-800 border border-yellow-200 dark:border-zinc-700 shadow-sm">
                       <div className="flex items-center gap-3">
-                        <UtensilsCrossed className="h-6 w-6 text-orange-500" />
+                        <UtensilsCrossed className="h-6 w-6 text-teal-500" />
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                           🍱 {p.name || translate("lunch_break")}
                         </h3>
@@ -452,11 +450,19 @@ export default function MapTimelineRight({
 
                           <Button
                             size="sm"
-                            className="w-full h-10 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:opacity-90 text-white font-semibold text-sm shadow-sm"
+                            className="
+    w-full h-10 rounded-xl
+    bg-gradient-to-r from-teal-500 via-teal-400 to-cyan-400
+    hover:from-teal-600 hover:via-teal-500 hover:to-cyan-500
+    text-white font-semibold text-sm
+    shadow-md shadow-teal-500/30
+    transition-all
+  "
                             onClick={() => handleOpen(p._id)}
                           >
                             {translate("tourDetails.viewDetails")}
                           </Button>
+
                         </div>
                       </div>
                     </div>
@@ -505,7 +511,7 @@ export default function MapTimelineRight({
                     <div className="p-6">
                       <h3
                         onClick={() => handleOpen(p._id)}
-                        className="cursor-pointer text-lg font-semibold truncate text-amber-700 dark:text-amber-300 transition"
+                        className="cursor-pointer text-lg font-semibold truncate text-teal-700 dark:text-teal-300 transition"
                       >
                         {m?.title ?? m?.name ?? p.name}
                       </h3>
@@ -537,7 +543,13 @@ export default function MapTimelineRight({
                       <div className="mt-5 flex gap-3">
                         <Button
                           size="sm"
-                          className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:opacity-90 text-white font-medium border"
+                           className="
+    w-full h-10 rounded-xl
+    bg-gradient-to-r from-teal-500 via-teal-400 to-cyan-400
+    hover:from-teal-600 hover:via-teal-500 hover:to-cyan-500
+    text-white font-semibold text-sm
+    transition-all
+  "
                           onClick={() => handleOpen(p._id)}
                         >
                           {translate("tourDetails.viewDetails")}
@@ -822,7 +834,7 @@ function TravelConnector({
 
   const icon =
     next?.pointtype === "lunch" ? (
-      <UtensilsCrossed className="h-6 w-6 text-orange-500" />
+      <UtensilsCrossed className="h-6 w-6 text-teal-500" />
     ) : (
       getTravelIcon(travelMode)
     );
@@ -898,7 +910,7 @@ function capitalize(str?: string) {
 }
 
 function dynamicColor(i: number, type?: "start" | "place" | "end") {
-  if (type === "start") return "#10b981"; // green
-  if (type === "end") return "#ef4444"; // red
-  return "#f97316"; // orange
+  if (type === "start") return "#14b8a6"; // teal-500
+  if (type === "end") return "#0891b2";   // cyan-600
+  return "#2dd4bf";                       // teal-400
 }

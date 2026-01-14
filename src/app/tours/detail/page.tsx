@@ -418,14 +418,34 @@ export default function TourDetailsClientPage() {
           <button
             onClick={toggleBookmark}
             aria-label="Bookmark tour"
-            className="absolute right-6 top-6 z-10 flex items-center justify-center rounded-full 
-               bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition 
-               backdrop-blur-md shadow"
+            className="
+    absolute right-6 top-6 z-10
+    flex items-center justify-center
+    p-2 rounded-full
+    bg-black/40 hover:bg-black/60
+    backdrop-blur-md
+    border border-white/10
+    shadow-lg
+    transition-all
+  "
           >
             {bookmarked ? (
-              <BookmarkCheck className="h-8 w-8 text-amber-300 dark:text-amber-300 cursor-pointer" />
+              <BookmarkCheck
+                className="
+        h-8 w-8
+        text-teal-400
+        drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
+      "
+              />
             ) : (
-              <Bookmark className="h-8 w-8 text-white cursor-pointer" />
+              <Bookmark
+                className="
+        h-8 w-8
+        text-white/90
+        hover:text-teal-300
+        transition-colors
+      "
+              />
             )}
           </button>
 
@@ -448,16 +468,15 @@ export default function TourDetailsClientPage() {
             className="
       relative -mt-24 w-full max-w-5xl overflow-hidden rounded-[2.5rem]
       bg-gradient-to-b
-        from-orange-50/80 via-white/70 to-amber-50/80
-        dark:from-[#1a0f08]/90 dark:via-[#120a06]/95 dark:to-[#1a0f08]/90
+        from-teal-50/80 via-white/70 to-slate-50/80
+        dark:from-[#081a17]/90 dark:via-[#071210]/95 dark:to-[#081a17]/90
       backdrop-blur-2xl
-      border border-orange-200/40 dark:border-orange-500/20
-      shadow-[0_25px_80px_-25px_rgba(251,146,60,0.45)]
+      border border-teal-200/40 dark:border-teal-500/20
     "
           >
             {/* 🌊 Top Wave */}
             <svg
-              className="absolute top-0 left-0 w-full text-orange-400/20 dark:text-orange-500/20"
+              className="absolute top-0 left-0 w-full text-teal-400/20 dark:text-teal-500/20"
               viewBox="0 0 500 60"
               preserveAspectRatio="none"
             >
@@ -469,7 +488,7 @@ export default function TourDetailsClientPage() {
 
             {/* 🌊 Bottom Wave */}
             <svg
-              className="absolute bottom-0 left-0 w-full rotate-180 text-orange-400/20 dark:text-orange-500/20"
+              className="absolute bottom-0 left-0 w-full rotate-180 text-teal-400/20 dark:text-teal-500/20"
               viewBox="0 0 500 60"
               preserveAspectRatio="none"
             >
@@ -500,16 +519,16 @@ export default function TourDetailsClientPage() {
                         <div
                           className="
                     h-16 w-16 rounded-full flex items-center justify-center
-                    bg-gradient-to-br from-orange-400/30 to-yellow-400/30
-                    border border-orange-400/40
-                    shadow-inner shadow-orange-400/20
-                    text-orange-600 dark:text-orange-300
+                    bg-gradient-to-br from-teal-400/30 to-cyan-400/30
+                    border border-teal-400/40
+                    shadow-inner shadow-teal-400/20
+                    text-teal-700 dark:text-teal-300
                     text-lg font-semibold
                   "
                         >
                           {item.value}
                         </div>
-                        <span className="mt-3 text-xs tracking-wide text-gray-600 dark:text-gray-200">
+                        <span className="mt-3 text-xs tracking-wide text-slate-600 dark:text-slate-300">
                           {item.label}
                         </span>
                       </div>
@@ -521,9 +540,10 @@ export default function TourDetailsClientPage() {
               <div className="flex flex-wrap justify-center gap-5">
                 <button
                   onClick={handleStartNavigation}
-                  className="cursor-pointer
+                  className="
+            cursor-pointer
             px-8 py-3 rounded-full
-            bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500
+            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500
             text-white font-semibold
             transition-all hover:scale-[1.06]
           "
@@ -533,11 +553,12 @@ export default function TourDetailsClientPage() {
 
                 <button
                   onClick={onJumpTimeline}
-                  className="cursor-pointer
+                  className="
+            cursor-pointer
             px-8 py-3 rounded-full
-            border border-orange-400/60
-            text-orange-600 dark:text-orange-300
-            hover:bg-orange-100/40 dark:hover:bg-orange-900/40
+            border border-teal-400/60
+            text-teal-700 dark:text-teal-300
+            hover:bg-teal-100/40 dark:hover:bg-teal-900/40
             backdrop-blur-md
             font-semibold
             transition-all hover:scale-[1.05]
@@ -549,6 +570,7 @@ export default function TourDetailsClientPage() {
             </div>
           </div>
         </section>
+
 
         {/* ===== Map Section ===== */}
         {tour.tourpoints?.length ? (
@@ -579,7 +601,7 @@ export default function TourDetailsClientPage() {
             <TimelineRight
               tourpoints={tour.tourpoints}
               tour_id={id}
-              customStyle="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:opacity-90
+              customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
                 text-white font-semibold shadow-md hover:shadow-xl transition-all"
             />
           </section>
