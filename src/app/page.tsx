@@ -226,7 +226,7 @@ export default function ToursDashboardPage() {
     hover:border-teal-400/50
     hover:shadow-teal-500/20
 
-    transition-all duration-300
+    transition-all duration-300 cursor-pointer
   "
                 aria-label="Scroll left"
               >
@@ -260,7 +260,7 @@ export default function ToursDashboardPage() {
     hover:border-teal-400/50
     hover:shadow-teal-500/20
 
-    transition-all duration-300
+    transition-all duration-300 cursor-pointer
   "
                 aria-label="Scroll right"
               >
@@ -727,7 +727,7 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
             </span>
 
             {/* Arrow Hint */}
-            <div className="ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400">
+            <div className="ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
               <ChevronRight className="w-4 h-4" />
             </div>
           </div>
