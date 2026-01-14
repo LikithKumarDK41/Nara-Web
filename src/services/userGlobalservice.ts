@@ -17,11 +17,12 @@ function parseAxiosError(err: any, fallback: string) {
 }
 
 function extractShortcuts(data: ShortcutsEnvelope): Shortcut[] {
+  if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("shortcuts" in data && Array.isArray((data as any).shortcuts?.results)) {
+  if ("shortcuts" in (data as any) && Array.isArray((data as any).shortcuts?.results)) {
     return (data as any).shortcuts.results as Shortcut[];
   }
-  if ("results" in data && Array.isArray((data as any).results)) {
+  if ("results" in (data as any) && Array.isArray((data as any).results)) {
     return (data as any).results as Shortcut[];
   }
   return [];
@@ -44,11 +45,12 @@ export type AboutsEnvelope =
   | About[];
 
 function extractAbouts(data: AboutsEnvelope): About[] {
+  if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("abouts" in data && Array.isArray((data as any).abouts?.results)) {
+  if ("abouts" in (data as any) && Array.isArray((data as any).abouts?.results)) {
     return (data as any).abouts.results as About[];
   }
-  if ("results" in data && Array.isArray((data as any).results)) {
+  if ("results" in (data as any) && Array.isArray((data as any).results)) {
     return (data as any).results as About[];
   }
   return [];
@@ -71,11 +73,12 @@ export type EventsEnvelope =
   | EventItem[];
 
 function extractEvents(data: EventsEnvelope): EventItem[] {
+  if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("events" in data && Array.isArray((data as any).events?.results)) {
+  if ("events" in (data as any) && Array.isArray((data as any).events?.results)) {
     return (data as any).events.results as EventItem[];
   }
-  if ("results" in data && Array.isArray((data as any).results)) {
+  if ("results" in (data as any) && Array.isArray((data as any).results)) {
     return (data as any).results as EventItem[];
   }
   return [];

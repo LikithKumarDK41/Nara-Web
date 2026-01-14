@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { apiFetchAboutById, apiFetchByLink, apiFetchSubthemesWithQuery } from "@/services/userGlobalservice";
+import { apiFetchMonumentDetails } from "@/services/userTourService";
 import { selectActiveAboutId } from "@/lib/store/slices/globalSlice";
 import { normalizeHTML } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +27,7 @@ import { parseApiLink } from "@/lib/utils";
 import type { Monument } from "@/lib/types/userTour.types";
 import { SubthemeItem } from "@/lib/types/userGlobal.types";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
+import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
 
 type About = any;
 
@@ -47,6 +49,11 @@ export default function AboutDetailPage() {
     const [activeSubtheme, setActiveSubtheme] = useState<SubthemeItem | null>(null);
 
     const [subthemes, setSubthemes] = useState<SubthemeItem[]>([]);
+
+    // Monument detail modal
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalLoading, setModalLoading] = useState(false);
+    const [selectedMonument, setSelectedMonument] = useState<any | null>(null);
 
     /* ================= FETCH DATA ================= */
     useEffect(() => {
@@ -176,6 +183,27 @@ export default function AboutDetailPage() {
         }
     }, [subthemes, show, hide]);
 
+    const handleOpenMonument = useCallback(async (id: string) => {
+        try {
+            setModalLoading(true);
+            show();
+
+            const data = await apiFetchMonumentDetails(id);
+            setSelectedMonument(data);
+            setModalOpen(true);
+        } catch (err) {
+            console.error("Failed to load monument details:", err);
+        } finally {
+            setModalLoading(false);
+            hide();
+        }
+    }, [show, hide]);
+
+    const handleCloseModal = useCallback(() => {
+        setModalOpen(false);
+        setSelectedMonument(null);
+    }, []);
+
     return (
         <div className="text-slate-100 min-h-screen">
 
@@ -224,7 +252,7 @@ export default function AboutDetailPage() {
 
             {showImage && about.image?.secure_url && (
                 <div
-                    className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center"
+                    className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center cursor-pointer"
                     onClick={() => setShowImage(false)}
                 >
                     <img
@@ -238,6 +266,16 @@ export default function AboutDetailPage() {
                         Click anywhere to close
                     </span>
                 </div>
+            )}
+
+            {selectedMonument && (
+                <MonumentDetailModal
+                    open={modalOpen}
+                    onClose={handleCloseModal}
+                    loading={modalLoading}
+                    details={selectedMonument}
+                    onOpenAnother={handleOpenMonument}
+                />
             )}
 
             {/* ================= MAIN CONTENT ================= */}
@@ -427,13 +465,14 @@ export default function AboutDetailPage() {
                                     {/* CTA */}
                                     <div className="pt-3">
                                         <button
+                                            onClick={() => handleOpenMonument(m._id)}
                                             className="
         inline-flex items-center gap-2
         text-[10px] font-black
         uppercase tracking-[0.25em]
         text-teal-600 dark:text-teal-400
         hover:text-teal-500
-        transition-colors
+        transition-colors cursor-pointer
       "
                                         >
                                             Discover Details
