@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-xl overflow-hidden">
+      <section className="relative w-full mx-auto bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white rounded-2xl shadow-xl overflow-hidden">
         <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
           <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
             {t("privacy.title")}
@@ -68,13 +68,34 @@ export default function PrivacyPolicyPage() {
 
 /* ✅ Reusable Section Component */
 function PolicySection({ title, desc }: { title: string; desc: string }) {
+   const renderTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.split(urlRegex).map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-teal-700 dark:text-teal-300 underline hover:opacity-80"
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   return (
     <section className="mb-6">
-      <h2 className="text-xl md:text-2xl font-bold text-amber-700 dark:text-amber-300 mb-3 border-b pb-2">
+      <h2 className="text-xl md:text-2xl font-bold text-teal-700 dark:text-teal-300 mb-3 border-b pb-2">
         {title}
       </h2>
       <p className="leading-relaxed whitespace-pre-line text-slate-600 dark:text-slate-200">
-        {desc}
+                {renderTextWithLinks(desc)}
       </p>
     </section>
   );

@@ -73,7 +73,7 @@ export default function BlueprintPage() {
   return (
     <div className="space-y-8">
       {/* ================= HERO ================= */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-xl overflow-hidden">
+      <section className="relative w-full mx-auto bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white rounded-2xl shadow-xl overflow-hidden">
         <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
           <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
             {t("blueprint_title")}
@@ -96,7 +96,7 @@ export default function BlueprintPage() {
               className={`cursor-pointer px-5 py-2 rounded-full text-sm font-medium transition
                 ${
                   activeTab === tab
-                    ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow"
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
                     : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 }`}
             >
@@ -117,7 +117,7 @@ export default function BlueprintPage() {
                 className={`rounded-xl border p-6 transition shadow-sm
                   ${
                     item.title === "blueprint_tours" && highlightTours
-                      ? "border-amber-500 ring-2 ring-amber-400/60 bg-amber-50/60 dark:bg-amber-500/10"
+                      ? "border-teal-500 ring-2 ring-teal-400/60 bg-teal-50/60 dark:bg-teal-500/10"
                       : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60"
                   }`}
               >
@@ -125,7 +125,7 @@ export default function BlueprintPage() {
 
                 <h3
                   className={`text-lg font-semibold
-                    text-amber-700 dark:text-amber-300
+                    text-teal-700 dark:text-teal-300
                     ${
                       item.title === "blueprint_home" || item.title === "blueprint_tours"
                         ? "cursor-pointer hover:underline"
@@ -149,17 +149,17 @@ export default function BlueprintPage() {
                       <div key={idx} className="relative">
                         {idx !== item.children.length - 1 && (
                           <span className="absolute left-[-15px] top-4 bottom-[-32px] w-px
-                            bg-gradient-to-b from-orange-500 via-amber-500 to-yellow-500" />
+                            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500" />
                         )}
 
                         <span className="absolute left-[-20px] top-2 w-3 h-3 rounded-full
-                          bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500" />
+                          bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500" />
 
                         <p
                           className={`font-semibold
                             ${
                               child.title === "blueprint_home_tour_list"
-                                ? "cursor-pointer text-amber-700 dark:text-amber-300 hover:underline"
+                                ? "cursor-pointer text-teal-700 dark:text-teal-300 hover:underline"
                                 : "text-slate-800 dark:text-slate-100"
                             }`}
                           onClick={() => {
@@ -207,7 +207,7 @@ export default function BlueprintPage() {
         <section className="max-w-4xl mx-auto rounded-2xl p-8 shadow-sm
           bg-white border border-red-200
           dark:bg-slate-900/60 dark:border-slate-700">
-          <h2 className="text-2xl font-semibold text-amber-700 dark:text-amber-300">
+          <h2 className="text-2xl font-semibold text-teal-700 dark:text-teal-300">
             {t("applicationRestrictions.title")}
           </h2>
 

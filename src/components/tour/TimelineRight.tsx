@@ -450,7 +450,7 @@ export default function MapTimelineRight({
 
                           <Button
                             size="sm"
-                            className="
+                            className="cursor-pointer
     w-full h-10 rounded-xl
     bg-gradient-to-r from-teal-500 via-teal-400 to-cyan-400
     hover:from-teal-600 hover:via-teal-500 hover:to-cyan-500
@@ -543,7 +543,7 @@ export default function MapTimelineRight({
                       <div className="mt-5 flex gap-3">
                         <Button
                           size="sm"
-                           className="
+                           className="cursor-pointer
     w-full h-10 rounded-xl
     bg-gradient-to-r from-teal-500 via-teal-400 to-cyan-400
     hover:from-teal-600 hover:via-teal-500 hover:to-cyan-500

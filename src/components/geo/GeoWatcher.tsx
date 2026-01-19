@@ -133,7 +133,7 @@ export default function GeoWatcher() {
             name: tp.monument?.title || tp.name || "Unknown",
             lat,
             lng,
-            radius: tp.monument?.georadius ?? DEFAULT_RADIUS,
+            radius: tp.monument?.georadius,
             blurb: tp.monument?.content?.brief ?? "",
             tourId: tour?._id ?? null,
           };
