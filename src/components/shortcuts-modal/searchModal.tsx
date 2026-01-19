@@ -539,7 +539,7 @@ export default function SearchModal({
                                 key={`star-${m._id}-${i}`}
                                 className={`h-3.5 w-3.5 ${
                                   i < (m.popularity ?? 0)
-                                    ? "fill-teal-400 text-teal-400"
+                                    ? "fill-amber-400 text-amber-400"
                                     : "text-gray-300 dark:text-gray-600"
                                 }`}
                               />
