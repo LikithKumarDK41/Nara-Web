@@ -549,7 +549,7 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
       style={{ transitionDelay: `${idx * 50}ms` }}
       onClick={() => (window.location.href = `/tours/detail?id=${tour._id}`)}
     >
-      <div className="relative h-[180px] w-full overflow-hidden flex-shrink-0">
+      <div className="relative h-[220px] w-full overflow-hidden flex-shrink-0">
         {tour.image?.secure_url ? (
           <img
             src={tour.image.secure_url}
@@ -617,14 +617,14 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
       const priority = shortcut.priority ?? null;
 
       const routes: Record<number, string> = {
-        2: "/shortcuts/tourist-attractions",
-        3: "/shortcuts/about",
-        4: "/shortcuts/events",
-        5: "/shortcuts/gourmet-products",
-        6: "/shortcuts/facility",
-        7: "/shortcuts/mt-kongo-and-katsuragi",
-        8: "/shortcuts/city-promotion",
-        9: "/shortcuts/meetings",
+        2: "/category/politics",
+        3: "/category/economy",
+        4: "/category/faith",
+        5: "/category/art",
+        6: "/category/technology",
+        7: "/category/mt-kongo-and-katsuragi",
+        8: "/category/city-promotion",
+        9: "/category/meetings",
       };
 
       if (priority === null) router.push("/shortcuts/tourist-map");
@@ -633,6 +633,40 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
 
     } catch (err) {
       console.error("❌ Link Error:", err);
+    }
+  };
+
+
+  const handleShortcutLink2 = (shortcut: any) => {
+    try {
+      if (shortcut.link && shortcut.link.trim().startsWith("{")) {
+        const parsedLink = JSON.parse(shortcut.link);
+        if (parsedLink.theme) {
+          dispatch(setActiveTheme(parsedLink.theme));
+        }
+      }
+      const priority = shortcut?.priority;
+
+      // Only allow priority 4 → 8
+      if (typeof priority !== "number" || priority < 4 || priority > 8) {
+        return; // ❌ do nothing
+      }
+
+      const routes: Record<number, string> = {
+        4: "/category/politics",
+        5: "/category/economy",
+        6: "/category/faith",
+        7: "/category/art",
+        8: "/category/technology",
+        9: "/category/nature",
+      };
+
+      const targetRoute = routes[priority];
+      if (targetRoute) {
+        router.push(targetRoute);
+      }
+    } catch (err) {
+      console.error("❌ Shortcut V2 Link Error:", err);
     }
   };
 
@@ -702,7 +736,7 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
         return (
           <div
             key={item._id}
-            onClick={() => handleShortcutClick(item)}
+            onClick={() => handleShortcutLink2(item)}
             className={`
                ${baseCardStyles}
                flex-row gap-4 px-4 py-3.5
