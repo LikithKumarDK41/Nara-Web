@@ -23,6 +23,7 @@ import type { Tour } from "@/lib/types/userTour.types";
 import { normalizeHTML, stripHTML } from "@/lib/utils";
 import { apiFetchAbouts } from "@/services/userGlobalservice";
 import { About } from "@/lib/types/userGlobal.types";
+import SearchModal from "@/components/shortcuts-modal/searchModal";
 
 /* =======================================================================
    MAIN PAGE - HERO CAROUSEL & COMPACT LAYOUT
@@ -36,6 +37,7 @@ export default function ToursDashboardPage() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const [abouts, setAbouts] = useState<About[]>([]);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -161,7 +163,7 @@ export default function ToursDashboardPage() {
         md:overflow-visible
       "
           >
-            <ShortcutRow items={sectionOne} variant="primary" />
+            <ShortcutRow items={sectionOne} variant="primary" onOpenSearch={() => setSearchOpen(true)}/>
           </div>
         </section>
       )}
@@ -180,7 +182,7 @@ export default function ToursDashboardPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              <ShortcutRow items={sectionTwo} variant="secondary" />
+              <ShortcutRow items={sectionTwo} variant="secondary" onOpenSearch={() => setSearchOpen(true)}/>
             </div>
           </section>
         )}
@@ -397,6 +399,12 @@ export default function ToursDashboardPage() {
           </section>
         )}
 
+        <SearchModal
+  open={searchOpen}
+  onClose={() => setSearchOpen(false)}
+/>
+
+
       </div>
     </div>
   );
@@ -601,7 +609,8 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
   )
 }
 
-function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "secondary" }) {
+function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: "primary" | "secondary";  onOpenSearch: () => void;
+ }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { t } = useLocale();
@@ -616,8 +625,12 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
       }
       const priority = shortcut.priority ?? null;
 
+        if (priority === 2) {
+        onOpenSearch();
+        return;
+      }
+
       const routes: Record<number, string> = {
-        2: "/category/politics",
         3: "/category/economy",
         4: "/category/faith",
         5: "/category/art",
@@ -651,6 +664,11 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
       // Only allow priority 4 → 8
       if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
+      }
+
+      if (priority === 2) {
+        onOpenSearch();
+        return;
       }
 
       const routes: Record<number, string> = {
