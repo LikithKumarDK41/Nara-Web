@@ -36,6 +36,8 @@ export default function CategoryExplorer() {
 
             try {
                 setLoading(true);
+                show();
+                
                 const data = await apiFetchSubthemesWithQuery({ filter: { theme: activeThemeId }, sort: "sortOrder" });
                 if (mounted) setSubthemes(data);
 
@@ -52,6 +54,7 @@ export default function CategoryExplorer() {
                 if (mounted) setSubthemes([]);
             } finally {
                 if (mounted) setLoading(false);
+                hide();
             }
         };
 
@@ -60,98 +63,96 @@ export default function CategoryExplorer() {
         return () => {
             mounted = false;
         };
-    }, [activeThemeId]);
+    }, [activeThemeId, show, hide]);
 
     return (
         <main className="w-full">
-            {/* ================= RESPONSIVE HERO (POLISHED) ================= */}
+            {/* ================= ENHANCED HERO SECTION ================= */}
             <section
                 className="
     w-full
     rounded-3xl
-    bg-gradient-to-r
-    from-teal-700 via-cyan-700 to-emerald-700
-    dark:from-[#0f2027] dark:via-[#203a43] dark:to-[#2c5364]
-    shadow-[0_30px_80px_rgba(0,0,0,0.35)]
-    px-6 sm:px-10 md:px-14
-    py-10 md:py-14
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    shadow-[0_40px_100px_rgba(0,120,100,0.25)]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
     relative
     overflow-hidden
   "
             >
-                {/* Soft radial highlight */}
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 w-[420px] h-[140px] bg-white/10 blur-[120px] rounded-full pointer-events-none" />
+                {/* Animated gradient orbs */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
 
-                {/* Bottom fade */}
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/25 to-transparent pointer-events-none" />
+                {/* Subtle grid pattern */}
+                <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
+                    backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)',
+                    backgroundSize: '50px 50px'
+                }} />
 
-                <div className="max-w-7xl mx-auto relative z-10">
+                {/* Content */}
+                <div className="max-w-6xl mx-auto relative z-10 text-center">
 
-                    {/* Title */}
-                    <div className="text-center px-2">
-
-                        <h1
-                            className="
-          text-2xl sm:text-3xl md:text-4xl
-          font-bold
-          text-white
-          tracking-tight
-          leading-tight
-        "
-                        >
-                            {themeInfo?.title}
-                        </h1>
-
-                        {/* Context row (responsive) */}
-                        <div
-                            className="
-          mt-3
-          flex flex-wrap justify-center gap-x-4 gap-y-1
-          text-xs sm:text-sm
-          text-white/70
-        "
-                        >
-                            <span>Historical Theme</span>
-                            <span className="opacity-40 hidden sm:inline">•</span>
-                            <span>Curated Archive</span>
-                            <span className="opacity-40 hidden sm:inline">•</span>
-                            <span>Nara Heritage</span>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="mt-5 mb-6 h-px w-full max-w-3xl mx-auto bg-white/30" />
+                    {/* Overline */}
+                    <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+                        <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+                        <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+                            Nara Heritage Theme
+                        </span>
                     </div>
 
-                    {/* Subthemes */}
-                    <div
+                    {/* Main title - Enhanced typography */}
+                    <h1
                         className="
-        flex flex-wrap justify-center
-        gap-2 sm:gap-3
-        px-2
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
       "
                     >
-                        {subthemes.map((s) => (
-                            <span
-                                key={s._id}
-                                className="
-            px-3 sm:px-4
-            py-1.5
-            rounded-full
-            text-xs sm:text-sm
-            font-medium
-            text-white/90
-            bg-white/15
-            border border-white/20
-            backdrop-blur-sm
-            hover:bg-white/25
-            transition-all
-            cursor-pointer
-            whitespace-nowrap
-          "
-                            >
-                                {s.title}
-                            </span>
-                        ))}
+                        {themeInfo?.title || "Explore Nara"}
+                        <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
+                            Cultural Heritage Collection
+                        </span>
+                    </h1>
+
+                    {/* Decorative accent line */}
+                    <div className="flex items-center justify-center gap-3 my-2">
+                        <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+                        <span className="text-white/60 text-xs font-medium">✦</span>
+                        <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+                    </div>
+
+                    {/* Subtitle with stats */}
+                    <p className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      ">
+                        Discover curated themes showcasing Nara's rich historical, cultural, and natural heritage
+                    </p>
+
+                    {/* Stats row */}
+                    <div className="mt-3 flex flex-wrap justify-center gap-4 md:gap-6">
+                        <div className="flex flex-col items-center">
+                            <span className="text-lg md:text-xl font-bold text-teal-300">{subthemes.length}</span>
+                            <span className="text-[10px] md:text-xs text-white/70 font-medium">Themes</span>
+                        </div>
+                        <div className="hidden sm:flex flex-col items-center">
+                            <span className="text-lg md:text-xl font-bold text-cyan-300">∞</span>
+                            <span className="text-[10px] md:text-xs text-white/70 font-medium">Discovery</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <span className="text-lg md:text-xl font-bold text-emerald-300">Curated</span>
+                            <span className="text-[10px] md:text-xs text-white/70 font-medium">Collection</span>
+                        </div>
                     </div>
 
                 </div>
@@ -269,72 +270,53 @@ export default function CategoryExplorer() {
 
             {/* ================= SELECTED SUBTHEME INTRO ================= */}
             {activeSubtheme && (
-                <section className="space-y-8 pt-8">
+                <section className="space-y-4 pt-8">
 
-                    {/* Header (matches 関連スポット style) */}
-                    <div
-                        className="
-        flex items-center justify-between
-        pb-4
-        border-b border-slate-200 dark:border-white/10
-      "
-                    >
-                        <div className="flex items-center gap-3">
-                            <BookOpen className="w-5 h-5 text-teal-500" />
-                            <h2
-                                className="
-            text-lg font-bold tracking-wider uppercase
-            text-slate-900 dark:text-white
-          "
-                            >
-                                テーマ概要
-                            </h2>
-                        </div>
+                    {/* Header */}
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
+                        <BookOpen className="w-5 h-5 text-teal-500" />
+                        <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
+                            テーマ概要
+                        </h2>
                     </div>
-                    {/* ================= FULL-WIDTH SUBTHEME INTRO ================= */}
 
-                    <div>
-
-                        {/* Small context label */}
-                        <div className="mb-4 text-xs tracking-[0.3em] uppercase text-teal-600 dark:text-teal-400">
-                            Selected Theme
-                        </div>
-
+                    {/* Content - Text Only */}
+                    <div className="pt-2">
                         {/* Title */}
-                        <h1
-                            className="
-        text-3xl md:text-4xl lg:text-5xl
+                        <h1 className="
+        text-3xl md:text-4xl
         font-bold
-        tracking-tight
-        leading-tight
         text-slate-900 dark:text-white
-        max-w-4xl
-      "
-                        >
-                            {activeSubtheme.title || activeSubtheme.name}
+        mb-6
+        leading-tight
+      ">
+                            {activeSubtheme.title || activeSubtheme.name || "Theme"}
                         </h1>
 
-                        {/* Decorative underline */}
-                        <div className="mt-6 mb-10 h-[3px] w-20 bg-teal-500 rounded-full" />
+                        {/* Accent line */}
+                        <div className="h-1 w-16 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full mb-6" />
 
                         {/* Description */}
-                        {activeSubtheme.description && (
+                        {activeSubtheme.description ? (
                             <div
                                 className="
           text-slate-700 dark:text-slate-300
           text-base md:text-lg
-          leading-[1.9]
-
-          [&>p]:mb-6
+          leading-[1.8]
+          font-light
+          [&>p]:mb-4
           [&>p:last-child]:mb-0
+          [&>strong]:font-semibold
+          [&>em]:italic
         "
                                 dangerouslySetInnerHTML={{
-                                    __html:
-                                        typeof activeSubtheme.description === "string"
-                                            ? activeSubtheme.description
-                                            : "",
+                                    __html: activeSubtheme.description,
                                 }}
                             />
+                        ) : (
+                            <p className="text-base text-slate-500 dark:text-slate-400 italic font-light">
+                                No description available
+                            </p>
                         )}
                     </div>
                 </section>
@@ -481,8 +463,10 @@ export default function CategoryExplorer() {
                                                 setModalLoading(true);
                                                 show();
                                                 const data = await apiFetchMonumentDetails(m._id);
-                                                setSelectedMonument(data);
-                                                setModalOpen(true);
+                                                if (data) {
+                                                    setSelectedMonument(data);
+                                                    setModalOpen(true);
+                                                }
                                             } catch (e) {
                                                 console.error(e);
                                             } finally {
@@ -490,12 +474,14 @@ export default function CategoryExplorer() {
                                                 hide();
                                             }
                                         }}
+                                        disabled={modalLoading}
                                         className="
                 inline-flex items-center gap-2
                 text-[10px] font-black
                 uppercase tracking-[0.25em]
                 text-teal-600 dark:text-teal-400
                 hover:text-teal-500
+                disabled:opacity-50 disabled:cursor-not-allowed
                 transition-colors cursor-pointer
               "
                                     >
