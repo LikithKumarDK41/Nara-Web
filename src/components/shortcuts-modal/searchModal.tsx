@@ -40,7 +40,7 @@ export default function SearchModal({
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
-    null
+    null,
   );
 
   /* -------------------- Initial Load -------------------- */
@@ -96,7 +96,7 @@ export default function SearchModal({
         setLoading(true);
 
         const selectedData = filters.filter((f) =>
-          selectedFilters.includes(f._id)
+          selectedFilters.includes(f._id),
         );
 
         const filter1 = filters[0];
@@ -128,12 +128,12 @@ export default function SearchModal({
                 console.warn("Error fetching filter:", f.title);
                 return [];
               }
-            })
+            }),
           );
 
           const combined = results.flat();
           const unique = combined.filter(
-            (m, i, arr) => arr.findIndex((x) => x._id === m._id) === i
+            (m, i, arr) => arr.findIndex((x) => x._id === m._id) === i,
           );
 
           setMonuments(unique);
@@ -173,7 +173,7 @@ export default function SearchModal({
 
   function toggleFilter(id: string) {
     setSelectedFilters((prev) =>
-      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id],
     );
   }
 
@@ -375,9 +375,9 @@ export default function SearchModal({
                         className="
                 w-8 h-8 animate-spin rounded-full
                 border-4 border-transparent
-                border-t-teal-500
-                border-r-teal-500
-                border-b-teal-400
+               border-t-teal-500
+          border-r-cyan-400
+          border-b-emerald-400
               "
                       />
                     </div>
@@ -501,9 +501,9 @@ export default function SearchModal({
                   className="
       w-10 h-10 animate-spin rounded-full
       border-4 border-transparent
-      border-t-orange-500
-      border-r-amber-500
-      border-b-yellow-500
+      border-t-teal-500
+          border-r-cyan-400
+          border-b-emerald-400
     "
                 />
               </div>
@@ -658,7 +658,7 @@ function PageNavigator({
               >
                 {n}
               </button>
-            )
+            ),
           )}
         </div>
 
@@ -685,7 +685,7 @@ function PageNavigator({
 function rangeAround(
   current: number,
   total: number,
-  radius: number
+  radius: number,
 ): (number | "…")[] {
   const out: (number | "…")[] = [];
   const start = Math.max(1, current - radius);
