@@ -26,6 +26,9 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
+  MapPinned,
+  Camera,
+  SwitchCamera,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useRef, useEffect, useState } from "react";
@@ -40,7 +43,9 @@ import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
 import { selectNav } from "@/lib/store/slices/navSlice";
 import MonumentMapModal from "../map/MonumentsMapModal";
-import { normalizeHTML, stripHTML } from "@/lib/utils";
+import { normalizeHTML, stripHTML, getDistanceInMeters } from "@/lib/utils";
+import { useGlobalLoader } from "@/providers/LoaderProvider";
+import PlaceDetailModal from "./PlaceDetailModal";
 
 /* ------------------------------------------------------------------ */
 interface MonumentDetailModalProps {
@@ -65,6 +70,7 @@ export default function MonumentDetailModal({
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
   const [events, setEvents] = useState<EventItem[]>([]);
+  const { show, hide } = useGlobalLoader();
   const nav = useAppSelector(selectNav);
   const customStyleDefault =
     "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white font-semibold shadow-md hover:shadow-xl transition-all";
@@ -86,6 +92,21 @@ export default function MonumentDetailModal({
   const [viewerOpen, setViewerOpen] = useState(false);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const isMobile =
+    typeof window !== "undefined" &&
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const [placeOpen, setPlaceOpen] = useState(false);
+  const [activePlace, setActivePlace] = useState<any>(null);
+  const [placeLoading, setPlaceLoading] = useState(false);
+
+  const openPlaceDetails = async (service: any) => {
+    setPlaceLoading(true);
+    setActivePlace(service); // you already have full object
+    setPlaceOpen(true);
+    setPlaceLoading(false);
+  };
 
   const openViewer = (index: number) => {
     setActiveIndex(index);
@@ -175,7 +196,7 @@ export default function MonumentDetailModal({
               (b: BookmarkItem) =>
                 b.marktype === "monument" &&
                 b.monument?._id === details._id &&
-                b.status === "active"
+                b.status === "active",
             ) || null;
         } else if (res?.monument?._id === details._id) {
           bookmark = res as BookmarkItem;
@@ -264,6 +285,85 @@ export default function MonumentDetailModal({
     );
   }
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
+    "environment",
+  );
+
+  useEffect(() => {
+    if (!cameraOpen) return;
+
+    const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent,
+    );
+
+    const constraints: MediaStreamConstraints = {
+      video: isMobileDevice
+        ? { facingMode: { exact: cameraFacing } } // 📱 mobile
+        : true, // 💻 desktop fallback
+    };
+
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream) => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        video.srcObject = stream;
+
+        video.onloadedmetadata = () => {
+          video.play(); // ✅ VERY IMPORTANT
+        };
+      })
+      .catch(() => {
+        toast.error(t("camera_permission_denied"));
+      });
+
+    return () => {
+      const tracks = videoRef.current?.srcObject as MediaStream;
+      tracks?.getTracks()?.forEach((t) => t.stop());
+    };
+  }, [cameraOpen, cameraFacing]);
+
+  const [isNearby, setIsNearby] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  function openStreetViewFromApi(loc: [number, number]) {
+    const [lng, lat] = loc;
+
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+
+    let url = "";
+
+    if (isIOS) {
+      // 🍎 Apple Maps (Look Around if available)
+      url = `https://maps.apple.com/?ll=${lat},${lng}&q=${lat},${lng}`;
+    } else {
+      // 🌍 Google Street View
+      url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+    }
+
+    window.open(url, "_blank");
+  }
+
+  function normalizeCoords(loc?: any): {
+    lat: number | null;
+    lng: number | null;
+  } {
+    if (!Array.isArray(loc)) return { lat: null, lng: null };
+
+    return {
+      lng: loc[0],
+      lat: loc[1],
+    };
+  }
+
+  const { lat, lng } = normalizeCoords(details?.avlocation);
+
   const hasAnyDetails =
     safeText(details?.era) ||
     safeText(details?.year) ||
@@ -273,6 +373,106 @@ export default function MonumentDetailModal({
     details?.rare ||
     (details?.popularity != null && details.popularity !== "0") ||
     !!details?.priority;
+
+  function capturePhoto() {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas) return;
+
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      toast.info(t("camera_loading_info"));
+      return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // 🤳 Fix selfie mirroring
+    if (cameraFacing === "user") {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
+    if (!isMobile && cameraFacing != "user") {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
+
+    ctx.drawImage(video, 0, 0);
+
+    // reset transform
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    const logo = new window.Image();
+    logo.src = "/nara_logo.png";
+    logo.onload = () => {
+      const size = 128;
+      ctx.drawImage(
+        logo,
+        canvas.width / 2 - size / 2,
+        canvas.height / 2 - size / 2,
+        size,
+        size,
+      );
+
+      setCapturedImage(canvas.toDataURL("image/png"));
+      closeCamera();
+      setPreviewOpen(true);
+    };
+  }
+
+  async function shareImage() {
+    if (!capturedImage) return;
+
+    const blob = await (await fetch(capturedImage)).blob();
+    const file = new File([blob], "gose-visit.png", {
+      type: "image/png",
+    });
+
+    // 📱 MOBILE: use native share (WhatsApp, Mail, Messages)
+    if (
+      isMobile &&
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({ files: [file] })
+    ) {
+      await navigator.share({
+        title: "Gose Visit",
+        text: "Captured at Gose monument",
+        files: [file],
+      });
+      return;
+    }
+
+    // 💻 DESKTOP / TEAMS: download fallback
+    downloadImageFallback(capturedImage);
+  }
+
+  function downloadImageFallback(dataUrl: string) {
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = "gose-visit.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    toast.success(t("image_downloaded"));
+  }
+
+  function closeCamera() {
+    const video = videoRef.current;
+
+    if (video && video.srcObject) {
+      const stream = video.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      video.srcObject = null; // 🔑 VERY IMPORTANT
+    }
+
+    setCameraOpen(false);
+  }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -284,7 +484,7 @@ export default function MonumentDetailModal({
         className="z-50
   w-screen
   h-[100dvh]
-  md:h-screen
+  md:h-[100dvh] lg:h-screen
   bg-background
   p-0
   !max-w-full
@@ -344,7 +544,7 @@ export default function MonumentDetailModal({
                     <button
                       onClick={handleBookmarkToggle}
                       aria-label="Toggle bookmark"
-                      className="
+                      className="cursor-pointer
     absolute top-4 right-4 z-10
     flex items-center justify-center
     p-2 rounded-full
@@ -374,6 +574,81 @@ export default function MonumentDetailModal({
                         />
                       )}
                     </button>
+
+                    {details.avenabled && details.avlocation && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openStreetViewFromApi(details.avlocation);
+                        }}
+                        aria-label="Open street view"
+                        title={t("open_street_view")}
+                        className="cursor-pointer absolute top-20 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition"
+                      >
+                        <MapPinned className="h-8 w-8 text-white cursor-pointer" />
+
+                        {/* 360 badge */}
+                        <span className="absolute -right-2 -top-1 rounded-full bg-black/80 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          360
+                        </span>
+                      </button>
+                    )}
+
+                    {details.arenabled && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          show();
+
+                          navigator.geolocation.getCurrentPosition(
+                            (pos) => {
+                              const userLat = pos.coords.latitude;
+                              const userLng = pos.coords.longitude;
+
+                              const [lng, lat] = details.location;
+                              const distance = getDistanceInMeters(
+                                userLat,
+                                userLng,
+                                lat,
+                                lng,
+                              );
+
+                              const nearby =
+                                distance <=
+                                (details.georadius ? details.georadius : 150);
+
+                              setIsNearby(nearby);
+                              if (!nearby) {
+                                toast.error(t("move_closer_to_monument"));
+                                hide();
+                                return;
+                              } else {
+                                setCameraOpen(true);
+                                setTimeout(() => {
+                                  hide();
+                                }, 500);
+                              }
+                            },
+                            (err) => {
+                              console.error("Geolocation error:", err);
+                              toast.error("location_permission_required");
+                            },
+                            { enableHighAccuracy: true },
+                          );
+                        }}
+                        title={t("open_camera")}
+                        className={`cursor-pointer absolute right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition
+  ${details?.avenabled && details?.avlocation ? "top-36" : "top-20"}
+`}
+                      >
+                        <Camera className="h-8 w-8 text-white" />
+
+                        {/* badge */}
+                        <span className="absolute -right-2 -top-1 rounded-full bg-teal-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          AR
+                        </span>
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -420,11 +695,98 @@ export default function MonumentDetailModal({
                       aria-label="Toggle bookmark"
                     >
                       {isBookmarked ? (
-                        <BookmarkCheck className="h-8 w-8 text-amber-300 dark:text-amber-300 cursor-pointer" />
+                        <BookmarkCheck
+                          className="
+        h-8 w-8
+        text-teal-400
+        drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
+      "
+                        />
                       ) : (
-                        <Bookmark className="h-8 w-8 text-white cursor-pointer" />
+                        <Bookmark
+                          className="
+        h-8 w-8
+        text-white/90
+        hover:text-teal-300
+        transition-colors
+      "
+                        />
                       )}
                     </button>
+
+                    {details.avenabled && details.avlocation && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openStreetViewFromApi(details.avlocation);
+                        }}
+                        aria-label="Open street view"
+                        title={t("open_street_view")}
+                        className="cursor-pointer absolute top-20 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition"
+                      >
+                        <MapPinned className="h-8 w-8 text-white cursor-pointer" />
+
+                        {/* 360 badge */}
+                        <span className="absolute -right-2 -top-1 rounded-full bg-black/80 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          360
+                        </span>
+                      </button>
+                    )}
+
+                    {details.arenabled && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          show();
+
+                          navigator.geolocation.getCurrentPosition(
+                            (pos) => {
+                              const userLat = pos.coords.latitude;
+                              const userLng = pos.coords.longitude;
+
+                              const [lng, lat] = details.location;
+                              const distance = getDistanceInMeters(
+                                userLat,
+                                userLng,
+                                lat,
+                                lng,
+                              );
+
+                              const nearby =
+                                distance <=
+                                (details.georadius ? details.georadius : 150);
+                              setIsNearby(nearby);
+                              if (!nearby) {
+                                toast.error(t("move_closer_to_monument"));
+                                hide();
+                                return;
+                              } else {
+                                setCameraOpen(true);
+                                setTimeout(() => {
+                                  hide();
+                                }, 500);
+                              }
+                            },
+                            (err) => {
+                              console.error("Geolocation error:", err);
+                              toast.error(t("location_permission_required"));
+                            },
+                            { enableHighAccuracy: true },
+                          );
+                        }}
+                        title={t("open_camera")}
+                        className={`cursor-pointer absolute right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition
+  ${details?.avenabled && details?.avlocation ? "top-36" : "top-20"}
+`}
+                      >
+                        <Camera className="h-8 w-8 text-white" />
+
+                        {/* badge */}
+                        <span className="absolute -right-2 -top-1 rounded-full bg-teal-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          AR
+                        </span>
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -467,8 +829,9 @@ export default function MonumentDetailModal({
                   <section className="flex flex-wrap gap-2">
                     {safeText(details?.era) && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.era")}:{" "}
                         {details.era}
@@ -476,8 +839,9 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.year) && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.year")}:{" "}
                         {details.year}
@@ -485,8 +849,9 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.size) && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.size")}:{" "}
                         {details.size}
@@ -494,8 +859,9 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.mtype) && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.type")}:{" "}
                         {details.mtype}
@@ -503,24 +869,27 @@ export default function MonumentDetailModal({
                     )}
                     {details?.featured && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.featured")}
                       </Badge>
                     )}
                     {details?.rare && (
                       <Badge
-                        className={`whitespace-normal break-words${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.rare")}
                       </Badge>
                     )}
                     {details?.popularity && details?.popularity !== "0" && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.popularity")}:{" "}
                         {details.popularity}
@@ -528,8 +897,9 @@ export default function MonumentDetailModal({
                     )}
                     {details?.priority && (
                       <Badge
-                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                          }`}
+                        className={`whitespace-normal break-words ${
+                          customStyle || customStyleDefault
+                        }`}
                       >
                         {t("shortcut.tourist_attraction_details.priority")}:{" "}
                         {details.priority}
@@ -572,7 +942,7 @@ export default function MonumentDetailModal({
                           className="mt-2"
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(
-                              details.region.content.extended
+                              details.region.content.extended,
                             ),
                           }}
                         />
@@ -582,48 +952,58 @@ export default function MonumentDetailModal({
                 )}
 
                 {/* 📷 Image Credit */}
-                {plainCredit && (
+                {details?.imagecredit && (
                   <section>
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
-                      <Info className="h-4 w-4 text-gray-500" />{" "}
+                      <Info className="h-4 w-4 text-gray-500" />
                       {t("shortcut.tourist_attraction_details.image_credit")}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {plainCredit}
-                    </p>
+
+                    <div
+                      className="
+    text-sm text-muted-foreground
+    prose prose-sm max-w-none
+    [&_a]:text-blue-600
+    [&_a]:underline
+    hover:[&_a]:text-blue-800
+  "
+                      dangerouslySetInnerHTML={{ __html: details.imagecredit }}
+                    />
                   </section>
                 )}
 
                 {/* 🏷 Theme / Subtheme */}
                 {(details?.theme?.length > 0 ||
                   details?.subtheme?.length > 0) && (
-                    <section>
-                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
-                        <Star className="h-4 w-4 text-gray-500" />{" "}
-                        {t("shortcut.tourist_attraction_details.classification")}
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {details.theme?.map((th: any, i: number) => (
-                          <Badge
-                            key={th._id || `theme-${i}`}
-                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                              }`}
-                          >
-                            {safeText(th.title || th.name)}
-                          </Badge>
-                        ))}
-                        {details.subtheme?.map((sth: any, i: number) => (
-                          <Badge
-                            key={sth._id || `subtheme-${i}`}
-                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
-                              }`}
-                          >
-                            {safeText(sth.title || sth.name)}
-                          </Badge>
-                        ))}
-                      </div>
-                    </section>
-                  )}
+                  <section>
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                      <Star className="h-4 w-4 text-gray-500" />{" "}
+                      {t("shortcut.tourist_attraction_details.classification")}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {details.theme?.map((th: any, i: number) => (
+                        <Badge
+                          key={th._id || `theme-${i}`}
+                          className={`whitespace-normal break-words ${
+                            customStyle || customStyleDefault
+                          }`}
+                        >
+                          {safeText(th.title || th.name)}
+                        </Badge>
+                      ))}
+                      {details.subtheme?.map((sth: any, i: number) => (
+                        <Badge
+                          key={sth._id || `subtheme-${i}`}
+                          className={`whitespace-normal break-words ${
+                            customStyle || customStyleDefault
+                          }`}
+                        >
+                          {safeText(sth.title || sth.name)}
+                        </Badge>
+                      ))}
+                    </div>
+                  </section>
+                )}
 
                 {/* 🖼 Gallery */}
                 {!!details.gallery?.length && (
@@ -648,7 +1028,7 @@ export default function MonumentDetailModal({
                               className="object-cover hover:scale-105 transition-transform"
                             />
                           </button>
-                        ) : null
+                        ) : null,
                       )}
                     </div>
                   </section>
@@ -677,10 +1057,11 @@ export default function MonumentDetailModal({
                       className={`
     absolute left-4 top-1/2 -translate-y-1/2 z-20
     p-2 md:p-3 rounded-full transition-all duration-200
-    ${isSingleImage
-                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-                        }
+    ${
+      isSingleImage
+        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
+        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
+    }
   `}
                     >
                       <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
@@ -712,10 +1093,11 @@ export default function MonumentDetailModal({
                       className={`
     absolute right-4 top-1/2 -translate-y-1/2 z-20
     p-2 md:p-3 rounded-full transition-all duration-200
-    ${isSingleImage
-                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-                        }
+    ${
+      isSingleImage
+        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
+        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
+    }
   `}
                     >
                       <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
@@ -729,7 +1111,7 @@ export default function MonumentDetailModal({
                     <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Landmark className="h-5 w-5 text-gray-500" />{" "}
                       {t(
-                        "shortcut.tourist_attraction_details.nearby_monuments"
+                        "shortcut.tourist_attraction_details.nearby_monuments",
                       )}
                     </h3>
                     <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
@@ -768,8 +1150,9 @@ export default function MonumentDetailModal({
 
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
-                                }`}
+                              className={`cursor-pointer w-full rounded-full mt-3 ${
+                                customStyle || customStyleDefault
+                              }`}
                               onClick={() => onOpenAnother(m._id)}
                             >
                               {t("tourDetails.viewDetails")}
@@ -792,7 +1175,7 @@ export default function MonumentDetailModal({
                       {details.relatedtours
                         .filter(
                           (tour: any) =>
-                            !(localTourId && localTourId === tour._id)
+                            !(localTourId && localTourId === tour._id),
                         )
                         .map((tour: any) => (
                           <div
@@ -838,8 +1221,9 @@ export default function MonumentDetailModal({
                               {/* BUTTON ALWAYS AT BOTTOM */}
                               <Button
                                 size="sm"
-                                className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
-                                  }`}
+                                className={`cursor-pointer w-full rounded-full mt-3 ${
+                                  customStyle || customStyleDefault
+                                }`}
                                 onClick={() =>
                                   router.push(`/tours/detail/?id=${tour._id}`)
                                 }
@@ -848,7 +1232,7 @@ export default function MonumentDetailModal({
                                 }
                               >
                                 {t(
-                                  "shortcut.tourist_attraction_details.go_tour"
+                                  "shortcut.tourist_attraction_details.go_tour",
                                 )}
                               </Button>
                             </div>
@@ -891,7 +1275,7 @@ export default function MonumentDetailModal({
                               {srv.category && (
                                 <p className="text-xs text-muted-foreground">
                                   {t(
-                                    "shortcut.tourist_attraction_details.category"
+                                    "shortcut.tourist_attraction_details.category",
                                   )}
                                   : {safeText(srv.category.name)}
                                 </p>
@@ -899,6 +1283,16 @@ export default function MonumentDetailModal({
                               {/* If no content, keep height consistent */}
                               {!srv.category && <div className="h-5"></div>}
                             </div>
+                            {/* ✅ DETAILS BUTTON */}
+                            <Button
+                              size="sm"
+                              className={`cursor-pointer w-full rounded-full mt-3 ${
+                                customStyle || customStyleDefault
+                              }`}
+                              onClick={() => openPlaceDetails(srv)}
+                            >
+                              {t("tourDetails.viewDetails")}
+                            </Button>
                           </div>
                         </div>
                       ))}
@@ -961,8 +1355,9 @@ export default function MonumentDetailModal({
 
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-2 ${customStyle || customStyleDefault
-                                }`}
+                              className={`cursor-pointer w-full rounded-full mt-2 ${
+                                customStyle || customStyleDefault
+                              }`}
                               onClick={() => {
                                 router.push(`/shortcuts/events/?id=${ev._id}`);
                               }}
@@ -985,8 +1380,9 @@ export default function MonumentDetailModal({
           <Button
             size="lg"
             onClick={() => setMapOpen(true)}
-            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${customStyle || customStyleDefault
-              }`}
+            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${
+              customStyle || customStyleDefault
+            }`}
           >
             <MapPin className="h-5 w-5" />
             {t("view_map")}
@@ -1005,7 +1401,106 @@ export default function MonumentDetailModal({
             open={mapOpen}
             onClose={() => setMapOpen(false)}
             monument={details}
-            show={!!details.nearbyservices?.length}
+            showMonument={!!details.nearbymonuments?.length}
+            showAttraction={!!details.nearbyservices?.length}
+          />
+        )}
+
+        {cameraOpen && (
+          <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
+            {/* ❌ CLOSE CAMERA */}
+            <button
+              // onClick={() => setCameraOpen(false)}
+              onClick={closeCamera}
+              className="cursor-pointer absolute top-4 right-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition"
+              aria-label="Close camera"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              // className="absolute inset-0 w-full h-full object-cover"
+              //             className={`absolute inset-0 w-full h-full object-cover
+              //   ${cameraFacing === "user" ? "scale-x-[-1]" : ""}
+
+              // `}
+
+              className={`absolute inset-0 w-full h-full object-cover
+    ${isMobile && cameraFacing === "user" ? "scale-x-[-1]" : ""}
+    ${!isMobile && cameraFacing != "user" ? "scale-x-[-1]" : ""}
+  `}
+            />
+
+            {/* GOSE LOGO */}
+            <img
+              src="/nara_logo.png"
+              alt="Gose"
+              className="absolute w-32 opacity-80"
+            />
+
+            {/* Capture */}
+            <button
+              onClick={capturePhoto}
+              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500  p-4 rounded-full shadow-lg"
+            >
+              <Camera className="h-8 w-8 text-white" />
+            </button>
+
+            {/* 🔁 SWITCH CAMERA */}
+            <button
+              onClick={() =>
+                setCameraFacing((prev) =>
+                  prev === "environment" ? "user" : "environment",
+                )
+              }
+              className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${
+                isMobile ? "" : "hidden"
+              }`}
+              aria-label="Switch camera"
+            >
+              <SwitchCamera className="h-6 w-6" />
+            </button>
+
+            <canvas ref={canvasRef} className="hidden" />
+          </div>
+        )}
+
+        {previewOpen && capturedImage && (
+          <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
+            {/* Close */}
+            <button
+              onClick={() => setPreviewOpen(false)}
+              className="absolute top-4 right-4 text-white bg-black/60 p-2 rounded-full"
+            >
+              <X />
+            </button>
+
+            {/* Image */}
+            <img
+              src={capturedImage}
+              alt="Captured"
+              className="max-h-[80vh] max-w-[90vw] object-contain rounded-xl shadow-xl"
+            />
+
+            {/* Share */}
+            <Button
+              onClick={shareImage}
+              className="cursor-pointer mt-6 rounded-full px-10 py-4 bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-lg hover:opacity-90 transition"
+            >
+              {isMobile ? t("share_photo") : t("download_photo")}
+            </Button>
+          </div>
+        )}
+        {activePlace && (
+          <PlaceDetailModal
+            open={placeOpen}
+            onClose={() => setPlaceOpen(false)}
+            loading={placeLoading}
+            details={activePlace}
+            customStyle={customStyle}
           />
         )}
       </DialogContent>

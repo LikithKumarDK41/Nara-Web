@@ -84,7 +84,7 @@ export default function ToursPage() {
       arr = arr.filter(
         (t) =>
           t.title.toLowerCase().includes(q) ||
-          (t.description ?? "").toLowerCase().includes(q)
+          (t.description ?? "").toLowerCase().includes(q),
       );
     }
 
@@ -112,7 +112,10 @@ export default function ToursPage() {
   return (
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-xl overflow-hidden">
+      <section
+        className="relative w-full mx-auto bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500
+            text-white rounded-2xl shadow-xl overflow-hidden"
+      >
         <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
           <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
             {t("tours.exploreTours")}
@@ -158,7 +161,7 @@ export default function ToursPage() {
                 {/* ===== Content Section ===== */}
                 <div className="flex flex-1 flex-col justify-between p-4">
                   <div>
-                    <h3 className="line-clamp-1 text-base font-semibold text-amber-700 dark:text-amber-300">
+                    <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
                       {tour.title}
                     </h3>
 
@@ -176,7 +179,8 @@ export default function ToursPage() {
                     onClick={() =>
                       (window.location.href = `/tours/detail?id=${tour._id}`)
                     }
-                    className="mt-3 h-9 cursor-pointer rounded-lg bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white hover:opacity-90 transition-all"
+                    className="mt-3 h-9 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500
+            text-white hover:opacity-90 transition-all"
                   >
                     {t("actions.details")}
                   </Button>
@@ -229,7 +233,7 @@ function ToursToolbar({
           <Button
             variant="ghost"
             size="icon"
-            className="cursor-pointer rounded-full text-amber-700 dark:text-amber-300 hover:text-amber-700 hover:bg-orange-50 dark:hover:bg-orange-900/30"
+            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
           >
             <Search className="h-4 w-4" />
           </Button>
@@ -251,7 +255,7 @@ function ToursToolbar({
           <Button
             variant="ghost"
             size="icon"
-            className="cursor-pointer rounded-full text-amber-700 dark:text-amber-300 hover:text-amber-700 hover:bg-orange-50 dark:hover:bg-orange-900/30"
+            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
           >
             <ArrowUpDown className="h-4 w-4" />
           </Button>
@@ -313,8 +317,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+                        text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page <= 1}
@@ -339,17 +343,17 @@ function PageNavigator({
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
                   ${
                     n === page
-                      ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
+                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
                       : `
-                        text-orange-600 dark:text-amber-400
-                        hover:bg-orange-50 dark:hover:bg-orange-900/30
+                        text-teal-600 dark:text-teal-400
+                        hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `
                   }
                 `}
               >
                 {n}
               </button>
-            )
+            ),
           )}
         </div>
 
@@ -359,8 +363,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page >= totalPages}
@@ -378,7 +382,7 @@ function PageNavigator({
 function rangeAround(
   current: number,
   total: number,
-  radius: number
+  radius: number,
 ): (number | "…")[] {
   const out: (number | "…")[] = [];
   const start = Math.max(1, current - radius);

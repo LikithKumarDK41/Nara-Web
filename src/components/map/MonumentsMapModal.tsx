@@ -9,7 +9,7 @@ import {
 import { X, MapPin, ArrowLeft } from "lucide-react";
 import MonumentsMap from "@/components/map/MonumentsMap";
 
-export default function MonumentMapModal({ open, onClose, monument,show }: any) {
+export default function MonumentMapModal({ open, onClose, monument,showMonument, showAttraction }: any) {
   if (!monument) return null;
 
   // ⭐ For array format: [lng, lat]
@@ -78,7 +78,9 @@ export default function MonumentMapModal({ open, onClose, monument,show }: any) 
         {/* MAP */}
         <MonumentsMap
           height="100dvh"
-          show={show}
+          showMonument={showMonument}
+          showAttraction={showAttraction}
+          near_monuments={monument.nearbymonuments}
           singleLocation={{
             id: monument._id,
             title: monument.title,

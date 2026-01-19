@@ -83,9 +83,10 @@ export async function apiGetNearbyAttractionsByCategory(params: {
   lng: number;
   radius?: number;
   category: string;
+  monumentId?: string;
 }): Promise<any> {
 
-  const { lat, lng, radius = 1000, category } = params;
+  const { lat, lng, radius = 1000, category, monumentId } = params;
 
   try {
     const { data } = await api.get("/v1/nearbyattraction", {
@@ -94,6 +95,7 @@ export async function apiGetNearbyAttractionsByCategory(params: {
         lng,
         radius,
         category,
+        monument: monumentId,
       },
     });
 
