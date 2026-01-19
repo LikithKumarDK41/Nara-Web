@@ -36,7 +36,7 @@ export default function HeaderLogout() {
           backdrop-blur-md transition cursor-pointer
 
           /* 🌞 Light mode */
-          bg-white/80 border border-black/10 text-gray-700 hover:bg-black/5
+          bg-white/80 border border-black/10 text-red-500 hover:bg-black/5
 
           /* 🌙 Dark mode */
           dark:bg-black/20 dark:border-white/20 dark:text-red-500 hover:dark:bg-white/10

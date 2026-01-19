@@ -70,7 +70,7 @@ export default function UserProfileDropdown({
           whitespace-nowrap
         "
       >
-        <div className="font-semibold text-amber-700 dark:text-amber-300">{userName}</div>
+        <div className="font-semibold text-teal-700 dark:text-teal-300">{userName}</div>
         <div className="text-[11px] text-gray-900 dark:text-gray-300">{userEmail}</div>
       </div>
     </div>

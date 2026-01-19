@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
 
-function App() {
-    return <h1>Hello World</h1>;
+import CategoryExplorer from "@/components/category";
+
+export default function TechnologyPage() {
+    return (
+        <>
+            <CategoryExplorer />
+        </>
+    )
 }
-
-export default App;
