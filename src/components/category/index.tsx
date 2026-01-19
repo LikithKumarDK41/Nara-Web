@@ -135,7 +135,8 @@ export default function CategoryExplorer() {
         max-w-3xl mx-auto
         leading-relaxed
         font-light
-      ">Discover curated themes showcasing Nara&apos;s rich historical, cultural, and natural heritage
+      ">
+                        {"Discover curated themes showcasing Nara's rich historical, cultural, and natural heritage"}
                     </p>
 
                     {/* Stats row */}
