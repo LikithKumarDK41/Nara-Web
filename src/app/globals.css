@@ -739,9 +739,17 @@ body {
 }
 
 @keyframes slow-drift {
-  0% { background-position: 50% 0%; }
-  50% { background-position: 50% 6%; }
-  100% { background-position: 50% 0%; }
+  0% {
+    background-position: 50% 0%;
+  }
+
+  50% {
+    background-position: 50% 6%;
+  }
+
+  100% {
+    background-position: 50% 0%;
+  }
 }
 
 .animate-slow-drift {
@@ -753,6 +761,7 @@ body {
     clip-path: inset(0 0 100% 0);
     opacity: 0;
   }
+
   to {
     clip-path: inset(0 0 0 0);
     opacity: 1;
@@ -769,6 +778,7 @@ body {
     transform: translateY(14px);
     filter: blur(6px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -778,4 +788,166 @@ body {
 
 .animate-focus-rise {
   animation: focus-rise 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ================================
+   POPUP CARD
+================================ */
+.monument_map-popup__body {
+  padding: 12px 14px 14px;
+}
+
+.monument_map-popup__card {
+  padding: 0px 0px 10px 0px;
+}
+
+.monument_map-popup {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  max-width: 320px;
+  color: var(--popup-fg);
+}
+
+.monument_map-popup__card img {
+  display: block;
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+}
+
+.monument_map-popup__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding: 10px 10px 0px 10px;
+}
+
+.monument_map-popup__brief {
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.85;
+  padding: 0px 10px;
+}
+
+/* ================================
+   LIGHT MODE
+================================ */
+html:not(.dark) .monument_map-popup__card {
+  background: #ffffff;
+  color: #111111;
+}
+
+html:not(.dark) .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
+  color: #111;
+}
+
+/* ================================
+   DARK MODE
+================================ */
+html.dark .monument_map-popup__card {
+  background: #0f0f0f;
+  color: #ffffff;
+}
+
+html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
+  color: #ffffff;
+}
+
+/* ================================
+   MAP FLOATING TOGGLE BUTTONS
+================================ */
+
+.map-toggle-stack {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+
+/* Base button */
+.map-toggle-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border: none;
+
+  background: #ffffff;
+  color: #f97316;
+  /* orange-500 */
+
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.15);
+
+  transition: all 0.2s ease;
+}
+
+.map-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Active (checked) */
+.map-toggle-btn.active {
+  background: #f97316;
+  /* orange */
+  color: #ffffff;
+}
+
+/* Icon size */
+.map-toggle-btn span.icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ================================
+   CHECK BADGE
+================================ */
+
+.map-toggle-btn .check-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+
+  background: #22c55e;
+  /* green-500 */
+  color: #ffffff;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  border: 2px solid #ffffff;
+}
+
+/* ================================
+   DARK MODE SUPPORT
+================================ */
+
+html.dark .map-toggle-btn {
+  background: #1f2937;
+  /* gray-800 */
+  color: #f97316;
+}
+
+html.dark .map-toggle-btn.active {
+  background: #f97316;
+  color: #ffffff;
+}
+
+html.dark .map-toggle-btn .check-badge {
+  border-color: #1f2937;
 }

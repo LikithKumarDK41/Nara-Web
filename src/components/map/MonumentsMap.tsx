@@ -26,10 +26,14 @@ function escapeText(s?: string) {
 export default function MonumentsMap({
   height = "100dvh",
   singleLocation,
-  show,
+  showMonument,
+  showAttraction,
+  near_monuments,
 }: {
   height?: number | string;
-  show?: boolean;
+  showMonument?: boolean;
+  showAttraction?: boolean;
+  near_monuments?: any;
   singleLocation?: {
     id: string;
     title: string;
@@ -116,7 +120,7 @@ export default function MonumentsMap({
   async function showAttractionsByCategory(categoryId: string) {
     if (!singleLocation) return;
 
-    const { lat, lng } = singleLocation;
+    const { lat, lng, id } = singleLocation;
 
     try {
       const data = await apiGetNearbyAttractionsByCategory({
@@ -124,6 +128,7 @@ export default function MonumentsMap({
         lng,
         radius: 1000,
         category: categoryId, // ← SEND ID
+        monumentId: id,
       });
 
       const attractions = data.attractions || [];
@@ -182,11 +187,12 @@ export default function MonumentsMap({
   /* ---------- addMarkersToMap : USE category secure_url ---------- */
 
   function createPopupHTML(item: any) {
+    const rawBrief = item.content?.brief || item.brief || "";
     return `
     <div class="monument_map-popup__card">
       ${
-        item?.image
-          ? `<img src="${item.image}" />`
+        item.image?.secure_url
+          ? `<img src="${item.image.secure_url}" />`
           : `
             <div class="tour-popup__noimg">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
@@ -203,7 +209,7 @@ export default function MonumentsMap({
         ${escapeText(item.title || item.name || "")}
       </div>
       <div class="monument_map-popup__brief">
-        ${(item.brief || "").replace(/<[^>]+>/g, "")}
+      ${rawBrief.replace(/<[^>]+>/g, "")}
       </div>
     </div>
   `;
@@ -286,6 +292,22 @@ export default function MonumentsMap({
     });
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapRef.current) {
+        mapRef.current.resize();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
+  }, []);
+
   /* ---------------- Initialize Map ---------------- */
   useEffect(() => {
     if (!mapDivRef.current) return;
@@ -344,6 +366,8 @@ export default function MonumentsMap({
 
         map.resize();
         setTimeout(() => map.resize(), 0);
+        setTimeout(() => map.resize(), 100);
+        setTimeout(() => map.resize(), 300);
 
         setLoading(false);
       });
@@ -369,8 +393,13 @@ export default function MonumentsMap({
       return;
     }
 
-    await fetchNearbyMonuments();
-    setShowMonuments(true);
+    // await fetchNearbyMonuments();
+    // setShowMonuments(true);
+    if (Array.isArray(near_monuments) && near_monuments.length) {
+      setNearbyMonuments(near_monuments);
+      addMarkersToMap(near_monuments, "monument");
+      setShowMonuments(true);
+    }
   };
 
   const toggleAttractions = async () => {
@@ -477,48 +506,58 @@ export default function MonumentsMap({
   return (
     <div
       className="relative w-full overflow-hidden bg-white"
-      style={{ height }}
+      style={{
+        height,
+        width: "100vw",
+        maxWidth: "100vw",
+      }}
     >
       <div ref={mapDivRef} className="w-full h-full" />
 
       {/* Right-side Floating Buttons */}
-      {singleLocation && show && (
+      {singleLocation && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-[5]">
-          <button
-            onClick={toggleMonuments}
-            className={`cursor-pointer relative rounded-2xl px-3 py-2 shadow-md bg-white rounded-2xl px-2 py-2 shadow-md relative
+          {showMonument && (
+            <button
+              onClick={toggleMonuments}
+              className={`cursor-pointer relative rounded-2xl px-3 py-2 shadow-md bg-white rounded-2xl px-2 py-2 shadow-md relative
     
   `}
-          >
-            <Landmark className="text-amber-600" />
+            >
+              <Landmark className="text-amber-600" />
 
-            {showMonuments && (
-              <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full px-1">
-                ✓
-              </span>
-            )}
-          </button>
+              {showMonuments && (
+                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full px-1">
+                  ✓
+                </span>
+              )}
+            </button>
+          )}
 
           {attractionCategories.map((cat) => {
             const isSelected = activeCategories.includes(cat._id);
 
             return (
-              <button
-                key={cat._id}
-                onClick={() => loadCategory(cat._id)}
-                className={`flex items-center justify-center bg-white rounded-2xl px-2 py-2 shadow-md relative`}
-              >
-                <img
-                  src={cat.image?.secure_url}
-                  className="w-6 h-6 object-contain"
-                />
+              <>
+                {showAttraction && (
+                  <button
+                    key={cat._id}
+                    onClick={() => loadCategory(cat._id)}
+                    className={`cursor-pointer flex items-center justify-center bg-white rounded-2xl px-2 py-2 shadow-md relative`}
+                  >
+                    <img
+                      src={cat.image?.secure_url}
+                      className="w-8 h-8 object-contain"
+                    />
 
-                {isSelected && (
-                  <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full px-1">
-                    ✓
-                  </span>
+                    {isSelected && (
+                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full px-1">
+                        ✓
+                      </span>
+                    )}
+                  </button>
                 )}
-              </button>
+              </>
             );
           })}
         </div>

@@ -735,5 +735,15 @@
       ]
     },
     "quick_access": "クイックアクセス"
-  }
+  },
+  "open_street_view": "ストリートビューを開く",
+  "not_near_location": "現在地が近くにありません",
+  "share_photo": "写真を共有",
+  "download_photo": "写真をダウンロード",
+  "camera_permission_denied": "カメラの使用が許可されていません",
+  "camera_loading_info": "カメラを読み込み中…",
+  "image_downloaded": "画像をダウンロードしました。",
+  "location_permission_required": "位置情報の許可が必要です。",
+  "move_closer_to_monument": "史跡に近づいてください。",
+  "open_camera": "カメラを開く"
 }

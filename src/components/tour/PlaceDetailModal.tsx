@@ -87,7 +87,7 @@ export default function PlaceDetailModal({
           z-[20000] 
   w-screen
   h-[100dvh]
-  md:h-screen
+  md:h-[100dvh] lg:h-screen
   bg-background
   p-0
   !max-w-full
