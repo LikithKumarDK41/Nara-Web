@@ -147,7 +147,7 @@ export default function MonumentsMap({
   // ✅ Same pin style as your current marker; only inner icon changes
   /* ---------- makePin : outer pin same; inner icon from category image ---------- */
   function makePin(kind: PinKind, categoryImageUrl?: string) {
-    const pinFill = "rgb(249, 115, 22)"; // your existing orange shell
+    const pinFill = "rgb(20, 184, 166)"; // your existing orange shell
 
     const el = document.createElement("div");
     el.style.width = "40px";
@@ -342,7 +342,7 @@ export default function MonumentsMap({
           const { lat, lng } = singleLocation;
 
           // ✅ main marker uses same pin style
-          const pin = makePin("monument", "rgb(249, 115, 22)");
+          const pin = makePin("monument", "rgb(20, 184, 166)");
 
           const mainMarker = new mapboxgl.Marker({ element: pin })
             .setLngLat([lng, lat])
@@ -524,7 +524,7 @@ export default function MonumentsMap({
     
   `}
             >
-              <Landmark className="text-amber-600" />
+              <Landmark className="text-teal-600" />
 
               {showMonuments && (
                 <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full px-1">
@@ -575,7 +575,7 @@ export default function MonumentsMap({
           onClick={handleNavigate}
           className="
             absolute bottom-[5%] md:bottom-[4%] left-1/2 -translate-x-1/2
-            bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:opacity-90
+            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
             text-white px-4 py-2 rounded-full shadow-lg cursor-pointer
           "
         >
