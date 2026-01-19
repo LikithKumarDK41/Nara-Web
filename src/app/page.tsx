@@ -636,7 +636,6 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
     }
   };
 
-
   const handleShortcutLink2 = (shortcut: any) => {
     try {
       if (shortcut.link && shortcut.link.trim().startsWith("{")) {
@@ -647,8 +646,10 @@ function ShortcutRow({ items, variant }: { items: any[]; variant: "primary" | "s
       }
       const priority = shortcut?.priority;
 
+      
+
       // Only allow priority 4 → 8
-      if (typeof priority !== "number" || priority < 4 || priority > 8) {
+      if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
       }
 
