@@ -6,7 +6,7 @@ import { selectActiveThemeId } from "@/lib/store/slices/globalSlice";
 import { apiFetchSubthemesWithQuery, apiFetchByLink, apiFetchThemes } from "@/services/userGlobalservice";
 import { apiFetchMonumentDetails } from "@/services/userTourService";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
-import { ArrowRight, Layers, MapPin, Star } from "lucide-react";
+import { ArrowRight, Layers, MapPin, Star, BookOpen } from "lucide-react";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 
 export default function CategoryExplorer() {
@@ -267,6 +267,78 @@ export default function CategoryExplorer() {
                 </section>
             )}
 
+            {/* ================= SELECTED SUBTHEME INTRO ================= */}
+            {activeSubtheme && (
+                <section className="space-y-8 pt-8">
+
+                    {/* Header (matches 関連スポット style) */}
+                    <div
+                        className="
+        flex items-center justify-between
+        pb-4
+        border-b border-slate-200 dark:border-white/10
+      "
+                    >
+                        <div className="flex items-center gap-3">
+                            <BookOpen className="w-5 h-5 text-teal-500" />
+                            <h2
+                                className="
+            text-lg font-bold tracking-wider uppercase
+            text-slate-900 dark:text-white
+          "
+                            >
+                                テーマ概要
+                            </h2>
+                        </div>
+                    </div>
+                    {/* ================= FULL-WIDTH SUBTHEME INTRO ================= */}
+
+                    <div>
+
+                        {/* Small context label */}
+                        <div className="mb-4 text-xs tracking-[0.3em] uppercase text-teal-600 dark:text-teal-400">
+                            Selected Theme
+                        </div>
+
+                        {/* Title */}
+                        <h1
+                            className="
+        text-3xl md:text-4xl lg:text-5xl
+        font-bold
+        tracking-tight
+        leading-tight
+        text-slate-900 dark:text-white
+        max-w-4xl
+      "
+                        >
+                            {activeSubtheme.title || activeSubtheme.name}
+                        </h1>
+
+                        {/* Decorative underline */}
+                        <div className="mt-6 mb-10 h-[3px] w-20 bg-teal-500 rounded-full" />
+
+                        {/* Description */}
+                        {activeSubtheme.description && (
+                            <div
+                                className="
+          text-slate-700 dark:text-slate-300
+          text-base md:text-lg
+          leading-[1.9]
+
+          [&>p]:mb-6
+          [&>p:last-child]:mb-0
+        "
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        typeof activeSubtheme.description === "string"
+                                            ? activeSubtheme.description
+                                            : "",
+                                }}
+                            />
+                        )}
+                    </div>
+                </section>
+            )}
 
             {view === "monuments" && (
                 <section className="space-y-14 pt-8">
