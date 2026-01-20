@@ -284,6 +284,7 @@ export default function SearchModal({
     dark:from-orange-950/12
     dark:via-amber-950/10
     dark:to-yellow-950/8
+    bg-white dark:bg-black
     backdrop-blur-2xl
     flex flex-col items-center justify-start
     overflow-y-auto h-[100dvh]
