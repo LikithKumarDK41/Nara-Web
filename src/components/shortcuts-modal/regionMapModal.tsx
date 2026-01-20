@@ -69,7 +69,7 @@ export default function RegionMapModal({
                       ${
                         view === "region"
                           ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
-                          : "text-slate-600 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-white/10"
+                          : "text-slate-600 dark:text-slate-100 hover:bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:text-white"
                       }`}
                   >
                     Region
@@ -81,7 +81,7 @@ export default function RegionMapModal({
                       ${
                         view === "map"
                           ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
-                          : "text-slate-600 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-white/10"
+                          : "text-slate-600 dark:text-slate-100 hover:bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:text-white"
                       }`}
                   >
                     Map
