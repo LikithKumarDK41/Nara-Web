@@ -37,6 +37,7 @@ import { apiFetchAbouts } from "@/services/userGlobalservice";
 import { About } from "@/lib/types/userGlobal.types";
 import SearchModal from "@/components/shortcuts-modal/searchModal";
 import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
+import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
 
 /* =======================================================================
    MAIN PAGE - HERO CAROUSEL & COMPACT LAYOUT
@@ -52,6 +53,7 @@ export default function ToursDashboardPage() {
   const [abouts, setAbouts] = useState<About[]>([]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [streetViewOpen, setStreetViewOpen] = useState(false);
+  const [regionMapOpen, setRegionMapOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -181,6 +183,7 @@ export default function ToursDashboardPage() {
               variant="primary"
               onOpenSearch={() => setSearchOpen(true)}
               onStreetView={() => setStreetViewOpen(true)}
+              onOpenRegionMap={() => setRegionMapOpen(true)}
             />
           </div>
         </section>
@@ -204,6 +207,7 @@ export default function ToursDashboardPage() {
                 variant="secondary"
                 onOpenSearch={() => setSearchOpen(true)}
                 onStreetView={() => setStreetViewOpen(true)}
+                onOpenRegionMap={() => setRegionMapOpen(true)}
               />
             </div>
           </section>
@@ -428,6 +432,10 @@ export default function ToursDashboardPage() {
           openModal={streetViewOpen}
           onClose={() => setStreetViewOpen(false)}
         />
+        <RegionMapModal
+          openMapModal={regionMapOpen}
+          onCloseMapModal={() => setRegionMapOpen(false)}
+        />
       </div>
     </div>
   );
@@ -639,11 +647,13 @@ function ShortcutRow({
   variant,
   onOpenSearch,
   onStreetView,
+  onOpenRegionMap,
 }: {
   items: any[];
   variant: "primary" | "secondary";
   onOpenSearch: () => void;
   onStreetView: () => void;
+  onOpenRegionMap: () => void;
 }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -658,6 +668,11 @@ function ShortcutRow({
         }
       }
       const priority = shortcut.priority ?? null;
+
+      if (priority === 1) {
+        onOpenRegionMap();
+        return;
+      }
 
       if (priority === 2) {
         onOpenSearch();
@@ -699,6 +714,11 @@ function ShortcutRow({
       // Only allow priority 4 → 8
       if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
+      }
+
+      if (priority === 1) {
+        onOpenRegionMap();
+        return;
       }
 
       if (priority === 2) {
