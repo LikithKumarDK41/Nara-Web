@@ -4,7 +4,19 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-import { ImageIcon, ChevronLeft, ChevronRight, Search, MapPinned, ArrowRight, Star, Compass, Play, Pause, BookOpen, Layers, Route, ArrowUpRight } from "lucide-react";
+import {
+  ImageIcon,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  MapPinned,
+  ArrowRight,
+  Star,
+  BookOpen,
+  Layers,
+  Route,
+  ArrowUpRight,
+} from "lucide-react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
 import {
@@ -24,6 +36,7 @@ import { normalizeHTML, stripHTML } from "@/lib/utils";
 import { apiFetchAbouts } from "@/services/userGlobalservice";
 import { About } from "@/lib/types/userGlobal.types";
 import SearchModal from "@/components/shortcuts-modal/searchModal";
+import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
 
 /* =======================================================================
    MAIN PAGE - HERO CAROUSEL & COMPACT LAYOUT
@@ -38,6 +51,7 @@ export default function ToursDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [abouts, setAbouts] = useState<About[]>([]);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [streetViewOpen, setStreetViewOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -93,7 +107,7 @@ export default function ToursDashboardPage() {
 
   const hasTours = (tours?.length ?? 0) > 0;
   // Get featured tours for the carousel, fallback to first 5
-  const heroTours = tours.filter(t => t.featured).slice(0, 5);
+  const heroTours = tours.filter((t) => t.featured).slice(0, 5);
   const carouselItems = heroTours.length > 0 ? heroTours : tours.slice(0, 5);
 
   /* -------------------- Priority Logic -------------------- */
@@ -115,14 +129,14 @@ export default function ToursDashboardPage() {
     shortcuts.filter((s) => {
       const p = s.priority ?? 0;
       return p >= 0 && p <= 3;
-    })
+    }),
   );
 
   const sectionTwo = placeByPriority(
     shortcuts.filter((s) => {
       const p = s.priority ?? 0;
       return p >= 4 && p <= 9;
-    })
+    }),
   );
 
   const aboutScrollRef = useRef<HTMLDivElement>(null);
@@ -136,7 +150,6 @@ export default function ToursDashboardPage() {
   /* -------------------- Render -------------------- */
   return (
     <div className="flex flex-col w-full min-h-screen">
-
       {/* ================= HERO CAROUSEL ================= */}
       <TextHeroSlider />
 
@@ -163,14 +176,18 @@ export default function ToursDashboardPage() {
         md:overflow-visible
       "
           >
-            <ShortcutRow items={sectionOne} variant="primary" onOpenSearch={() => setSearchOpen(true)}/>
+            <ShortcutRow
+              items={sectionOne}
+              variant="primary"
+              onOpenSearch={() => setSearchOpen(true)}
+              onStreetView={() => setStreetViewOpen(true)}
+            />
           </div>
         </section>
       )}
 
       {/* ================= CONTENT CONTAINER ================= */}
       <div className=" mx-auto w-full px-4 md:px-8 space-y-12">
-
         {/* ================= SERVICE INFO (Unique Title) ================= */}
         {!globalLoading && sectionTwo.length > 0 && (
           <section className="py-2">
@@ -182,7 +199,12 @@ export default function ToursDashboardPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              <ShortcutRow items={sectionTwo} variant="secondary" onOpenSearch={() => setSearchOpen(true)}/>
+              <ShortcutRow
+                items={sectionTwo}
+                variant="secondary"
+                onOpenSearch={() => setSearchOpen(true)}
+                onStreetView={() => setStreetViewOpen(true)}
+              />
             </div>
           </section>
         )}
@@ -190,7 +212,6 @@ export default function ToursDashboardPage() {
         {/* ================= ABOUT NARA HERITAGE ================= */}
         {abouts.length > 0 && (
           <section className="w-full mt-10 mb-12">
-
             {/* ===== Section Header (UNCHANGED) ===== */}
             <div className="flex items-center gap-3 mb-5 px-1 border-b border-dashed border-teal-500/30 pb-2">
               <BookOpen className="h-5 w-5 text-teal-500" />
@@ -201,7 +222,6 @@ export default function ToursDashboardPage() {
 
             {/* ===== Cards + Overlay Arrows ===== */}
             <div className="relative">
-
               {/* LEFT ARROW (desktop only) */}
               <button
                 onClick={() => scrollAbout("left")}
@@ -234,7 +254,6 @@ export default function ToursDashboardPage() {
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-
 
               {/* RIGHT ARROW (desktop only) */}
               <button
@@ -290,7 +309,6 @@ export default function ToursDashboardPage() {
         cursor-pointer
       "
                   >
-
                     {/* ===== Action Icon (Go to About) ===== */}
                     <button
                       onClick={(e) => {
@@ -350,7 +368,6 @@ export default function ToursDashboardPage() {
                   </div>
                 ))}
               </div>
-
             </div>
           </section>
         )}
@@ -365,7 +382,12 @@ export default function ToursDashboardPage() {
                   {t("home.guide_tour")}
                 </h2>
               </div>
-              <Button variant="ghost" size="sm" className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+                asChild
+              >
                 <Link href="/tours">
                   {t("actions.show_more")} <ChevronRight className="w-4 h-4" />
                 </Link>
@@ -393,18 +415,19 @@ export default function ToursDashboardPage() {
 
             {!loading && !hasTours && (
               <div className="py-12 text-center border rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border-dashed border-slate-200 dark:border-slate-800">
-                <p className="text-muted-foreground text-sm">{t("no_tours_available")}</p>
+                <p className="text-muted-foreground text-sm">
+                  {t("no_tours_available")}
+                </p>
               </div>
             )}
           </section>
         )}
 
-        <SearchModal
-  open={searchOpen}
-  onClose={() => setSearchOpen(false)}
-/>
-
-
+        <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+        <StreetViewModal
+          openModal={streetViewOpen}
+          onClose={() => setStreetViewOpen(false)}
+        />
       </div>
     </div>
   );
@@ -465,7 +488,6 @@ function TextHeroSlider() {
 
       {/* ================= TEXT ================= */}
       <div className="relative z-10 w-full px-6 md:px-12">
-
         {/* ⬆ Intentional upward positioning */}
         <div
           key={current}
@@ -533,9 +555,10 @@ function TextHeroSlider() {
             aria-label={`Go to slide ${idx + 1}`}
             className={`
               transition-all duration-500
-              ${idx === current
-                ? "w-7 h-1.5 bg-teal-500"
-                : "w-1.5 h-1.5 bg-slate-400"
+              ${
+                idx === current
+                  ? "w-7 h-1.5 bg-teal-500"
+                  : "w-1.5 h-1.5 bg-slate-400"
               }
               rounded-full
             `}
@@ -573,7 +596,9 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
         <div className="absolute top-5 left-5 z-20">
           <div className="px-4 py-1.5 rounded-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5 shadow-sm border border-teal-100 dark:border-teal-900/50">
             <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500" />
-            <span className="tracking-wide uppercase">{t("actions.featured")}</span>
+            <span className="tracking-wide uppercase">
+              {t("actions.featured")}
+            </span>
           </div>
         </div>
 
@@ -606,11 +631,20 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: "primary" | "secondary";  onOpenSearch: () => void;
- }) {
+function ShortcutRow({
+  items,
+  variant,
+  onOpenSearch,
+  onStreetView,
+}: {
+  items: any[];
+  variant: "primary" | "secondary";
+  onOpenSearch: () => void;
+  onStreetView: () => void;
+}) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { t } = useLocale();
@@ -625,13 +659,17 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
       }
       const priority = shortcut.priority ?? null;
 
-        if (priority === 2) {
+      if (priority === 2) {
         onOpenSearch();
         return;
       }
 
+      if (priority == 3) {
+        onStreetView();
+        return;
+      }
+
       const routes: Record<number, string> = {
-        3: "/category/economy",
         4: "/category/faith",
         5: "/category/art",
         6: "/category/technology",
@@ -643,7 +681,6 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
       if (priority === null) router.push("/shortcuts/tourist-map");
       else if (routes[priority]) router.push(routes[priority]);
       else router.push("/shortcuts/others");
-
     } catch (err) {
       console.error("❌ Link Error:", err);
     }
@@ -659,8 +696,6 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
       }
       const priority = shortcut?.priority;
 
-      
-
       // Only allow priority 4 → 8
       if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
@@ -668,6 +703,11 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
 
       if (priority === 2) {
         onOpenSearch();
+        return;
+      }
+
+      if (priority == 3) {
+        onStreetView();
         return;
       }
 
@@ -748,7 +788,7 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
                 {item.title}
               </span>
             </div>
-          )
+          );
         }
 
         // Secondary Design (Categories) - Compact Version of the SAME style
@@ -768,7 +808,15 @@ function ShortcutRow({ items, variant, onOpenSearch }: { items: any[]; variant: 
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
               {item.icon?.secure_url ? (
                 <div className="w-5 h-5 text-current">
-                  <img src={item.icon.secure_url} alt={item.title} className="w-full h-full object-contain" style={{ filter: "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)" }} />
+                  <img
+                    src={item.icon.secure_url}
+                    alt={item.title}
+                    className="w-full h-full object-contain"
+                    style={{
+                      filter:
+                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                    }}
+                  />
                 </div>
               ) : (
                 <Search className="w-5 h-5" />

@@ -745,5 +745,7 @@
   "image_downloaded": "画像をダウンロードしました。",
   "location_permission_required": "位置情報の許可が必要です。",
   "move_closer_to_monument": "史跡に近づいてください。",
-  "open_camera": "カメラを開く"
+  "open_camera": "カメラを開く",
+  "street_view_title": "観光名所ストリートビュー",
+  "street_view_desc": "ストリートビューで周辺の観光名所を臨場感たっぷりに探索できます"
 }

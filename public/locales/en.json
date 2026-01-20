@@ -745,5 +745,7 @@
   "image_downloaded": " Image downloaded successfully.",
   "location_permission_required": "Location permission required",
   "move_closer_to_monument": "Move closer to the monument",
-  "open_camera": "Open Camera"
+  "open_camera": "Open Camera",
+  "street_view_title": "Tourist Attractions Street View",
+  "street_view_desc": "Explore nearby tourist attractions using immersive street-level views"
 }
