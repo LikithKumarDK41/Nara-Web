@@ -276,7 +276,7 @@ export default function SearchModal({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           className="
-    fixed inset-0 z-[9999]
+      fixed inset-0 z-[9999]
     bg-gradient-to-br
       from-orange-50/20
       via-amber-50/15
@@ -286,7 +286,8 @@ export default function SearchModal({
     dark:to-yellow-950/8
     backdrop-blur-2xl
     flex flex-col items-center justify-start
-    overflow-y-auto
+    overflow-y-auto h-[100dvh]
+  md:h-[100dvh] lg:h-screen
   "
         >
           {/* Close button */}
@@ -469,7 +470,7 @@ export default function SearchModal({
                             <img
                               src={f.icon.secure_url}
                               alt={f.title}
-                              className="h-7 w-7 object-contain"
+                              className="h-7 w-7 object-contain filter brightness-0 dark:invert"
                             />
                           ) : (
                             <Search className="h-6 w-6 text-teal-600 dark:text-teal-400" />
