@@ -190,7 +190,8 @@ export default function StreetViewModal({
             dark:to-yellow-950/8
             backdrop-blur-2xl
             flex flex-col items-center justify-start
-            overflow-y-auto py-4
+            overflow-y-auto py-4 h-[100dvh]
+  md:h-[100dvh] lg:h-screen
           "
           >
             {/* Close button */}
