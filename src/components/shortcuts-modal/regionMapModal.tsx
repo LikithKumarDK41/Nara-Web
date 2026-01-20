@@ -22,7 +22,7 @@ export default function RegionMapModal({
   }, [openMapModal]);
 
   return (
-    <div className="space-y-6 min-h-screen">
+    <div className="space-y-6">
       <AnimatePresence>
         {openMapModal && (
           <motion.div
@@ -90,19 +90,163 @@ export default function RegionMapModal({
 
               {/* ===== REGION VIEW ===== */}
               {view === "region" && (
-                <section className="mt-6 rounded-3xl bg-gradient-to-br from-teal-600 via-cyan-600 to-emerald-700 px-8 py-6 text-center text-white">
-                  <h1 className="text-2xl font-black">Region</h1>
-                  <p className="mt-2 text-white/80">{t("map_desc")}</p>
-                </section>
+               
+                   <section
+                className="mt-4 mb-4
+    w-full
+    rounded-3xl
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
+    relative
+    overflow-hidden
+  "
+              >
+                {/* Animated gradient orbs */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
+
+                {/* Subtle grid pattern */}
+                <div
+                  className="absolute inset-0 opacity-5 pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)",
+                    backgroundSize: "50px 50px",
+                  }}
+                />
+
+                {/* Content */}
+                <div className="max-w-6xl mx-auto relative z-10 text-center">
+                  {/* Overline */}
+                  <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+                      Nara Heritage
+                    </span>
+                  </div>
+
+                  {/* Main title - Enhanced typography */}
+                  <h1
+                    className="
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
+      "
+                  >
+                    <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
+                      {"Region"}
+                    </span>
+                  </h1>
+
+                  {/* Decorative accent line */}
+                  <div className="flex items-center justify-center gap-3 my-2">
+                    <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+                    <span className="text-white/60 text-xs font-medium">✦</span>
+                    <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+                  </div>
+
+                  {/* Subtitle with stats */}
+                  <p
+                    className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      "
+                  >
+                    {t("map_desc")}
+                  </p>
+                </div>
+              </section>
               )}
 
               {/* ===== MAP VIEW ===== */}
               {view === "map" && (
                 <>
-                  <section className="mt-6 rounded-3xl bg-gradient-to-br from-teal-600 via-cyan-600 to-emerald-700 px-8 py-6 text-center text-white">
-                    <h1 className="text-2xl font-black">{t("map_title")}</h1>
-                    <p className="mt-2 text-white/80">{t("map_desc")}</p>
-                  </section>
+
+                   <section
+                className="mt-6 mb-4
+    w-full
+    rounded-3xl
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
+    relative
+    overflow-hidden
+  "
+              >
+                {/* Animated gradient orbs */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
+
+                {/* Subtle grid pattern */}
+                <div
+                  className="absolute inset-0 opacity-5 pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)",
+                    backgroundSize: "50px 50px",
+                  }}
+                />
+
+                {/* Content */}
+                <div className="max-w-6xl mx-auto relative z-10 text-center">
+                  {/* Overline */}
+                  <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+                    <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+                      Nara Heritage
+                    </span>
+                  </div>
+
+                  {/* Main title - Enhanced typography */}
+                  <h1
+                    className="
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
+      "
+                  >
+                    <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
+                      {t("map_title")}
+                    </span>
+                  </h1>
+
+                  {/* Decorative accent line */}
+                  <div className="flex items-center justify-center gap-3 my-2">
+                    <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+                    <span className="text-white/60 text-xs font-medium">✦</span>
+                    <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+                  </div>
+
+                  {/* Subtitle with stats */}
+                  <p
+                    className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      "
+                  >
+                    {t("map_desc")}
+                  </p>
+                </div>
+              </section>
 
                   <div className="w-full mt-4">
                     <RegionMap height={600} />
