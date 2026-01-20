@@ -37,6 +37,7 @@ import { apiFetchAbouts } from "@/services/userGlobalservice";
 import { About } from "@/lib/types/userGlobal.types";
 import SearchModal from "@/components/shortcuts-modal/searchModal";
 import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
+import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
 
 /* =======================================================================
    MAIN PAGE - HERO CAROUSEL & COMPACT LAYOUT
@@ -52,6 +53,7 @@ export default function ToursDashboardPage() {
   const [abouts, setAbouts] = useState<About[]>([]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [streetViewOpen, setStreetViewOpen] = useState(false);
+  const [regionMapOpen, setRegionMapOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -169,18 +171,18 @@ export default function ToursDashboardPage() {
         <section className="w-full p-4">
           <div
             className="
-        flex flex-wrap
-        gap-4
-        justify-center
-        md:flex-nowrap md:justify-center
-        md:overflow-visible
-      "
+    grid grid-cols-3 gap-3           /* ✅ MOBILE: force 3 in one row */
+    md:flex md:flex-nowrap md:gap-4 /* ✅ TAB & DESKTOP: SAME AS BEFORE */
+    justify-center
+    md:overflow-visible
+  "
           >
             <ShortcutRow
               items={sectionOne}
               variant="primary"
               onOpenSearch={() => setSearchOpen(true)}
               onStreetView={() => setStreetViewOpen(true)}
+              onOpenRegionMap={() => setRegionMapOpen(true)}
             />
           </div>
         </section>
@@ -204,6 +206,7 @@ export default function ToursDashboardPage() {
                 variant="secondary"
                 onOpenSearch={() => setSearchOpen(true)}
                 onStreetView={() => setStreetViewOpen(true)}
+                onOpenRegionMap={() => setRegionMapOpen(true)}
               />
             </div>
           </section>
@@ -428,6 +431,10 @@ export default function ToursDashboardPage() {
           openModal={streetViewOpen}
           onClose={() => setStreetViewOpen(false)}
         />
+        <RegionMapModal
+          openMapModal={regionMapOpen}
+          onCloseMapModal={() => setRegionMapOpen(false)}
+        />
       </div>
     </div>
   );
@@ -555,10 +562,9 @@ function TextHeroSlider() {
             aria-label={`Go to slide ${idx + 1}`}
             className={`
               transition-all duration-500
-              ${
-                idx === current
-                  ? "w-7 h-1.5 bg-teal-500"
-                  : "w-1.5 h-1.5 bg-slate-400"
+              ${idx === current
+                ? "w-7 h-1.5 bg-teal-500"
+                : "w-1.5 h-1.5 bg-slate-400"
               }
               rounded-full
             `}
@@ -639,11 +645,13 @@ function ShortcutRow({
   variant,
   onOpenSearch,
   onStreetView,
+  onOpenRegionMap,
 }: {
   items: any[];
   variant: "primary" | "secondary";
   onOpenSearch: () => void;
   onStreetView: () => void;
+  onOpenRegionMap: () => void;
 }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -658,6 +666,11 @@ function ShortcutRow({
         }
       }
       const priority = shortcut.priority ?? null;
+
+      if (priority === 1) {
+        onOpenRegionMap();
+        return;
+      }
 
       if (priority === 2) {
         onOpenSearch();
@@ -699,6 +712,11 @@ function ShortcutRow({
       // Only allow priority 4 → 8
       if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
+      }
+
+      if (priority === 1) {
+        onOpenRegionMap();
+        return;
       }
 
       if (priority === 2) {
@@ -756,15 +774,15 @@ function ShortcutRow({
               key={item._id}
               onClick={() => handleShortcutClick(item)}
               className={`
-    ${baseCardStyles}
-    flex flex-col items-center justify-center
-    min-w-[140px] max-w-[140px]
-    h-[110px]
-    snap-center
-    rounded-2xl
-    shadow-md
-    bg-white dark:bg-[#0f1115]
-  `}
+  ${baseCardStyles}
+  flex flex-col items-center justify-center
+  w-full md:min-w-[140px] md:max-w-[140px]  /* ✅ fixed ONLY on md+ */
+  h-[110px]
+  rounded-2xl
+  shadow-md
+  bg-white dark:bg-[#0f1115]
+`}
+
             >
               {/* Icon */}
               <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
@@ -784,7 +802,19 @@ function ShortcutRow({
               </div>
 
               {/* Text */}
-              <span className="text-sm font-bold text-center text-slate-800 dark:text-slate-200 leading-tight">
+              <span
+                className="
+    text-sm font-bold
+    text-center
+    text-slate-800 dark:text-slate-200
+    whitespace-nowrap
+    overflow-hidden
+    text-ellipsis
+    max-w-full
+    px-2
+  "
+                title={item.title}
+              >
                 {item.title}
               </span>
             </div>
@@ -797,13 +827,13 @@ function ShortcutRow({
             key={item._id}
             onClick={() => handleShortcutLink2(item)}
             className={`
-               ${baseCardStyles}
-               flex-row gap-4 px-4 py-3.5
-               w-full h-auto min-h-[72px]
-               rounded-2xl
-               shadow-sm hover:shadow-lg hover:shadow-teal-500/10 dark:hover:shadow-teal-900/20
-               bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
-            `}
+    ${baseCardStyles}
+    flex-row gap-4 px-4 py-3.5
+    w-full min-w-0 h-auto min-h-[72px]
+    rounded-2xl
+    shadow-sm hover:shadow-lg hover:shadow-teal-500/10 dark:hover:shadow-teal-900/20
+    bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
+  `}
           >
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
               {item.icon?.secure_url ? (
@@ -823,7 +853,20 @@ function ShortcutRow({
               )}
             </div>
 
-            <span className="text-sm font-bold text-left text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-white leading-tight">
+            <span
+              className="
+    text-sm font-bold
+    text-left
+    text-slate-700 dark:text-slate-200
+    group-hover:text-teal-700 dark:group-hover:text-white
+    leading-tight
+    whitespace-nowrap
+    overflow-hidden
+    text-ellipsis
+    flex-1
+  "
+              title={item.title}   // 👈 tooltip on hover (desktop)
+            >
               {item.title}
             </span>
 
