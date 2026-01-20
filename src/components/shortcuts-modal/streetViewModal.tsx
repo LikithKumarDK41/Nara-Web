@@ -188,6 +188,7 @@ export default function StreetViewModal({
             dark:from-orange-950/12
             dark:via-amber-950/10
             dark:to-yellow-950/8
+            bg-white dark:bg-black
             backdrop-blur-2xl
             flex flex-col items-center justify-start
             overflow-y-auto py-4 h-[100dvh]
@@ -261,9 +262,7 @@ export default function StreetViewModal({
         drop-shadow-lg
       "
                   >
-                    <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
                       {t("street_view_title")}
-                    </span>
                   </h1>
 
                   {/* Decorative accent line */}

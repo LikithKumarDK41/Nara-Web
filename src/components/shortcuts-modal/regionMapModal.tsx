@@ -35,6 +35,7 @@ export default function RegionMapModal({
               bg-gradient-to-br
               from-orange-50/20 via-amber-50/15 to-yellow-50/10
               dark:from-orange-950/12 dark:via-amber-950/10 dark:to-yellow-950/8
+              bg-white dark:bg-black
               backdrop-blur-2xl
               flex flex-col items-center
               overflow-y-auto py-4 h-[100dvh]
@@ -61,14 +62,14 @@ export default function RegionMapModal({
             >
               {/* ===== Toggle ===== */}
               <div className="mt-6 flex justify-center">
-                <div className="inline-flex rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border border-slate-200 dark:border-white/20">
+                <div className="inline-flex gap-2 rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border border-slate-200 dark:border-white/20">
                   <button
                     onClick={() => setView("region")}
                     className={`cursor-pointer px-6 py-3 rounded-xl font-semibold transition-all
                       ${
                         view === "region"
-                          ? "bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-400 shadow"
-                          : "text-slate-600 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-white/10"
+                          ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
+                          : "text-slate-600 dark:text-slate-100 hover:bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:text-white"
                       }`}
                   >
                     Region
@@ -79,8 +80,8 @@ export default function RegionMapModal({
                     className={`cursor-pointer px-6 py-3 rounded-xl font-semibold transition-all
                       ${
                         view === "map"
-                          ? "bg-white dark:bg-slate-900 text-teal-700 dark:text-teal-400 shadow"
-                          : "text-slate-600 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-white/10"
+                          ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
+                          : "text-slate-600 dark:text-slate-100 hover:bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:text-white"
                       }`}
                   >
                     Map
@@ -128,9 +129,9 @@ export default function RegionMapModal({
                     </span>
                   </div>
 
-                  {/* Main title - Enhanced typography */}
+
                   <h1
-                    className="
+                        className="
         text-xl sm:text-2xl md:text-3xl lg:text-4xl
         font-black
         text-white
@@ -139,11 +140,9 @@ export default function RegionMapModal({
         mt-2 mb-2
         drop-shadow-lg
       "
-                  >
-                    <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
+                    >
                       {"Region"}
-                    </span>
-                  </h1>
+                    </h1>
 
                   {/* Decorative accent line */}
                   <div className="flex items-center justify-center gap-3 my-2">
@@ -221,9 +220,7 @@ export default function RegionMapModal({
         drop-shadow-lg
       "
                   >
-                    <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
                       {t("map_title")}
-                    </span>
                   </h1>
 
                   {/* Decorative accent line */}
