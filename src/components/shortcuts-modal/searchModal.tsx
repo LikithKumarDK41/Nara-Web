@@ -470,7 +470,11 @@ export default function SearchModal({
                             <img
                               src={f.icon.secure_url}
                               alt={f.title}
-                              className="h-7 w-7 object-contain filter brightness-0 dark:invert"
+                              className="h-7 w-7 object-contain"
+                              style={{
+                                filter:
+                                  "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                              }}
                             />
                           ) : (
                             <Search className="h-6 w-6 text-teal-600 dark:text-teal-400" />

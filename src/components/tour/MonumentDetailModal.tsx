@@ -1500,7 +1500,7 @@ export default function MonumentDetailModal({
             onClose={() => setPlaceOpen(false)}
             loading={placeLoading}
             details={activePlace}
-            customStyle={customStyle}
+            customStyle={customStyleDefault}
           />
         )}
       </DialogContent>

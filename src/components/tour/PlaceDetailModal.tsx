@@ -10,7 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLocale } from "@/providers/LocaleProvider";
-import { MapPin, X, ArrowLeft, Info, ImageIcon } from "lucide-react";
+import {
+  MapPin,
+  X,
+  ArrowLeft,
+  Info,
+  ImageIcon,
+  Navigation,
+} from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { createPortal } from "react-dom";
@@ -266,14 +273,17 @@ export function FullscreenMap({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [loadingCategory, setLoadingCategory] = useState(false);
   const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
-  const { locale } = useLocale();
+  const { t, locale } = useLocale();
+  const [selectedCoords, setSelectedCoords] = useState<[number, number] | null>(
+    null,
+  );
 
   // ✅ Create custom category icon marker with styled popup (from TourMap)
   const createCategoryMarker = (
     map: mapboxgl.Map,
     place: PlaceItem,
     iconUrl: string,
-    color: string
+    color: string,
   ) => {
     if (!Array.isArray(place.location) || place.location.length !== 2)
       return null;
@@ -300,7 +310,7 @@ export function FullscreenMap({
 
     /* Popup Layout (TourMap reference) */
     const briefHtml = tidyParagraphs(
-      sanitizeRichHtml((place.content as any)?.brief ?? "")
+      sanitizeRichHtml((place.content as any)?.brief ?? ""),
     );
 
     const image = place.image?.secure_url
@@ -324,6 +334,10 @@ export function FullscreenMap({
       closeOnMove: false,
       maxWidth: "320px",
     }).setHTML(html);
+
+    popup.on("open", () => {
+      setSelectedCoords([lat, lng]);
+    });
 
     const marker = new mapboxgl.Marker({ element: el })
       .setLngLat([lng, lat])
@@ -371,7 +385,7 @@ export function FullscreenMap({
         (p: PlaceItem) =>
           p.category?._id === details.category._id &&
           Array.isArray(p.location) &&
-          p.location.length === 2
+          p.location.length === 2,
       );
 
       markers.forEach((m) => m.remove());
@@ -396,6 +410,50 @@ export function FullscreenMap({
     } catch (err) {
       console.error("Failed to load same-category places:", err);
       setLoadingCategory(false);
+    }
+  }
+
+  const handleNavigate = () => {
+    const base = Array.isArray(details?.location) ? details.location : null;
+
+    // destination = selected marker or fallback to current details
+    const destination = selectedCoords
+      ? [selectedCoords[1], selectedCoords[0]] // convert to [lng, lat] if needed
+      : base;
+
+    if (!destination) return;
+
+    const destLat = destination[1];
+    const destLng = destination[0];
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const origin = `${pos.coords.latitude},${pos.coords.longitude}`;
+        openMaps(origin, `${destLat},${destLng}`);
+      },
+      () => {
+        openMaps(null, `${destLat},${destLng}`);
+      },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  };
+
+  function openMaps(origin: string | null, destination: string) {
+    const ua = navigator.userAgent || navigator.vendor;
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+
+    if (isIOS) {
+      const appleMapsUrl = origin
+        ? `maps://?saddr=${origin}&daddr=${destination}&dirflg=d`
+        : `maps://?daddr=${destination}&dirflg=d`;
+
+      window.location.href = appleMapsUrl;
+    } else {
+      const webUrl = origin
+        ? `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
+        : `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+
+      window.open(webUrl, "_blank");
     }
   }
 
@@ -464,8 +522,23 @@ export function FullscreenMap({
             </div>
           </div>
         </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNavigate();
+          }}
+          className="cursor-pointer
+    absolute bottom-5 left-1/2 -translate-x-1/2 z-[3]
+    bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
+    text-white px-4 py-2 rounded-full shadow-lg
+    flex items-center gap-2
+  "
+        >
+          <Navigation className="w-4 h-4" />
+          {t("navigate")}
+        </button>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
