@@ -747,5 +747,9 @@
   "move_closer_to_monument": "史跡に近づいてください。",
   "open_camera": "カメラを開く",
   "street_view_title": "観光名所ストリートビュー",
-  "street_view_desc": "ストリートビューで周辺の観光名所を臨場感たっぷりに探索できます"
+  "street_view_desc": "ストリートビューで周辺の観光名所を臨場感たっぷりに探索できます",
+  "region_title": "地域でフィルター",
+  "region_desc": "史跡を特定の地域でフィルターできます",
+  "no_regions": "利用可能な地域がありません",
+  "no_regions_desc": "現在、利用可能な地域がありません"
 }
