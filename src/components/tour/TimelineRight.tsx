@@ -359,10 +359,10 @@ export default function MapTimelineRight({
                       {p.traveltime && (
                         <span
                           className="text-xs font-semibold
-               text-orange-600 dark:text-orange-400
-               bg-orange-50 dark:bg-orange-900/20
+               text-teal-600 dark:text-teal-400
+               bg-teal-50 dark:bg-teal-900/20
                px-2.5 py-1 rounded-md
-               border border-orange-100 dark:border-orange-900/30"
+               border border-teal-100 dark:border-teal-900/30"
                         >
                           {formatMinutes(p.traveltime, translate)}
                         </span>

@@ -65,7 +65,7 @@ export default function MapTimelineRight({
 
   const active = useMemo(
     () => tourpoints.find((p) => p._id === openId) ?? null,
-    [openId, tourpoints],
+    [openId, tourpoints]
   );
 
   /* -------------------- Load bookmarks -------------------- */
@@ -100,11 +100,11 @@ export default function MapTimelineRight({
   const details =
     activeMonument && monumentDetail?._id === activeMonument._id
       ? monumentDetail
-      : (activeMonument ?? active?.monument);
+      : activeMonument ?? active?.monument;
 
   const formatMinutes = (
     value?: string | number,
-    t?: (key: string) => string,
+    t?: (key: string) => string
   ) => {
     if (!value) return null;
 
@@ -140,7 +140,7 @@ export default function MapTimelineRight({
   return (
     <>
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-b from-orange-500 via-orange-400 to-orange-600 rounded-full" />
+        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 rounded-full" />
 
         <ul className="space-y-16 md:space-y-20">
           {tourpoints.map((p, i) => {
@@ -170,7 +170,7 @@ export default function MapTimelineRight({
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-orange-500 ${
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${
                           hideTop ? "top-[50%]" : "top-0"
                         } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
@@ -345,10 +345,10 @@ export default function MapTimelineRight({
                       {p.traveltime && (
                         <span
                           className="text-xs font-semibold
-               text-orange-600 dark:text-orange-400
-               bg-orange-50 dark:bg-orange-900/20
+               text-teal-600 dark:text-teal-400
+               bg-teal-50 dark:bg-teal-900/20
                px-2.5 py-1 rounded-md
-               border border-orange-100 dark:border-orange-900/30"
+               border border-teal-100 dark:border-teal-900/30"
                         >
                           {p.traveltime}
                         </span>
@@ -522,7 +522,7 @@ export default function MapTimelineRight({
                                     const location = await getCurrentLocation(
                                       100,
                                       20000,
-                                      3,
+                                      3
                                     ); // 100m accuracy, 20s timeout, 3 retries
                                     const userLocation = {
                                       lat: location.lat,
@@ -546,7 +546,7 @@ export default function MapTimelineRight({
                                       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                       Math.cos((monumentLat * Math.PI) / 180) *
                                         Math.cos(
-                                          (userLocation.lat * Math.PI) / 180,
+                                          (userLocation.lat * Math.PI) / 180
                                         ) *
                                         Math.sin(dLng / 2) *
                                         Math.sin(dLng / 2);
@@ -555,7 +555,7 @@ export default function MapTimelineRight({
                                       2 *
                                       Math.atan2(
                                         Math.sqrt(a),
-                                        Math.sqrt(1 - a),
+                                        Math.sqrt(1 - a)
                                       );
                                     const distance = R * c;
 
@@ -566,8 +566,8 @@ export default function MapTimelineRight({
                                       toast.error(
                                         t("too_far_from_monument") ||
                                           `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                            distance,
-                                          )}m`,
+                                            distance
+                                          )}m`
                                       );
                                       return;
                                     }
@@ -575,7 +575,7 @@ export default function MapTimelineRight({
                                     console.warn("Location error:", error);
                                     toast.error(
                                       t("error_getting_location") ||
-                                        "Could not get your location. Please try again.",
+                                        "Could not get your location. Please try again."
                                     );
                                     return;
                                   }
@@ -615,7 +615,7 @@ export default function MapTimelineRight({
                                     {
                                       description: t("visit_progress_success"),
                                       duration: 5000,
-                                    },
+                                    }
                                   );
 
                                   /* ------------------------------------------------
@@ -685,7 +685,7 @@ export default function MapTimelineRight({
                     <div className="p-6">
                       <h3
                         onClick={() => handleOpen(p._id)}
-                        className="cursor-pointer text-lg font-semibold truncate text-amber-700 dark:text-amber-300 transition"
+                        className="cursor-pointer text-lg font-semibold truncate text-teal-700 dark:text-teal-300 transition"
                       >
                         {m?.title ?? m?.name ?? p.name}
                       </h3>
@@ -800,7 +800,7 @@ export default function MapTimelineRight({
                                 const location = await getCurrentLocation(
                                   100,
                                   20000,
-                                  3,
+                                  3
                                 ); // 100m accuracy, 20s timeout, 3 retries
                                 const userLocation = {
                                   lat: location.lat,
@@ -822,7 +822,7 @@ export default function MapTimelineRight({
                                   Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                   Math.cos((monumentLat * Math.PI) / 180) *
                                     Math.cos(
-                                      (userLocation.lat * Math.PI) / 180,
+                                      (userLocation.lat * Math.PI) / 180
                                     ) *
                                     Math.sin(dLng / 2) *
                                     Math.sin(dLng / 2);
@@ -839,8 +839,8 @@ export default function MapTimelineRight({
                                   toast.error(
                                     t("too_far_from_monument") ||
                                       `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                        distance,
-                                      )}m`,
+                                        distance
+                                      )}m`
                                   );
                                   return;
                                 }
@@ -848,7 +848,7 @@ export default function MapTimelineRight({
                                 console.warn("Location error:", error);
                                 toast.error(
                                   t("error_getting_location") ||
-                                    "Could not get your location. Please try again.",
+                                    "Could not get your location. Please try again."
                                 );
                                 return;
                               }
@@ -888,7 +888,7 @@ export default function MapTimelineRight({
                                 {
                                   description: t("visit_progress_success"),
                                   duration: 5000,
-                                },
+                                }
                               );
 
                               /* ------------------------------------------------
@@ -1122,7 +1122,7 @@ function capitalize(str?: string) {
 }
 
 function dynamicColor(i: number, type?: "start" | "place" | "end") {
-  if (type === "start") return "#10b981"; // green
-  if (type === "end") return "#ef4444"; // red
-  return "#f97316"; // orange
+  if (type === "start") return "#14b8a6"; // teal-500
+  if (type === "end") return "#0891b2"; // cyan-600
+  return "#2dd4bf"; // teal-400
 }
