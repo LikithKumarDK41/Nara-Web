@@ -258,8 +258,8 @@ body::after {
   /* Marker wrapper effects */
   --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .18)) drop-shadow(0 10px 20px rgba(0, 0, 0, .12));
   --pin-ring: 0 0 0 0 rgba(0, 0, 0, 0);
-  --pin-ring-hover: 0 0 0 4px rgba(249, 115, 22, .18);
-  /* orange ring on hover */
+  --pin-ring-hover: 0 0 0 4px rgba(13, 148, 136, .18);
+  /* teal ring on hover */
 }
 
 /* FORCE DARK (when user picks dark) */
@@ -630,8 +630,8 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
   border: none;
 
   background: #ffffff;
-  color: #f97316;
-  /* orange-500 */
+  color: #0d9488;
+  /* teal-600 */
 
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.25),
@@ -646,8 +646,8 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
 
 /* Active (checked) */
 .map-toggle-btn.active {
-  background: #f97316;
-  /* orange */
+  background: #0d9488;
+  /* teal */
   color: #ffffff;
 }
 
@@ -690,11 +690,11 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
 html.dark .map-toggle-btn {
   background: #1f2937;
   /* gray-800 */
-  color: #f97316;
+  color: #0d9488;
 }
 
 html.dark .map-toggle-btn.active {
-  background: #f97316;
+  background: #0d9488;
   color: #ffffff;
 }
 

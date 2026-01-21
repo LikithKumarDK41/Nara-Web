@@ -35,11 +35,11 @@ function normalizeLngLat(
 }
 
 function colorFor(kind?: string) {
-  if (!kind) return "#f59e0b";
+  if (!kind) return "#0d9488";
   const k = kind.toLowerCase();
   if (k === "start") return "#16a34a";
   if (k === "end") return "#ef4444";
-  return "#f59e0b";
+  return "#0d9488";
 }
 
 function makeNumberedPin(label: string, fill: string) {
@@ -352,59 +352,67 @@ export default function MapboxTourMap({
 
         removeRouteLayers(map);
 
-        if (tour.routeJson) {
-          try {
-            const parsed = JSON.parse(tour.routeJson);
-            if (parsed?.type === "FeatureCollection") {
-              map.addSource("custom-route", { type: "geojson", data: parsed });
+        /* -------- D) Draw route using Mapbox Directions API -------- */
+        if (pointPositions.length > 1) {
+          const coordinatesStr = pointPositions
+            .map((pos) => `${pos[0]},${pos[1]}`)
+            .join(";");
 
-              map.addLayer({
-                id: "custom-route-outline",
-                type: "line",
-                source: "custom-route",
-                paint: {
-                  "line-width": 8,
-                  "line-color": "#ffffff",
-                  "line-opacity": 0.85,
-                },
-              });
+          const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${coordinatesStr}?alternatives=false&geometries=geojson&steps=false&access_token=${token}`;
 
-              map.addLayer({
-                id: "custom-route-line",
-                type: "line",
-                source: "custom-route",
-                paint: {
-                  "line-width": 4,
-                  "line-color": "#f97316",
-                  "line-opacity": 0.95,
-                },
-              });
+          fetch(directionsUrl)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.routes && data.routes.length > 0) {
+                const route = data.routes[0];
+                const geojsonData = {
+                  type: "FeatureCollection" as const,
+                  features: [
+                    {
+                      type: "Feature" as const,
+                      geometry: route.geometry,
+                      properties: {},
+                    },
+                  ],
+                };
 
-              const coords: [number, number][] = [];
-              parsed.features?.forEach((f: any) => {
-                const g = f.geometry;
-                if (g?.type === "LineString" && Array.isArray(g.coordinates)) {
-                  coords.push(...g.coordinates);
-                } else if (g?.type === "MultiLineString") {
-                  g.coordinates?.forEach((line: [number, number][]) =>
-                    coords.push(...line)
-                  );
+                if (!map.getSource("custom-route")) {
+                  map.addSource("custom-route", {
+                    type: "geojson",
+                    data: geojsonData,
+                  });
+                } else {
+                  (map.getSource("custom-route") as any).setData(geojsonData);
                 }
-              });
 
-              if (coords.length) {
-                if (bounds) coords.forEach((c) => bounds!.extend(c));
-                else {
-                  bounds = coords.reduce(
-                    (b, c) => b.extend(c),
-                    new mapboxgl.LngLatBounds(coords[0], coords[0])
-                  );
+                if (!map.getLayer("custom-route-outline")) {
+                  map.addLayer({
+                    id: "custom-route-outline",
+                    type: "line",
+                    source: "custom-route",
+                    paint: {
+                      "line-width": 8,
+                      "line-color": "#ffffff",
+                      "line-opacity": 0.85,
+                    },
+                  });
+                }
+
+                if (!map.getLayer("custom-route-line")) {
+                  map.addLayer({
+                    id: "custom-route-line",
+                    type: "line",
+                    source: "custom-route",
+                    paint: {
+                      "line-width": 4,
+                      "line-color": "#0d9488",
+                      "line-opacity": 0.95,
+                    },
+                  });
                 }
               }
-            }
-          } catch (e) {
-            console.error("Invalid routeJson:", e);
-          }
+            })
+            .catch((e) => console.error("Directions API error:", e));
         }
 
         if (bounds) {
