@@ -192,7 +192,7 @@ export default function MapTimelineRight({
                             ? "Start Station"
                             : "End Station")}
                       </h3>
-                      {/* {travelTitle && (
+                      {travelTitle && (
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {t("travel_mode")}: {travelTitle}
                         </p>
@@ -209,11 +209,11 @@ export default function MapTimelineRight({
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {t("startTime")}: {p.starttime}
                         </p>
-                      )} */}
+                      )}
                     </div>
                   </li>
 
-                  {/* {next && (
+                  {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -221,7 +221,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -252,7 +252,7 @@ export default function MapTimelineRight({
                     </div>
                   </li>
 
-                  {/* {next && (
+                  {next && (
                     <li className="flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -260,7 +260,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -294,7 +294,7 @@ export default function MapTimelineRight({
                     </div>
                   </li>
 
-                  {/* {next && (
+                  {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -302,7 +302,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -325,7 +325,7 @@ export default function MapTimelineRight({
 
                   <div className="pl-[88px] pr-4 pt-[2px]">
                     {/* Travel Info - Improved Pills */}
-                    {/* <div className="flex flex-wrap items-center gap-3 mb-4 mt-0.5">
+                    <div className="flex flex-wrap items-center gap-3 mb-4 mt-0.5">
                       <div
                         className="flex items-center gap-2 bg-gray-100 dark:bg-zinc-800
                   px-3 py-1.5 rounded-full
@@ -379,7 +379,7 @@ export default function MapTimelineRight({
                           {p.starttime || ""}
                         </span>
                       )}
-                    </div> */}
+                    </div>
 
                     {/* Compact Card */}
                     <div className="relative overflow-visible">
@@ -915,7 +915,7 @@ export default function MapTimelineRight({
                   </article>
                 </li>
 
-                {/* {next && (
+                {next && (
                   <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                     <TravelConnector
                       info={next.traveltype}
@@ -923,7 +923,7 @@ export default function MapTimelineRight({
                       next={next}
                     />
                   </li>
-                )} */}
+                )}
               </Fragment>
             );
           })}

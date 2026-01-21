@@ -72,7 +72,7 @@ export default function MapTimelineRight({
 
   const active = useMemo(
     () => tourpoints.find((p) => p._id === openId) ?? null,
-    [openId, tourpoints]
+    [openId, tourpoints],
   );
 
   /* -------------------- Load bookmarks -------------------- */
@@ -113,11 +113,11 @@ export default function MapTimelineRight({
   const details =
     activeMonument && monumentDetail?._id === activeMonument._id
       ? monumentDetail
-      : activeMonument ?? active?.monument;
+      : (activeMonument ?? active?.monument);
 
   const formatMinutes = (
     value?: string | number,
-    t?: (key: string) => string
+    t?: (key: string) => string,
   ) => {
     if (!value) return null;
 
@@ -177,13 +177,15 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li
-                    className={`grid grid-cols-[90px_1fr] gap-1 ${hideBottom ? "pb-8" : "md:pb-10 pb-0"
-                      }`}
+                    className={`grid grid-cols-[90px_1fr] gap-1 ${
+                      hideBottom ? "pb-8" : "md:pb-10 pb-0"
+                    }`}
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${hideTop ? "top-[50%]" : "top-0"
-                          } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${
+                          hideTop ? "top-[50%]" : "top-0"
+                        } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
                       <div className="absolute left-[52px] top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div
@@ -203,7 +205,7 @@ export default function MapTimelineRight({
                             ? "Start Station"
                             : "End Station")}
                       </h3>
-                      {/* {travelTitle && (
+                      {travelTitle && (
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {translate("travel_mode")}: {travelTitle}
                         </p>
@@ -220,11 +222,11 @@ export default function MapTimelineRight({
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {translate("startTime")}: {p.starttime}
                         </p>
-                      )} */}
+                      )}
                     </div>
                   </li>
 
-                  {/* {next && (
+                   {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -232,7 +234,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -263,7 +265,7 @@ export default function MapTimelineRight({
                     </div>
                   </li>
 
-                  {/* {next && (
+                  {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -271,7 +273,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -305,7 +307,7 @@ export default function MapTimelineRight({
                     </div>
                   </li>
 
-                  {/* {next && (
+                  {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -313,7 +315,7 @@ export default function MapTimelineRight({
                         next={next}
                       />
                     </li>
-                  )} */}
+                  )}
                 </Fragment>
               );
             }
@@ -337,7 +339,7 @@ export default function MapTimelineRight({
                   {/* Content (Pushed Right) */}
                   <div className="pl-[88px] pr-4 pt-[2px]">
                     {/* Travel Info - Improved Pills */}
-                    {/* <div className="flex flex-wrap items-center gap-3 mb-4 mt-0.5">
+                    <div className="flex flex-wrap items-center gap-3 mb-4 mt-0.5">
                       <div
                         className="flex items-center gap-2 bg-gray-100 dark:bg-zinc-800
                   px-3 py-1.5 rounded-full
@@ -349,7 +351,7 @@ export default function MapTimelineRight({
                      text-gray-700 dark:text-gray-300"
                         >
                           {translate(
-                            p.traveltype?.title || p.traveltype?.name || "walk"
+                            p.traveltype?.title || p.traveltype?.name || "walk",
                           )}
                         </span>
                       </div>
@@ -391,7 +393,7 @@ export default function MapTimelineRight({
                           {p.starttime || ""}
                         </span>
                       )}
-                    </div> */}
+                    </div>
 
                     {/* Compact Card */}
                     <div className="relative overflow-visible">
@@ -543,7 +545,7 @@ export default function MapTimelineRight({
                       <div className="mt-5 flex gap-3">
                         <Button
                           size="sm"
-                           className="cursor-pointer
+                          className="cursor-pointer
     w-full h-10 rounded-xl
     bg-gradient-to-r from-teal-500 via-teal-400 to-cyan-400
     hover:from-teal-600 hover:via-teal-500 hover:to-cyan-500
@@ -701,7 +703,7 @@ export default function MapTimelineRight({
                   </article>
                 </li>
 
-                {/* {next && (
+                {next && (
                   <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                     <TravelConnector
                       info={next.traveltype}
@@ -709,7 +711,7 @@ export default function MapTimelineRight({
                       next={next}
                     />
                   </li>
-                )} */}
+                )}
               </Fragment>
             );
           })}
@@ -911,6 +913,6 @@ function capitalize(str?: string) {
 
 function dynamicColor(i: number, type?: "start" | "place" | "end") {
   if (type === "start") return "#14b8a6"; // teal-500
-  if (type === "end") return "#0891b2";   // cyan-600
-  return "#2dd4bf";                       // teal-400
+  if (type === "end") return "#0891b2"; // cyan-600
+  return "#2dd4bf"; // teal-400
 }
