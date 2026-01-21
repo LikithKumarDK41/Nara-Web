@@ -229,29 +229,29 @@ export default function RegionDetailsPage() {
                         key={m._id}
                         className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all"
                       >
-                        <div className="rounded-2xl bg-white dark:bg-slate-900/40 shadow hover:shadow-lg transition overflow-hidden">
-                          <div className="relative h-48 w-full overflow-hidden">
-                            {m.image?.secure_url ? (
-                              <img
-                                src={m.image.secure_url}
-                                alt={m.title}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                              />
-                            ) : (
-                              <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-                                <ImageIcon className="h-8 w-8" />
-                              </div>
-                            )}
-                          </div>
+                        <div className="relative h-48 w-full overflow-hidden">
+                          {m.image?.secure_url ? (
+                            <img
+                              src={m.image.secure_url}
+                              alt={m.title}
+                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                            />
+                          ) : (
+                            <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
+                              <ImageIcon className="h-8 w-8" />
+                            </div>
+                          )}
+                        </div>
 
-                          <div className="flex flex-1 flex-col justify-between p-4">
-                            <h3 className="font-semibold text-teal-700 dark:text-teal-300">
+                        <div className="flex flex-1 flex-col justify-between p-4 ">
+                          <div>
+                            <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
                               {m.title?.[locale] || m.title?.en}
                             </h3>
 
                             {m.content?.brief && (
                               <p
-                                className="mt-1 text-xs text-muted-foreground line-clamp-2"
+                                className="mt-1 line-clamp-2 text-xs text-muted-foreground whitespace-pre-wrap"
                                 dangerouslySetInnerHTML={{
                                   __html: normalizeHTML(
                                     m.content.brief?.[locale] ||
@@ -274,14 +274,13 @@ export default function RegionDetailsPage() {
                                 />
                               ))}
                             </div>
-
-                            <button
-                              className="mt-3 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-                              onClick={() => handleOpenMonument(m._id)}
-                            >
-                              {t("tourDetails.viewDetails")}
-                            </button>
                           </div>
+                          <button
+                            className="mt-3 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+                            onClick={() => handleOpenMonument(m._id)}
+                          >
+                            {t("tourDetails.viewDetails")}
+                          </button>
                         </div>
                       </div>
                     ))}
