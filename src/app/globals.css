@@ -134,136 +134,166 @@
   height: 100vh;
 }
 
-/* =========================================
-   MODERN FLUID BACKGROUND (Teal/Cyan Theme)
-   ========================================= */
-
-/* Base Canvas */
-html {
+/* Masked tourism-themed background layer */
+html,
+body {
   height: 100%;
-  background-color: var(--background);
 }
 
-body {
-  min-height: 100%;
+/* Background micro-shapes layer (dots/diamonds) with a different theme color */
+html::before {
+  opacity: 0.32;
+  /* ⬆ slightly stronger */
 
-  /* 
-   Background Pattern Layer 
-   "Kazemoyou" - Flowing Wind / Stream 
-   Organic, sweeping curves that evoke wind or water currents (Nara's rivers/nature).
-   Sparse, elegant, and fluid—no rigid grid or simple shapes.
-*/
+  background:
+    repeating-radial-gradient(circle at 20% 30%,
+      color-mix(in oklab, oklch(0.82 0.18 45) 22%, transparent) 0 2px,
+      transparent 2px 28px),
+    repeating-linear-gradient(45deg,
+      color-mix(in oklab, oklch(0.85 0.17 65) 14%, transparent) 0 2px,
+      transparent 2px 26px),
+    conic-gradient(from 0deg at 82% 18%,
+      color-mix(in oklab, oklch(0.88 0.2 55) 16%, transparent) 0 10%,
+      transparent 10% 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  /* behind app content, above body background */
+  pointer-events: none;
+  /* Vivid multi-stop gradients to colorize the lines richly */
+  background:
+    linear-gradient(135deg,
+      color-mix(in oklab, oklch(0.85 0.18 45) 55%, var(--color-background)) 0%,
+      color-mix(in oklab, oklch(0.88 0.17 65) 45%, var(--color-background)) 48%,
+      color-mix(in oklab, oklch(0.92 0.16 85) 50%, var(--color-background)) 100%),
+    linear-gradient(215deg,
+      oklch(0.92 0.15 30) 0%,
+      transparent 60%),
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--color-background) 92%, transparent),
+      var(--color-background));
+  -webkit-mask-image: url('/masks/wave-lines.svg');
+  mask-image: url('/masks/wave-lines.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  mask-mode: luminance;
+  opacity: 1;
+}
+
+.dark body::before {
+  opacity: 0.9;
+  background:
+    linear-gradient(135deg, color-mix(in oklab, var(--primary) 30%, transparent), color-mix(in oklab, var(--secondary) 24%, transparent)),
+    linear-gradient(215deg, color-mix(in oklab, var(--accent) 22%, transparent), transparent 55%),
+    linear-gradient(180deg, color-mix(in oklab, var(--color-background) 96%, transparent), var(--color-background));
+}
+
+/* Fallback if CSS masks are unsupported: show the color wash softly */
+@supports not ((mask-image: url('/masks/wave-lines.svg')) or (-webkit-mask-image: url('/masks/wave-lines.svg'))) {
   body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-
-    /* 
-     Large, overlapping elliptical gradients positioned off-center 
-     to create sweeping "waves" or "ribbons" across the screen.
-  */
-    background-image:
-      /* 1. Large Swoop from Top-Left */
-      radial-gradient(120% 120% at 0% 0%, transparent 40%, color-mix(in oklab, var(--primary) 4%, transparent) 41%, transparent 60%),
-
-      /* 2. Counter-Swoop from Bottom-Right */
-      radial-gradient(130% 130% at 100% 100%, transparent 45%, color-mix(in oklab, var(--secondary) 6%, transparent) 46%, transparent 70%),
-
-      /* 3. Subtle wide arc in the middle */
-      radial-gradient(150% 100% at 50% 120%, transparent 60%, color-mix(in oklab, var(--primary) 3%, transparent) 61%, transparent 80%);
-
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-
-    /* Soft fade at the bottom to blend with content */
-    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-
-    opacity: 1;
+    -webkit-mask-image: none;
+    mask-image: none;
+    mix-blend-mode: multiply;
+    opacity: 0.25;
+    /* keep subtle so content remains readable */
   }
 
-  /* Dark Mode: Etherial, glowing currents (Aurora-like) */
   .dark body::before {
-    opacity: 0.6;
-    background-image:
-      radial-gradient(120% 120% at 0% 0%, transparent 35%, rgba(20, 184, 166, 0.1) 36%, transparent 65%),
-      radial-gradient(130% 130% at 100% 100%, transparent 40%, rgba(6, 182, 212, 0.08) 41%, transparent 70%),
-      radial-gradient(150% 100% at 50% 120%, transparent 55%, rgba(13, 148, 136, 0.05) 56%, transparent 85%);
+    opacity: 0.2;
+    mix-blend-mode: screen;
   }
+}
 
-  /* 
-   Ambient Glow (Backdrop)
-*/
-  html::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    background:
-      linear-gradient(120deg, var(--background), color-mix(in oklab, var(--primary) 4%, var(--background)));
-  }
+/* Frosted glass veil over the mask so foreground remains legible */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  /* above ::before mask, below app content (z-10) */
+  pointer-events: none;
+  /* Solid theme background overlay that hides mask while keeping glass feel */
+  background: color-mix(in oklab, var(--color-background) 86%, transparent);
+  backdrop-filter: blur(8px) saturate(110%);
+  -webkit-backdrop-filter: blur(8px) saturate(110%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 6%, transparent);
+  opacity: 0.78;
+}
 
-  .dark html::after {
-    background:
-      radial-gradient(at 0% 0%, rgba(15, 23, 42, 1) 0%, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.08) 0%, transparent 40%);
-  }
+.dark body::after {
+  background: color-mix(in oklab, var(--color-background) 90%, transparent);
+  opacity: 0.76;
+}
 
-  /* 
-   Subtle Noise Overlay 
-   Adds texture to make it feel "premium" and less flat 
-*/
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.03;
-    /* Very subtle */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    mix-blend-mode: overlay;
-  }
-
-  .dark body::after {
-    opacity: 0.06;
-    mix-blend-mode: soft-light;
-  }
-
-  /* =========================================
+/* =========================================
    THEME TOKENS (Light default)
    ========================================= */
-  :root {
-    /* Popup */
-    --popup-bg: #ffffff;
-    --popup-fg: #111111;
-    --popup-shadow: 0 12px 30px rgba(0, 0, 0, .18), 0 2px 8px rgba(0, 0, 0, .08);
-    --popup-tip: #ffffff;
-    --link: #0b57d0;
+:root {
+  /* Popup */
+  --popup-bg: #ffffff;
+  --popup-fg: #111111;
+  --popup-shadow: 0 12px 30px rgba(0, 0, 0, .18), 0 2px 8px rgba(0, 0, 0, .08);
+  --popup-tip: #ffffff;
+  --link: #0b57d0;
 
-    /* Popup close */
-    --close-bg: #ffffff;
-    --close-fg: #111111;
-    --close-border: rgba(17, 17, 17, .08);
-    --close-bg-hover: #f5f5f5;
+  /* Popup close */
+  --close-bg: #ffffff;
+  --close-fg: #111111;
+  --close-border: rgba(17, 17, 17, .08);
+  --close-bg-hover: #f5f5f5;
 
-    /* Chips */
-    --chip-bg: #f2f2f2;
-    --chip-fg: #222222;
-    --chip-border: rgba(0, 0, 0, .06);
+  /* Chips */
+  --chip-bg: #f2f2f2;
+  --chip-fg: #222222;
+  --chip-border: rgba(0, 0, 0, .06);
 
-    /* Marker wrapper effects */
-    --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .18)) drop-shadow(0 10px 20px rgba(0, 0, 0, .12));
-    --pin-ring: 0 0 0 0 rgba(0, 0, 0, 0);
-    --pin-ring-hover: 0 0 0 4px rgba(249, 115, 22, .18);
-    /* orange ring on hover */
-  }
+  /* Marker wrapper effects */
+  --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .18)) drop-shadow(0 10px 20px rgba(0, 0, 0, .12));
+  --pin-ring: 0 0 0 0 rgba(0, 0, 0, 0);
+  --pin-ring-hover: 0 0 0 4px rgba(13, 148, 136, .18);
+  /* teal ring on hover */
+}
 
-  /* FORCE DARK (when user picks dark) */
-  html[data-theme="dark"],
-  html[data-theme="dark"].dark {
+/* FORCE DARK (when user picks dark) */
+html[data-theme="dark"],
+html[data-theme="dark"].dark {
+  --popup-bg: #101214;
+  --popup-fg: #e6e6e6;
+  --popup-shadow: 0 12px 30px rgba(0, 0, 0, .36), 0 2px 8px rgba(0, 0, 0, .24);
+  --popup-tip: #101214;
+  --link: #8ab4ff;
+
+  --close-bg: #15181c;
+  --close-fg: #e6e6e6;
+  --close-border: rgba(255, 255, 255, .08);
+  --close-bg-hover: #1b1f24;
+
+  --chip-bg: #1b1f24;
+  --chip-fg: #e6e6e6;
+  --chip-border: rgba(255, 255, 255, .08);
+
+  --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .5)) drop-shadow(0 10px 20px rgba(0, 0, 0, .35));
+  --pin-ring-hover: 0 0 0 4px rgba(138, 180, 255, .18);
+}
+
+/* FORCE LIGHT (when user picks light) */
+html[data-theme="light"] {
+  /* (same as :root but with higher specificity) */
+}
+
+/* SYSTEM: follow OS only if data-theme is absent OR "system" */
+@media (prefers-color-scheme: dark) {
+
+  :root:not([data-theme]),
+  :root[data-theme="system"] {
     --popup-bg: #101214;
     --popup-fg: #e6e6e6;
     --popup-shadow: 0 12px 30px rgba(0, 0, 0, .36), 0 2px 8px rgba(0, 0, 0, .24);
@@ -282,512 +312,232 @@ body {
     --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .5)) drop-shadow(0 10px 20px rgba(0, 0, 0, .35));
     --pin-ring-hover: 0 0 0 4px rgba(138, 180, 255, .18);
   }
+}
 
-  /* FORCE LIGHT (when user picks light) */
-  html[data-theme="light"] {
-    /* (same as :root but with higher specificity) */
-  }
-
-  /* SYSTEM: follow OS only if data-theme is absent OR "system" */
-  @media (prefers-color-scheme: dark) {
-
-    :root:not([data-theme]),
-    :root[data-theme="system"] {
-      --popup-bg: #101214;
-      --popup-fg: #e6e6e6;
-      --popup-shadow: 0 12px 30px rgba(0, 0, 0, .36), 0 2px 8px rgba(0, 0, 0, .24);
-      --popup-tip: #101214;
-      --link: #8ab4ff;
-
-      --close-bg: #15181c;
-      --close-fg: #e6e6e6;
-      --close-border: rgba(255, 255, 255, .08);
-      --close-bg-hover: #1b1f24;
-
-      --chip-bg: #1b1f24;
-      --chip-fg: #e6e6e6;
-      --chip-border: rgba(255, 255, 255, .08);
-
-      --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .5)) drop-shadow(0 10px 20px rgba(0, 0, 0, .35));
-      --pin-ring-hover: 0 0 0 4px rgba(138, 180, 255, .18);
-    }
-  }
-
-  /* =========================================
+/* =========================================
    MARKERS (works with your current pins)
    ========================================= */
-  /* Style the pin container created by JS (any Mapbox marker -> our div) */
-  .mapboxgl-marker>div {
-    filter: var(--pin-shadow);
-    transition: transform .16s ease, box-shadow .16s ease;
-    border-radius: 14px;
-    /* helps the hover ring feel nicer */
-  }
+/* Style the pin container created by JS (any Mapbox marker -> our div) */
+.mapboxgl-marker>div {
+  filter: var(--pin-shadow);
+  transition: transform .16s ease, box-shadow .16s ease;
+  border-radius: 14px;
+  /* helps the hover ring feel nicer */
+}
 
-  .mapboxgl-marker>div:hover {
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: var(--pin-ring-hover);
-  }
+.mapboxgl-marker>div:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--pin-ring-hover);
+}
 
-  /* If you give your pin element a class "tour-pin" in JS, these target more specifically: */
-  /*
+/* If you give your pin element a class "tour-pin" in JS, these target more specifically: */
+/*
 .tour-pin { filter: var(--pin-shadow); transition: transform .16s ease, box-shadow .16s ease; border-radius: 14px; }
 .tour-pin:hover { transform: translateY(-1px) scale(1.02); box-shadow: var(--pin-ring-hover); }
 */
 
-  /* =========================================
+/* =========================================
    POPUP: Readability baseline
    ========================================= */
-  .mapboxgl-popup.tour-popup,
-  .mapboxgl-popup-content.tour-popup,
-  .tour-popup .mapboxgl-popup-content {
-    opacity: 1 !important;
-    filter: none !important;
-  }
+.mapboxgl-popup.tour-popup,
+.mapboxgl-popup-content.tour-popup,
+.tour-popup .mapboxgl-popup-content {
+  opacity: 1 !important;
+  filter: none !important;
+}
 
-  .mapboxgl-popup-content {
-    color: var(--popup-fg);
-    font-size: 13px;
-    line-height: 1.5;
-  }
+.mapboxgl-popup-content {
+  color: var(--popup-fg);
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-  .mapboxgl-popup-content a {
-    color: var(--link);
-    text-decoration: underline;
-  }
+.mapboxgl-popup-content a {
+  color: var(--link);
+  text-decoration: underline;
+}
 
-  /* =========================================
+/* =========================================
    POPUP: Card polish
    ========================================= */
-  .mapboxgl-popup.tour-popup .mapboxgl-popup-content {
-    padding: 0;
-    border-radius: 14px;
-    box-shadow: var(--popup-shadow);
-    overflow: hidden;
-    background: var(--popup-bg);
-    color: var(--popup-fg);
-  }
+.mapboxgl-popup.tour-popup .mapboxgl-popup-content {
+  padding: 0;
+  border-radius: 14px;
+  box-shadow: var(--popup-shadow);
+  overflow: hidden;
+  background: var(--popup-bg);
+  color: var(--popup-fg);
+}
 
-  .mapboxgl-popup.tour-popup .mapboxgl-popup-tip {
-    border-top-color: var(--popup-tip) !important;
-  }
+.mapboxgl-popup.tour-popup .mapboxgl-popup-tip {
+  border-top-color: var(--popup-tip) !important;
+}
 
-  /* Close button — large, circular */
-  .mapboxgl-popup.tour-popup .mapboxgl-popup-close-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    line-height: 26px;
-    border-radius: 9999px;
-    background: var(--close-bg);
-    color: var(--close-fg);
-    font-size: 18px;
-    font-weight: 700;
-    text-align: center;
-    border: 1px solid var(--close-border);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-    opacity: 1;
-  }
+/* Close button — large, circular */
+.mapboxgl-popup.tour-popup .mapboxgl-popup-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  line-height: 26px;
+  border-radius: 9999px;
+  background: var(--close-bg);
+  color: var(--close-fg);
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid var(--close-border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+  opacity: 1;
+}
 
-  .mapboxgl-popup.tour-popup .mapboxgl-popup-close-button:hover {
-    background: var(--close-bg-hover);
-  }
+.mapboxgl-popup.tour-popup .mapboxgl-popup-close-button:hover {
+  background: var(--close-bg-hover);
+}
 
-  /* =========================================
+/* =========================================
    POPUP: Layout blocks
    ========================================= */
-  .tour-popup__card {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    max-width: 320px;
-    color: var(--popup-fg);
-  }
-
-  .tour-popup__media .tour-popup__img {
-    display: block;
-    width: 100%;
-    max-height: 160px;
-    object-fit: cover;
-  }
-
-  .tour-popup__noimg {
-    width: 100%;
-    height: 160px;
-    /* ✅ fixed height */
-    max-height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #e5e7eb;
-    /* gray-200 */
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
-  }
-
-  .dark .tour-popup__noimg {
-    background: #374151;
-    /* gray-700 */
-  }
-
-  .tour-popup__icon {
-    width: 32px;
-    height: 32px;
-    color: #6b7280;
-    /* gray-500 */
-  }
-
-  .dark .tour-popup__icon {
-    color: #d1d5db;
-    /* gray-300 */
-  }
-
-  .tour-popup__body {
-    padding: 12px 14px 14px;
-  }
-
-  .tour-popup__title {
-    font-weight: 700;
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  .tour-popup__chips {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-
-  .tour-chip {
-    display: inline-block;
-    padding: 2px 8px;
-    font-size: 11px;
-    color: var(--chip-fg);
-    background: var(--chip-bg);
-    border: 1px solid var(--chip-border);
-    border-radius: 9999px;
-  }
-
-  .tour-popup__brief p {
-    margin: 6px 0;
-  }
-
-  .tour-popup__brief a {
-    color: var(--link);
-    text-decoration: underline;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  .animate-fadeIn {
-    animation: fadeIn .3s ease-out;
-  }
-
-  /* Global Modern Scrollbar - Dark Theme */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.35);
-  }
-
-  /* Hide scrollbar for Chrome, Safari and Edge */
-  .scrollbar-hide::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
-
-  /* Hide scrollbar for Firefox */
-  .scrollbar-hide {
-    scrollbar-width: none;
-  }
-
-  /* ================================
-   MAPBOX POPUP – BASE
-================================ */
-  .mapboxgl-popup.monument_map-popup {
-    max-width: 280px;
-    font-family: inherit;
-  }
-
-  .mapboxgl-popup.monument_map-popup .mapboxgl-popup-content {
-    padding: 0;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-    overflow: hidden;
-  }
-
-  /* ================================
-   POPUP CARD
-================================ */
-  .monument_map-popup__body {
-    padding: 12px 14px 14px;
-  }
-
-  .monument_map-popup__card {
-    padding: 0px 0px 10px 0px;
-  }
-
-  .monument_map-popup {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    max-width: 320px;
-    color: var(--popup-fg);
-  }
-
-  .monument_map-popup__card img {
-    display: block;
-    width: 100%;
-    max-height: 160px;
-    object-fit: cover;
-  }
-
-  .monument_map-popup__title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    padding: 10px 10px 0px 10px;
-  }
-
-  .monument_map-popup__brief {
-    font-size: 13px;
-    line-height: 1.4;
-    opacity: 0.85;
-    padding: 0px 10px;
-  }
-
-  /* ================================
-   LIGHT MODE
-================================ */
-  html:not(.dark) .monument_map-popup__card {
-    background: #ffffff;
-    color: #111111;
-  }
-
-  html:not(.dark) .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
-    color: #111;
-  }
-
-  /* ================================
-   DARK MODE
-================================ */
-  html.dark .monument_map-popup__card {
-    background: #0f0f0f;
-    color: #ffffff;
-  }
-
-  html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
-    color: #ffffff;
-  }
-
-  /* ================================
-   MAP FLOATING TOGGLE BUTTONS
-================================ */
-
-  .map-toggle-stack {
-    /* Marker wrapper effects */
-    --pin-shadow: drop-shadow(0 2px 6px rgba(0, 0, 0, .18)) drop-shadow(0 10px 20px rgba(0, 0, 0, .12));
-    --pin-ring: 0 0 0 0 rgba(0, 0, 0, 0);
-    --pin-ring-hover: 0 0 0 4px rgba(20, 184, 166, .18);
-    /* teal ring on hover */
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 20;
-  }
-
-  /* Base button */
-  .map-toggle-btn {
-    position: relative;
-    width: 44px;
-    height: 44px;
-    border-radius: 9999px;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    border: none;
-
-    background: #ffffff;
-    color: #14b8a6;
-    /* teal-500 */
-
-    box-shadow:
-      0 6px 14px rgba(0, 0, 0, 0.25),
-      0 2px 4px rgba(0, 0, 0, 0.15);
-
-    transition: all 0.2s ease;
-  }
-
-  .map-toggle-btn:hover {
-    transform: scale(1.05);
-  }
-
-  /* Active (checked) */
-  .map-toggle-btn.active {
-    background: #14b8a6;
-    /* teal */
-    color: #ffffff;
-  }
-
-  /* Icon size */
-  .map-toggle-btn span.icon {
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  /* ================================
-   CHECK BADGE
-================================ */
-
-  .map-toggle-btn .check-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-
-    width: 18px;
-    height: 18px;
-    border-radius: 9999px;
-
-    background: #22c55e;
-    /* green-500 */
-    color: #ffffff;
-
-    display: grid;
-    place-items: center;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    border: 2px solid #ffffff;
-  }
-
-  /* ================================
-   DARK MODE SUPPORT
-================================ */
-
-  html.dark .map-toggle-btn {
-    background: #1f2937;
-    /* gray-800 */
-    color: #f97316;
-  }
-
-  html.dark .map-toggle-btn.active {
-    background: #f97316;
-    color: #ffffff;
-  }
-
-  html.dark .map-toggle-btn .check-badge {
-    border-color: #1f2937;
-  }
-
-  /* Force Header Icons to match theme */
-  /* This targets the SVGs inside the round buttons we just added */
-  header button svg,
-  header a svg,
-  header .lucide {
-    color: inherit;
-    /* Allow parent color (Teal) to dictate SVG color */
-  }
+.tour-popup__card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  max-width: 320px;
+  color: var(--popup-fg);
 }
 
-/* Home Page Hero Slider */
-@keyframes breathe {
-  0% {
-    opacity: 0.4;
-    transform: scaleX(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scaleX(1.4);
-  }
-
-  100% {
-    opacity: 0.4;
-    transform: scaleX(1);
-  }
+.tour-popup__media .tour-popup__img {
+  display: block;
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
 }
 
-.animate-breathe {
-  animation: breathe 2.5s ease-in-out infinite;
+.tour-popup__noimg {
+  width: 100%;
+  height: 160px;
+  /* ✅ fixed height */
+  max-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+  /* gray-200 */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
-@keyframes slow-drift {
-  0% {
-    background-position: 50% 0%;
-  }
-
-  50% {
-    background-position: 50% 6%;
-  }
-
-  100% {
-    background-position: 50% 0%;
-  }
+.dark .tour-popup__noimg {
+  background: #374151;
+  /* gray-700 */
 }
 
-.animate-slow-drift {
-  animation: slow-drift 18s ease-in-out infinite;
+.tour-popup__icon {
+  width: 32px;
+  height: 32px;
+  color: #6b7280;
+  /* gray-500 */
 }
 
-@keyframes reveal {
+.dark .tour-popup__icon {
+  color: #d1d5db;
+  /* gray-300 */
+}
+
+.tour-popup__body {
+  padding: 12px 14px 14px;
+}
+
+.tour-popup__title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.tour-popup__chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tour-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--chip-fg);
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-border);
+  border-radius: 9999px;
+}
+
+.tour-popup__brief p {
+  margin: 6px 0;
+}
+
+.tour-popup__brief a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
   from {
-    clip-path: inset(0 0 100% 0);
     opacity: 0;
+    transform: translateY(4px);
   }
 
   to {
-    clip-path: inset(0 0 0 0);
     opacity: 1;
+    transform: none;
   }
 }
 
-.animate-reveal {
-  animation: reveal 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+.animate-fadeIn {
+  animation: fadeIn .3s ease-out;
 }
 
-@keyframes focus-rise {
-  0% {
-    opacity: 0;
-    transform: translateY(14px);
-    filter: blur(6px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
+/* Global Modern Scrollbar - Dark Theme */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.animate-focus-rise {
-  animation: focus-rise 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Hide scrollbar for Chrome, Safari and Edge */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* ================================
+   MAPBOX POPUP – BASE
+================================ */
+.mapboxgl-popup.monument_map-popup {
+  max-width: 280px;
+  font-family: inherit;
+}
+
+.mapboxgl-popup.monument_map-popup .mapboxgl-popup-content {
+  padding: 0;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
 }
 
 /* ================================
@@ -880,8 +630,8 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
   border: none;
 
   background: #ffffff;
-  color: #f97316;
-  /* orange-500 */
+  color: #0d9488;
+  /* teal-600 */
 
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.25),
@@ -896,8 +646,8 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
 
 /* Active (checked) */
 .map-toggle-btn.active {
-  background: #f97316;
-  /* orange */
+  background: #0d9488;
+  /* teal */
   color: #ffffff;
 }
 
@@ -940,11 +690,11 @@ html.dark .mapboxgl-popup.monument_map-popup .mapboxgl-popup-close-button {
 html.dark .map-toggle-btn {
   background: #1f2937;
   /* gray-800 */
-  color: #f97316;
+  color: #0d9488;
 }
 
 html.dark .map-toggle-btn.active {
-  background: #f97316;
+  background: #0d9488;
   color: #ffffff;
 }
 

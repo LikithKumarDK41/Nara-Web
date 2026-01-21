@@ -681,19 +681,6 @@ function ShortcutRow({
         onStreetView();
         return;
       }
-
-      const routes: Record<number, string> = {
-        4: "/category/faith",
-        5: "/category/art",
-        6: "/category/technology",
-        7: "/category/mt-kongo-and-katsuragi",
-        8: "/category/city-promotion",
-        9: "/category/meetings",
-      };
-
-      if (priority === null) router.push("/shortcuts/tourist-map");
-      else if (routes[priority]) router.push(routes[priority]);
-      else router.push("/shortcuts/others");
     } catch (err) {
       console.error("❌ Link Error:", err);
     }
@@ -712,21 +699,6 @@ function ShortcutRow({
       // Only allow priority 4 → 8
       if (typeof priority !== "number" || priority < 4 || priority > 9) {
         return; // ❌ do nothing
-      }
-
-      if (priority === 1) {
-        onOpenRegionMap();
-        return;
-      }
-
-      if (priority === 2) {
-        onOpenSearch();
-        return;
-      }
-
-      if (priority == 3) {
-        onStreetView();
-        return;
       }
 
       const routes: Record<number, string> = {

@@ -457,6 +457,87 @@ export async function apiFetchByLink<T = any>(
 
 
 
+export interface RegionImage {
+  public_id: string;
+  version: number;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  url: string;
+  secure_url: string;
+  encoding: string;
+  filename: string;
+  mimetype: string;
+  originalFilename: string;
+}
 
+export interface RegionContent {
+  brief: string;
+  extended: string;
+}
 
+export interface RegionMonument {
+  title: string;
+}
 
+export interface Region {
+  _id: string;
+  title: string;
+  name: string;
+  location: [number, number]; // [lng, lat]
+  content: RegionContent;
+  image?: RegionImage | null;
+  mapimage?: RegionImage | null;
+  state: string;
+  monuments: RegionMonument[];
+}
+
+export interface RegionListResponse {
+  regions: {
+    total: number;
+    results: Region[];
+  };
+}
+
+export async function apiFetchRegions(): Promise<RegionListResponse> {
+  try {
+    const { data } = await api.get<RegionListResponse>(
+      "/v1/regions"
+    );
+
+    return {
+      regions: {
+        total: data?.regions?.total ?? 0,
+        results: Array.isArray(data?.regions?.results)
+          ? data.regions.results
+          : [],
+      },
+    };
+  } catch (err: any) {
+    throw new Error(parseAxiosError(err, "Failed to fetch regions"));
+  }
+}
+
+export async function apiFetchRegionDetails(
+  regionId: string,
+  sort?: string,
+) {
+  try {
+    const params = new URLSearchParams();
+
+    if (sort) {
+      params.append("sort", sort);
+    }
+
+    const url = `/v1/regions/${regionId}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+
+    const res = await api.get(url);
+    return res.data.region;
+  } catch (err: any) {
+    throw new Error(parseAxiosError(err, "Failed to fetch region details"));
+  }
+}

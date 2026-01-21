@@ -466,7 +466,12 @@
     "error_phone_invalid": "電話番号は6桁以上で入力してください",
     "error_gender_required": "性別は必須です",
     "switch_to_phone": "電話番号でログイン",
-    "switch_to_email": "メールアドレスでログイン"
+    "switch_to_email": "メールアドレスでログイン",
+    "label_pincode": "郵便番号",
+    "placeholder_pincode": "7桁の郵便番号を入力してください",
+    "error_pincode_required": "郵便番号は必須です",
+    "error_pincode_invalid": "郵便番号は7桁で入力してください",
+    "error_otp_invalid": "無効なOTPコード"
   },
   "profile": {
     "editProfile": "プロフィールを編集",
@@ -507,7 +512,10 @@
     "deleteFailed": "アカウントの削除に失敗しました。もう一度お試しください。",
     "phone": "電話番号",
     "phoneRequired": "電話番号は必須です",
-    "invalidPhone": "無効な電話番号"
+    "invalidPhone": "無効な電話番号",
+    "pincode": "郵便番号",
+    "pincodeRequired": "郵便番号は必須です",
+    "invalidPincode": "郵便番号は7桁で入力してください"
   },
   "no_monuments_found": "表示できる史跡がありません",
   "no_tours_found": "表示できるツアーがありません",
@@ -747,5 +755,9 @@
   "move_closer_to_monument": "史跡に近づいてください。",
   "open_camera": "カメラを開く",
   "street_view_title": "観光名所ストリートビュー",
-  "street_view_desc": "ストリートビューで周辺の観光名所を臨場感たっぷりに探索できます"
+  "street_view_desc": "ストリートビューで周辺の観光名所を臨場感たっぷりに探索できます",
+  "region_title": "地域でフィルター",
+  "region_desc": "史跡を特定の地域でフィルターできます",
+  "no_regions": "利用可能な地域がありません",
+  "no_regions_desc": "現在、利用可能な地域がありません"
 }
