@@ -8,6 +8,7 @@ import { useLocale } from "@/providers/LocaleProvider";
 import RegionMap from "../map/regionMap";
 import { apiFetchRegions } from "@/services/userGlobalservice";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function RegionMapModal({
   openMapModal,
@@ -320,7 +321,7 @@ export default function RegionMapModal({
         text-white/80
         max-w-3xl mx-auto
         leading-relaxed
-        font-light
+      font-light
       "
                       >
                         {t("map_desc")}
@@ -342,7 +343,7 @@ export default function RegionMapModal({
 
 function RegionCard({ r }: { r: any }) {
   const { t } = useLocale();
-
+  const router = useRouter();
   return (
     <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all">
       {/* IMAGE */}
@@ -373,18 +374,18 @@ function RegionCard({ r }: { r: any }) {
               dangerouslySetInnerHTML={{ __html: r.content.brief }}
             />
           )}
-
         </div>
 
-        {/* <button
+        <button
           className="mt-3 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
           onClick={() => {
-            // future: zoom map to region
-            console.log("Open region", r._id);
+            router.push(`/regions/?id=${r._id}`);
+            // const url = `/regions/?id=${r._id}`;
+            // window.open(url);
           }}
         >
           {t("tourDetails.viewDetails")}
-        </button> */}
+        </button>
       </div>
     </div>
   );
