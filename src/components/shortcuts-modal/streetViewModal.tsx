@@ -84,7 +84,7 @@ export default function StreetViewModal({
         // 🔑 BACKEND SORT DECISION
         const backendSort =
           selectedSort === "-popularity"
-            ? "+title"
+            ? "-popularity"
             : (selectedSort ?? undefined);
 
         const data = await apiFetchAllMonumentsWithQuery({
@@ -113,7 +113,9 @@ export default function StreetViewModal({
   }, [selectedFilter, selectedSort, activeThemeId]);
 
   /* -------------------- Filtering -------------------- */
-  useEffect(() => setPage(1), [query, selectedFilter, selectedSort]);
+  useEffect(() => {
+    setPage(1);
+  }, [query, selectedFilter, selectedSort, openModal]);
 
   const filtered = useMemo(() => {
     let list = monuments;
@@ -262,7 +264,7 @@ export default function StreetViewModal({
         drop-shadow-lg
       "
                   >
-                      {t("street_view_title")}
+                    {t("street_view_title")}
                   </h1>
 
                   {/* Decorative accent line */}
