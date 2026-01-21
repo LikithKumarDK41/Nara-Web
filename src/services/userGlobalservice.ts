@@ -516,11 +516,28 @@ export async function apiFetchRegions(): Promise<RegionListResponse> {
       },
     };
   } catch (err: any) {
-    throw new Error(
-      parseAxiosError(err, "Failed to fetch regions")
-    );
+    throw new Error(parseAxiosError(err, "Failed to fetch regions"));
   }
 }
 
+export async function apiFetchRegionDetails(
+  regionId: string,
+  sort?: string,
+) {
+  try {
+    const params = new URLSearchParams();
 
+    if (sort) {
+      params.append("sort", sort);
+    }
 
+    const url = `/v1/regions/${regionId}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+
+    const res = await api.get(url);
+    return res.data.region;
+  } catch (err: any) {
+    throw new Error(parseAxiosError(err, "Failed to fetch region details"));
+  }
+}
