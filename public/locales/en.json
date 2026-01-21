@@ -466,7 +466,12 @@
     "error_phone_invalid": "Phone number must be at least 6 digits",
     "error_gender_required": "Gender required",
     "switch_to_phone": "Use phone instead",
-    "switch_to_email": "Use email instead"
+    "switch_to_email": "Use email instead",
+    "label_pincode": "Postal Code",
+    "placeholder_pincode": "Enter 7-digit postal code",
+    "error_pincode_required": "Postal code is required",
+    "error_pincode_invalid": "Postal code must be 7 digits",
+    "error_otp_invalid": "Invalid OTP"
   },
   "profile": {
     "editProfile": "Edit Profile",
@@ -507,7 +512,10 @@
     "deleteFailed": "Failed to delete account. Please try again.",
     "phone": "Phone Number",
     "phoneRequired": "Phone number required",
-    "invalidPhone": "Invalid phone number"
+    "invalidPhone": "Invalid phone number",
+    "pincode": "Postal Code",
+    "pincodeRequired": "Postal code is required",
+    "invalidPincode": "Postal code must be 7 digits"
   },
   "no_monuments_found": "No monuments found",
   "no_tours_found": "No tours found",
