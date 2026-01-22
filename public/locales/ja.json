@@ -759,5 +759,7 @@
   "region_title": "地域でフィルター",
   "region_desc": "史跡を特定の地域でフィルターできます",
   "no_regions": "利用可能な地域がありません",
-  "no_regions_desc": "現在、利用可能な地域がありません"
+  "no_regions_desc": "現在、利用可能な地域がありません",
+  "region_desc_title": "この地域の注目スポット",
+  "region_desc_subtitle": "この地域にある史跡を探索しましょう"
 }
