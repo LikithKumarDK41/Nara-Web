@@ -86,7 +86,7 @@ export default function StreetViewModal({
         const backendSort =
           selectedSort === "-popularity"
             ? "-popularity"
-            : (selectedSort ?? undefined);
+            : (selectedSort ?? "-popularity");
 
         const data = await apiFetchAllMonumentsWithQuery({
           //   filter: selectedFilter
@@ -119,12 +119,12 @@ export default function StreetViewModal({
   }, [query, selectedFilter, selectedSort, openModal]);
 
   const filtered = useMemo(() => {
-    let list = monuments;
+    const list = monuments;
 
     // ⭐ ONLY when popular sort selected
-    if (selectedSort === "-popularity") {
-      list = sortByPopularityThenName(list);
-    }
+    // if (selectedSort === "-popularity") {
+    //   list = sortByPopularityThenName(list);
+    // }
 
     if (!query.trim()) return list;
 

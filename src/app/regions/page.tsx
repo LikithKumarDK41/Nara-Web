@@ -71,7 +71,7 @@ export default function RegionDetailsPage() {
         // 🔑 BACKEND SORT DECISION
         const backendSort =
           selectedSort === "-popularity"
-            ? "+title"
+            ? "-popularity"
             : (selectedSort ?? "-popularity");
 
         const data = await apiFetchRegionDetails({
@@ -98,12 +98,12 @@ export default function RegionDetailsPage() {
   useEffect(() => setPage(1), [query, selectedSort]);
 
   const filtered = useMemo(() => {
-    let list = monuments;
+    const list = monuments;
 
     // ⭐ ONLY when popular sort selected
-    if (selectedSort === "-popularity") {
-      list = sortByPopularityThenName(list);
-    }
+    // if (selectedSort === "-popularity") {
+    //   list = sortByPopularityThenName(list);
+    // }
 
     if (!query.trim()) return list;
 
