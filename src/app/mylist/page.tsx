@@ -8,10 +8,8 @@ import {
   CheckCircle2,
   Compass,
   ImageIcon,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Trash2
+  Trash2,
+  PlayCircle,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -28,11 +26,17 @@ import {
   apiDeleteVisitHistory,
 } from "@/services/myListService";
 import { apiDeleteUserTour } from "@/services/userTourService";
+import { useAppSelector } from "@/lib/store/hook";
+import { selectNav, resetAll as resetNav } from "@/lib/store/slices/navSlice";
+import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
+import { clearTourDetail } from "@/lib/store/slices/touristSlice";
 
 /* MAIN PAGE */
 export default function LibraryPage() {
   const { t } = useLocale();
   const dispatch = useDispatch<AppDispatch>();
+  const nav = useAppSelector(selectNav);
+  const usertour = nav.usertour;
 
   const monumentDetail = useSelector((s: any) => s.tourist.monumentDetail);
   const loadingState = useSelector((s: any) => s.tourist.loading);
@@ -106,6 +110,7 @@ export default function LibraryPage() {
           visitId: t._id,
           historytype: "tour",
           tour: t.tour,
+          status: t.status,
         })),
       ];
 
@@ -141,7 +146,7 @@ export default function LibraryPage() {
           image: b.monument.image?.secure_url || b.monument.image?.url,
           description: cleanText(b.monument.content?.brief || ""),
         })),
-    [bookmarks]
+    [bookmarks],
   );
 
   const bookmarkedTours = useMemo(
@@ -155,7 +160,7 @@ export default function LibraryPage() {
           image: b.tour.image?.secure_url || b.tour.image?.url,
           description: cleanText(b.tour.content?.brief || ""),
         })),
-    [bookmarks]
+    [bookmarks],
   );
 
   const visitedMonuments = useMemo(
@@ -169,7 +174,7 @@ export default function LibraryPage() {
           image: v.monument.image?.secure_url || v.monument.image?.url,
           description: cleanText(v.monument.content?.brief || ""),
         })),
-    [visits]
+    [visits],
   );
 
   const visitedTours = useMemo(
@@ -182,8 +187,9 @@ export default function LibraryPage() {
           title: v.tour.title,
           image: v.tour.image?.secure_url || v.tour.image?.url,
           description: cleanText(v.tour.content?.brief || ""),
+          status: v.status,
         })),
-    [visits]
+    [visits],
   );
 
   /* ============================
@@ -233,7 +239,7 @@ export default function LibraryPage() {
 
   const currentData = dataList.slice(
     (currentPage - 1) * limit,
-    currentPage * limit
+    currentPage * limit,
   );
 
   /* ============================
@@ -270,7 +276,7 @@ export default function LibraryPage() {
       const v = await apiGetVisitHistoryByUser();
 
       const monumentBookmarks = (b.monuments || []).map((m: any) => ({
-        bookmarkId: m._id,     // keep bookmark id
+        bookmarkId: m._id, // keep bookmark id
         marktype: "monument",
         monument: m.monument,
       }));
@@ -304,18 +310,86 @@ export default function LibraryPage() {
 
   const deleteUserTour = async (visitId: string) => {
     await apiDeleteUserTour(visitId);
+    if (usertour && usertour._id === visitId) {
+      dispatch(resetNav());
+      dispatch(resetGeofence());
+      dispatch(clearTourDetail());
+    }
     loadVisits(); // refresh only visit history list
   };
 
   return (
     <div className="space-y-6">
       {/* HERO BANNER */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
-          <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
+      <section
+        className="mb-4
+    w-full
+    rounded-3xl
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
+    relative
+    overflow-hidden
+  "
+      >
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
+
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 opacity-5 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        {/* Content */}
+        <div className="max-w-6xl mx-auto relative z-10 text-center">
+          {/* Overline */}
+          <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+            <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+            <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+              Nara Heritage
+            </span>
+          </div>
+
+          {/* Main title - Enhanced typography */}
+          <h1
+            className="
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
+      "
+          >
             {t("personal_library")}
           </h1>
-          <p className="text-sm md:text-xl font-medium opacity-90">
+
+          {/* Decorative accent line */}
+          <div className="flex items-center justify-center gap-3 my-2">
+            <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+            <span className="text-white/60 text-xs font-medium">✦</span>
+            <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+          </div>
+
+          {/* Subtitle with stats */}
+          <p
+            className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      "
+          >
             {t("personal_library_subtitle")}
           </p>
         </div>
@@ -360,7 +434,7 @@ export default function LibraryPage() {
           open={open}
           onClose={async () => {
             setOpen(false);
-            await refreshAll();   // 🔥 reload list on modal close
+            await refreshAll(); // 🔥 reload list on modal close
           }}
           loading={modalLoading || loadingState}
           details={selectedMonument}
@@ -386,7 +460,7 @@ function InnerTabs({
   onDeleteBookmark,
   onDeleteVisit,
   isBookmarkTab,
-  onDeleteUserTour
+  onDeleteUserTour,
 }: any) {
   const hasData = data.length > 0;
   const isMonument = value === "monuments";
@@ -450,7 +524,7 @@ function InnerTabs({
                     isBookmarkTab={isBookmarkTab}
                     onDeleteUserTour={onDeleteUserTour}
                   />
-                )
+                ),
               )}
             </div>
 
@@ -510,7 +584,7 @@ function MonumentCard({
 
       <div className="flex flex-1 flex-col justify-between p-4">
         <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-amber-700 dark:text-amber-300">
+          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
             {m.name}
           </h3>
           {m.description && (
@@ -521,7 +595,7 @@ function MonumentCard({
         </div>
 
         <Button
-          className="cursor-pointer mt-3 h-9 rounded-lg bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white hover:opacity-90"
+          className="cursor-pointer mt-3 h-9 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
           onClick={() => onOpen(m._id)}
         >
           {t("Details")}
@@ -539,7 +613,7 @@ function TourCard({
   onDeleteBookmark,
   onDeleteVisit,
   isBookmarkTab,
-  onDeleteUserTour
+  onDeleteUserTour,
 }: any) {
   const { t: tr } = useLocale();
 
@@ -552,10 +626,9 @@ function TourCard({
           if (isBookmarkTab) {
             onDeleteBookmark(tour.bookmarkId);
           } else {
-            onDeleteUserTour(tour.visitId);   // ✅ FIXED
+            onDeleteUserTour(tour.visitId); // ✅ FIXED
           }
         }}
-
       >
         <Trash2 className="h-4 w-4" />
       </button>
@@ -572,11 +645,45 @@ function TourCard({
             <ImageIcon className="h-8 w-8" />
           </div>
         )}
+
+        {/* ⏸ PAUSE OVERLAY */}
+        {(tour.status === "pause" ||
+          tour.status === "start" ||
+          tour.status === "end") && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <div className="flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 text-white shadow-lg">
+              {tour.status === "pause" && (
+                <>
+                  <PlayCircle className="h-6 w-6" />
+                  <span className="text-sm font-medium">
+                    {tr("in_progress")}
+                  </span>
+                </>
+              )}
+
+              {tour.status === "start" && (
+                <>
+                  <PlayCircle className="h-6 w-6" />
+                  <span className="text-sm font-medium">
+                    {tr("in_progress")}
+                  </span>
+                </>
+              )}
+
+              {tour.status === "end" && (
+                <>
+                  <CheckCircle2 className="h-6 w-6" />
+                  <span className="text-sm font-medium">{tr("completed")}</span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
         <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-amber-700 dark:text-amber-300">
+          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
             {tour.title}
           </h3>
           {tour.description && (
@@ -588,7 +695,7 @@ function TourCard({
 
         <Button
           asChild
-          className="cursor-pointer h-9 rounded-lg bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white hover:opacity-90"
+          className="cursor-pointer h-9 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
         >
           <Link href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}>
             {tr("Details")}
@@ -627,8 +734,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page <= 1}
@@ -651,18 +758,19 @@ function PageNavigator({
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${n === page
-                    ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
-                    : `
-                        text-orange-600 dark:text-amber-400
-                        hover:bg-orange-50 dark:hover:bg-orange-900/30
+                  ${
+                    n === page
+                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                      : `
+                        text-teal-600 dark:text-teal-400
+                        hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `
                   }
                 `}
               >
                 {n}
               </button>
-            )
+            ),
           )}
         </div>
 
@@ -672,8 +780,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page >= totalPages}
@@ -688,7 +796,7 @@ function PageNavigator({
 function rangeAround(
   current: number,
   total: number,
-  radius: number
+  radius: number,
 ): (number | "…")[] {
   const out: (number | "…")[] = [];
   const start = Math.max(1, current - radius);
@@ -705,11 +813,10 @@ function rangeAround(
   return out;
 }
 
-
 function EmptyState({ icon, title, subtitle }: any) {
   return (
     <div className="grid place-items-center rounded-3xl border bg-gradient-to-br from-sky-50 to-cyan-100 dark:from-gray-900/50 dark:to-gray-800/50 p-10 text-center shadow-inner">
-      <div className="mb-3 grid h-14 w-14 place-items-center rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow">
+      <div className="mb-3 grid h-14 w-14 place-items-center rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow">
         {icon}
       </div>
       <div className="text-base font-semibold text-gray-800 dark:text-white">

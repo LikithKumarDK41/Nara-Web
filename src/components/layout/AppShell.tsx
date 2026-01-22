@@ -59,9 +59,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* ================= FLOATING TOOLBAR ================= */}
-        {/* {!isAuthPage && (
+        {!isAuthPage && (
           <FloatingToolbar onOpenSearch={() => setSearchOpen(true)} />
-        )} */}
+        )}
 
         {/* ================= SEARCH MODAL ================= */}
         <SearchModal

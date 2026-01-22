@@ -282,11 +282,12 @@ export async function apiRemoveBookmark(refId: string): Promise<void> {
   }
 }
 
-export async function apiFetchBookmarkByRef(): Promise<{
-  _id?: string;
-} | null> {
+export async function apiFetchBookmarkByRef(
+  userId: string
+): Promise<{ _id?: string } | null> {
   try {
-    const { data } = await api.get(`/v1/bookmarks`);
+    const filter = encodeURIComponent(JSON.stringify({ user: userId }));
+    const { data } = await api.get(`/v1/bookmarks?filter=${filter}`);
     const result = Array.isArray(data?.results) ? data.results[0] : data;
     return result || null;
   } catch {

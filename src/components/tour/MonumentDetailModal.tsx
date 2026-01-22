@@ -43,7 +43,7 @@ import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
 import { selectNav } from "@/lib/store/slices/navSlice";
 import MonumentMapModal from "../map/MonumentsMapModal";
-import { normalizeHTML, stripHTML, getDistanceInMeters } from "@/lib/utils";
+import { getDistanceInMeters, normalizeHTML, stripHTML } from "@/lib/utils";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 import PlaceDetailModal from "./PlaceDetailModal";
 
@@ -72,6 +72,7 @@ export default function MonumentDetailModal({
   const [events, setEvents] = useState<EventItem[]>([]);
   const { show, hide } = useGlobalLoader();
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
   const customStyleDefault =
     "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white font-semibold shadow-md hover:shadow-xl transition-all";
 
@@ -92,7 +93,6 @@ export default function MonumentDetailModal({
   const [viewerOpen, setViewerOpen] = useState(false);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
   const isMobile =
     typeof window !== "undefined" &&
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -185,7 +185,7 @@ export default function MonumentDetailModal({
 
     (async () => {
       try {
-        const res = (await apiFetchBookmarkByRef()) as any;
+        const res = (await apiFetchBookmarkByRef(auth.data?.user?._id)) as any;
         if (stop) return;
 
         let bookmark: BookmarkItem | null = null;
@@ -196,7 +196,7 @@ export default function MonumentDetailModal({
               (b: BookmarkItem) =>
                 b.marktype === "monument" &&
                 b.monument?._id === details._id &&
-                b.status === "active",
+                b.status === "active"
             ) || null;
         } else if (res?.monument?._id === details._id) {
           bookmark = res as BookmarkItem;
@@ -290,14 +290,14 @@ export default function MonumentDetailModal({
   const [cameraOpen, setCameraOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
-    "environment",
+    "environment"
   );
 
   useEffect(() => {
     if (!cameraOpen) return;
 
     const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(
-      navigator.userAgent,
+      navigator.userAgent
     );
 
     const constraints: MediaStreamConstraints = {
@@ -415,7 +415,7 @@ export default function MonumentDetailModal({
         canvas.width / 2 - size / 2,
         canvas.height / 2 - size / 2,
         size,
-        size,
+        size
       );
 
       setCapturedImage(canvas.toDataURL("image/png"));
@@ -610,7 +610,7 @@ export default function MonumentDetailModal({
                                 userLat,
                                 userLng,
                                 lat,
-                                lng,
+                                lng
                               );
 
                               const nearby =
@@ -633,7 +633,7 @@ export default function MonumentDetailModal({
                               console.error("Geolocation error:", err);
                               toast.error("location_permission_required");
                             },
-                            { enableHighAccuracy: true },
+                            { enableHighAccuracy: true }
                           );
                         }}
                         title={t("open_camera")}
@@ -749,7 +749,7 @@ export default function MonumentDetailModal({
                                 userLat,
                                 userLng,
                                 lat,
-                                lng,
+                                lng
                               );
 
                               const nearby =
@@ -771,7 +771,7 @@ export default function MonumentDetailModal({
                               console.error("Geolocation error:", err);
                               toast.error(t("location_permission_required"));
                             },
-                            { enableHighAccuracy: true },
+                            { enableHighAccuracy: true }
                           );
                         }}
                         title={t("open_camera")}
@@ -942,7 +942,7 @@ export default function MonumentDetailModal({
                           className="mt-2"
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(
-                              details.region.content.extended,
+                              details.region.content.extended
                             ),
                           }}
                         />
@@ -1028,7 +1028,7 @@ export default function MonumentDetailModal({
                               className="object-cover hover:scale-105 transition-transform"
                             />
                           </button>
-                        ) : null,
+                        ) : null
                       )}
                     </div>
                   </section>
@@ -1111,7 +1111,7 @@ export default function MonumentDetailModal({
                     <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Landmark className="h-5 w-5 text-gray-500" />{" "}
                       {t(
-                        "shortcut.tourist_attraction_details.nearby_monuments",
+                        "shortcut.tourist_attraction_details.nearby_monuments"
                       )}
                     </h3>
                     <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
@@ -1175,7 +1175,7 @@ export default function MonumentDetailModal({
                       {details.relatedtours
                         .filter(
                           (tour: any) =>
-                            !(localTourId && localTourId === tour._id),
+                            !(localTourId && localTourId === tour._id)
                         )
                         .map((tour: any) => (
                           <div
@@ -1232,7 +1232,7 @@ export default function MonumentDetailModal({
                                 }
                               >
                                 {t(
-                                  "shortcut.tourist_attraction_details.go_tour",
+                                  "shortcut.tourist_attraction_details.go_tour"
                                 )}
                               </Button>
                             </div>
@@ -1275,7 +1275,7 @@ export default function MonumentDetailModal({
                               {srv.category && (
                                 <p className="text-xs text-muted-foreground">
                                   {t(
-                                    "shortcut.tourist_attraction_details.category",
+                                    "shortcut.tourist_attraction_details.category"
                                   )}
                                   : {safeText(srv.category.name)}
                                 </p>
@@ -1444,7 +1444,7 @@ export default function MonumentDetailModal({
             {/* Capture */}
             <button
               onClick={capturePhoto}
-              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500  p-4 rounded-full shadow-lg"
+              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500  p-4 rounded-full shadow-lg"
             >
               <Camera className="h-8 w-8 text-white" />
             </button>
@@ -1453,7 +1453,7 @@ export default function MonumentDetailModal({
             <button
               onClick={() =>
                 setCameraFacing((prev) =>
-                  prev === "environment" ? "user" : "environment",
+                  prev === "environment" ? "user" : "environment"
                 )
               }
               className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${

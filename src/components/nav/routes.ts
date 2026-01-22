@@ -28,11 +28,11 @@ export const NAV_ITEMS: NavItem[] = [
 export const MOBILE_NAV_ITEMS: NavItem[] = [
   { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
   { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
-  { type: "link", href: "/map", labelKey: "nav.map", icon: Map },
-  { type: "action", action: "search", labelKey: "nav.search", icon: Search },
+  // { type: "link", href: "/map", labelKey: "nav.map", icon: Map },
+  // { type: "action", action: "search", labelKey: "nav.search", icon: Search },
   {
     type: "link",
-    href: "https://api-v2-gose.naraiseki.org/public-videos/",
+    href: "https://naraiseki.nichi.in/public-videos/",
     // href: "https://api.gose.nichi.in/public-videos/",
     labelKey: "nav.videos",
     icon: VideoIcon,
