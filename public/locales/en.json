@@ -759,5 +759,7 @@
   "region_title": "Region",
   "region_desc": "Select a region to filter tourist attractions",
   "no_regions": "No Regions",
-  "no_regions_desc": " No regions available to filter tourist attractions."
+  "no_regions_desc": " No regions available to filter tourist attractions.",
+  "region_desc_title": "Regional Attractions",
+  "region_desc_subtitle": "Points of interest available in this area"
 }

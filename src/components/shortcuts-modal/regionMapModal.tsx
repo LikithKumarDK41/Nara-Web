@@ -379,9 +379,8 @@ function RegionCard({ r }: { r: any }) {
         <button
           className="mt-3 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
           onClick={() => {
-            router.push(`/regions/?id=${r._id}`);
-            // const url = `/regions/?id=${r._id}`;
-            // window.open(url);
+            const url = `/regions/?id=${r._id}`;
+            window.open(url);
           }}
         >
           {t("tourDetails.viewDetails")}
