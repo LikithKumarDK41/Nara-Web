@@ -49,6 +49,7 @@ export default function TourDetailsClientPage() {
 
   // ⭐ nav slice (for current running usertour)
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
 
   // ⭐ Local tour state (for this details page)
   const [tour, setTour] = useState<any>(null);
@@ -91,7 +92,7 @@ export default function TourDetailsClientPage() {
 
     (async () => {
       try {
-        const res = await apiFetchBookmarkByRef();
+        const res = await apiFetchBookmarkByRef(auth.data?.user?._id);
         if (cancelled) return;
 
         let bookmark: BookmarkItem | null = null;
