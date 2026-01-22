@@ -7,8 +7,6 @@ import { useAppSelector } from '@/lib/store/hook';
 import { FullScreenLoader } from './FullScreenLoader';
 
 const PUBLIC_PATHS = new Set<string>([
-  '/signin',
-  '/privacy-policy',
   '/',
   '/info/',
   '/info',
