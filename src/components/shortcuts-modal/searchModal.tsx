@@ -252,7 +252,8 @@ export default function SearchModal({
 
   /* -------------------- Sorting -------------------- */
   const sortedMonuments = useMemo(() => {
-    return sortGlobalByPopularityThenName(monuments);
+    // return sortGlobalByPopularityThenName(monuments);
+    return monuments;
   }, [monuments]);
 
   /* -------------------- Pagination -------------------- */

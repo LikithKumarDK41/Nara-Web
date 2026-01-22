@@ -47,7 +47,7 @@ export default function ProfileModal({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { data, loading, countries, countriesLoading } = useAppSelector(
-    (s) => s.auth
+    (s) => s.auth,
   );
 
   const user = data?.user || null;
@@ -70,6 +70,34 @@ export default function ProfileModal({
   const [preview, setPreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const getCountryCode = (value: any, countries: any[]) => {
+    if (!value || !countries?.length) return "";
+
+    // Case 1: Already an object { name, code }
+    if (typeof value === "object") {
+      return value.code || "";
+    }
+
+    // Case 2: Already a valid country code
+    const byCode = countries.find((c) => c.code === value);
+    if (byCode) return byCode.code;
+
+    // Case 3: Match by country name (string only)
+    if (typeof value === "string") {
+      const byName = countries.find(
+        (c) => c.name.toLowerCase() === value.toLowerCase(),
+      );
+      return byName?.code || "";
+    }
+
+    return "";
+  };
+
+  const getCountryLabel = (code: string) => {
+    const c = countries?.find((c: any) => c.code === code);
+    return c ? `${c.name} (${c.code})` : "";
+  };
 
   // ------------------------------------
   // PREFILL FORM WHEN MODAL OPENS
@@ -94,20 +122,16 @@ export default function ProfileModal({
       "60-70": "60s",
     };
 
-    const userCountry =
-      typeof user.country === "string" ? user.country : user.country?.name;
-
-    const matchedCountry = countries.find(
-      (c) => c.name.toLowerCase() === userCountry?.toLowerCase()
-    );
+    const userCountryCode = getCountryCode(user.country, countries);
+    const userNationalityCode = getCountryCode(user.nationality, countries);
 
     setForm({
       name: user?.name || "",
       email: user?.email || "",
       gender: genderMap[user?.gender] || user?.gender || "",
       agegroup: ageGroupMap[user?.agegroup] || user?.agegroup || "",
-      country: matchedCountry ? matchedCountry.code : "",
-      nationality: user?.nationality || "",
+      country: userCountryCode || "",
+      nationality: userNationalityCode || "",
       phoneNumber: user?.phoneNumber || "",
     });
 
@@ -181,7 +205,7 @@ export default function ProfileModal({
           uploadProfileImage({
             userId: user._id,
             file: imageFile,
-          })
+          }),
         ).unwrap();
       }
 
@@ -190,7 +214,7 @@ export default function ProfileModal({
         updateUserProfile({
           id: user._id,
           payload: form,
-        })
+        }),
       ).unwrap();
 
       toast.success(t("profile.success"));
@@ -408,6 +432,7 @@ export default function ProfileModal({
             </div>
 
             {/* COUNTRY */}
+            {/* COUNTRY */}
             <div className="grid gap-2">
               <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.country")} *
@@ -426,7 +451,11 @@ export default function ProfileModal({
       focus-visible:border-0
     "
                 >
-                  <SelectValue placeholder={t("profile.selectCountry")} />
+                  <SelectValue>
+                    {form.country
+                      ? getCountryLabel(form.country)
+                      : t("profile.selectCountry")}{" "}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent
                   className="
@@ -449,19 +478,47 @@ export default function ProfileModal({
               <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
                 {t("profile.nationality")} *
               </Label>
-              <Input
-                name="nationality"
-                value={form.nationality}
-                onChange={handleChange}
-                disabled={loading}
-                className="
-          focus-visible:ring-teal-500
-          focus-visible:border-0
-          border-teal-300 dark:border-teal-600
-        "
-              />
-            </div>
 
+              <Select
+                value={form.nationality}
+                onValueChange={(v) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    nationality: v,
+                  }))
+                }
+                disabled={loading || countriesLoading}
+              >
+                <SelectTrigger
+                  className="
+      w-full
+      border-teal-300 dark:border-teal-600
+      focus:ring-0
+      focus-visible:ring-teal-500
+      focus-visible:border-0
+    "
+                >
+                  <SelectValue>
+                    {form.nationality
+                      ? getCountryLabel(form.nationality)
+                      : t("profile.selectCountry")}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent
+                  className="
+                 border border-teal-500/20
+                 bg-background
+                 shadow-lg
+               "
+                >
+                  {countries?.map((c: any) => (
+                    <SelectItem key={c.code} value={c.code}>
+                      {c.name} ({c.code})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             {/* PHONE NUMBER */}
             <div className="grid gap-2">
               <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
@@ -545,7 +602,11 @@ export default function ProfileModal({
 
           <div className="mt-6 flex justify-end gap-3">
             {/* Cancel */}
-            <Button variant="ghost" className="cursor-pointer" onClick={() => setShowDeleteConfirm(false)}>
+            <Button
+              variant="ghost"
+              className="cursor-pointer"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
               {t("profile.cancel")}
             </Button>
 
