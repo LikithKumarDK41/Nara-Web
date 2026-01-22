@@ -7,17 +7,29 @@ import { useAppSelector } from '@/lib/store/hook';
 import { FullScreenLoader } from './FullScreenLoader';
 
 const PUBLIC_PATHS = new Set<string>([
-  '/signin',
-  '/privacy-policy',
   '/',
   '/info/',
   '/info',
-  '/map/',
-  '/map',
   '/tours/',
   '/tours',
   '/tours/detail/',
-  '/tours/detail'
+  '/tours/detail',
+  '/category/politics/',
+  '/category/politics',
+  '/category/economy/',
+  '/category/economy',
+  '/category/faith/',
+  '/category/faith',
+  '/category/art/',
+  '/category/art',
+  '/category/technology/',
+  '/category/technology',
+  '/category/nature/',
+  '/category/nature',
+  '/about/',
+  '/about',
+  '/regions/',
+  '/regions',
 ]);
 
 function isPublicRoute(pathname: string) {

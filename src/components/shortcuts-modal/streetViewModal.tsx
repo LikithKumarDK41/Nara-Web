@@ -8,6 +8,7 @@ import {
   Landmark,
   ArrowUpDown,
   X,
+  ArrowRight,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
@@ -311,7 +312,7 @@ export default function StreetViewModal({
               {/* ===== GRID ===== */}
               {filtered.length > 0 && (
                 <>
-                  <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {currentData.map((m) => (
                       <MonumentCard
                         key={m._id}
@@ -388,41 +389,30 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
   }
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all">
+    <div
+      className="mt-4 mb-4 group relative flex flex-col h-[480px] rounded-[32px] overflow-hidden bg-white dark:bg-[#15191f] border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_20px_40px_rgba(0,184,166,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
+      onClick={(e) => {
+        e.stopPropagation();
+        openStreetViewFromApi((m as any)?.avlocation);
+      }}
+    >
+      {" "}
       {/* IMAGE */}
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="relative h-[220px] w-full overflow-hidden flex-shrink-0">
         {m.image?.secure_url ? (
           <img
             src={m.image.secure_url}
             alt={m.title || m.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
         ) : (
-          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
+          <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
+            <ImageIcon className="h-12 w-12 text-slate-300" />
           </div>
         )}
-      </div>
 
-      {/* CONTENT */}
-      <div className="flex flex-1 flex-col justify-between p-4">
-        <div>
-          {/* TITLE */}
-          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
-            {m.title || m.name}
-          </h3>
-
-          {/* BRIEF */}
-          {m.content?.brief && (
-            <p
-              className="mt-1 line-clamp-2 text-xs text-muted-foreground whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{
-                __html: normalizeHTML(m.content.brief),
-              }}
-            />
-          )}
-
-          <div className="mt-2 flex items-center gap-0.5">
+        <div className="absolute top-5 left-5 z-20">
+          <div className="px-4 py-1.5 rounded-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5 shadow-sm border border-teal-100 dark:border-teal-900/50">
             {Array.from({ length: 4 }).map((_, i) => (
               <Star
                 key={i}
@@ -432,8 +422,30 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
                     : "text-gray-300 dark:text-gray-600"
                 }`}
               />
-            ))}
+            ))}{" "}
           </div>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#15191f] via-transparent to-transparent opacity-0 dark:opacity-60 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-0 group-hover:opacity-10 dark:group-hover:opacity-0 transition-opacity duration-500" />
+      </div>
+      {/* CONTENT */}
+      <div className="relative flex-1 p-8 flex flex-col justify-between bg-white dark:bg-[#15191f]">
+        <div className="space-y-3">
+          {/* TITLE */}
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+            {m.title || m.name}
+          </h3>
+
+          {/* BRIEF */}
+          {m.content?.brief && (
+            <p
+              className="text-sm font-light text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: normalizeHTML(m.content.brief),
+              }}
+            />
+          )}
 
           {/* ✅ ONLY MATCHING SUBTHEME CHIPS */}
           {matchedSubthemes.length > 0 && (
@@ -455,15 +467,14 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
         </div>
 
         {/* BUTTON */}
-        <Button
-          className="mt-3 cursor-pointer bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
-          onClick={(e) => {
-            e.stopPropagation();
-            openStreetViewFromApi((m as any)?.avlocation);
-          }}
-        >
-          {t("open_street_view")}
-        </Button>
+        <div className="flex items-center justify-between pt-6 mt-auto">
+          <span className="text-xs font-bold text-teal-600/70 dark:text-teal-400/70 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+            {t("open_street_view")}
+          </span>
+          <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-teal-500 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
+            <ArrowRight className="w-5 h-5 -ml-0.5" />
+          </div>
+        </div>
       </div>
     </div>
   );
