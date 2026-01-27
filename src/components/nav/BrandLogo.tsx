@@ -70,7 +70,7 @@ export default function BrandLogo({
               bg-clip-text text-transparent text-left
             "
           >
-            御所市観光ナビ
+            奈良遺跡めぐり
           </span>
 
           {/* English subtitle */}
