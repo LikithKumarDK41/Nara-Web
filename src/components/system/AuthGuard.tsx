@@ -30,6 +30,8 @@ const PUBLIC_PATHS = new Set<string>([
   '/about',
   '/regions/',
   '/regions',
+  '/terms-of-use/',
+  '/terms-of-use'
 ]);
 
 function isPublicRoute(pathname: string) {

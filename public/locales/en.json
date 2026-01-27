@@ -771,5 +771,10 @@
   "related_spots": "Related spots",
   "back": "Back",
   "no_monuments_found_": "No monuments found.",
-  "discover_details": "Discover details"
+  "discover_details": "Discover details",
+  "click_anywhere_to_close": "Click anywhere to close",
+  "about": " About",
+  "recommended_experiences": "Recommended experiences",
+  "see_details": "See details",
+  "termsOfUse": "Terms of Use"
 }

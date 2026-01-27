@@ -29,9 +29,14 @@ export default function FooterBar() {
         >
           <div>{t("footer.copyright", { year: new Date().getFullYear() })}</div>
 
+          <div className="flex gap-3">
           <Link href="/privacy-policy" className="hover:text-foreground transition">
             {t("privacyPolicy")}
           </Link>
+           <Link href="/terms-of-use" className="hover:text-foreground transition">
+            {t("termsOfUse")}
+          </Link>
+          </div>
         </div>
       </div>
     </footer>
