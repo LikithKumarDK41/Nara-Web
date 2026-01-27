@@ -29,6 +29,10 @@ const blueprintItems = [
         ],
       },
       {
+        title:"blueprint_about_kofun_title",
+        desc:"blueprint_about_kofun_desc"
+      },
+      {
         title: "blueprint_home_tour_list",
         desc: "blueprint_home_tour_list_desc",
         points: [
@@ -38,8 +42,8 @@ const blueprintItems = [
         ],
       },
       { title: "blueprint_global_header_my_list", desc: "blueprint_global_header_my_list_desc" },
-      { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
-      { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
+      // { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
+      // { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
       { title: "blueprint_home_video", desc: "blueprint_home_video_desc" },
     ],
   },
