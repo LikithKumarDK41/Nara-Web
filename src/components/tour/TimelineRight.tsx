@@ -128,6 +128,10 @@ export default function MapTimelineRight({
     return `${minutes} ${t ? t("time.min") : "min"}`;
   };
 
+  function shouldShowTimelineDot(p: TourPoint) {
+    return p.pointtype !== "lunch";
+  }
+
   /* -------------------- Loading Skeleton -------------------- */
   if (initialLoading) {
     return (
@@ -159,6 +163,9 @@ export default function MapTimelineRight({
           {tourpoints.map((p, i) => {
             const accent = dynamicColor(i, p.waypointtype);
             const next = tourpoints[i + 1];
+            const visualIndex = tourpoints
+              .slice(0, i)
+              .filter(shouldShowTimelineDot).length;
 
             /* -------------------- START / END STATION -------------------- */
             if (
@@ -226,7 +233,7 @@ export default function MapTimelineRight({
                     </div>
                   </li>
 
-                   {next && (
+                  {next && (
                     <li className="hidden md:flex items-center gap-2 ml-[78px] mt-3 text-gray-600 dark:text-gray-300">
                       <TravelConnector
                         info={next.traveltype}
@@ -244,13 +251,13 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li className="grid grid-cols-[90px_1fr] gap-1 items-start">
-                    <TimelineDot
+                    {/* <TimelineDot
                       index={i}
                       accent={accent}
                       waypointtype={p.waypointtype}
                       hasStart={hasStart}
-                    />
-                    <div className="col-start-2 p-6 rounded-2xl bg-yellow-50 dark:bg-zinc-800 border border-yellow-200 dark:border-zinc-700 shadow-sm">
+                    /> */}
+                    <div className="col-start-2 p-6 rounded-2xl bg-teal-50 dark:bg-teal-800 border border-teal-200 dark:border-teal-700 shadow-sm">
                       <div className="flex items-center gap-3">
                         <UtensilsCrossed className="h-6 w-6 text-teal-500" />
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
@@ -289,7 +296,7 @@ export default function MapTimelineRight({
                   <li className="grid grid-cols-[90px_1fr] gap-1 items-start">
                     {/* Timeline dot */}
                     <TimelineDot
-                      index={i}
+                      index={visualIndex}
                       accent={accent}
                       waypointtype="station"
                       hasStart={hasStart}
@@ -464,7 +471,6 @@ export default function MapTimelineRight({
                           >
                             {translate("tourDetails.viewDetails")}
                           </Button>
-
                         </div>
                       </div>
                     </div>
@@ -473,7 +479,7 @@ export default function MapTimelineRight({
                 {/* ========================= DESKTOP VIEW ========================= */}
                 <li className="hidden md:grid grid-cols-[90px_1fr] gap-1 items-start">
                   <TimelineDot
-                    index={i}
+                    index={visualIndex}
                     accent={accent}
                     waypointtype={p.waypointtype}
                     hasStart={hasStart}
@@ -798,6 +804,7 @@ function TimelineDot({
   hasStart: boolean;
 }) {
   let label: string | number = index + 1;
+
   if (waypointtype === "start") label = "S";
   else if (waypointtype === "end") label = "E";
   else if (hasStart) label = index;
