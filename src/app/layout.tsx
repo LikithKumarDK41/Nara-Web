@@ -69,8 +69,8 @@ export default function RootLayout({
 
             const META = {
               ja: {
-                title: '御所市観光ナビ',
-                description: '御所市の観光情報とスタンプラリー',
+                title: '奈良遺跡めぐり',
+                description: '奈良市の観光情報とスタンプラリー',
               },
               en: {
                 title: 'Nara Kofun & Heritage Foundation',
