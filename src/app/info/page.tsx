@@ -26,7 +26,13 @@ const blueprintItems = [
           "blueprint_home_more_options_point_2",
           "blueprint_home_more_options_point_3",
           "blueprint_home_more_options_point_4",
+          "blueprint_home_more_options_point_5",
+          "blueprint_home_more_options_point_6",
         ],
+      },
+      {
+        title:"blueprint_about_kofun_title",
+        desc:"blueprint_about_kofun_desc"
       },
       {
         title: "blueprint_home_tour_list",
@@ -38,8 +44,8 @@ const blueprintItems = [
         ],
       },
       { title: "blueprint_global_header_my_list", desc: "blueprint_global_header_my_list_desc" },
-      { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
-      { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
+      // { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
+      // { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
       { title: "blueprint_home_video", desc: "blueprint_home_video_desc" },
     ],
   },
