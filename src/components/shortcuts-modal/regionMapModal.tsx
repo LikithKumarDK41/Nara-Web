@@ -135,12 +135,12 @@ export default function RegionMapModal({
             >
               {/* ===== Toggle ===== */}
               <div className="mt-6 flex justify-center">
-                <div className="inline-flex gap-2 rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border">
+                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border">
                   {["region", "map"].map((v) => (
                     <button
                       key={v}
                       onClick={() => setView(v as any)}
-                      className={`cursor-pointer px-6 py-3 rounded-xl font-semibold transition-all ${
+                      className={`cursor-pointer truncate px-6 py-3 rounded-xl font-semibold transition-all text-center ${
                         view === v
                           ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
                           : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
@@ -349,12 +349,13 @@ export default function RegionMapModal({
 
 function RegionCard({ r }: { r: any }) {
   const { t } = useLocale();
+  const router = useRouter();
   return (
     <div
       className="mb-4 mt-4 group relative flex flex-col h-[400px] rounded-[32px] overflow-hidden bg-white dark:bg-[#15191f] border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_20px_40px_rgba(0,184,166,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
       onClick={() => {
-        const url = `/regions/?id=${r._id}`;
-        window.open(url);
+        sessionStorage.setItem("returnToRegionModal", "true");
+        router.push(`/regions?id=${r._id}`);
       }}
     >
       {/* IMAGE */}

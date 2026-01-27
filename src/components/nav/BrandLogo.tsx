@@ -18,6 +18,9 @@ export default function BrandLogo({
     <Link
       href={href}
       aria-label={label}
+      onClick={() => {
+        sessionStorage.removeItem("returnToRegionModal"); // important
+      }}
       className="group inline-flex items-center focus:outline-none"
     >
       {/* 🟠 Gradient Badge */}
