@@ -26,6 +26,8 @@ const blueprintItems = [
           "blueprint_home_more_options_point_2",
           "blueprint_home_more_options_point_3",
           "blueprint_home_more_options_point_4",
+          "blueprint_home_more_options_point_5",
+          "blueprint_home_more_options_point_6",
         ],
       },
       {
