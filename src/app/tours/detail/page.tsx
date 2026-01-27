@@ -505,7 +505,8 @@ export default function TourDetailsClientPage() {
               <div className="flex flex-wrap justify-center gap-12 mb-10">
                 {[
                   {
-                    value: tour.tourpoints?.length ?? 0,
+                    // value: tour.tourpoints?.length ?? 0,
+                    value: tour.tourpoints?.filter((p:any) => p.pointtype !== "lunch").length ?? 0,
                     label: t("tourDetails.stops"),
                   },
                   { value: tour.duration, label: t("tourDetails.duration") },
