@@ -50,7 +50,7 @@ export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => 
         <div
             className="
         hidden lg:flex
-        fixed bottom-6 right-6
+        fixed bottom-14 right-6
         z-[30]
         flex flex-col items-end gap-4
         pointer-events-none
