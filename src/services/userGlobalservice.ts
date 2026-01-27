@@ -458,12 +458,25 @@ function extractMonuments(data: MonumentsEnvelope): Monument[] {
 export async function apiFetchByLink<T = any>(
   resource: string,
   filter?: Record<string, any>,
+  sort?: string
 ): Promise<T[]> {
   try {
     let url = `/v1/${resource}`;
+    const params: string[] = [];
 
     if (filter) {
-      url += `?filter=${encodeURIComponent(JSON.stringify(filter))}`;
+      params.push(
+        `filter=${encodeURIComponent(JSON.stringify(filter))}`
+      );
+    }
+
+    if (sort) {
+      // IMPORTANT: send raw string, no JSON.stringify
+      params.push(`sort=${encodeURIComponent(sort)}`);
+    }
+
+    if (params.length > 0) {
+      url += `?${params.join("&")}`;
     }
 
     const { data } = await api.get<any>(url);

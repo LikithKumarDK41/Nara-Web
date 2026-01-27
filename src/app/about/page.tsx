@@ -112,7 +112,7 @@ export default function AboutDetailPage() {
                 show();
 
                 if (resource === "monuments") {
-                    const data = await apiFetchByLink<Monument>("monuments", filter);
+                    const data = await apiFetchByLink<Monument>("monuments", filter, "-popularity");
                     if (!cancelled) {
                         setMonuments(data);
                         setSubthemes([]);
@@ -172,7 +172,7 @@ export default function AboutDetailPage() {
 
             const filter = { subtheme: subthemeId };
 
-            const data = await apiFetchByLink<Monument>("monuments", filter);
+            const data = await apiFetchByLink<Monument>("monuments", filter,"-popularity");
 
             setMonuments(data);
             setView("monuments");
