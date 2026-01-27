@@ -12,16 +12,20 @@ import AppToaster from "@/components/system/AppToaster";
 
 export const metadata: Metadata = {
   // title: "Tourist",
+  manifest: "/manifest.json",
+  metadataBase: new URL("https://naraiseki.nichi.in"),
+  title: "Nara Heritage Guide - Tourist App",
+  description: "Explore Nara's cultural heritage with our interactive tourist guide app. Discover monuments, tours, and heritage sites.",
+  keywords: ["tourism", "Nara", "heritage", "travel", "map", "guide", "Japan", "monuments", "history"],
   icons: {
     icon: "/icon.png",         // Main favicon (PNG preferred)
     shortcut: "/favicon.ico",  // Backup ICO file
     apple: "/icon.png",        // Apple Touch Icon
   },
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Gose Guide",
+    title: "Nara Heritage Guide",
   },
 };
 export const viewport: Viewport = { themeColor: "#0b0f14" };

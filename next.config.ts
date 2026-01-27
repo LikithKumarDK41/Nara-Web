@@ -30,25 +30,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withPWA = require("@ducanh2912/next-pwa").default({
+const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
   skipWaiting: true,
-  cacheOnFrontEndNav: false,
-  aggressiveFrontEndNavCaching: false,
-  reloadOnOnline: false,
-  swcMinify: true,
   disable: false,
-  workboxOptions: {
-    disableDevLogs: true,
-    // Force NetworkOnly strategy for all requests to ensure no offline handling
-    runtimeCaching: [
-      {
-        urlPattern: /^https?.*/,
-        handler: "NetworkOnly",
-      },
-    ],
-  },
 });
 
 export default withPWA(nextConfig);
