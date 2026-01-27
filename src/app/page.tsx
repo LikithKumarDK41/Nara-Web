@@ -198,7 +198,7 @@ export default function ToursDashboardPage() {
       )}
 
       {/* ================= CONTENT CONTAINER ================= */}
-      <div className=" mx-auto w-full px-4 md:px-8 space-y-12">
+      <div className=" mx-auto w-full px-4 md:px-8 mt-12">
         {/* ================= SERVICE INFO (Unique Title) ================= */}
         {!globalLoading && sectionTwo.length > 0 && (
           <section className="py-2">
