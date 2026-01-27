@@ -763,5 +763,13 @@
   "region_desc_title": "Regional Attractions",
   "region_desc_subtitle": "Points of interest available in this area",
   "in_progress": "In Progress",
-  "completed": "Completed"
+  "completed": "Completed",
+  "related_themes": "Related themes",
+  "explore": "Explore",
+  "theme_overview": "Theme Overview",
+  "no_desc_available": "No description available",
+  "related_spots": "Related spots",
+  "back": "Back",
+  "no_monuments_found_": "No monuments found.",
+  "discover_details": "Discover details"
 }

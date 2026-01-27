@@ -763,5 +763,13 @@
   "region_desc_title": "この地域の注目スポット",
   "region_desc_subtitle": "この地域にある史跡を探索しましょう",
   "in_progress": "進行中",
-  "completed": "完了"
+  "completed": "完了",
+  "related_themes": "関連テーマ",
+  "explore": "探索する",
+  "theme_overview": "テーマ概要",
+  "no_desc_available": "説明はありません",
+  "related_spots": "関連スポット",
+  "back": "戻る",
+  "no_monuments_found_": "スポットが見つかりませんでした。",
+  "discover_details": "詳細を見る"
 }

@@ -8,16 +8,38 @@ import {
   apiFetchByLink,
   apiFetchThemes,
 } from "@/services/userGlobalservice";
-import { apiFetchMonumentDetails } from "@/services/userTourService";
+import {
+  apiFetchMonumentDetails,
+  apiFetchMonumentSorts,
+} from "@/services/userTourService";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
-import { ArrowRight, Layers, MapPin, Star, BookOpen } from "lucide-react";
+import {
+  ArrowRight,
+  Layers,
+  MapPin,
+  Star,
+  BookOpen,
+  ArrowUpDown,
+  ImageIcon,
+} from "lucide-react";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { MonumentSort } from "@/lib/types/userTour.types";
+import { useLocale } from "@/providers/LocaleProvider";
 
 export default function CategoryExplorer() {
   const activeThemeId = useAppSelector(selectActiveThemeId);
   const [subthemes, setSubthemes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [themeInfo, setThemeInfo] = useState<any | null>(null);
+  const { t } = useLocale();
 
   const [view, setView] = useState<"subthemes" | "monuments">("subthemes");
   const [activeSubtheme, setActiveSubtheme] = useState<any | null>(null);
@@ -28,6 +50,8 @@ export default function CategoryExplorer() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [selectedMonument, setSelectedMonument] = useState<any | null>(null);
+  const [selectedSort, setSelectedSort] = useState<string | null>(null);
+  const [sortOptions, setSortOptions] = useState<MonumentSort[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -44,7 +68,6 @@ export default function CategoryExplorer() {
 
         const data = await apiFetchSubthemesWithQuery({
           filter: { theme: activeThemeId },
-          sort: "sortOrder",
         });
         if (mounted) setSubthemes(data);
 
@@ -72,6 +95,75 @@ export default function CategoryExplorer() {
       mounted = false;
     };
   }, [activeThemeId, show, hide]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadDefaultSort = async () => {
+      try {
+        const sorts = await apiFetchMonumentSorts();
+        setSortOptions(sorts);
+
+        if (!mounted || !sorts?.length) return;
+
+        // pick highest-priority default
+        const defaultSort = "-popularity";
+
+        setSelectedSort(defaultSort);
+      } catch (e) {
+        console.error("Failed to load default sort", e);
+        setSelectedSort("-popularity"); // safe fallback
+      }
+    };
+
+    loadDefaultSort();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!activeSubtheme || view !== "monuments") return;
+
+    let mounted = true;
+
+    const fetchMonuments = async () => {
+      const backendSort =
+        selectedSort === "-popularity"
+          ? "-popularity"
+          : (selectedSort ?? "-popularity");
+
+      try {
+        setMonuments([]);
+        setMonumentsLoading(true);
+        show();
+
+        const data = await apiFetchByLink(
+          "monuments",
+          { subtheme: activeSubtheme._id },
+          backendSort,
+        );
+
+        if (mounted) {
+          setMonuments(data || []);
+        }
+      } catch (err) {
+        console.error(err);
+        if (mounted) setMonuments([]);
+      } finally {
+        if (mounted) {
+          setMonumentsLoading(false);
+          hide();
+        }
+      }
+    };
+
+    fetchMonuments();
+
+    return () => {
+      mounted = false;
+    };
+  }, [selectedSort, activeSubtheme, view]);
 
   return (
     <main className="w-full">
@@ -190,7 +282,7 @@ export default function CategoryExplorer() {
           <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
             <Layers className="w-5 h-5 text-teal-500" />
             <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
-              関連テーマ
+              {t("related_themes")}
             </h2>
           </div>
 
@@ -263,22 +355,6 @@ export default function CategoryExplorer() {
                         setMonuments([]);
                         setMonumentsLoading(true);
                         setView("monuments");
-
-                        try {
-                          show();
-                          const data = await apiFetchByLink(
-                            "monuments",
-                            { subtheme: s._id },
-                            "-popularity",
-                          );
-                          setMonuments(data || []);
-                        } catch (err) {
-                          console.error(err);
-                          setMonuments([]);
-                        } finally {
-                          setMonumentsLoading(false);
-                          hide();
-                        }
                       }}
                       className="
                   flex items-center gap-1
@@ -290,7 +366,7 @@ export default function CategoryExplorer() {
                   cursor-pointer
                 "
                     >
-                      <span>Explore</span>
+                      <span>{t("explore")}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -305,11 +381,58 @@ export default function CategoryExplorer() {
       {activeSubtheme && (
         <section className="space-y-4 pt-8">
           {/* Header */}
-          <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-white/10">
-            <BookOpen className="w-5 h-5 text-teal-500" />
-            <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
-              テーマ概要
-            </h2>
+          <div className="flex justify-between  border-b border-slate-200 dark:border-white/10">
+            <div className="flex items-center gap-3 pb-4">
+              <BookOpen className="w-5 h-5 text-teal-500" />
+              <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
+                {t("theme_overview")}
+              </h2>
+            </div>
+
+            <div className="flex justify-end items-end gap-3 pb-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="cursor-pointer rounded-full p-2
+        text-teal-600 dark:text-teal-400
+        hover:bg-teal-50 dark:hover:bg-teal-900/30"
+                  >
+                    <ArrowUpDown className="w-5 h-5" />
+                  </button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  {sortOptions.map((so) => (
+                    <DropdownMenuItem
+                      key={so._id}
+                      onClick={() => setSelectedSort(so.link || so.name || "")}
+                      className={`cursor-pointer flex items-center gap-2 ${
+                        selectedSort === so.link
+                          ? "bg-slate-100 dark:bg-neutral-800 font-semibold"
+                          : ""
+                      }`}
+                    >
+                      {/* optional icon */}
+                      {so.icon?.secure_url ? (
+                        <img
+                          src={so.icon.secure_url}
+                          alt={so.title || so.name}
+                          className="h-4 w-4 rounded-sm object-contain"
+                        />
+                      ) : (
+                        <ImageIcon className="h-4 w-4" />
+                      )}
+
+                      {/* label from backend */}
+                      <span>{so.title || so.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
 
           {/* Content - Text Only */}
@@ -349,7 +472,7 @@ export default function CategoryExplorer() {
               />
             ) : (
               <p className="text-base text-slate-500 dark:text-slate-400 italic font-light">
-                No description available
+                {t("no_desc_available")}
               </p>
             )}
           </div>
@@ -369,7 +492,7 @@ export default function CategoryExplorer() {
             <div className="flex items-center gap-3">
               <MapPin className="w-5 h-5 text-teal-500" />
               <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
-                関連スポット
+                {t("related_spots")}
               </h2>
             </div>
 
@@ -379,6 +502,7 @@ export default function CategoryExplorer() {
                 setView("subthemes");
                 setMonuments([]);
                 setActiveSubtheme(null);
+                setSelectedSort("-popularity");
               }}
               className="
           inline-flex items-center gap-1.5
@@ -388,14 +512,14 @@ export default function CategoryExplorer() {
           transition-colors cursor-pointer
         "
             >
-              ← 戻る
+              ← {t("back")}
             </button>
           </div>
 
           {/* Empty */}
           {monuments.length === 0 && !monumentsLoading && (
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              No monuments found.
+              {t("no_monuments_found_")}
             </p>
           )}
 
@@ -518,7 +642,7 @@ export default function CategoryExplorer() {
                 transition-colors cursor-pointer
               "
                   >
-                    Discover Details
+                    {t("discover_details")}
                     <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
