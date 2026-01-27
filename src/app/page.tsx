@@ -107,6 +107,15 @@ export default function ToursDashboardPage() {
     };
   }, [dispatch, show, hide]);
 
+  useEffect(() => {
+    const shouldOpen = sessionStorage.getItem("returnToRegionModal");
+
+    if (shouldOpen === "true") {
+      setRegionMapOpen(true);
+      sessionStorage.removeItem("returnToRegionModal"); // important
+    }
+  }, []);
+
   const hasTours = (tours?.length ?? 0) > 0;
   // Get featured tours for the carousel, fallback to first 5
   const heroTours = tours.filter((t) => t.featured).slice(0, 5);
@@ -562,9 +571,10 @@ function TextHeroSlider() {
             aria-label={`Go to slide ${idx + 1}`}
             className={`
               transition-all duration-500
-              ${idx === current
-                ? "w-7 h-1.5 bg-teal-500"
-                : "w-1.5 h-1.5 bg-slate-400"
+              ${
+                idx === current
+                  ? "w-7 h-1.5 bg-teal-500"
+                  : "w-1.5 h-1.5 bg-slate-400"
               }
               rounded-full
             `}
@@ -754,7 +764,6 @@ function ShortcutRow({
   shadow-md
   bg-white dark:bg-[#0f1115]
 `}
-
             >
               {/* Icon */}
               <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
@@ -837,7 +846,7 @@ function ShortcutRow({
     text-ellipsis
     flex-1
   "
-              title={item.title}   // 👈 tooltip on hover (desktop)
+              title={item.title} // 👈 tooltip on hover (desktop)
             >
               {item.title}
             </span>
