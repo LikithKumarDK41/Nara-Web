@@ -771,5 +771,10 @@
   "related_spots": "関連スポット",
   "back": "戻る",
   "no_monuments_found_": "スポットが見つかりませんでした。",
-  "discover_details": "詳細を見る"
+  "discover_details": "詳細を見る",
+  "click_anywhere_to_close": "クリックで閉じる",
+  "about": "について",
+  "recommended_experiences": "おすすめの体験",
+  "see_details": "詳しく見る",
+  "termsOfUse": "利用規約／サービス規約"
 }

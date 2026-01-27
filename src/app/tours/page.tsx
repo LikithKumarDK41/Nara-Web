@@ -76,7 +76,7 @@ export default function ToursPage() {
     let arr = [...tours];
 
     // ✅ 1️⃣ FEATURED FIRST
-    arr = arr.filter((t) => t.featured === true);
+    // arr = arr.filter((t) => t.featured === true);
 
     // ✅ 2️⃣ SEARCH
     if (query.trim()) {
