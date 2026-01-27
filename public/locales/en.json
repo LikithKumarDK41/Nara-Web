@@ -721,24 +721,24 @@
     "hero": {
       "slides": [
         {
-          "title": "GOSE CITY",
-          "subtitle": "Experience the Ancient Heart of Japan",
-          "description": "Walk the paths of emperors and discover the birthplace of Japanese culture."
+          "title": "NARA PREFECTURE",
+          "subtitle": "Where Japanese Civilization Began",
+          "description": "Discover the ancient heart of Japan, shaped by timeless temples, sacred landscapes, and living history."
         },
         {
-          "title": "SACRED PEAKS",
-          "subtitle": "Mt. Kongo & Mt. Katsuragi",
-          "description": "Breathtaking views and spiritual trails that connect heaven and earth."
+          "title": "SACRED ORIGINS",
+          "subtitle": "Mt. Yoshino & Mt. Miwa - Ōmiwa Shrine",
+          "description": "Experience Japan’s most ancient Shinto traditions at a sacred mountain worshipped since prehistoric times."
         },
         {
-          "title": "HIDDEN GEMS",
-          "subtitle": "Temples, Shrines & Old Streets",
-          "description": "Explore the untouched beauty of historic Gose, away from the crowds."
+          "title": "WORLD HERITAGE",
+          "subtitle": "Temples, Shrines & Ancient Capitals",
+          "description": "Explore UNESCO World Heritage Sites that defined Japan’s spiritual and cultural foundation."
         },
         {
-          "title": "LOCAL FLAVORS",
-          "subtitle": "Traditional Medicine & Cuisine",
-          "description": "Savor the rich heritage of medicinal herbs and authentic local gastronomy."
+          "title": "TRADITION & TASTE",
+          "subtitle": "Local Crafts & Nara Cuisine",
+          "description": "Enjoy refined flavors, traditional crafts, and hospitality rooted in centuries of heritage."
         }
       ]
     },
