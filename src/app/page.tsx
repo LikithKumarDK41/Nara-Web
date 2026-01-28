@@ -162,7 +162,8 @@ export default function ToursDashboardPage() {
   return (
     <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
-      <TextHeroSlider />
+      {/* <TextHeroSlider /> */}
+      <ImageHero />
 
       {/* ================= SECTION DIVIDER ================= */}
       <div className="relative z-10 flex justify-center py-6">
@@ -585,6 +586,35 @@ function TextHeroSlider() {
   );
 }
 
+function ImageHero() {
+  return (
+    <section
+      className="
+        relative w-full
+        flex items-center justify-center
+        overflow-hidden rounded-[32px]
+        bg-white dark:bg-black
+      "
+    >
+      <div className="absolute inset-0 bg-teal-500/10" />
+
+      {/* Image with original aspect ratio */}
+      <img
+        src="/home-banner.png"
+        alt="Hero banner"
+        className="
+          max-w-full
+          h-auto
+          object-contain
+        "
+      />
+
+      {/* Optional bottom fade */}
+      {/* <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" /> */}
+    </section>
+  );
+}
+
 /* =======================================================================
    SUB-COMPONENTS (ShortcutRow, TourCard)
 ======================================================================= */
@@ -773,8 +803,11 @@ function ShortcutRow({
                     alt={item.title}
                     className="w-6 h-6 object-contain"
                     style={{
-                      filter:
-                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                      filter: document.documentElement.classList.contains(
+                        "dark",
+                      )
+                        ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                        : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}
                   />
                 ) : (
@@ -816,7 +849,7 @@ function ShortcutRow({
     bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
   `}
           >
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 transition-all duration-300">
               {item.icon?.secure_url ? (
                 <div className="w-5 h-5 text-current">
                   <img
@@ -824,8 +857,11 @@ function ShortcutRow({
                     alt={item.title}
                     className="w-full h-full object-contain"
                     style={{
-                      filter:
-                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                      filter: document.documentElement.classList.contains(
+                        "dark",
+                      )
+                        ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                        : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}
                   />
                 </div>
