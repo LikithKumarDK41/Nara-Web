@@ -162,7 +162,8 @@ export default function ToursDashboardPage() {
   return (
     <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
-      <TextHeroSlider />
+      {/* <TextHeroSlider /> */}
+      <ImageHero/>
 
       {/* ================= SECTION DIVIDER ================= */}
       <div className="relative z-10 flex justify-center py-6">
@@ -581,6 +582,33 @@ function TextHeroSlider() {
           />
         ))}
       </div>
+    </section>
+  );
+}
+
+function ImageHero() {
+  return (
+    <section
+      className="
+        relative w-full
+        flex items-center justify-center
+        overflow-hidden rounded-[32px]
+        bg-white dark:bg-black
+      "
+    >
+      {/* Image with original aspect ratio */}
+      <img
+        src="/home-banner.png"
+        alt="Hero banner"
+        className="
+          max-w-full
+          h-auto
+          object-contain
+        "
+      />
+
+      {/* Optional bottom fade */}
+      <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" />
     </section>
   );
 }
