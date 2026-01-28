@@ -475,7 +475,11 @@ export default function SearchModal({
                               className="h-7 w-7 object-contain"
                               style={{
                                 filter:
-                                  "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                                  document.documentElement.classList.contains(
+                                    "dark",
+                                  )
+                                    ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                                    : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                               }}
                             />
                           ) : (
