@@ -596,6 +596,9 @@ function ImageHero() {
         bg-white dark:bg-black
       "
     >
+
+    <div className="absolute inset-0 bg-teal-500/10" />
+
       {/* Image with original aspect ratio */}
       <img
         src="/home-banner.png"
@@ -608,7 +611,7 @@ function ImageHero() {
       />
 
       {/* Optional bottom fade */}
-      <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" />
+      {/* <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" /> */}
     </section>
   );
 }
