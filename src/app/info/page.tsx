@@ -31,8 +31,8 @@ const blueprintItems = [
         ],
       },
       {
-        title:"blueprint_about_kofun_title",
-        desc:"blueprint_about_kofun_desc"
+        title: "blueprint_about_kofun_title",
+        desc: "blueprint_about_kofun_desc",
       },
       {
         title: "blueprint_home_tour_list",
@@ -43,7 +43,10 @@ const blueprintItems = [
           "blueprint_home_tour_list_point_3",
         ],
       },
-      { title: "blueprint_global_header_my_list", desc: "blueprint_global_header_my_list_desc" },
+      {
+        title: "blueprint_global_header_my_list",
+        desc: "blueprint_global_header_my_list_desc",
+      },
       // { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
       // { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
       { title: "blueprint_home_video", desc: "blueprint_home_video_desc" },
@@ -54,10 +57,16 @@ const blueprintItems = [
     title: "blueprint_tours",
     desc: "blueprint_tours_desc",
     children: [
-      { title: "blueprint_tours_details", desc: "blueprint_tours_details_desc" },
+      {
+        title: "blueprint_tours_details",
+        desc: "blueprint_tours_details_desc",
+      },
       { title: "blueprint_tours_start", desc: "blueprint_tours_start_desc" },
       { title: "blueprint_tours_active", desc: "blueprint_tours_active_desc" },
-      { title: "blueprint_tours_completion", desc: "blueprint_tours_completion_desc" },
+      {
+        title: "blueprint_tours_completion",
+        desc: "blueprint_tours_completion_desc",
+      },
     ],
   },
 ];
@@ -79,12 +88,75 @@ export default function BlueprintPage() {
   return (
     <div className="space-y-8">
       {/* ================= HERO ================= */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
-          <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
+      <section
+        className="mb-4
+    w-full
+    rounded-3xl
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
+    relative
+    overflow-hidden
+  "
+      >
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
+
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 opacity-5 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        {/* Content */}
+        <div className="max-w-6xl mx-auto relative z-10 text-center">
+          {/* Overline */}
+          <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+            <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+            <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+              {t("nara_heritage")}
+            </span>
+          </div>
+
+          {/* Main title - Enhanced typography */}
+          <h1
+            className="
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
+      "
+          >
             {t("blueprint_title")}
           </h1>
-          <p className="text-sm md:text-xl font-medium opacity-90">
+
+          {/* Decorative accent line */}
+          <div className="flex items-center justify-center gap-3 my-2">
+            <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+            <span className="text-white/60 text-xs font-medium">✦</span>
+            <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+          </div>
+
+          {/* Subtitle with stats */}
+          <p
+            className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      "
+          >
             {t("blueprint_subtitle")}
           </p>
         </div>
@@ -92,10 +164,12 @@ export default function BlueprintPage() {
 
       {/* ================= TABS ================= */}
       <div className="flex justify-center">
-        <div className="inline-flex gap-1 rounded-full p-1 border
+        <div
+          className="inline-flex gap-1 rounded-full p-1 border
           bg-white/70 border-orange-200
-          dark:bg-slate-900/60 dark:border-slate-700">
-          {["info", "limits"].map(tab => (
+          dark:bg-slate-900/60 dark:border-slate-700"
+        >
+          {["info", "limits"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -106,7 +180,11 @@ export default function BlueprintPage() {
                     : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 }`}
             >
-              {t(tab === "info" ? "blueprint_tab_app_info" : "blueprint_tab_app_restrictions")}
+              {t(
+                tab === "info"
+                  ? "blueprint_tab_app_info"
+                  : "blueprint_tab_app_restrictions",
+              )}
             </button>
           ))}
         </div>
@@ -119,7 +197,9 @@ export default function BlueprintPage() {
             {blueprintItems.map((item, index) => (
               <div
                 key={index}
-                id={item.title === "blueprint_tours" ? "tours-section" : undefined}
+                id={
+                  item.title === "blueprint_tours" ? "tours-section" : undefined
+                }
                 className={`rounded-xl border p-6 transition shadow-sm
                   ${
                     item.title === "blueprint_tours" && highlightTours
@@ -133,13 +213,16 @@ export default function BlueprintPage() {
                   className={`text-lg font-semibold
                     text-teal-700 dark:text-teal-300
                     ${
-                      item.title === "blueprint_home" || item.title === "blueprint_tours"
+                      item.title === "blueprint_home" ||
+                      item.title === "blueprint_tours"
                         ? "cursor-pointer hover:underline"
                         : ""
                     }`}
                   onClick={() => {
-                    if (item.title === "blueprint_tours") window.location.href = "/tours";
-                    if (item.title === "blueprint_home") window.location.href = "/";
+                    if (item.title === "blueprint_tours")
+                      window.location.href = "/tours";
+                    if (item.title === "blueprint_home")
+                      window.location.href = "/";
                   }}
                 >
                   {t(item.title)}
@@ -154,12 +237,16 @@ export default function BlueprintPage() {
                     {item.children.map((child, idx) => (
                       <div key={idx} className="relative">
                         {idx !== item.children.length - 1 && (
-                          <span className="absolute left-[-15px] top-4 bottom-[-32px] w-px
-                            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500" />
+                          <span
+                            className="absolute left-[-15px] top-4 bottom-[-32px] w-px
+                            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500"
+                          />
                         )}
 
-                        <span className="absolute left-[-20px] top-2 w-3 h-3 rounded-full
-                          bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500" />
+                        <span
+                          className="absolute left-[-20px] top-2 w-3 h-3 rounded-full
+                          bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500"
+                        />
 
                         <p
                           className={`font-semibold
@@ -172,7 +259,10 @@ export default function BlueprintPage() {
                             if (child.title === "blueprint_home_tour_list") {
                               document
                                 .getElementById("tours-section")
-                                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                ?.scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "start",
+                                });
 
                               setHighlightTours(true);
                               setTimeout(() => setHighlightTours(false), 2500);
@@ -187,8 +277,10 @@ export default function BlueprintPage() {
                         </p>
 
                         {child.points && (
-                          <ul className="mt-2 list-disc pl-5 text-sm
-                            text-slate-600 dark:text-slate-400">
+                          <ul
+                            className="mt-2 list-disc pl-5 text-sm
+                            text-slate-600 dark:text-slate-400"
+                          >
                             {child.points.map((p, i) => (
                               <li key={i}>{t(p)}</li>
                             ))}
@@ -210,9 +302,11 @@ export default function BlueprintPage() {
 
       {/* ================= LIMITS TAB ================= */}
       {activeTab === "limits" && (
-        <section className="max-w-4xl mx-auto rounded-2xl p-8 shadow-sm
+        <section
+          className="max-w-4xl mx-auto rounded-2xl p-8 shadow-sm
           bg-white border border-red-200
-          dark:bg-slate-900/60 dark:border-slate-700">
+          dark:bg-slate-900/60 dark:border-slate-700"
+        >
           <h2 className="text-2xl font-semibold text-teal-700 dark:text-teal-300">
             {t("applicationRestrictions.title")}
           </h2>
@@ -225,8 +319,10 @@ export default function BlueprintPage() {
             {appLimitations.map((item, index, arr) => (
               <div key={index} className="relative">
                 {index !== arr.length - 1 && (
-                  <span className="absolute left-[-15px] top-4 bottom-[-40px] w-px
-                    bg-slate-300 dark:bg-slate-700" />
+                  <span
+                    className="absolute left-[-15px] top-4 bottom-[-40px] w-px
+                    bg-slate-300 dark:bg-slate-700"
+                  />
                 )}
                 <span className="absolute left-[-20px] top-2 w-3 h-3 rounded-full bg-red-500" />
                 <p className="font-medium text-slate-800 dark:text-slate-100">
