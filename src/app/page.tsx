@@ -697,6 +697,27 @@ function ShortcutRow({
   const dispatch = useAppDispatch();
   const { t } = useLocale();
 
+  // Current mode light or dark to make icon image color change based on that
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    // initial
+    setIsDark(html.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(html.classList.contains("dark"));
+    });
+
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleShortcutClick = (shortcut: any) => {
     try {
       if (shortcut.link && shortcut.link.trim().startsWith("{")) {
@@ -803,9 +824,7 @@ function ShortcutRow({
                     alt={item.title}
                     className="w-6 h-6 object-contain"
                     style={{
-                      filter: document.documentElement.classList.contains(
-                        "dark",
-                      )
+                      filter: isDark
                         ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
                         : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}
@@ -857,9 +876,7 @@ function ShortcutRow({
                     alt={item.title}
                     className="w-full h-full object-contain"
                     style={{
-                      filter: document.documentElement.classList.contains(
-                        "dark",
-                      )
+                      filter: isDark
                         ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
                         : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}

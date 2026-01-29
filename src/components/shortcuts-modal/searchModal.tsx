@@ -267,6 +267,27 @@ export default function SearchModal({
 
   const shouldShowMonuments = pageItems.length > 0;
 
+  // Current mode light or dark to make icon image color change based on that
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    // initial
+    setIsDark(html.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(html.classList.contains("dark"));
+    });
+
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   /* -------------------- Render -------------------- */
   return (
     <AnimatePresence>
@@ -474,10 +495,7 @@ export default function SearchModal({
                               alt={f.title}
                               className="h-7 w-7 object-contain"
                               style={{
-                                filter:
-                                  document.documentElement.classList.contains(
-                                    "dark",
-                                  )
+                                filter :isDark
                                     ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
                                     : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                               }}
