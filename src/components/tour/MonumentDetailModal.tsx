@@ -428,7 +428,7 @@ export default function MonumentDetailModal({
     if (!capturedImage) return;
 
     const blob = await (await fetch(capturedImage)).blob();
-    const file = new File([blob], "gose-visit.png", {
+    const file = new File([blob], "nara-visit.png", {
       type: "image/png",
     });
 
@@ -440,8 +440,8 @@ export default function MonumentDetailModal({
       navigator.canShare({ files: [file] })
     ) {
       await navigator.share({
-        title: "Gose Visit",
-        text: "Captured at Gose monument",
+        title: "Nara Visit",
+        text: "Captured at Nara monument",
         files: [file],
       });
       return;
@@ -454,7 +454,7 @@ export default function MonumentDetailModal({
   function downloadImageFallback(dataUrl: string) {
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = "gose-visit.png";
+    a.download = "nara-visit.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1437,7 +1437,7 @@ export default function MonumentDetailModal({
             {/* GOSE LOGO */}
             <img
               src="/nara_logo.png"
-              alt="Gose"
+              alt="Nara"
               className="absolute w-32 opacity-80"
             />
 

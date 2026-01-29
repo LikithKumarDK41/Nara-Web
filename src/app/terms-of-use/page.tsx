@@ -180,14 +180,14 @@ Nara Archaeological Site and Cultural Property Preservation and Activation Found
 1-6-25 Mamigaoka, Kashiba City, Nara Prefecture 639-0223
 
 Development:
-NDR Co., Ltd.:https://ndr.co.jp/
+NDR Co., Ltd.
 Sumitomo Life Minatomachi MT Building 2F, 1-18-4 Minamihorie, Nishi-ku, Osaka City 550-0015`
                 : `【著作・制作】
 一般財団法人奈良遺跡文化財保存活性化財団
 〒639-0223 奈良県香芝市真美ケ丘1-6-25
 
 【開発】
-株式会社エヌ・ディ・アール: https://ndr.co.jp/
+株式会社エヌ・ディ・アール
 〒550-0015 大阪市西区南堀江1-18-4 住友生命湊町MTビル2階`
             }
           />
