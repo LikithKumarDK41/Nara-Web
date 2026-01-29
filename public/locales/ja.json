@@ -781,5 +781,12 @@
   "see_details": "詳しく見る",
   "termsOfUse": "利用規約／サービス規約",
   "nara_heritage": "奈良の遺産",
-  "nara_heritage_theme": "奈良遺産テーマ"
+  "nara_heritage_theme": "奈良遺産テーマ",
+  "explore_nara": "奈良を探索",
+  "cultural_heritage_collection": "文化遺産コレクション",
+  "category_desc": "奈良の豊かな歴史、文化、自然遺産を紹介する厳選されたテーマをご覧ください",
+  "themes": "テーマ",
+  "discovery": "発見",
+  "curated": "厳選",
+  "collection": "コレクション"
 }

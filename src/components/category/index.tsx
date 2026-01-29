@@ -218,9 +218,9 @@ export default function CategoryExplorer() {
         drop-shadow-lg
       "
           >
-            {themeInfo?.title || "Explore Nara"}
+            {themeInfo?.title || t("explore_nara")}
             <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-bold text-white/80">
-              Cultural Heritage Collection
+              {t("cultural_heritage_collection")}
             </span>
           </h1>
 
@@ -241,9 +241,7 @@ export default function CategoryExplorer() {
         font-light
       "
           >
-            {
-              "Discover curated themes showcasing Nara's rich historical, cultural, and natural heritage"
-            }
+            { t("category_desc") }
           </p>
 
           {/* Stats row */}
@@ -253,7 +251,7 @@ export default function CategoryExplorer() {
                 {subthemes.length}
               </span>
               <span className="text-[10px] md:text-xs text-white/70 font-medium">
-                Themes
+                {t("themes")}
               </span>
             </div>
             <div className="hidden sm:flex flex-col items-center">
@@ -261,15 +259,15 @@ export default function CategoryExplorer() {
                 ∞
               </span>
               <span className="text-[10px] md:text-xs text-white/70 font-medium">
-                Discovery
+                {t("discovery")}
               </span>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-lg md:text-xl font-bold text-emerald-300">
-                Curated
+                {t("curated")}
               </span>
               <span className="text-[10px] md:text-xs text-white/70 font-medium">
-                Collection
+                {t("collection")}
               </span>
             </div>
           </div>

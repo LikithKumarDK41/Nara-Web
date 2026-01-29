@@ -400,7 +400,7 @@ export default function SearchModal({
                         <span className="font-medium">{keyword}</span>{" "}
                         <span className="text-gray-500">@</span>{" "}
                         <span className="text-teal-600 dark:text-teal-400 font-medium">
-                          All
+                          {t("all")}
                         </span>
                       </div>
 
