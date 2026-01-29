@@ -633,7 +633,7 @@ function PageNavigator({
     <div className="flex items-center justify-between gap-3 pt-8">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        ページ {page} / {totalPages}
+        {t("pagination_left", { current: page, total: totalPages })}
       </div>
 
       <div className="flex items-center gap-1">
