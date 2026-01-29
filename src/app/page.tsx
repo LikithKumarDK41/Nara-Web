@@ -210,7 +210,7 @@ export default function ToursDashboardPage() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               <ShortcutRow
                 items={sectionTwo}
                 variant="secondary"
@@ -789,14 +789,14 @@ function ShortcutRow({
   ${baseCardStyles}
   flex flex-col items-center justify-center
   w-full md:min-w-[140px] md:max-w-[140px]  /* ✅ fixed ONLY on md+ */
-  h-[110px]
+  h-[101px] md:h-[110px]
   rounded-2xl
   shadow-md
   bg-white dark:bg-[#0f1115]
 `}
             >
               {/* Icon */}
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
                 {item.icon?.secure_url ? (
                   <img
                     src={item.icon.secure_url}
@@ -818,7 +818,7 @@ function ShortcutRow({
               {/* Text */}
               <span
                 className="
-    text-sm font-bold
+    text-xs md:text-sm font-bold
     text-center
     text-slate-800 dark:text-slate-200
     whitespace-nowrap
@@ -842,8 +842,8 @@ function ShortcutRow({
             onClick={() => handleShortcutLink2(item)}
             className={`
     ${baseCardStyles}
-    flex-row gap-4 px-4 py-3.5
-    w-full min-w-0 h-auto min-h-[72px]
+    flex-col items-center md:flex-row gap-2 md:gap-4 px-2 md:px-4 py-3.5 md:py-3.5
+    w-full min-w-0 h-auto md:min-h-[72px]
     rounded-2xl
     shadow-sm hover:shadow-lg hover:shadow-teal-500/10 dark:hover:shadow-teal-900/20
     bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
@@ -872,7 +872,7 @@ function ShortcutRow({
 
             <span
               className="
-    text-sm font-bold
+    text-xs md:text-sm font-bold
     text-left
     text-slate-700 dark:text-slate-200
     group-hover:text-teal-700 dark:group-hover:text-white
@@ -888,7 +888,7 @@ function ShortcutRow({
             </span>
 
             {/* Arrow Hint */}
-            <div className="ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
+            <div className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
               <ChevronRight className="w-4 h-4" />
             </div>
           </div>
