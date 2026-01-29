@@ -249,7 +249,7 @@ export default function StreetViewModal({
                   <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
                     <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
                     <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-                      Nara Heritage
+                      {t("nara_heritage")}
                     </span>
                   </div>
 

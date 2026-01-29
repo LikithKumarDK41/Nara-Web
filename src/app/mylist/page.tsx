@@ -354,7 +354,7 @@ export default function LibraryPage() {
           <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
             <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
             <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-              Nara Heritage
+             {t("nara_heritage")}
             </span>
           </div>
 
@@ -724,7 +724,7 @@ function PageNavigator({
     <div className="flex items-center justify-between gap-3 pt-6">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        ページ {page} / {totalPages}
+        {t("pagination_left", { current: page, total: totalPages })}
       </div>
 
       <div className="flex items-center gap-1">
