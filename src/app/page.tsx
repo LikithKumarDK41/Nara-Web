@@ -163,7 +163,6 @@ export default function ToursDashboardPage() {
     <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
       <TextHeroSlider />
-      {/* <ImageHero /> */}
 
       {/* ================= SECTION DIVIDER ================= */}
       <div className="relative z-10 flex justify-center py-6">
@@ -309,6 +308,11 @@ export default function ToursDashboardPage() {
                 {abouts.map((item) => (
                   <div
                     key={item._id}
+                     onClick={(e) => {
+                        e.stopPropagation(); // prevent card click conflicts
+                        dispatch(setActiveAbout(item._id));
+                        router.push("/about");
+                      }}
                     className="
         relative
         min-w-[260px] max-w-[260px]
@@ -582,35 +586,6 @@ function TextHeroSlider() {
           />
         ))}
       </div>
-    </section>
-  );
-}
-
-function ImageHero() {
-  return (
-    <section
-      className="
-        relative w-full
-        flex items-center justify-center
-        overflow-hidden rounded-[32px]
-        bg-white dark:bg-black
-      "
-    >
-      <div className="absolute inset-0 bg-teal-500/10" />
-
-      {/* Image with original aspect ratio */}
-      <img
-        src="/home-banner.png"
-        alt="Hero banner"
-        className="
-          max-w-full
-          h-auto
-          object-contain
-        "
-      />
-
-      {/* Optional bottom fade */}
-      {/* <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-b from-transparent to-white dark:to-black pointer-events-none" /> */}
     </section>
   );
 }

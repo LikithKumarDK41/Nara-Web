@@ -238,12 +238,6 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li className="grid grid-cols-[90px_1fr] gap-1 items-start">
-                    {/* <TimelineDot
-                      index={i}
-                      accent={accent}
-                      waypointtype={p.waypointtype}
-                      hasStart={hasStart}
-                    /> */}
                     <div className="col-start-2 p-6 rounded-2xl bg-yellow-50 dark:bg-zinc-800 border border-yellow-200 dark:border-zinc-700 shadow-sm">
                       <div className="flex items-center gap-3">
                         <UtensilsCrossed className="h-6 w-6 text-orange-500" />
@@ -294,10 +288,6 @@ export default function MapTimelineRight({
                       <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                         {p.pointtitle || t("station")}
                       </h3>
-
-                      {/* <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {t("travel_mode")}: {t("station")}
-                      </p> */}
                     </div>
                   </li>
 

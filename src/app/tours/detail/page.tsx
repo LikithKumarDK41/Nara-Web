@@ -602,7 +602,6 @@ export default function TourDetailsClientPage() {
             <br />
             <TimelineRight
               tourpoints={tour.tourpoints}
-              tour_id={id}
               customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
                 text-white font-semibold shadow-md hover:shadow-xl transition-all"
             />
