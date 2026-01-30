@@ -308,6 +308,11 @@ export default function ToursDashboardPage() {
                 {abouts.map((item) => (
                   <div
                     key={item._id}
+                     onClick={(e) => {
+                        e.stopPropagation(); // prevent card click conflicts
+                        dispatch(setActiveAbout(item._id));
+                        router.push("/about");
+                      }}
                     className="
         relative
         min-w-[260px] max-w-[260px]
