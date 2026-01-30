@@ -162,14 +162,14 @@ export default function ToursDashboardPage() {
   return (
     <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
-      {/* <TextHeroSlider /> */}
-      <ImageHero />
+      <TextHeroSlider />
+      {/* <ImageHero /> */}
 
       {/* ================= SECTION DIVIDER ================= */}
       <div className="relative z-10 flex justify-center py-6">
         <div className="flex items-center gap-3 text-slate-400">
           <span className="h-px w-10 bg-gradient-to-r from-transparent to-teal-500/40" />
-          <span className="text-xs tracking-widest uppercase">
+          <span className="text-xs tracking-widest uppercase text-slate-800 dark:text-slate-100 font-bold">
             {t("home.quick_access")}
           </span>
           <span className="h-px w-10 bg-gradient-to-l from-transparent to-teal-500/40" />
