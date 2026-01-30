@@ -14,7 +14,6 @@ import {
   MapPin,
   X,
   ArrowLeft,
-  Info,
   ImageIcon,
   Navigation,
 } from "lucide-react";
