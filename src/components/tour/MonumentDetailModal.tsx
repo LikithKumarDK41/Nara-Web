@@ -1154,7 +1154,6 @@ export default function MonumentDetailModal({
                               className={`cursor-pointer w-full rounded-full mt-3 ${
                                 customStyle || customStyleDefault
                               } group-hover:opacity-90`}
-                              onClick={() => onOpenAnother(m._id)}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1250,11 +1249,6 @@ export default function MonumentDetailModal({
                                     className={`cursor-pointer w-full rounded-full mt-3 ${
                                       customStyle || customStyleDefault
                                     } group-hover:opacity-90`}
-                                    onClick={() =>
-                                      router.push(
-                                        `/tours/detail/?id=${tour._id}`,
-                                      )
-                                    }
                                     disabled={
                                       localTourId
                                         ? localTourId !== tour._id
@@ -1322,7 +1316,6 @@ export default function MonumentDetailModal({
                               className={`cursor-pointer w-full rounded-full mt-3 ${
                                 customStyle || customStyleDefault
                               } group-hover:opacity-90`}
-                              onClick={() => openPlaceDetails(srv)}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1387,9 +1380,6 @@ export default function MonumentDetailModal({
                               className={`cursor-pointer w-full rounded-full mt-2 ${
                                 customStyle || customStyleDefault
                               } group-hover:opacity-90`}
-                              onClick={() => {
-                                router.push(`/shortcuts/events/?id=${ev._id}`);
-                              }}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
