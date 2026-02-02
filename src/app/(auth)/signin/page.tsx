@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Mail, Facebook, ArrowLeftRight } from "lucide-react";
+import { Mail, Facebook } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 
@@ -49,7 +49,6 @@ import {
 /* ⭐ Translation Hook */
 import { useLocale } from "@/providers/LocaleProvider";
 
-type OtpMode = "login" | "register";
 type FieldErrors = Record<string, string>;
 
 /** Infer country code from phone */
@@ -68,8 +67,6 @@ function inferCountryFromE164(e164: string, list: Country[]): string | null {
 
 export default function SignInPage() {
   const { t } = useLocale(); // ⭐ Translation hook
-  const [profileImage, setProfileImage] = React.useState<File | null>(null);
-  const [profilePreview, setProfilePreview] = React.useState<string>("");
   const [loginType, setLoginType] = React.useState<"email" | "phone">("email");
   const [countryCode, setCountryCode] = React.useState("+91");
 
@@ -97,10 +94,7 @@ export default function SignInPage() {
 
   const {
     loading,
-    otpMode,
     pendingAccount,
-    pendingEmailid,
-    pendingFirebaseUid,
     countries,
     countriesLoading,
   } = useAppSelector((s) => s.auth);
@@ -118,8 +112,6 @@ export default function SignInPage() {
   const [idErrors, setIdErrors] = React.useState<FieldErrors>({});
   const [otpErrors, setOtpErrors] = React.useState<FieldErrors>({});
   const [regErrors, setRegErrors] = React.useState<FieldErrors>({});
-
-  const effectiveEmail = pendingEmailid || email.trim();
 
   function accountLabel(): AccountType {
     if (pendingAccount) return pendingAccount;
@@ -254,8 +246,6 @@ export default function SignInPage() {
           );
 
           if (verifyOtp.fulfilled.match(verifyAction)) {
-            // toast.success(t("auth.toast_otp_verified"));
-
             const signAction = await dispatch(signin({ email: email.trim() }));
 
             if (signin.fulfilled.match(signAction)) {
@@ -297,21 +287,6 @@ export default function SignInPage() {
           if (!validateOtp()) return;
 
           try {
-            const result = await verifyPhoneOtp(otp);
-            const firebaseUser = result.user;
-
-            // 🔐 Send verified data to backend
-            // const signAction = await dispatch(
-            //   signin({
-            //     firebaseUserId: firebaseUser.uid,
-            //   })
-            // );
-
-            // if (signin.fulfilled.match(signAction)) {
-            //   toast.success(t("auth.toast_login_success"));
-            //   return router.replace(next);
-            // }
-
             toast.error(t("auth.toast_login_failed"));
           } catch (err) {
             toast.error(t("auth.error_otp_invalid"));
@@ -342,12 +317,11 @@ export default function SignInPage() {
 
       if (registerNewUser.fulfilled.match(regAction)) {
         toast.success(t("auth.toast_register_success"));
-        // return router.replace(next);
         setShowSocialRegister(false);
         setActiveTab("login"); // SWITCH TAB
         dispatch(resetOtpState());
         setOtp("");
-        setEmail(""); //setEmail(emailReg) if wanted register mail id to be prefilled;
+        setEmail("");
       }
       toast.error(t("auth.toast_register_failed"));
       return;
@@ -404,11 +378,10 @@ export default function SignInPage() {
 
       if (registerNewUser.fulfilled.match(regAction)) {
         toast.success(t("auth.toast_register_success"));
-        // router.replace(next);
         setActiveTab("login"); // SWITCH TAB
         dispatch(resetOtpState()); // optional but recommended
         setOtp("");
-        setEmail(""); //setEmail(emailReg) if wanted register mail id to be prefilled;
+        setEmail("");
       } else {
         toast.error(t("auth.toast_register_failed"));
       }
@@ -538,12 +511,6 @@ export default function SignInPage() {
     }
   }
 
-  function toggleLoginType() {
-    setLoginType((prev) => (prev === "email" ? "phone" : "email"));
-    setOtp("");
-    dispatch(resetOtpState());
-  }
-
   const uniqueDialCodes = React.useMemo(() => {
     const map = new Map<string, any>();
 
@@ -667,22 +634,6 @@ export default function SignInPage() {
                           ? t("auth.label_email")
                           : t("auth.label_phone")}
                       </span>
-
-                      {/* <button
-                        type="button"
-                        onClick={toggleLoginType}
-                        className="
-    flex items-center gap-1.5 text-xs font-medium
-    text-amber-600 hover:text-amber-700
-    dark:text-amber-300 dark:hover:text-amber-200
-    transition-colors
-  "
-                      >
-                        <ArrowLeftRight className="h-3.5 w-3.5" />
-                        {loginType === 'email'
-                          ? t("auth.switch_to_phone")
-                          : t("auth.switch_to_email")}
-                      </button> */}
                     </Label>
 
                     {/* INPUT AREA */}
@@ -750,38 +701,6 @@ export default function SignInPage() {
                       </div>
                     )}
                   </div>
-
-                  {/* Email */}
-                  {/* <div className="grid gap-2">
-                    <Label
-                      htmlFor="email"
-                      className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
-                    >
-                      {t("auth.label_email")}
-                    </Label>
-
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t("auth.placeholder_email")}
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (idErrors.email) setIdErrors((p) => ({ ...p, email: '' }));
-                      }}
-                      onBlur={validateIdentifier}
-                      disabled={loading}
-                      className="
-          focus-visible:ring-amber-500
-          focus-visible:border-0
-          border-amber-300 dark:border-amber-600
-        "
-                    />
-
-                    {idErrors.email && (
-                      <p className="text-xs text-red-600">{idErrors.email}</p>
-                    )}
-                  </div> */}
 
                   {otpServer && !otpVerified && (
                     <div className="grid gap-2">
@@ -876,7 +795,6 @@ export default function SignInPage() {
         "
                       type="button"
                       onClick={() => handleSocial("facebook")}
-                      // disabled={loading}
                       disabled={true}
                     >
                       <Facebook className="mr-2 size-5" />
@@ -1323,7 +1241,6 @@ export default function SignInPage() {
         "
                           type="button"
                           onClick={() => handleSocialRegister("facebook")}
-                          // disabled={loading}
                           disabled={true}
                         >
                           <Facebook className="mr-2 size-5" />{" "}

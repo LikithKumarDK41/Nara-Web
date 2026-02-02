@@ -38,7 +38,6 @@ export default function LibraryPage() {
   const nav = useAppSelector(selectNav);
   const usertour = nav.usertour;
 
-  const monumentDetail = useSelector((s: any) => s.tourist.monumentDetail);
   const loadingState = useSelector((s: any) => s.tourist.loading);
 
   const [topTab, setTopTab] = useState<"bookmarks" | "visited">("bookmarks");

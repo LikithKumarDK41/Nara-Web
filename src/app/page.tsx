@@ -117,10 +117,6 @@ export default function ToursDashboardPage() {
   }, []);
 
   const hasTours = (tours?.length ?? 0) > 0;
-  // Get featured tours for the carousel, fallback to first 5
-  const heroTours = tours.filter((t) => t.featured).slice(0, 5);
-  const carouselItems = heroTours.length > 0 ? heroTours : tours.slice(0, 5);
-
   /* -------------------- Priority Logic -------------------- */
   function placeByPriority(list: any[]) {
     const ordered: any[] = [];
@@ -137,7 +133,7 @@ export default function ToursDashboardPage() {
   }
 
   const sectionOne = placeByPriority(
-    shortcuts.filter((s) => {
+    shortcuts.filter((s:any) => {
       const p = s.priority ?? 0;
       return p >= 0 && p <= 3;
     }),
@@ -670,7 +666,6 @@ function ShortcutRow({
 }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { t } = useLocale();
 
   // Current mode light or dark to make icon image color change based on that
   const [isDark, setIsDark] = useState(false);
