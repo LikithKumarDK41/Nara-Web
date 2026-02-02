@@ -43,7 +43,6 @@ export default function MapTimelineRight({
   const { t } = useLocale();
   const { show, hide } = useGlobalLoader();
   const persisted = getPersistedUser();
-  const userId = persisted?.user?._id ?? null;
 
   const loading = useSelector((s: any) => s.tourist.loading);
   const monumentDetail = useSelector((s: any) => s.tourist.monumentDetail);
@@ -101,19 +100,6 @@ export default function MapTimelineRight({
     activeMonument && monumentDetail?._id === activeMonument._id
       ? monumentDetail
       : (activeMonument ?? active?.monument);
-
-  const formatMinutes = (
-    value?: string | number,
-    t?: (key: string) => string,
-  ) => {
-    if (!value) return null;
-
-    // Extract number from "10", "10 min", "10分"
-    const minutes = String(value).match(/\d+/)?.[0];
-    if (!minutes) return value;
-
-    return `${minutes} ${t ? t("time.min") : "min"}`;
-  };
 
   function shouldShowTimelineDot(p: TourPoint) {
     return p.pointtype !== "lunch";
@@ -1053,16 +1039,6 @@ function TravelConnector({
   // ✅ Start time (safe fallback)
   const startTime = next?.starttime || "";
   null;
-
-  function formatMinutes(value?: string | number, t?: (key: string) => string) {
-    if (!value) return null;
-
-    // Extract number from "10", "10 min", "10分"
-    const minutes = String(value).match(/\d+/)?.[0];
-    if (!minutes) return value;
-
-    return `${minutes} ${t ? t("time.min") : "min"}`;
-  }
 
   return (
     <div className="flex flex-wrap items-center gap-3 text-base font-medium text-gray-700 dark:text-gray-300">

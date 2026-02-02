@@ -80,55 +80,6 @@ export default function FinishPage() {
     if (usertour.status !== "end") console.warn("Tour not ended yet");
   }, [tourId, auth.data, usertour]);
 
-  /* ---------- SHARE ACHIEVEMENT ---------- */
-  const handleShare = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-      });
-
-      const track = stream.getVideoTracks()[0];
-      const imageCapture = new (window as any).ImageCapture(track);
-
-      const bitmap: ImageBitmap = await imageCapture.grabFrame();
-
-      const canvas = document.createElement("canvas");
-      canvas.width = bitmap.width;
-      canvas.height = bitmap.height;
-
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("Canvas context is null");
-
-      ctx.drawImage(bitmap, 0, 0);
-
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((file) => {
-          if (file) resolve(file);
-          else reject("Failed to create Blob");
-        }, "image/png");
-      });
-
-      // STOP screen capture
-      stream.getTracks().forEach((t) => t.stop());
-
-      // Convert screenshot to image URL
-      const imgURL = URL.createObjectURL(blob);
-
-      // Open screenshot in new window
-      const win = window.open("");
-      win!.document.write(`
-      <html>
-        <body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;">
-          <img src="${imgURL}" style="max-width:100%;max-height:100%;" />
-        </body>
-      </html>
-    `);
-    } catch (err) {
-      console.error("SCREENSHOT ERROR:", err);
-      alert("Unable to capture screenshot.");
-    }
-  };
-
   /* ---------- BACK TO TOURS ---------- */
   const handleBackToTours = () => {
     setIsResetting(true);
@@ -248,13 +199,6 @@ export default function FinishPage() {
 
       {/* FOOTER BUTTONS */}
       <div className="p-6 space-y-3 bg-gradient-to-t from-gray-100 to-transparent dark:from-black dark:to-transparent">
-        {/* <Button
-          onClick={handleShare}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-5 rounded-xl font-bold"
-        >
-          <Share2 className="mr-2" /> {t("share_achievement")}
-        </Button> */}
-
         <Button
           onClick={handleBackToTours}
           disabled={isResetting}

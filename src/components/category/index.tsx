@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "@/lib/store/hook";
 import { selectActiveThemeId } from "@/lib/store/slices/globalSlice";
 import {
   apiFetchSubthemesWithQuery,
@@ -46,7 +46,6 @@ export default function CategoryExplorer() {
   const [monuments, setMonuments] = useState<any[]>([]);
   const [monumentsLoading, setMonumentsLoading] = useState(false);
   const { show, hide } = useGlobalLoader();
-  const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [selectedMonument, setSelectedMonument] = useState<any | null>(null);

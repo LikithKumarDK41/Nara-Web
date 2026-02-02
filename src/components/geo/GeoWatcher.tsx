@@ -13,7 +13,6 @@ import { selectTourDetail } from "@/lib/store/slices/touristSlice";
 import { toast } from "sonner";
 import { useLocale } from "@/providers/LocaleProvider";
 
-const DEFAULT_RADIUS = 5000;
 const UPDATE_INTERVAL = 1500;
 const GEO_TIMEOUT = 30000;
 const RETRY_DELAY = 60000;
@@ -138,7 +137,7 @@ export default function GeoWatcher() {
             tourId: tour?._id ?? null,
           };
         })
-        .filter((p): p is NonNullable<typeof p> => p !== null)
+        .filter((p:any): p is NonNullable<typeof p> => p !== null)
     );
   }, [tour, findMetaForTourpoint]);
 
