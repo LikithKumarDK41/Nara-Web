@@ -1425,7 +1425,7 @@ export default function MonumentDetailModal({
             {/* Capture */}
             <button
               onClick={capturePhoto}
-              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500  p-4 rounded-full shadow-lg"
+              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500  p-4 rounded-full shadow-lg"
             >
               <Camera className="h-8 w-8 text-white" />
             </button>
