@@ -1112,7 +1112,7 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label
                           htmlFor="nationality"
-                          className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
+                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
                         >
                           {t("auth.label_nationality")} *
                         </Label>

@@ -439,7 +439,6 @@ export default function MapTimelineRight({
                             </Button>
                             <Button
                               size="sm"
-                              variant="outline"
                               className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
                               disabled={checkingIn}
                               onClick={async () => {
@@ -717,7 +716,6 @@ export default function MapTimelineRight({
                         </Button>
                         <Button
                           size="sm"
-                          variant="outline"
                           className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
                           disabled={checkingIn}
                           onClick={async () => {
