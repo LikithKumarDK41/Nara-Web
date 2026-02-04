@@ -157,15 +157,13 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li
-                    className={`grid grid-cols-[90px_1fr] gap-1 ${
-                      hideBottom ? "pb-8" : "md:pb-10 pb-0"
-                    }`}
+                    className={`grid grid-cols-[90px_1fr] gap-1 ${hideBottom ? "pb-8" : "md:pb-10 pb-0"
+                      }`}
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${
-                          hideTop ? "top-[50%]" : "top-0"
-                        } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${hideTop ? "top-[50%]" : "top-0"
+                          } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
                       <div className="absolute left-[52px] top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div
@@ -527,11 +525,11 @@ export default function MapTimelineRight({
                                     const a =
                                       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                       Math.cos((monumentLat * Math.PI) / 180) *
-                                        Math.cos(
-                                          (userLocation.lat * Math.PI) / 180,
-                                        ) *
-                                        Math.sin(dLng / 2) *
-                                        Math.sin(dLng / 2);
+                                      Math.cos(
+                                        (userLocation.lat * Math.PI) / 180,
+                                      ) *
+                                      Math.sin(dLng / 2) *
+                                      Math.sin(dLng / 2);
 
                                     const c =
                                       2 *
@@ -547,9 +545,9 @@ export default function MapTimelineRight({
                                     if (distance > radius) {
                                       toast.error(
                                         t("too_far_from_monument") ||
-                                          `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                            distance,
-                                          )}m`,
+                                        `You need to be within ${radius}m to check in. Current distance: ${Math.round(
+                                          distance,
+                                        )}m`,
                                       );
                                       return;
                                     }
@@ -557,7 +555,7 @@ export default function MapTimelineRight({
                                     console.warn("Location error:", error);
                                     toast.error(
                                       t("error_getting_location") ||
-                                        "Could not get your location. Please try again.",
+                                      "Could not get your location. Please try again.",
                                     );
                                     return;
                                   }
@@ -591,8 +589,7 @@ export default function MapTimelineRight({
                                  🔟 Success Notification
                               ------------------------------------------------ */
                                   toast.success(
-                                    `${t("checked_in_at")} ${
-                                      m?.name ?? "location"
+                                    `${t("checked_in_at")} ${m?.name ?? "location"
                                     }`,
                                     {
                                       description: t("visit_progress_success"),
@@ -802,11 +799,11 @@ export default function MapTimelineRight({
                                 const a =
                                   Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                   Math.cos((monumentLat * Math.PI) / 180) *
-                                    Math.cos(
-                                      (userLocation.lat * Math.PI) / 180,
-                                    ) *
-                                    Math.sin(dLng / 2) *
-                                    Math.sin(dLng / 2);
+                                  Math.cos(
+                                    (userLocation.lat * Math.PI) / 180,
+                                  ) *
+                                  Math.sin(dLng / 2) *
+                                  Math.sin(dLng / 2);
 
                                 const c =
                                   2 *
@@ -819,9 +816,9 @@ export default function MapTimelineRight({
                                 if (distance > radius) {
                                   toast.error(
                                     t("too_far_from_monument") ||
-                                      `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                        distance,
-                                      )}m`,
+                                    `You need to be within ${radius}m to check in. Current distance: ${Math.round(
+                                      distance,
+                                    )}m`,
                                   );
                                   return;
                                 }
@@ -829,7 +826,7 @@ export default function MapTimelineRight({
                                 console.warn("Location error:", error);
                                 toast.error(
                                   t("error_getting_location") ||
-                                    "Could not get your location. Please try again.",
+                                  "Could not get your location. Please try again.",
                                 );
                                 return;
                               }
@@ -863,8 +860,7 @@ export default function MapTimelineRight({
                                  🔟 Success Notification
                               ------------------------------------------------ */
                               toast.success(
-                                `${t("checked_in_at")} ${
-                                  m?.name ?? "location"
+                                `${t("checked_in_at")} ${m?.name ?? "location"
                                 }`,
                                 {
                                   description: t("visit_progress_success"),
@@ -971,7 +967,7 @@ export default function MapTimelineRight({
           </div>
         </div>
       )}
-      <div className="px-4 text-sm text-muted-foreground text-center">
+      <div className="md:mt-4 px-4 text-sm text-muted-foreground text-center">
         {t("timeline_footer_desc")}
       </div>
     </>
