@@ -92,12 +92,8 @@ export default function SignInPage() {
     "login",
   );
 
-  const {
-    loading,
-    pendingAccount,
-    countries,
-    countriesLoading,
-  } = useAppSelector((s) => s.auth);
+  const { loading, pendingAccount, countries, countriesLoading } =
+    useAppSelector((s) => s.auth);
 
   const [email, setEmail] = React.useState("");
   const [otp, setOtp] = React.useState("");
@@ -1077,7 +1073,7 @@ export default function SignInPage() {
                         >
                           <SelectTrigger
                             className="
-      w-full
+      w-full overflow-hidden
       border-teal-300 dark:border-teal-600
       focus:ring-0
       focus-visible:ring-teal-500
@@ -1085,6 +1081,7 @@ export default function SignInPage() {
     "
                           >
                             <SelectValue
+                              className="block w-full truncate"
                               placeholder={t("auth.label_country")}
                             />
                           </SelectTrigger>
@@ -1097,7 +1094,14 @@ export default function SignInPage() {
                           >
                             {countries.map((c) => (
                               <SelectItem key={c.code} value={c.code}>
-                                {c.name} ({c.code})
+                                <div className="flex w-full items-center justify-between gap-2">
+                                  <span className="truncate max-w-[220px]">
+                                    {c.name}
+                                  </span>
+                                  <span className="shrink-0 text-muted-foreground">
+                                    ({c.code})
+                                  </span>
+                                </div>
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -1123,7 +1127,7 @@ export default function SignInPage() {
                         >
                           <SelectTrigger
                             className="
-      w-full
+      w-full overflow-hidden
       border-teal-300 dark:border-teal-600
       focus:ring-0
       focus-visible:ring-teal-500
@@ -1131,6 +1135,7 @@ export default function SignInPage() {
     "
                           >
                             <SelectValue
+                              className="block w-full truncate"
                               placeholder={t("auth.label_nationality")}
                             />
                           </SelectTrigger>
@@ -1143,7 +1148,14 @@ export default function SignInPage() {
                           >
                             {countries.map((c) => (
                               <SelectItem key={c.code} value={c.code}>
-                                {c.name} ({c.code})
+                                <div className="flex w-full items-center justify-between gap-2">
+                                  <span className="truncate max-w-[220px]">
+                                    {c.name}
+                                  </span>
+                                  <span className="shrink-0 text-muted-foreground">
+                                    ({c.code})
+                                  </span>
+                                </div>
                               </SelectItem>
                             ))}
                           </SelectContent>
