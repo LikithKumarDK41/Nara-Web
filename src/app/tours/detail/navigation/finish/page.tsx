@@ -167,7 +167,7 @@ export default function FinishPage() {
               <p
                 className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3 whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{
-                  __html: normalizeHTML(finalTour.content.brief),
+                  __html: finalTour.content.brief,
                 }}
               />
             )}
@@ -176,7 +176,7 @@ export default function FinishPage() {
               <div
                 className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{
-                  __html: normalizeHTML(finalTour.content.extended),
+                  __html: finalTour.content.extended,
                 }}
               />
             )}
