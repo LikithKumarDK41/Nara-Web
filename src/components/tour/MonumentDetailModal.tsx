@@ -927,7 +927,7 @@ export default function MonumentDetailModal({
                 )}
 
                 {/* 📷 Image Credit */}
-                {details?.imagecredit && (
+                {details?.imagecredit && details.imagecredit.replace(/<[^>]*>/g, "").trim() !== "" && (
                   <section>
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Info className="h-4 w-4 text-gray-500" />
@@ -1142,34 +1142,32 @@ export default function MonumentDetailModal({
                 {/* 🧭 Related Tours */}
                 {!!details.relatedtours?.length && (
                   <section>
+                    {details.relatedtours.filter(
+                      (tour: any) => !(localTourId && localTourId === tour._id),
+                    ).length > 0 && (
+                      <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                        <Route className="h-5 w-5 text-gray-500" />{" "}
+                        {t("shortcut.tourist_attraction_details.related_tours")}
+                      </h3>
+                    )}
                     <div>
-                      {details.relatedtours
-                        .filter(
-                          (tour: any) =>
-                            !(localTourId && localTourId === tour._id),
-                        )
-                        .map((tour: any) => (
-                          <div key={tour._id}>
-                            <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                              <Route className="h-5 w-5 text-gray-500" />{" "}
-                              {t(
-                                "shortcut.tourist_attraction_details.related_tours",
-                              )}
-                            </h3>
-                            <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                              <div
-                                onClick={() => {
-                                  if (!(localTourId !== tour._id)) {
-                                    router.push(
-                                      `/tours/detail/?id=${tour._id}`,
-                                    );
-                                  } else if (!localTourId) {
-                                    router.push(
-                                      `/tours/detail/?id=${tour._id}`,
-                                    );
-                                  }
-                                }}
-                                className={`
+                      <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+                        {details.relatedtours
+                          .filter(
+                            (tour: any) =>
+                              !(localTourId && localTourId === tour._id),
+                          )
+                          .map((tour: any) => (
+                            <div
+                              key={tour._id}
+                              onClick={() => {
+                                if (!(localTourId !== tour._id)) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                } else if (!localTourId) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                }
+                              }}
+                              className={`
   group relative flex flex-col h-full overflow-hidden rounded-2xl
   bg-white/90 dark:bg-slate-900/40 shadow-md transition-all border
   ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
@@ -1179,66 +1177,65 @@ export default function MonumentDetailModal({
        : "cursor-not-allowed"
    }
 `}
-                              >
-                                {/* IMAGE */}
-                                <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                                  {tour.image?.secure_url ? (
-                                    <img
-                                      src={tour.image.secure_url}
-                                      alt={safeText(tour.title)}
-                                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                            >
+                              {/* IMAGE */}
+                              <div className="h-48 w-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                {tour.image?.secure_url ? (
+                                  <img
+                                    src={tour.image.secure_url}
+                                    alt={safeText(tour.title)}
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                                  />
+                                ) : (
+                                  <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                                )}
+                              </div>
+
+                              {/* CONTENT + BUTTON */}
+                              <div className="flex flex-col flex-1 justify-between p-4">
+                                {/* Text Section (auto-height) */}
+                                <div className="flex-1">
+                                  <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                                    {safeText(tour.title)}
+                                  </h3>
+
+                                  {tour.content?.brief && (
+                                    <p
+                                      className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
+                                      dangerouslySetInnerHTML={{
+                                        __html: normalizeHTML(
+                                          tour.content.brief,
+                                        ),
+                                      }}
                                     />
-                                  ) : (
-                                    <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                                  )}
+
+                                  {/* If no content, keep height consistent */}
+                                  {!tour.content?.brief && (
+                                    <div className="h-5"></div>
                                   )}
                                 </div>
 
-                                {/* CONTENT + BUTTON */}
-                                <div className="flex flex-col flex-1 justify-between p-4">
-                                  {/* Text Section (auto-height) */}
-                                  <div className="flex-1">
-                                    <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                      {safeText(tour.title)}
-                                    </h3>
-
-                                    {tour.content?.brief && (
-                                      <p
-                                        className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                        dangerouslySetInnerHTML={{
-                                          __html: normalizeHTML(
-                                            tour.content.brief,
-                                          ),
-                                        }}
-                                      />
-                                    )}
-
-                                    {/* If no content, keep height consistent */}
-                                    {!tour.content?.brief && (
-                                      <div className="h-5"></div>
-                                    )}
-                                  </div>
-
-                                  {/* BUTTON ALWAYS AT BOTTOM */}
-                                  <Button
-                                    size="sm"
-                                    className={`cursor-pointer w-full rounded-full mt-3 ${
-                                      customStyle || customStyleDefault
-                                    } group-hover:opacity-90`}
-                                    disabled={
-                                      localTourId
-                                        ? localTourId !== tour._id
-                                        : false
-                                    }
-                                  >
-                                    {t(
-                                      "shortcut.tourist_attraction_details.go_tour",
-                                    )}
-                                  </Button>
-                                </div>
+                                {/* BUTTON ALWAYS AT BOTTOM */}
+                                <Button
+                                  size="sm"
+                                  className={`cursor-pointer w-full rounded-full mt-3 ${
+                                    customStyle || customStyleDefault
+                                  } group-hover:opacity-90`}
+                                  disabled={
+                                    localTourId
+                                      ? localTourId !== tour._id
+                                      : false
+                                  }
+                                >
+                                  {t(
+                                    "shortcut.tourist_attraction_details.go_tour",
+                                  )}
+                                </Button>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                      </div>
                     </div>
                   </section>
                 )}
@@ -1289,70 +1286,6 @@ export default function MonumentDetailModal({
                             <Button
                               size="sm"
                               className={`cursor-pointer w-full rounded-full mt-3 ${
-                                customStyle || customStyleDefault
-                              } group-hover:opacity-90`}
-                            >
-                              {t("tourDetails.viewDetails")}
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-                {/* 📅 Events linked to this Monument */}
-                {!!events.length && (
-                  <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <CalendarDays className="h-5 w-5 text-gray-500" />
-                      {t("event_header")}
-                    </h3>
-
-                    <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                      {events.map((ev, i) => (
-                        <div
-                          key={ev._id || `event-${i}`}
-                          onClick={() => {
-                            router.push(`/shortcuts/events/?id=${ev._id}`);
-                          }}
-                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
-                        >
-                          {/* 🖼 Image */}
-                          <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                            {ev.image?.secure_url ? (
-                              <img
-                                src={ev.image.secure_url}
-                                alt={safeText(ev.title)}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                              />
-                            ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
-                            )}
-                          </div>
-
-                          {/* 📄 Event Info */}
-                          <div className="flex flex-col flex-1 justify-between p-4">
-                            <div className="flex-1">
-                              <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                {safeText(ev.title)}
-                              </h3>
-
-                              {ev.description && (
-                                <p
-                                  className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                  dangerouslySetInnerHTML={{
-                                    __html: normalizeHTML(ev.description),
-                                  }}
-                                />
-                              )}
-
-                              {/* If no content, keep height consistent */}
-                              {!ev.description && <div className="h-5"></div>}
-                            </div>
-
-                            <Button
-                              size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-2 ${
                                 customStyle || customStyleDefault
                               } group-hover:opacity-90`}
                             >

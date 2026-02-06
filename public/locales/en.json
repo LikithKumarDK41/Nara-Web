@@ -813,6 +813,6 @@
     "error_api": "Sorry, I couldn't reach the guidebot. Please try again.",
     "error_invalid": "Invalid response format"
   },
-  "open_chat": "チャットを開く",
-  "close_chat": "チャットを閉じる"
+  "open_chat": "Open Chat",
+  "close_chat": "Close Chat"
 }
