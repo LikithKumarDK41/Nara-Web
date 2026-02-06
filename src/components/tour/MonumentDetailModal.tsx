@@ -927,7 +927,7 @@ export default function MonumentDetailModal({
                 )}
 
                 {/* 📷 Image Credit */}
-                {details?.imagecredit && (
+                {details?.imagecredit && details.imagecredit.replace(/<[^>]*>/g, "").trim() !== "" && (
                   <section>
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Info className="h-4 w-4 text-gray-500" />
