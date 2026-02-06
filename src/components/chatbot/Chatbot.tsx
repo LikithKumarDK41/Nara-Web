@@ -4,9 +4,14 @@ import React, { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { ChatWindow } from "./ChatWindow";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAppSelector } from "@/lib/store/hook";
+import { useLocale } from "@/providers/LocaleProvider";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const authData = useAppSelector((s) => s.auth.data);
+  const isLoggedIn = !!authData?.user;
+  const {t} = useLocale();
 
   return (
     <>
@@ -24,7 +29,7 @@ export default function Chatbot() {
         )}
       </AnimatePresence>
 
-     {/* <motion.button
+      {/* <motion.button
   onClick={() => setIsOpen(!isOpen)}
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}
@@ -46,18 +51,19 @@ export default function Chatbot() {
   </span>
 </motion.button> */}
 
-<DiamondButton
-  label={isOpen ? "Close chat" : "Open chat"}
-  isOpen={isOpen}
-  onClick={() => setIsOpen(!isOpen)}
->
-  {isOpen ? (
-    <X className="h-5 w-5 text-white" />
-  ) : (
-    <MessageCircle className="h-5 w-5 text-white" />
-  )}
-</DiamondButton>
-
+      {isLoggedIn && (
+        <DiamondButton
+          label={isOpen ? t("close_chat") : t("open_chat")}
+          isOpen={isOpen}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <X className="h-5 w-5 text-white" />
+          ) : (
+            <MessageCircle className="h-5 w-5 text-white" />
+          )}
+        </DiamondButton>
+      )}
     </>
   );
 }

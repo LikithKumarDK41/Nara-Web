@@ -8,12 +8,15 @@ import {
 } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
+import { useAppSelector } from "@/lib/store/hook";
 
 /* =======================================================================
   FLOATING TOOLBAR
 ======================================================================= */
 export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => void }) {
     const { t, locale } = useLocale();
+      const authData = useAppSelector((s) => s.auth.data);
+      const isLoggedIn = !!authData?.user;
 
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
@@ -47,13 +50,13 @@ export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => 
 
     return (
         <div
-            className="
+            className={`
         hidden lg:flex
-        fixed bottom-30 right-6
+        fixed right-6
         z-[30]
         flex flex-col items-end gap-4
-        pointer-events-none
-      "
+        pointer-events-none ${isLoggedIn ? 'bottom-30' :'bottom-14'}
+      `}
         >
             <DiamondButton
                 label={t('nav.tours')}
