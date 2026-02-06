@@ -30,7 +30,6 @@ import {
 } from "@/services/userTourService";
 import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
 import { Star } from "lucide-react";
-import { sortByPopularityThenName } from "@/lib/monumentSort";
 import { normalizeHTML } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 
@@ -529,8 +528,6 @@ function MonumentsToolbar({
   const { t } = useLocale();
   const [sortOptions, setSortOptions] = useState<MonumentSort[]>([]);
   const [loadingSorts, setLoadingSorts] = useState(false);
-  const [filterOptions, setFilterOptions] = useState<any[]>([]);
-  const [loadingFilters, setLoadingFilters] = useState(false);
 
   useEffect(() => {
     let mounted = true;

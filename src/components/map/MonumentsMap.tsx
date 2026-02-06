@@ -5,12 +5,10 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import type mapboxgl from "mapbox-gl";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import { useLocale } from "@/providers/LocaleProvider";
-import { Landmark, Navigation, Star } from "lucide-react";
+import { Landmark, Navigation } from "lucide-react";
 import {
   apiGetNearbyAttractionCategories,
-  apiGetNearbyAttractions,
   apiGetNearbyAttractionsByCategory,
-  apiGetNearbyMonuments,
 } from "@/services/nearByService";
 
 const DEFAULT_CENTER: [number, number] = [135.7214, 34.4342];
@@ -393,24 +391,11 @@ export default function MonumentsMap({
       return;
     }
 
-    // await fetchNearbyMonuments();
-    // setShowMonuments(true);
     if (Array.isArray(near_monuments) && near_monuments.length) {
       setNearbyMonuments(near_monuments);
       addMarkersToMap(near_monuments, "monument");
       setShowMonuments(true);
     }
-  };
-
-  const toggleAttractions = async () => {
-    if (showAttractions) {
-      clearMarkers("attraction");
-      setShowAttractions(false);
-      return;
-    }
-
-    await fetchNearbyAttractions();
-    setShowAttractions(true);
   };
 
   /* ---------------- Google Maps Navigation ---------------- */
@@ -452,54 +437,6 @@ export default function MonumentsMap({
         : `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
 
       window.open(webUrl, "_blank");
-    }
-  }
-
-  // 🏛️ Fetch Nearby Monuments
-  async function fetchNearbyMonuments() {
-    if (!singleLocation) return;
-    const { lat, lng } = singleLocation;
-
-    try {
-      const data = await apiGetNearbyMonuments({ lat, lng });
-
-      if (data?.monuments?.length) {
-        setNearbyMonuments(data.monuments);
-        addMarkersToMap(data.monuments, "monument");
-        setSelectedCoords([
-          data.monuments[0].location[1],
-          data.monuments[0].location[0],
-        ]);
-      } else {
-        setNearbyMonuments([]);
-        clearMarkers("monument");
-      }
-    } catch (err) {
-      console.error("Error fetching nearby monuments:", err);
-    }
-  }
-
-  // 🎢 Fetch Nearby Attractions
-  async function fetchNearbyAttractions() {
-    if (!singleLocation) return;
-    const { lat, lng, id } = singleLocation;
-
-    try {
-      const data = await apiGetNearbyAttractions({
-        lat,
-        lng,
-        monumentId: id,
-      });
-
-      if (data?.attractions?.length) {
-        setNearbyAttractions(data.attractions);
-        addMarkersToMap(data.attractions, "attraction");
-      } else {
-        setNearbyAttractions([]);
-        clearMarkers("attraction");
-      }
-    } catch (err) {
-      console.error("Error fetching nearby attractions:", err);
     }
   }
 

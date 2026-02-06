@@ -59,28 +59,6 @@ export default function LanguageToggle() {
     >
       {/* 🌐 Icon */}
       <Languages className="h-4 w-4 text-teal-600 dark:text-teal-300" />
-
-      {/* 🔖 TOP badge (shows NEXT language) */}
-      {/* <span
-        className="
-          absolute -top-2 -right-1
-          min-w-[18px] h-[18px]
-          px-1
-          flex items-center justify-center
-          rounded-full
-          text-[9px] font-bold
-          text-black
-          shadow
-
-          bg-white
-          border border-orange-400/40
-          hover:shadow-[0_0_10px_rgba(251,146,60,0.35)]
-
-          dark:bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400
-        "
-      >
-        {locale === "en" ? "JP" : "EN"}
-      </span> */}
     </button>
   );
 }

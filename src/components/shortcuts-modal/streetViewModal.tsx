@@ -31,7 +31,6 @@ import {
 } from "@/services/userTourService";
 import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
 import { Star } from "lucide-react";
-import { sortByPopularityThenName } from "@/lib/monumentSort";
 import { normalizeHTML } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 

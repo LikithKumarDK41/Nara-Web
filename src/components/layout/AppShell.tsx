@@ -14,7 +14,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   // pages where header/footer/toolbar hidden
-  const authRoutes = ['/signin', '/register', '/forgot-password', '/public/gallery'];
+  const authRoutes = ['/signin', '/register', '/forgot-password'];
   const isAuthPage = authRoutes.some((route) => pathname.startsWith(route));
 
   return (

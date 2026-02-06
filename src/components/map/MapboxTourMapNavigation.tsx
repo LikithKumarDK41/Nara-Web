@@ -10,7 +10,7 @@ import type { Feature, Polygon } from "geojson";
 
 import { useAppSelector } from "@/lib/store/hook";
 import { selectUserTourPoints } from "@/lib/store/slices/navSlice";
-import { getCurrentLocation, startGPSWatcher, type GPSWatcher } from "@/lib/gpsWatcher";
+import { startGPSWatcher, type GPSWatcher } from "@/lib/gpsWatcher";
 
 /* -------------------- Helpers -------------------- */
 function normalizeLngLat(

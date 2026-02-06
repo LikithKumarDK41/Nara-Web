@@ -127,14 +127,6 @@ export default function MonumentDetailModal({
     setActiveIndex((i) => (i === details.gallery.length - 1 ? 0 : i + 1));
   };
 
-  function sanitizeHTML(input: string): string {
-    if (!input) return "";
-    return input
-      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "")
-      .replace(/<!--[\s\S]*?-->/g, "");
-  }
-
   useEffect(() => {
     if (details?._id) {
       (async () => {
@@ -169,7 +161,6 @@ export default function MonumentDetailModal({
   };
 
   const plainAddress = stripHTML(details?.access);
-  const plainCredit = stripHTML(details?.imagecredit);
   interface BookmarkItem {
     _id: string;
     marktype: string;
@@ -268,22 +259,6 @@ export default function MonumentDetailModal({
       toast.error(t("failed_to_update_bookmark"));
     }
   };
-
-  function normalizeEmptyParagraphs(html: string) {
-    if (!html) return html;
-
-    return (
-      html
-        // <p></p> or <p>   </p>
-        .replace(/<p>\s*<\/p>/gi, "<br/>")
-
-        // <p>&nbsp;</p>
-        .replace(/<p>(&nbsp;|\s)*<\/p>/gi, "<br/>")
-
-        // <p><br></p> or <p><br/></p>
-        .replace(/<p>\s*<br\s*\/?>\s*<\/p>/gi, "<br/>")
-    );
-  }
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1450,7 +1425,7 @@ export default function MonumentDetailModal({
             {/* Capture */}
             <button
               onClick={capturePhoto}
-              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500  p-4 rounded-full shadow-lg"
+              className="cursor-pointer absolute bottom-10 bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500  p-4 rounded-full shadow-lg"
             >
               <Camera className="h-8 w-8 text-white" />
             </button>

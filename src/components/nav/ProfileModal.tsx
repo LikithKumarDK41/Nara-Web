@@ -444,7 +444,7 @@ export default function ProfileModal({
               >
                 <SelectTrigger
                   className="
-      w-full
+      w-full overflow-hidden
       border-teal-300 dark:border-teal-600
       focus:ring-0
       focus-visible:ring-teal-500
@@ -452,9 +452,11 @@ export default function ProfileModal({
     "
                 >
                   <SelectValue>
-                    {form.country
-                      ? getCountryLabel(form.country)
-                      : t("profile.selectCountry")}{" "}
+                    <span className="block w-full truncate">
+                      {form.country
+                        ? getCountryLabel(form.country)
+                        : t("profile.selectCountry")}{" "}
+                    </span>
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
@@ -466,7 +468,12 @@ export default function ProfileModal({
                 >
                   {countries?.map((c: any) => (
                     <SelectItem key={c.code} value={c.code}>
-                      {c.name} ({c.code})
+                      <div className="flex w-full items-center justify-between gap-2">
+                        <span className="truncate max-w-[220px]">{c.name}</span>
+                        <span className="shrink-0 text-muted-foreground">
+                          ({c.code})
+                        </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -491,7 +498,7 @@ export default function ProfileModal({
               >
                 <SelectTrigger
                   className="
-      w-full
+      w-full overflow-hidden
       border-teal-300 dark:border-teal-600
       focus:ring-0
       focus-visible:ring-teal-500
@@ -499,9 +506,11 @@ export default function ProfileModal({
     "
                 >
                   <SelectValue>
-                    {form.nationality
-                      ? getCountryLabel(form.nationality)
-                      : t("profile.selectCountry")}
+                    <span className="block w-full truncate">
+                      {form.nationality
+                        ? getCountryLabel(form.nationality)
+                        : t("profile.selectCountry")}
+                    </span>
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
@@ -513,7 +522,12 @@ export default function ProfileModal({
                 >
                   {countries?.map((c: any) => (
                     <SelectItem key={c.code} value={c.code}>
-                      {c.name} ({c.code})
+                      <div className="flex w-full items-center justify-between gap-2">
+                        <span className="truncate max-w-[220px]">{c.name}</span>
+                        <span className="shrink-0 text-muted-foreground">
+                          ({c.code})
+                        </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>

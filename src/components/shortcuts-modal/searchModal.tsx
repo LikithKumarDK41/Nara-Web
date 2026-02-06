@@ -18,7 +18,6 @@ import type { Monument } from "@/lib/types/userTour.types";
 import type { SearchFilter } from "@/lib/types/userGlobal.types";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
 import { motion, AnimatePresence } from "framer-motion";
-import { sortGlobalByPopularityThenName } from "@/lib/globalMonumentSort";
 import { normalizeHTML } from "@/lib/utils";
 
 export default function SearchModal({
