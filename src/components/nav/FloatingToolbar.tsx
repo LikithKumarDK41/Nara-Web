@@ -4,17 +4,19 @@ import { useEffect, useState } from "react";
 
 import {
     Video,
-    Search,
-    Map, MapPinned, Heart
+    MapPinned, Heart
 } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
+import { useAppSelector } from "@/lib/store/hook";
 
 /* =======================================================================
   FLOATING TOOLBAR
 ======================================================================= */
 export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => void }) {
     const { t, locale } = useLocale();
+      const authData = useAppSelector((s) => s.auth.data);
+      const isLoggedIn = !!authData?.user;
 
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
@@ -48,13 +50,13 @@ export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => 
 
     return (
         <div
-            className="
+            className={`
         hidden lg:flex
-        fixed bottom-6 right-6
+        fixed right-6
         z-[30]
         flex flex-col items-end gap-4
-        pointer-events-none
-      "
+        pointer-events-none ${isLoggedIn ? 'bottom-30' :'bottom-14'}
+      `}
         >
             <DiamondButton
                 label={t('nav.tours')}
@@ -73,26 +75,10 @@ export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => 
             </DiamondButton>
 
             <DiamondButton
-                label={t('nav.map')}
-                gradient="from-indigo-500 via-blue-600 to-violet-600"
-                onClick={() => (window.location.href = "/map")}
-            >
-                <Map className="h-5 w-5 text-white -rotate-45" />
-            </DiamondButton>
-
-            <DiamondButton
-                label={t('nav.search')}
-                gradient="from-emerald-500 via-lime-400 to-yellow-400"
-                onClick={onOpenSearch}
-            >
-                <Search className="h-5 w-5 text-white -rotate-45" />
-            </DiamondButton>
-
-            <DiamondButton
                 label={t("nav.videos")}
                 gradient="from-cyan-500 via-sky-500 to-indigo-500"
                 onClick={() => {
-                    const videoUrl = `https://api-v2-gose.naraiseki.org/public-videos/?${new URLSearchParams({
+                    const videoUrl = `https://naraiseki.nichi.in/public-videos/?${new URLSearchParams({
                         lang: locale,
                         theme: resolvedTheme,
                     }).toString()}`;

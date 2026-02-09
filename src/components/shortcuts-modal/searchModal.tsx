@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { Search, X, Check, Star } from "lucide-react";
+import { Search, X, Check, Star, ImageIcon, ArrowRight } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,6 @@ import type { Monument } from "@/lib/types/userTour.types";
 import type { SearchFilter } from "@/lib/types/userGlobal.types";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
 import { motion, AnimatePresence } from "framer-motion";
-import { sortGlobalByPopularityThenName } from "@/lib/globalMonumentSort";
 import { normalizeHTML } from "@/lib/utils";
 
 export default function SearchModal({
@@ -252,7 +251,8 @@ export default function SearchModal({
 
   /* -------------------- Sorting -------------------- */
   const sortedMonuments = useMemo(() => {
-    return sortGlobalByPopularityThenName(monuments);
+    // return sortGlobalByPopularityThenName(monuments);
+    return monuments;
   }, [monuments]);
 
   /* -------------------- Pagination -------------------- */
@@ -265,6 +265,27 @@ export default function SearchModal({
   }, [sortedMonuments, startIdx, perPage]);
 
   const shouldShowMonuments = pageItems.length > 0;
+
+  // Current mode light or dark to make icon image color change based on that
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    // initial
+    setIsDark(html.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(html.classList.contains("dark"));
+    });
+
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   /* -------------------- Render -------------------- */
   return (
@@ -399,7 +420,7 @@ export default function SearchModal({
                         <span className="font-medium">{keyword}</span>{" "}
                         <span className="text-gray-500">@</span>{" "}
                         <span className="text-teal-600 dark:text-teal-400 font-medium">
-                          All
+                          {t("all")}
                         </span>
                       </div>
 
@@ -473,8 +494,9 @@ export default function SearchModal({
                               alt={f.title}
                               className="h-7 w-7 object-contain"
                               style={{
-                                filter:
-                                  "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                                filter :isDark
+                                    ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                                    : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                               }}
                             />
                           ) : (
@@ -515,13 +537,14 @@ export default function SearchModal({
               </div>
             ) : shouldShowMonuments ? (
               <>
-                <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {pageItems.map((m) => (
                     <div
                       key={m._id}
-                      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border border-orange-400/10"
+                      onClick={() => openMonumentModal(m._id)}
+                      className="group relative flex flex-col h-[480px] rounded-[32px] overflow-hidden bg-white dark:bg-[#15191f] border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_20px_40px_rgba(0,184,166,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
                     >
-                      <div className="relative h-48 w-full overflow-hidden">
+                      <div className="relative h-[220px] w-full overflow-hidden flex-shrink-0">
                         {m.image?.secure_url ? (
                           <img
                             src={m.image.secure_url}
@@ -529,43 +552,52 @@ export default function SearchModal({
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                           />
                         ) : (
-                          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-                            <Search className="h-8 w-8" />
+                          <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
+                            <ImageIcon className="h-12 w-12 text-slate-300" />
                           </div>
                         )}
-                      </div>
-                      <div className="p-4 flex flex-col justify-between flex-1">
-                        <div>
-                          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
-                            {m.title || m.name}
-                          </h3>
-                          <div className="mt-2 flex items-center gap-0.5">
+                        <div className="absolute top-5 left-5 z-20">
+                          <div className="px-4 py-1.5 rounded-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5 shadow-sm border border-teal-100 dark:border-teal-900/50">
                             {Array.from({ length: 4 }).map((_, i) => (
                               <Star
-                                key={`star-${m._id}-${i}`}
+                                key={i}
                                 className={`h-3.5 w-3.5 ${
                                   i < (m.popularity ?? 0)
                                     ? "fill-amber-400 text-amber-400"
                                     : "text-gray-300 dark:text-gray-600"
                                 }`}
                               />
-                            ))}
+                            ))}{" "}
                           </div>
+                        </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#15191f] via-transparent to-transparent opacity-0 dark:opacity-60 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-0 group-hover:opacity-10 dark:group-hover:opacity-0 transition-opacity duration-500" />
+                      </div>
+                      <div className="relative flex-1 p-8 flex flex-col justify-between bg-white dark:bg-[#15191f]">
+                        <div className="space-y-3">
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+                            {m.title || m.name}
+                          </h3>
+
                           {m.content?.brief && (
                             <p
-                              className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 whitespace-pre-wrap"
+                              className="text-sm font-light text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed"
                               dangerouslySetInnerHTML={{
                                 __html: normalizeHTML(m.content.brief),
                               }}
                             />
                           )}
                         </div>
-                        <Button
-                          onClick={() => openMonumentModal(m._id)}
-                          className="cursor-pointer mt-3 h-9 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90 transition-all"
-                        >
-                          {t("actions.details")}
-                        </Button>
+
+                        <div className="flex items-center justify-between pt-6 mt-auto">
+                          <span className="text-xs font-bold text-teal-600/70 dark:text-teal-400/70 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                            {t("actions.details")}
+                          </span>
+                          <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-teal-500 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                            <ArrowRight className="w-5 h-5 -ml-0.5" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -618,7 +650,7 @@ function PageNavigator({
     <div className="flex items-center justify-between gap-3 pt-8">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        ページ {page} / {totalPages}
+        {t("pagination_left", { current: page, total: totalPages })}
       </div>
 
       <div className="flex items-center gap-1">

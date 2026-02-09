@@ -2,14 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
-
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
 
 import LanguageToggle from "@/components/theme/LanguageToggle";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -18,12 +12,11 @@ import BrandLogo from "@/components/nav/BrandLogo";
 import UserProfileDropdown from "./UserProfileDropdown";
 import ProfileModal from "./ProfileModal";
 
-import { NAV_ITEMS, MOBILE_NAV_ITEMS, isActivePath, NavItem } from "./routes";
+import { MOBILE_NAV_ITEMS, NavItem } from "./routes";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 import { logout } from "@/lib/store/slices/authSlice";
 import HeaderLogout from "./Logout";
-import MapIcon from "./MapIcon";
 import AppInfo from "./InfoIcon";
 import HeaderLogin from "./LoginIcon";
 
@@ -33,13 +26,11 @@ export default function HeaderBar({
   onOpenSearch: () => void;
 }) {
   const { t, locale } = useLocale();
-  const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
   const authData = useAppSelector((s) => s.auth.data);

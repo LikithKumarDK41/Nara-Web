@@ -147,13 +147,13 @@ html::before {
 
   background:
     repeating-radial-gradient(circle at 20% 30%,
-      color-mix(in oklab, oklch(0.82 0.18 45) 22%, transparent) 0 2px,
+      color-mix(in oklab, oklch(0% 0 0) 22%, transparent) 0 2px,
       transparent 2px 28px),
     repeating-linear-gradient(45deg,
-      color-mix(in oklab, oklch(0.85 0.17 65) 14%, transparent) 0 2px,
+      color-mix(in oklab, oklch(0% 0 0) 14%, transparent) 0 2px,
       transparent 2px 26px),
     conic-gradient(from 0deg at 82% 18%,
-      color-mix(in oklab, oklch(0.88 0.2 55) 16%, transparent) 0 10%,
+      color-mix(in oklab, oklch(0% 0 0) 16%, transparent) 0 10%,
       transparent 10% 100%);
 }
 
@@ -167,11 +167,11 @@ body::before {
   /* Vivid multi-stop gradients to colorize the lines richly */
   background:
     linear-gradient(135deg,
-      color-mix(in oklab, oklch(0.85 0.18 45) 55%, var(--color-background)) 0%,
-      color-mix(in oklab, oklch(0.88 0.17 65) 45%, var(--color-background)) 48%,
-      color-mix(in oklab, oklch(0.92 0.16 85) 50%, var(--color-background)) 100%),
+      color-mix(in oklab, oklch(0.85 0.15 200) 55%, var(--color-background)) 0%,
+      color-mix(in oklab, oklch(0.88 0.14 215) 45%, var(--color-background)) 48%,
+      color-mix(in oklab, oklch(0.92 0.13 230) 50%, var(--color-background)) 100%),
     linear-gradient(215deg,
-      oklch(0.92 0.15 30) 0%,
+      oklch(0.92 0.14 195) 0%,
       transparent 60%),
     linear-gradient(180deg,
       color-mix(in oklab, var(--color-background) 92%, transparent),

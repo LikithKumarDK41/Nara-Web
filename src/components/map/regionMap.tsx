@@ -341,7 +341,6 @@ html.dark .ni-map-popup-noimg-icon {
             pin.classList.add("map-marker-selected");
             selectedMarkerRef.current = pin;
 
-            // map.easeTo({ center: loc, zoom: 15, duration: 800 });
             map.easeTo({
               center: {
                 lng: loc[0],

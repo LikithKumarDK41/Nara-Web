@@ -606,15 +606,19 @@
   "blueprint_home_desc": "Discover tours and quick actions.",
   "blueprint_home_main_categories": "Main Categories",
   "blueprint_home_main_categories_desc": "Primary entry points of the app. Each category opens a dedicated screen related to city exploration.",
-  "blueprint_home_main_categories_point_1": "Tourist Map → Interactive map screen",
-  "blueprint_home_main_categories_point_2": "Sightseeing Spots → Spot list → Spot detail",
-  "blueprint_home_main_categories_point_3": "About Gose City → City information pages",
+  "blueprint_home_main_categories_point_1": "Regions & Map → Browse Nara by region or interactive map view",
+  "blueprint_home_main_categories_point_2": "Search → Discover monuments, sightseeing spots, and cultural sites",
+  "blueprint_home_main_categories_point_3": "Street View → Experience Nara’s historic streets in immersive street view",
   "blueprint_home_more_options": "Service Information",
   "blueprint_home_more_options_desc": "Secondary content sections that follow the same navigation flow as main categories.",
-  "blueprint_home_more_options_point_1": "Events & Festivals → Event list → Event detail",
-  "blueprint_home_more_options_point_2": "Gourmet Products → Product list",
-  "blueprint_home_more_options_point_3": "Facilities → Facility information",
-  "blueprint_home_more_options_point_4": "City Promotion / Meetings → Information pages",
+  "blueprint_home_more_options_point_1": "Politics → Governance, administration, and public policy in the region",
+  "blueprint_home_more_options_point_2": "Economy → Local industries, commerce, and economic activities",
+  "blueprint_home_more_options_point_3": "Faith → Shrines, temples, religious beliefs, and spiritual heritage",
+  "blueprint_home_more_options_point_4": "Art → Traditional arts, crafts, and cultural expression",
+  "blueprint_home_more_options_point_5": "Technology → Innovation, science, and modern technological development",
+  "blueprint_home_more_options_point_6": "Nature → Natural landscapes, environment, and ecological heritage",
+  "blueprint_about_kofun_title": "About Kofun & Heritage Sites",
+  "blueprint_about_kofun_desc": "Nara is home to some of Japan’s oldest burial mounds and heritage sites, dating back to ancient times.From monumental Kofun that reflect early state formation to sacred landscapes and historic remains, these sites reveal the origins of Japanese culture, belief, and governance.",
   "blueprint_home_global_search": "Search",
   "blueprint_home_global_search_desc": "Allows users to search across all available content including tours, spots, events, and articles.",
   "blueprint_home_video": "Video",
@@ -721,24 +725,24 @@
     "hero": {
       "slides": [
         {
-          "title": "GOSE CITY",
-          "subtitle": "Experience the Ancient Heart of Japan",
-          "description": "Walk the paths of emperors and discover the birthplace of Japanese culture."
+          "title": "NARA PREFECTURE",
+          "subtitle": "Where Japanese Civilization Began",
+          "description": "Discover the ancient heart of Japan, shaped by timeless temples, sacred landscapes, and living history."
         },
         {
-          "title": "SACRED PEAKS",
-          "subtitle": "Mt. Kongo & Mt. Katsuragi",
-          "description": "Breathtaking views and spiritual trails that connect heaven and earth."
+          "title": "SACRED ORIGINS",
+          "subtitle": "Mt. Yoshino & Mt. Miwa - Ōmiwa Shrine",
+          "description": "Experience Japan’s most ancient Shinto traditions at a sacred mountain worshipped since prehistoric times."
         },
         {
-          "title": "HIDDEN GEMS",
-          "subtitle": "Temples, Shrines & Old Streets",
-          "description": "Explore the untouched beauty of historic Gose, away from the crowds."
+          "title": "WORLD HERITAGE",
+          "subtitle": "Temples, Shrines & Ancient Capitals",
+          "description": "Explore UNESCO World Heritage Sites that defined Japan’s spiritual and cultural foundation."
         },
         {
-          "title": "LOCAL FLAVORS",
-          "subtitle": "Traditional Medicine & Cuisine",
-          "description": "Savor the rich heritage of medicinal herbs and authentic local gastronomy."
+          "title": "TRADITION & TASTE",
+          "subtitle": "Local Crafts & Nara Cuisine",
+          "description": "Enjoy refined flavors, traditional crafts, and hospitality rooted in centuries of heritage."
         }
       ]
     },
@@ -759,5 +763,56 @@
   "region_title": "Region",
   "region_desc": "Select a region to filter tourist attractions",
   "no_regions": "No Regions",
-  "no_regions_desc": " No regions available to filter tourist attractions."
+  "no_regions_desc": " No regions available to filter tourist attractions.",
+  "region_desc_title": "Regional Attractions",
+  "region_desc_subtitle": "Points of interest available in this area",
+  "in_progress": "In Progress",
+  "completed": "Completed",
+  "related_themes": "Related themes",
+  "explore": "Explore",
+  "theme_overview": "Theme Overview",
+  "no_desc_available": "No description available",
+  "related_spots": "Related spots",
+  "back": "Back",
+  "no_monuments_found_": "No monuments found.",
+  "discover_details": "Discover details",
+  "click_anywhere_to_close": "Click anywhere to close",
+  "about": " About",
+  "recommended_experiences": "Recommended experiences",
+  "see_details": "See details",
+  "termsOfUse": "Terms of Use",
+  "nara_heritage": "Nara Heritage",
+  "nara_heritage_theme": "Nara Heritage Theme",
+  "explore_nara": "Explore Nara",
+  "cultural_heritage_collection": "Cultural Heritage Collection",
+  "category_desc": "Discover curated themes showcasing Nara's rich historical, cultural, and natural heritage",
+  "themes": "Themes",
+  "discovery": "Discovery",
+  "curated": "Curated",
+  "collection": "Collection",
+  "chatbot": {
+    "title": "Transport Guide",
+    "welcome": "Welcome to Nara Kofun Transport Guide. I'm here to help you about transportation to kofuns in Nara.\n\nPlease select your query from the below.",
+    "options": {
+      "search_routes": "Search Routes",
+      "transit_options": "Transit Options",
+      "transit_stations": "Transit Stations",
+      "paid_trains": "Using Paid Trains",
+      "start_again": "Start Again",
+      "back": "Back"
+    },
+    "help_text": {
+      "search_routes": "So you want to search routes.\nPlease use the following to search routes by setting search conditions.",
+      "paid_trains": "Please click the following for Kintetsu Limited Express Information.",
+      "click_to_visit": "Click the following to visit {label}.",
+      "previous_options": "Here are the previous options:"
+    },
+    "input_placeholder": "Type a message...",
+    "thinking": "Thinking...",
+    "reset_chat": "Reset Chat",
+    "error_api": "Sorry, I couldn't reach the guidebot. Please try again.",
+    "error_invalid": "Invalid response format"
+  },
+  "open_chat": "Open Chat",
+  "close_chat": "Close Chat"
 }

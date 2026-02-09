@@ -18,6 +18,9 @@ export default function BrandLogo({
     <Link
       href={href}
       aria-label={label}
+      onClick={() => {
+        sessionStorage.removeItem("returnToRegionModal"); // important
+      }}
       className="group inline-flex items-center focus:outline-none"
     >
       {/* 🟠 Gradient Badge */}
@@ -70,7 +73,7 @@ export default function BrandLogo({
               bg-clip-text text-transparent text-left
             "
           >
-            御所市観光ナビ
+            奈良遺跡めぐり
           </span>
 
           {/* English subtitle */}

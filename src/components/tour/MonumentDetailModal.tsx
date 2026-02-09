@@ -43,7 +43,7 @@ import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
 import { selectNav } from "@/lib/store/slices/navSlice";
 import MonumentMapModal from "../map/MonumentsMapModal";
-import { normalizeHTML, stripHTML, getDistanceInMeters } from "@/lib/utils";
+import { getDistanceInMeters, normalizeHTML, stripHTML } from "@/lib/utils";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 import PlaceDetailModal from "./PlaceDetailModal";
 
@@ -72,6 +72,7 @@ export default function MonumentDetailModal({
   const [events, setEvents] = useState<EventItem[]>([]);
   const { show, hide } = useGlobalLoader();
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
   const customStyleDefault =
     "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white font-semibold shadow-md hover:shadow-xl transition-all";
 
@@ -92,7 +93,6 @@ export default function MonumentDetailModal({
   const [viewerOpen, setViewerOpen] = useState(false);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
   const isMobile =
     typeof window !== "undefined" &&
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -126,14 +126,6 @@ export default function MonumentDetailModal({
     if (isSingleImage) return;
     setActiveIndex((i) => (i === details.gallery.length - 1 ? 0 : i + 1));
   };
-
-  function sanitizeHTML(input: string): string {
-    if (!input) return "";
-    return input
-      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "")
-      .replace(/<!--[\s\S]*?-->/g, "");
-  }
 
   useEffect(() => {
     if (details?._id) {
@@ -169,7 +161,6 @@ export default function MonumentDetailModal({
   };
 
   const plainAddress = stripHTML(details?.access);
-  const plainCredit = stripHTML(details?.imagecredit);
   interface BookmarkItem {
     _id: string;
     marktype: string;
@@ -185,7 +176,7 @@ export default function MonumentDetailModal({
 
     (async () => {
       try {
-        const res = (await apiFetchBookmarkByRef()) as any;
+        const res = (await apiFetchBookmarkByRef(auth.data?.user?._id)) as any;
         if (stop) return;
 
         let bookmark: BookmarkItem | null = null;
@@ -268,22 +259,6 @@ export default function MonumentDetailModal({
       toast.error(t("failed_to_update_bookmark"));
     }
   };
-
-  function normalizeEmptyParagraphs(html: string) {
-    if (!html) return html;
-
-    return (
-      html
-        // <p></p> or <p>   </p>
-        .replace(/<p>\s*<\/p>/gi, "<br/>")
-
-        // <p>&nbsp;</p>
-        .replace(/<p>(&nbsp;|\s)*<\/p>/gi, "<br/>")
-
-        // <p><br></p> or <p><br/></p>
-        .replace(/<p>\s*<br\s*\/?>\s*<\/p>/gi, "<br/>")
-    );
-  }
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -428,7 +403,7 @@ export default function MonumentDetailModal({
     if (!capturedImage) return;
 
     const blob = await (await fetch(capturedImage)).blob();
-    const file = new File([blob], "gose-visit.png", {
+    const file = new File([blob], "nara-visit.png", {
       type: "image/png",
     });
 
@@ -440,8 +415,8 @@ export default function MonumentDetailModal({
       navigator.canShare({ files: [file] })
     ) {
       await navigator.share({
-        title: "Gose Visit",
-        text: "Captured at Gose monument",
+        title: "Nara Visit",
+        text: "Captured at Nara monument",
         files: [file],
       });
       return;
@@ -454,7 +429,7 @@ export default function MonumentDetailModal({
   function downloadImageFallback(dataUrl: string) {
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = "gose-visit.png";
+    a.download = "nara-visit.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -952,7 +927,7 @@ export default function MonumentDetailModal({
                 )}
 
                 {/* 📷 Image Credit */}
-                {details?.imagecredit && (
+                {details?.imagecredit && details.imagecredit.replace(/<[^>]*>/g, "").trim() !== "" && (
                   <section>
                     <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                       <Info className="h-4 w-4 text-gray-500" />
@@ -1118,7 +1093,8 @@ export default function MonumentDetailModal({
                       {details.nearbymonuments.map((m: any) => (
                         <div
                           key={m._id}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          onClick={() => onOpenAnother(m._id)}
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
                         >
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
                             {m.image?.secure_url ? (
@@ -1152,8 +1128,7 @@ export default function MonumentDetailModal({
                               size="sm"
                               className={`cursor-pointer w-full rounded-full mt-3 ${
                                 customStyle || customStyleDefault
-                              }`}
-                              onClick={() => onOpenAnother(m._id)}
+                              } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1167,77 +1142,100 @@ export default function MonumentDetailModal({
                 {/* 🧭 Related Tours */}
                 {!!details.relatedtours?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <Route className="h-5 w-5 text-gray-500" />{" "}
-                      {t("shortcut.tourist_attraction_details.related_tours")}
-                    </h3>
-                    <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                      {details.relatedtours
-                        .filter(
-                          (tour: any) =>
-                            !(localTourId && localTourId === tour._id),
-                        )
-                        .map((tour: any) => (
-                          <div
-                            key={tour._id}
-                            className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
-                          >
-                            {/* IMAGE */}
-                            <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                              {tour.image?.secure_url ? (
-                                <img
-                                  src={tour.image.secure_url}
-                                  alt={safeText(tour.title)}
-                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                                />
-                              ) : (
-                                <ImageIcon className="h-9 w-8 text-muted-foreground" />
-                              )}
-                            </div>
-
-                            {/* CONTENT + BUTTON */}
-                            <div className="flex flex-col flex-1 justify-between p-4">
-                              {/* Text Section (auto-height) */}
-                              <div className="flex-1">
-                                <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                  {safeText(tour.title)}
-                                </h3>
-
-                                {tour.content?.brief && (
-                                  <p
-                                    className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                    dangerouslySetInnerHTML={{
-                                      __html: normalizeHTML(tour.content.brief),
-                                    }}
+                    {details.relatedtours.filter(
+                      (tour: any) => !(localTourId && localTourId === tour._id),
+                    ).length > 0 && (
+                      <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                        <Route className="h-5 w-5 text-gray-500" />{" "}
+                        {t("shortcut.tourist_attraction_details.related_tours")}
+                      </h3>
+                    )}
+                    <div>
+                      <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+                        {details.relatedtours
+                          .filter(
+                            (tour: any) =>
+                              !(localTourId && localTourId === tour._id),
+                          )
+                          .map((tour: any) => (
+                            <div
+                              key={tour._id}
+                              onClick={() => {
+                                if (!(localTourId !== tour._id)) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                } else if (!localTourId) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                }
+                              }}
+                              className={`
+  group relative flex flex-col h-full overflow-hidden rounded-2xl
+  bg-white/90 dark:bg-slate-900/40 shadow-md transition-all border
+  ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
+   ${
+     !(localTourId !== tour._id)
+       ? "cursor-pointer hover:shadow-xl"
+       : "cursor-not-allowed"
+   }
+`}
+                            >
+                              {/* IMAGE */}
+                              <div className="h-48 w-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                {tour.image?.secure_url ? (
+                                  <img
+                                    src={tour.image.secure_url}
+                                    alt={safeText(tour.title)}
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                                   />
-                                )}
-
-                                {/* If no content, keep height consistent */}
-                                {!tour.content?.brief && (
-                                  <div className="h-5"></div>
+                                ) : (
+                                  <ImageIcon className="h-9 w-8 text-muted-foreground" />
                                 )}
                               </div>
 
-                              {/* BUTTON ALWAYS AT BOTTOM */}
-                              <Button
-                                size="sm"
-                                className={`cursor-pointer w-full rounded-full mt-3 ${
-                                  customStyle || customStyleDefault
-                                }`}
-                                onClick={() =>
-                                  router.push(`/tours/detail/?id=${tour._id}`)
-                                }
-                                disabled={
-                                  localTourId ? localTourId !== tour._id : false
-                                }
-                              >
-                                {t(
-                                  "shortcut.tourist_attraction_details.go_tour",
-                                )}
-                              </Button>
+                              {/* CONTENT + BUTTON */}
+                              <div className="flex flex-col flex-1 justify-between p-4">
+                                {/* Text Section (auto-height) */}
+                                <div className="flex-1">
+                                  <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                                    {safeText(tour.title)}
+                                  </h3>
+
+                                  {tour.content?.brief && (
+                                    <p
+                                      className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
+                                      dangerouslySetInnerHTML={{
+                                        __html: normalizeHTML(
+                                          tour.content.brief,
+                                        ),
+                                      }}
+                                    />
+                                  )}
+
+                                  {/* If no content, keep height consistent */}
+                                  {!tour.content?.brief && (
+                                    <div className="h-5"></div>
+                                  )}
+                                </div>
+
+                                {/* BUTTON ALWAYS AT BOTTOM */}
+                                <Button
+                                  size="sm"
+                                  className={`cursor-pointer w-full rounded-full mt-3 ${
+                                    customStyle || customStyleDefault
+                                  } group-hover:opacity-90`}
+                                  disabled={
+                                    localTourId
+                                      ? localTourId !== tour._id
+                                      : false
+                                  }
+                                >
+                                  {t(
+                                    "shortcut.tourist_attraction_details.go_tour",
+                                  )}
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                      </div>
                     </div>
                   </section>
                 )}
@@ -1253,7 +1251,8 @@ export default function MonumentDetailModal({
                       {details.nearbyservices.map((srv: any) => (
                         <div
                           key={srv._id || srv.name}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          onClick={() => openPlaceDetails(srv)}
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
                         >
                           {/* IMAGE */}
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
@@ -1288,79 +1287,7 @@ export default function MonumentDetailModal({
                               size="sm"
                               className={`cursor-pointer w-full rounded-full mt-3 ${
                                 customStyle || customStyleDefault
-                              }`}
-                              onClick={() => openPlaceDetails(srv)}
-                            >
-                              {t("tourDetails.viewDetails")}
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-                {/* 📅 Events linked to this Monument */}
-                {!!events.length && (
-                  <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <CalendarDays className="h-5 w-5 text-gray-500" />
-                      {t("event_header")}
-                    </h3>
-
-                    <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                      {events.map((ev, i) => (
-                        <div
-                          key={ev._id || `event-${i}`}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
-                        >
-                          {/* 🖼 Image */}
-                          <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                            {ev.image?.secure_url ? (
-                              <img
-                                src={ev.image.secure_url}
-                                alt={safeText(ev.title)}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                              />
-                            ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
-                            )}
-                          </div>
-
-                          {/* 📄 Event Info */}
-                          <div className="flex flex-col flex-1 justify-between p-4">
-                            <div className="flex-1">
-                              <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                {safeText(ev.title)}
-                              </h3>
-
-                              {/* {ev.displaydate && (
-              <p className="text-xs text-muted-foreground">
-                <CalendarDays className="inline h-3 w-3 mr-1 text-gray-500" />
-                {ev.displaydate}
-              </p>
-            )} */}
-
-                              {ev.description && (
-                                <p
-                                  className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                  dangerouslySetInnerHTML={{
-                                    __html: normalizeHTML(ev.description),
-                                  }}
-                                />
-                              )}
-
-                              {/* If no content, keep height consistent */}
-                              {!ev.description && <div className="h-5"></div>}
-                            </div>
-
-                            <Button
-                              size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-2 ${
-                                customStyle || customStyleDefault
-                              }`}
-                              onClick={() => {
-                                router.push(`/shortcuts/events/?id=${ev._id}`);
-                              }}
+                              } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1388,13 +1315,6 @@ export default function MonumentDetailModal({
             {t("view_map")}
           </Button>
         </div>
-        {/* <button
-            onClick={() => setMapOpen(true)}
-            className="absolute top-4 left-4 bg-white/70 dark:bg-black/50 px-3 py-2 rounded-full shadow flex items-center gap-2 z-50"
-          >
-            <MapPin className="h-4 w-4" />
-            View on Map
-          </button> */}
 
         {details && (
           <MonumentMapModal
@@ -1422,12 +1342,6 @@ export default function MonumentDetailModal({
               autoPlay
               playsInline
               muted
-              // className="absolute inset-0 w-full h-full object-cover"
-              //             className={`absolute inset-0 w-full h-full object-cover
-              //   ${cameraFacing === "user" ? "scale-x-[-1]" : ""}
-
-              // `}
-
               className={`absolute inset-0 w-full h-full object-cover
     ${isMobile && cameraFacing === "user" ? "scale-x-[-1]" : ""}
     ${!isMobile && cameraFacing != "user" ? "scale-x-[-1]" : ""}
@@ -1437,7 +1351,7 @@ export default function MonumentDetailModal({
             {/* GOSE LOGO */}
             <img
               src="/nara_logo.png"
-              alt="Gose"
+              alt="Nara"
               className="absolute w-32 opacity-80"
             />
 

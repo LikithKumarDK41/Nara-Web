@@ -49,6 +49,7 @@ export default function TourDetailsClientPage() {
 
   // ⭐ nav slice (for current running usertour)
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
 
   // ⭐ Local tour state (for this details page)
   const [tour, setTour] = useState<any>(null);
@@ -91,7 +92,7 @@ export default function TourDetailsClientPage() {
 
     (async () => {
       try {
-        const res = await apiFetchBookmarkByRef();
+        const res = await apiFetchBookmarkByRef(auth.data?.user?._id);
         if (cancelled) return;
 
         let bookmark: BookmarkItem | null = null;
@@ -504,7 +505,8 @@ export default function TourDetailsClientPage() {
               <div className="flex flex-wrap justify-center gap-12 mb-10">
                 {[
                   {
-                    value: tour.tourpoints?.length ?? 0,
+                    // value: tour.tourpoints?.length ?? 0,
+                    value: tour.tourpoints?.filter((p:any) => p.pointtype !== "lunch").length ?? 0,
                     label: t("tourDetails.stops"),
                   },
                   { value: tour.duration, label: t("tourDetails.duration") },
@@ -600,7 +602,6 @@ export default function TourDetailsClientPage() {
             <br />
             <TimelineRight
               tourpoints={tour.tourpoints}
-              tour_id={id}
               customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
                 text-white font-semibold shadow-md hover:shadow-xl transition-all"
             />

@@ -9,19 +9,24 @@ import GlobalCheckinToasts from "@/components/nav/GlobalCheckinToasts";
 import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
+import Chatbot from "@/components/chatbot/Chatbot";
 
 export const metadata: Metadata = {
   // title: "Tourist",
+  manifest: "/manifest.json",
+  metadataBase: new URL("https://naraiseki.nichi.in"),
+  title: "Nara Heritage Guide - Tourist App",
+  description: "Explore Nara's cultural heritage with our interactive tourist guide app. Discover monuments, tours, and heritage sites.",
+  keywords: ["tourism", "Nara", "heritage", "travel", "map", "guide", "Japan", "monuments", "history"],
   icons: {
     icon: "/icon.png",         // Main favicon (PNG preferred)
     shortcut: "/favicon.ico",  // Backup ICO file
     apple: "/icon.png",        // Apple Touch Icon
   },
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Gose Guide",
+    title: "Nara Heritage Guide",
   },
 };
 export const viewport: Viewport = { themeColor: "#0b0f14" };
@@ -69,8 +74,8 @@ export default function RootLayout({
 
             const META = {
               ja: {
-                title: '御所市観光ナビ',
-                description: '御所市の観光情報とスタンプラリー',
+                title: '奈良遺跡めぐり',
+                description: '奈良市の観光情報とスタンプラリー',
               },
               en: {
                 title: 'Nara Kofun & Heritage Foundation',
@@ -121,6 +126,7 @@ export default function RootLayout({
 
               <GeoWatcher />
               <GlobalCheckinToasts />
+              <Chatbot />
             </LocaleProvider>
           </LoaderProvider>
         </StoreProvider>

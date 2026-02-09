@@ -43,7 +43,6 @@ export default function MapTimelineRight({
   const { t } = useLocale();
   const { show, hide } = useGlobalLoader();
   const persisted = getPersistedUser();
-  const userId = persisted?.user?._id ?? null;
 
   const loading = useSelector((s: any) => s.tourist.loading);
   const monumentDetail = useSelector((s: any) => s.tourist.monumentDetail);
@@ -102,18 +101,9 @@ export default function MapTimelineRight({
       ? monumentDetail
       : (activeMonument ?? active?.monument);
 
-  const formatMinutes = (
-    value?: string | number,
-    t?: (key: string) => string,
-  ) => {
-    if (!value) return null;
-
-    // Extract number from "10", "10 min", "10分"
-    const minutes = String(value).match(/\d+/)?.[0];
-    if (!minutes) return value;
-
-    return `${minutes} ${t ? t("time.min") : "min"}`;
-  };
+  function shouldShowTimelineDot(p: TourPoint) {
+    return p.pointtype !== "lunch";
+  }
 
   /* -------------------- Loading Skeleton -------------------- */
   if (initialLoading) {
@@ -140,12 +130,15 @@ export default function MapTimelineRight({
   return (
     <>
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-b from-orange-500 via-orange-400 to-orange-600 rounded-full" />
+        <div className="absolute left-[52px] top-0 bottom-0 w-[3px] bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 rounded-full" />
 
         <ul className="space-y-16 md:space-y-20">
           {tourpoints.map((p, i) => {
             const accent = dynamicColor(i, p.waypointtype);
             const next = tourpoints[i + 1];
+            const visualIndex = tourpoints
+              .slice(0, i)
+              .filter(shouldShowTimelineDot).length;
 
             /* -------------------- START / END STATION -------------------- */
             if (
@@ -164,15 +157,13 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li
-                    className={`grid grid-cols-[90px_1fr] gap-1 ${
-                      hideBottom ? "pb-8" : "md:pb-10 pb-0"
-                    }`}
+                    className={`grid grid-cols-[90px_1fr] gap-1 ${hideBottom ? "pb-8" : "md:pb-10 pb-0"
+                      }`}
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-orange-500 ${
-                          hideTop ? "top-[50%]" : "top-0"
-                        } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${hideTop ? "top-[50%]" : "top-0"
+                          } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
                       <div className="absolute left-[52px] top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div
@@ -231,12 +222,6 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li className="grid grid-cols-[90px_1fr] gap-1 items-start">
-                    <TimelineDot
-                      index={i}
-                      accent={accent}
-                      waypointtype={p.waypointtype}
-                      hasStart={hasStart}
-                    />
                     <div className="col-start-2 p-6 rounded-2xl bg-yellow-50 dark:bg-zinc-800 border border-yellow-200 dark:border-zinc-700 shadow-sm">
                       <div className="flex items-center gap-3">
                         <UtensilsCrossed className="h-6 w-6 text-orange-500" />
@@ -276,7 +261,7 @@ export default function MapTimelineRight({
                   <li className="grid grid-cols-[90px_1fr] gap-1 items-start">
                     {/* Timeline dot */}
                     <TimelineDot
-                      index={i}
+                      index={visualIndex}
                       accent={accent}
                       waypointtype="station"
                       hasStart={hasStart}
@@ -287,10 +272,6 @@ export default function MapTimelineRight({
                       <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                         {p.pointtitle || t("station")}
                       </h3>
-
-                      {/* <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {t("travel_mode")}: {t("station")}
-                      </p> */}
                     </div>
                   </li>
 
@@ -337,7 +318,7 @@ export default function MapTimelineRight({
                      text-gray-700 dark:text-gray-300"
                         >
                           {t(
-                            p.traveltype?.title || p.traveltype?.name || "walk"
+                            p.traveltype?.title || p.traveltype?.name || "walk",
                           )}
                         </span>
                       </div>
@@ -345,10 +326,10 @@ export default function MapTimelineRight({
                       {p.traveltime && (
                         <span
                           className="text-xs font-semibold
-               text-orange-600 dark:text-orange-400
-               bg-orange-50 dark:bg-orange-900/20
+               text-teal-600 dark:text-teal-400
+               bg-teal-50 dark:bg-teal-900/20
                px-2.5 py-1 rounded-md
-               border border-orange-100 dark:border-orange-900/30"
+               border border-teal-100 dark:border-teal-900/30"
                         >
                           {p.traveltime}
                         </span>
@@ -456,7 +437,6 @@ export default function MapTimelineRight({
                             </Button>
                             <Button
                               size="sm"
-                              variant="outline"
                               className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
                               disabled={checkingIn}
                               onClick={async () => {
@@ -545,11 +525,11 @@ export default function MapTimelineRight({
                                     const a =
                                       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                       Math.cos((monumentLat * Math.PI) / 180) *
-                                        Math.cos(
-                                          (userLocation.lat * Math.PI) / 180,
-                                        ) *
-                                        Math.sin(dLng / 2) *
-                                        Math.sin(dLng / 2);
+                                      Math.cos(
+                                        (userLocation.lat * Math.PI) / 180,
+                                      ) *
+                                      Math.sin(dLng / 2) *
+                                      Math.sin(dLng / 2);
 
                                     const c =
                                       2 *
@@ -565,9 +545,9 @@ export default function MapTimelineRight({
                                     if (distance > radius) {
                                       toast.error(
                                         t("too_far_from_monument") ||
-                                          `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                            distance,
-                                          )}m`,
+                                        `You need to be within ${radius}m to check in. Current distance: ${Math.round(
+                                          distance,
+                                        )}m`,
                                       );
                                       return;
                                     }
@@ -575,7 +555,7 @@ export default function MapTimelineRight({
                                     console.warn("Location error:", error);
                                     toast.error(
                                       t("error_getting_location") ||
-                                        "Could not get your location. Please try again.",
+                                      "Could not get your location. Please try again.",
                                     );
                                     return;
                                   }
@@ -609,8 +589,7 @@ export default function MapTimelineRight({
                                  🔟 Success Notification
                               ------------------------------------------------ */
                                   toast.success(
-                                    `${t("checked_in_at")} ${
-                                      m?.name ?? "location"
+                                    `${t("checked_in_at")} ${m?.name ?? "location"
                                     }`,
                                     {
                                       description: t("visit_progress_success"),
@@ -645,7 +624,7 @@ export default function MapTimelineRight({
                 </div>
                 <li className="hidden md:grid grid-cols-[90px_1fr] gap-1 items-start">
                   <TimelineDot
-                    index={i}
+                    index={visualIndex}
                     accent={accent}
                     waypointtype={p.waypointtype}
                     hasStart={hasStart}
@@ -685,7 +664,7 @@ export default function MapTimelineRight({
                     <div className="p-6">
                       <h3
                         onClick={() => handleOpen(p._id)}
-                        className="cursor-pointer text-lg font-semibold truncate text-amber-700 dark:text-amber-300 transition"
+                        className="cursor-pointer text-lg font-semibold truncate text-teal-700 dark:text-teal-300 transition"
                       >
                         {m?.title ?? m?.name ?? p.name}
                       </h3>
@@ -734,7 +713,6 @@ export default function MapTimelineRight({
                         </Button>
                         <Button
                           size="sm"
-                          variant="outline"
                           className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
                           disabled={checkingIn}
                           onClick={async () => {
@@ -781,8 +759,8 @@ export default function MapTimelineRight({
                               let monumentLng = 0;
 
                               if (Array.isArray(m.location)) {
-                                 monumentLng = Number(m.location[0]);
-                                 monumentLat = Number(m.location[1]);
+                                monumentLng = Number(m.location[0]);
+                                monumentLat = Number(m.location[1]);
                               } else {
                                 monumentLat = m.location?.lat ?? 0;
                                 monumentLng = m.location?.lng ?? 0;
@@ -821,11 +799,11 @@ export default function MapTimelineRight({
                                 const a =
                                   Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                                   Math.cos((monumentLat * Math.PI) / 180) *
-                                    Math.cos(
-                                      (userLocation.lat * Math.PI) / 180,
-                                    ) *
-                                    Math.sin(dLng / 2) *
-                                    Math.sin(dLng / 2);
+                                  Math.cos(
+                                    (userLocation.lat * Math.PI) / 180,
+                                  ) *
+                                  Math.sin(dLng / 2) *
+                                  Math.sin(dLng / 2);
 
                                 const c =
                                   2 *
@@ -838,9 +816,9 @@ export default function MapTimelineRight({
                                 if (distance > radius) {
                                   toast.error(
                                     t("too_far_from_monument") ||
-                                      `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                        distance,
-                                      )}m`,
+                                    `You need to be within ${radius}m to check in. Current distance: ${Math.round(
+                                      distance,
+                                    )}m`,
                                   );
                                   return;
                                 }
@@ -848,7 +826,7 @@ export default function MapTimelineRight({
                                 console.warn("Location error:", error);
                                 toast.error(
                                   t("error_getting_location") ||
-                                    "Could not get your location. Please try again.",
+                                  "Could not get your location. Please try again.",
                                 );
                                 return;
                               }
@@ -882,8 +860,7 @@ export default function MapTimelineRight({
                                  🔟 Success Notification
                               ------------------------------------------------ */
                               toast.success(
-                                `${t("checked_in_at")} ${
-                                  m?.name ?? "location"
+                                `${t("checked_in_at")} ${m?.name ?? "location"
                                 }`,
                                 {
                                   description: t("visit_progress_success"),
@@ -990,7 +967,7 @@ export default function MapTimelineRight({
           </div>
         </div>
       )}
-      <div className="px-4 text-sm text-muted-foreground text-center">
+      <div className="md:mt-4 px-4 text-sm text-muted-foreground text-center">
         {t("timeline_footer_desc")}
       </div>
     </>
@@ -1057,16 +1034,6 @@ function TravelConnector({
   const startTime = next?.starttime || "";
   null;
 
-  function formatMinutes(value?: string | number, t?: (key: string) => string) {
-    if (!value) return null;
-
-    // Extract number from "10", "10 min", "10分"
-    const minutes = String(value).match(/\d+/)?.[0];
-    if (!minutes) return value;
-
-    return `${minutes} ${t ? t("time.min") : "min"}`;
-  }
-
   return (
     <div className="flex flex-wrap items-center gap-3 text-base font-medium text-gray-700 dark:text-gray-300">
       {/* Travel mode */}
@@ -1122,7 +1089,7 @@ function capitalize(str?: string) {
 }
 
 function dynamicColor(i: number, type?: "start" | "place" | "end") {
-  if (type === "start") return "#10b981"; // green
-  if (type === "end") return "#ef4444"; // red
-  return "#f97316"; // orange
+  if (type === "start") return "#14b8a6"; // teal-500
+  if (type === "end") return "#0891b2"; // cyan-600
+  return "#2dd4bf"; // teal-400
 }

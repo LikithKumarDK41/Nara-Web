@@ -107,11 +107,16 @@ export default function ToursDashboardPage() {
     };
   }, [dispatch, show, hide]);
 
-  const hasTours = (tours?.length ?? 0) > 0;
-  // Get featured tours for the carousel, fallback to first 5
-  const heroTours = tours.filter((t) => t.featured).slice(0, 5);
-  const carouselItems = heroTours.length > 0 ? heroTours : tours.slice(0, 5);
+  useEffect(() => {
+    const shouldOpen = sessionStorage.getItem("returnToRegionModal");
 
+    if (shouldOpen === "true") {
+      setRegionMapOpen(true);
+      sessionStorage.removeItem("returnToRegionModal"); // important
+    }
+  }, []);
+
+  const hasTours = (tours?.length ?? 0) > 0;
   /* -------------------- Priority Logic -------------------- */
   function placeByPriority(list: any[]) {
     const ordered: any[] = [];
@@ -128,7 +133,7 @@ export default function ToursDashboardPage() {
   }
 
   const sectionOne = placeByPriority(
-    shortcuts.filter((s) => {
+    shortcuts.filter((s:any) => {
       const p = s.priority ?? 0;
       return p >= 0 && p <= 3;
     }),
@@ -159,7 +164,7 @@ export default function ToursDashboardPage() {
       <div className="relative z-10 flex justify-center py-6">
         <div className="flex items-center gap-3 text-slate-400">
           <span className="h-px w-10 bg-gradient-to-r from-transparent to-teal-500/40" />
-          <span className="text-xs tracking-widest uppercase">
+          <span className="text-xs tracking-widest uppercase text-slate-800 dark:text-slate-100 font-bold">
             {t("home.quick_access")}
           </span>
           <span className="h-px w-10 bg-gradient-to-l from-transparent to-teal-500/40" />
@@ -189,7 +194,7 @@ export default function ToursDashboardPage() {
       )}
 
       {/* ================= CONTENT CONTAINER ================= */}
-      <div className=" mx-auto w-full px-4 md:px-8 space-y-12">
+      <div className=" mx-auto w-full px-4 md:px-8 mt-12">
         {/* ================= SERVICE INFO (Unique Title) ================= */}
         {!globalLoading && sectionTwo.length > 0 && (
           <section className="py-2">
@@ -200,7 +205,7 @@ export default function ToursDashboardPage() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               <ShortcutRow
                 items={sectionTwo}
                 variant="secondary"
@@ -299,6 +304,11 @@ export default function ToursDashboardPage() {
                 {abouts.map((item) => (
                   <div
                     key={item._id}
+                     onClick={(e) => {
+                        e.stopPropagation(); // prevent card click conflicts
+                        dispatch(setActiveAbout(item._id));
+                        router.push("/about");
+                      }}
                     className="
         relative
         min-w-[260px] max-w-[260px]
@@ -562,9 +572,10 @@ function TextHeroSlider() {
             aria-label={`Go to slide ${idx + 1}`}
             className={`
               transition-all duration-500
-              ${idx === current
-                ? "w-7 h-1.5 bg-teal-500"
-                : "w-1.5 h-1.5 bg-slate-400"
+              ${
+                idx === current
+                  ? "w-7 h-1.5 bg-teal-500"
+                  : "w-1.5 h-1.5 bg-slate-400"
               }
               rounded-full
             `}
@@ -655,7 +666,27 @@ function ShortcutRow({
 }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { t } = useLocale();
+
+  // Current mode light or dark to make icon image color change based on that
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    // initial
+    setIsDark(html.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(html.classList.contains("dark"));
+    });
+
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleShortcutClick = (shortcut: any) => {
     try {
@@ -749,23 +780,23 @@ function ShortcutRow({
   ${baseCardStyles}
   flex flex-col items-center justify-center
   w-full md:min-w-[140px] md:max-w-[140px]  /* ✅ fixed ONLY on md+ */
-  h-[110px]
+  h-[101px] md:h-[110px]
   rounded-2xl
   shadow-md
   bg-white dark:bg-[#0f1115]
 `}
-
             >
               {/* Icon */}
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
+              <div className="w-8 h-8 md:w-12 md:h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
                 {item.icon?.secure_url ? (
                   <img
                     src={item.icon.secure_url}
                     alt={item.title}
                     className="w-6 h-6 object-contain"
                     style={{
-                      filter:
-                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                      filter: isDark
+                        ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                        : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}
                   />
                 ) : (
@@ -776,7 +807,7 @@ function ShortcutRow({
               {/* Text */}
               <span
                 className="
-    text-sm font-bold
+    text-xs md:text-sm font-bold
     text-center
     text-slate-800 dark:text-slate-200
     whitespace-nowrap
@@ -800,14 +831,14 @@ function ShortcutRow({
             onClick={() => handleShortcutLink2(item)}
             className={`
     ${baseCardStyles}
-    flex-row gap-4 px-4 py-3.5
-    w-full min-w-0 h-auto min-h-[72px]
+    flex-col items-center md:flex-row gap-2 md:gap-4 px-2 md:px-4 py-3.5 md:py-3.5
+    w-full min-w-0 h-auto md:min-h-[72px]
     rounded-2xl
     shadow-sm hover:shadow-lg hover:shadow-teal-500/10 dark:hover:shadow-teal-900/20
     bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
   `}
           >
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 transition-all duration-300">
               {item.icon?.secure_url ? (
                 <div className="w-5 h-5 text-current">
                   <img
@@ -815,8 +846,9 @@ function ShortcutRow({
                     alt={item.title}
                     className="w-full h-full object-contain"
                     style={{
-                      filter:
-                        "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                      filter: isDark
+                        ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                        : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                     }}
                   />
                 </div>
@@ -827,7 +859,7 @@ function ShortcutRow({
 
             <span
               className="
-    text-sm font-bold
+    text-xs md:text-sm font-bold
     text-left
     text-slate-700 dark:text-slate-200
     group-hover:text-teal-700 dark:group-hover:text-white
@@ -837,13 +869,13 @@ function ShortcutRow({
     text-ellipsis
     flex-1
   "
-              title={item.title}   // 👈 tooltip on hover (desktop)
+              title={item.title} // 👈 tooltip on hover (desktop)
             >
               {item.title}
             </span>
 
             {/* Arrow Hint */}
-            <div className="ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
+            <div className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
               <ChevronRight className="w-4 h-4" />
             </div>
           </div>
