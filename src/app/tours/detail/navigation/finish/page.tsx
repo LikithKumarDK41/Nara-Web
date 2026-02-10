@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef  } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -17,6 +17,7 @@ import { useLocale } from "@/providers/LocaleProvider";
 
 import { Button } from "@/components/ui/button";
 import MapboxTourMapFinish from "@/components/map/MapboxTourMapFinish";
+import ScreenshotButtons from "@/components/tour/ScreenshotButtons";
 import type { Tour, TourPoint } from "@/lib/types/userTour.types";
 import { normalizeHTML } from "@/lib/utils";
 
@@ -34,6 +35,8 @@ export default function FinishPage() {
   const detailTour = useAppSelector((s) => s.tourist.detail);
 
   const [isResetting, setIsResetting] = useState(false);
+   const [mapReady, setMapReady] = useState(false);
+  const mapInstanceRef = useRef<any>(null);
 
   const usertour = nav.usertour;
 
@@ -106,6 +109,8 @@ export default function FinishPage() {
     <div className="fixed inset-0 z-[100] bg-white dark:bg-black overflow-hidden flex flex-col">
       {/* Scrollable */}
       <div className="flex-1 overflow-y-auto">
+        {/* CAPTURABLE SECTION: Hero + Map */}
+        <div id="tour-screenshot-section">
         {/* HERO */}
         <div className="relative bg-gradient-to-b from-gray-100 via-white to-white dark:from-slate-900 dark:via-black dark:to-black">
           {tourImage ? (
@@ -184,6 +189,7 @@ export default function FinishPage() {
 
           {/* MAP */}
           <div
+           id="tour-map-only"
             className="rounded-2xl overflow-hidden border shadow-lg 
             border-gray-300 dark:border-white/10"
           >
@@ -192,13 +198,25 @@ export default function FinishPage() {
               stampedPoints={reduxUserTourPoints}
               height={360}
               profile="walking"
+               onMapReady={(map) => {
+                mapInstanceRef.current = map;
+                setMapReady(true);
+              }}
             />
           </div>
+        </div>
         </div>
       </div>
 
       {/* FOOTER BUTTONS */}
       <div className="p-6 space-y-3 bg-gradient-to-t from-gray-100 to-transparent dark:from-black dark:to-transparent">
+        {/* Screenshot Buttons */}
+        <ScreenshotButtons
+          elementId="tour-screenshot-section"
+          filename={`${finalTour.title.replaceAll(/\s+/g, "_")}_tour.png`}
+          isMapReady={mapReady}
+          mapInstance={mapInstanceRef.current}
+        />
         <Button
           onClick={handleBackToTours}
           disabled={isResetting}
