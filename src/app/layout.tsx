@@ -9,6 +9,7 @@ import GlobalCheckinToasts from "@/components/nav/GlobalCheckinToasts";
 import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
+import Chatbot from "@/components/chatbot/Chatbot";
 
 export const metadata: Metadata = {
   // title: "Tourist",
@@ -125,6 +126,7 @@ export default function RootLayout({
 
               <GeoWatcher />
               <GlobalCheckinToasts />
+              <Chatbot />
             </LocaleProvider>
           </LoaderProvider>
         </StoreProvider>
