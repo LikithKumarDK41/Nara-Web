@@ -13,6 +13,7 @@ type Props = {
   stampedPoints: TourPoint[]; // ⭐ NEW
   height?: number | string;
   profile?: "walking" | "driving" | "cycling";
+  onMapReady?: (map: mapboxgl.Map) => void; // Callback when map is fully loaded
 };
 
 /* -------------------- helpers -------------------- */
@@ -93,6 +94,7 @@ export default function MapboxTourMap({
   stampedPoints,
   height = 420,
   profile = "walking",
+  onMapReady
 }: Props) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapDivRef = useRef<HTMLDivElement | null>(null);
@@ -146,6 +148,8 @@ export default function MapboxTourMap({
         center: firstPoint,
         zoom: 13,
         antialias: true,
+        // ensure we can read pixels for screenshots
+        preserveDrawingBuffer: true,
       });
 
       mapRef.current = map;
@@ -374,7 +378,11 @@ export default function MapboxTourMap({
           map.fitBounds(bounds, { padding: 56, duration: 800 });
         }
 
-        setTimeout(() => map.resize(), 200);
+        setTimeout(() => {
+          map.resize();
+          // Call onMapReady after map is fully rendered and pass map instance
+          onMapReady?.(map);
+        }, 200);
       });
     })().catch((e) => setError(String(e)));
 

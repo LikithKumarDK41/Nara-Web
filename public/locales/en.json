@@ -814,5 +814,17 @@
     "error_invalid": "Invalid response format"
   },
   "open_chat": "Open Chat",
-  "close_chat": "Close Chat"
+  "close_chat": "Close Chat",
+  "check_out_my_tour": "Check out my tour!",
+  "map_loading": "Map is still loading. Please wait...",
+  "download_success": "Download successful",
+  "download_failed": "Download failed",
+  "failed_to_share": "Failed to share",
+  "download": "Download",
+  "loading_share": "Loading...",
+  "share": "Share",
+  "complete_desc": "I completed this amazing tour!",
+  "copied_to_clipboard": "Copied to clipboard",
+  "copy": "Copy",
+  "failed_to_copy": "Failed to copy"
 }
