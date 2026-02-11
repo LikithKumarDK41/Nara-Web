@@ -10,11 +10,13 @@ import {
   ImageIcon,
   Trash2,
   PlayCircle,
+  CheckCircle,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocale } from "@/providers/LocaleProvider";
 import type { AppDispatch } from "@/lib/store";
 import { fetchMonumentDetails } from "@/lib/store/slices/touristSlice";
+import { useGlobalLoader } from "@/providers/LoaderProvider";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -39,6 +41,8 @@ export default function LibraryPage() {
   const usertour = nav.usertour;
 
   const loadingState = useSelector((s: any) => s.tourist.loading);
+
+  const { show, hide } = useGlobalLoader();
 
   const [topTab, setTopTab] = useState<"bookmarks" | "visited">("bookmarks");
   const [innerTab, setInnerTab] = useState<"monuments" | "tours">("monuments");
@@ -195,13 +199,23 @@ export default function LibraryPage() {
         DELETE HANDLERS
      ============================ */
   const deleteBookmark = async (bookmarkId: string) => {
-    await apiDeleteBookmark(bookmarkId);
-    loadBookmarks(); // refresh
+    try {
+      show();
+      await apiDeleteBookmark(bookmarkId);
+      await loadBookmarks(); // refresh
+    } finally {
+      hide();
+    }
   };
 
   const deleteVisit = async (visitId: string) => {
-    await apiDeleteVisitHistory(visitId);
-    loadVisits(); // refresh
+    try {
+      show();
+      await apiDeleteVisitHistory(visitId);
+      await loadVisits(); // refresh
+    } finally {
+      hide();
+    }
   };
 
   /* ============================
@@ -308,13 +322,18 @@ export default function LibraryPage() {
   };
 
   const deleteUserTour = async (visitId: string) => {
-    await apiDeleteUserTour(visitId);
-    if (usertour && usertour._id === visitId) {
-      dispatch(resetNav());
-      dispatch(resetGeofence());
-      dispatch(clearTourDetail());
+    try {
+      show();
+      await apiDeleteUserTour(visitId);
+      if (usertour && usertour._id === visitId) {
+        dispatch(resetNav());
+        dispatch(resetGeofence());
+        dispatch(clearTourDetail());
+      }
+      await loadVisits(); // refresh only visit history list
+    } finally {
+      hide();
     }
-    loadVisits(); // refresh only visit history list
   };
 
   return (
@@ -353,7 +372,7 @@ export default function LibraryPage() {
           <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
             <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
             <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-             {t("nara_heritage")}
+              {t("nara_heritage")}
             </span>
           </div>
 
@@ -646,35 +665,25 @@ function TourCard({
         )}
 
         {/* ⏸ PAUSE OVERLAY */}
-        {(tour.status === "pause" ||
-          tour.status === "start" ||
-          tour.status === "end") && (
+        {/* ⏸ PAUSE / IN-PROGRESS OVERLAY */}
+        {(tour.status === "pause" || tour.status === "start") && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/30">
             <div className="flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 text-white shadow-lg">
-              {tour.status === "pause" && (
-                <>
-                  <PlayCircle className="h-6 w-6" />
-                  <span className="text-sm font-medium">
-                    {tr("in_progress")}
-                  </span>
-                </>
-              )}
-
-              {tour.status === "start" && (
-                <>
-                  <PlayCircle className="h-6 w-6" />
-                  <span className="text-sm font-medium">
-                    {tr("in_progress")}
-                  </span>
-                </>
-              )}
-
-              {tour.status === "end" && (
-                <>
-                  <CheckCircle2 className="h-6 w-6" />
-                  <span className="text-sm font-medium">{tr("completed")}</span>
-                </>
-              )}
+              <PlayCircle className="h-6 w-6" />
+              <span className="text-sm font-medium">
+                {tr("in_progress")}
+              </span>
+            </div>
+          </div>
+        )}
+        {/* ✅ COMPLETED OVERLAY */}
+        {tour.status === "end" && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <div className="flex items-center gap-2 rounded-full bg-emerald-600/80 px-4 py-2 text-white shadow-lg">
+              <CheckCircle className="h-6 w-6" />
+              <span className="text-sm font-bold">
+                {tr("completed")}
+              </span>
             </div>
           </div>
         )}
@@ -692,14 +701,50 @@ function TourCard({
           )}
         </div>
 
-        <Button
-          asChild
-          className="cursor-pointer h-9 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
-        >
-          <Link href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}>
-            {tr("Details")}
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          {/* === COMPLETED TOURS: Details + History === */}
+          {tour.status === "end" && (
+            <>
+              <Button
+                asChild
+                className="cursor-pointer h-9 flex-1 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
+              >
+                <Link href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}>
+                  {tr("Details")}
+                </Link>
+              </Button>
+
+              {!isBookmarkTab && (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="cursor-pointer h-9 flex-1 rounded-lg border-teal-500 text-teal-600 dark:text-teal-400 dark:border-teal-400 hover:bg-teal-50 hover:text-teal-600 dark:hover:bg-teal-900/20 dark:hover:text-teal-400"
+                >
+                  <Link
+                    target="_blank"
+                    href={`/tours/history/finish?visitId=${encodeURIComponent(
+                      tour.visitId
+                    )}&tourId=${encodeURIComponent(tour._id)}`}
+                  >
+                    {tr("buttons.history") || "History"}
+                  </Link>
+                </Button>
+              )}
+            </>
+          )}
+
+          {/* === IN-PROGRESS TOURS: Only Details === */}
+          {tour.status !== "end" && (
+            <Button
+              asChild
+              className="cursor-pointer h-9 flex-1 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
+            >
+              <Link href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}>
+                {tr("Details")}
+              </Link>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -757,10 +802,9 @@ function PageNavigator({
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                    : `
                         text-teal-600 dark:text-teal-400
                         hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `

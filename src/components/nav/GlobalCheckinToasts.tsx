@@ -92,12 +92,12 @@ export default function GlobalCheckinToasts() {
        /* 🌞 Light mode */
           bg-white
           border border-teal-400/40
-          hover:shadow-[0_0_10px_rgba(251,146,60,0.35)]
+          hover:shadow-[0_0_10px_rgba(45,212,191,0.35)]
 
           /* 🌙 Dark mode */
           dark:bg-black/80
           dark:border-teal-400/40
-          dark:hover:shadow-[0_0_12px_rgba(251,146,60,0.55)]
+          dark:hover:shadow-[0_0_12px_rgba(45,212,191,0.55)]
     "
             >
               {/* Title */}
@@ -142,7 +142,7 @@ export default function GlobalCheckinToasts() {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="
+                  className="cursor-pointer
           text-teal-700 hover:text-teal-800
           dark:text-teal-300 dark:hover:text-teal-200
         "
@@ -159,7 +159,7 @@ export default function GlobalCheckinToasts() {
                 {/* CHECK-IN BUTTON */}
                 <Button
                   size="sm"
-                  className="
+                  className="cursor-pointer
           bg-gradient-to-r
           from-teal-400 via-teal-500 to-teal-600
           text-white
@@ -217,7 +217,7 @@ export default function GlobalCheckinToasts() {
                             fetchUserTourPoints({ tourId, usertourId })
                           ).unwrap();
                         }
-                      } catch {}
+                      } catch { }
 
                       dispatch(confirm(item.id));
                       dispatch(markShown(item.id));
