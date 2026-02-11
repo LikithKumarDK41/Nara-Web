@@ -415,8 +415,8 @@ export default function MonumentDetailModal({
       navigator.canShare({ files: [file] })
     ) {
       await navigator.share({
-        title: "Nara Visit",
-        text: t("captured_nara_monument"),
+        title: t("nara_visit"),
+        text: t("captured_at") + (details.title || details.name) + t("monument_"),
         files: [file],
       });
       return;
