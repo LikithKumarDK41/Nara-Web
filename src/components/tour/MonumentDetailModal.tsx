@@ -416,7 +416,7 @@ export default function MonumentDetailModal({
     ) {
       await navigator.share({
         title: "Nara Visit",
-        text: "Captured at Nara monument",
+        text: t("captured_nara_monument"),
         files: [file],
       });
       return;
@@ -804,9 +804,8 @@ export default function MonumentDetailModal({
                   <section className="flex flex-wrap gap-2">
                     {safeText(details?.era) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.era")}:{" "}
                         {details.era}
@@ -814,9 +813,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.year) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.year")}:{" "}
                         {details.year}
@@ -824,9 +822,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.size) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.size")}:{" "}
                         {details.size}
@@ -834,9 +831,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.mtype) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.type")}:{" "}
                         {details.mtype}
@@ -844,27 +840,24 @@ export default function MonumentDetailModal({
                     )}
                     {details?.featured && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.featured")}
                       </Badge>
                     )}
                     {details?.rare && (
                       <Badge
-                        className={`whitespace-normal break-words${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.rare")}
                       </Badge>
                     )}
                     {details?.popularity && details?.popularity !== "0" && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.popularity")}:{" "}
                         {details.popularity}
@@ -872,9 +865,8 @@ export default function MonumentDetailModal({
                     )}
                     {details?.priority && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.priority")}:{" "}
                         {details.priority}
@@ -950,35 +942,33 @@ export default function MonumentDetailModal({
                 {/* 🏷 Theme / Subtheme */}
                 {(details?.theme?.length > 0 ||
                   details?.subtheme?.length > 0) && (
-                  <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
-                      <Star className="h-4 w-4 text-gray-500" />{" "}
-                      {t("shortcut.tourist_attraction_details.classification")}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {details.theme?.map((th: any, i: number) => (
-                        <Badge
-                          key={th._id || `theme-${i}`}
-                          className={`whitespace-normal break-words ${
-                            customStyle || customStyleDefault
-                          }`}
-                        >
-                          {safeText(th.title || th.name)}
-                        </Badge>
-                      ))}
-                      {details.subtheme?.map((sth: any, i: number) => (
-                        <Badge
-                          key={sth._id || `subtheme-${i}`}
-                          className={`whitespace-normal break-words ${
-                            customStyle || customStyleDefault
-                          }`}
-                        >
-                          {safeText(sth.title || sth.name)}
-                        </Badge>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                    <section>
+                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                        <Star className="h-4 w-4 text-gray-500" />{" "}
+                        {t("shortcut.tourist_attraction_details.classification")}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {details.theme?.map((th: any, i: number) => (
+                          <Badge
+                            key={th._id || `theme-${i}`}
+                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                              }`}
+                          >
+                            {safeText(th.title || th.name)}
+                          </Badge>
+                        ))}
+                        {details.subtheme?.map((sth: any, i: number) => (
+                          <Badge
+                            key={sth._id || `subtheme-${i}`}
+                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                              }`}
+                          >
+                            {safeText(sth.title || sth.name)}
+                          </Badge>
+                        ))}
+                      </div>
+                    </section>
+                  )}
 
                 {/* 🖼 Gallery */}
                 {!!details.gallery?.length && (
@@ -1032,11 +1022,10 @@ export default function MonumentDetailModal({
                       className={`
     absolute left-4 top-1/2 -translate-y-1/2 z-20
     p-2 md:p-3 rounded-full transition-all duration-200
-    ${
-      isSingleImage
-        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-    }
+    ${isSingleImage
+                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
+                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
+                        }
   `}
                     >
                       <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
@@ -1068,11 +1057,10 @@ export default function MonumentDetailModal({
                       className={`
     absolute right-4 top-1/2 -translate-y-1/2 z-20
     p-2 md:p-3 rounded-full transition-all duration-200
-    ${
-      isSingleImage
-        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-    }
+    ${isSingleImage
+                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
+                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
+                        }
   `}
                     >
                       <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
@@ -1126,9 +1114,8 @@ export default function MonumentDetailModal({
 
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-3 ${
-                                customStyle || customStyleDefault
-                              } group-hover:opacity-90`}
+                              className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1145,11 +1132,11 @@ export default function MonumentDetailModal({
                     {details.relatedtours.filter(
                       (tour: any) => !(localTourId && localTourId === tour._id),
                     ).length > 0 && (
-                      <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                        <Route className="h-5 w-5 text-gray-500" />{" "}
-                        {t("shortcut.tourist_attraction_details.related_tours")}
-                      </h3>
-                    )}
+                        <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                          <Route className="h-5 w-5 text-gray-500" />{" "}
+                          {t("shortcut.tourist_attraction_details.related_tours")}
+                        </h3>
+                      )}
                     <div>
                       <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
                         {details.relatedtours
@@ -1171,11 +1158,10 @@ export default function MonumentDetailModal({
   group relative flex flex-col h-full overflow-hidden rounded-2xl
   bg-white/90 dark:bg-slate-900/40 shadow-md transition-all border
   ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
-   ${
-     !(localTourId !== tour._id)
-       ? "cursor-pointer hover:shadow-xl"
-       : "cursor-not-allowed"
-   }
+   ${!(localTourId !== tour._id)
+                                  ? "cursor-pointer hover:shadow-xl"
+                                  : "cursor-not-allowed"
+                                }
 `}
                             >
                               {/* IMAGE */}
@@ -1219,9 +1205,8 @@ export default function MonumentDetailModal({
                                 {/* BUTTON ALWAYS AT BOTTOM */}
                                 <Button
                                   size="sm"
-                                  className={`cursor-pointer w-full rounded-full mt-3 ${
-                                    customStyle || customStyleDefault
-                                  } group-hover:opacity-90`}
+                                  className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                    } group-hover:opacity-90`}
                                   disabled={
                                     localTourId
                                       ? localTourId !== tour._id
@@ -1285,9 +1270,8 @@ export default function MonumentDetailModal({
                             {/* ✅ DETAILS BUTTON */}
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-3 ${
-                                customStyle || customStyleDefault
-                              } group-hover:opacity-90`}
+                              className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1307,9 +1291,8 @@ export default function MonumentDetailModal({
           <Button
             size="lg"
             onClick={() => setMapOpen(true)}
-            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${
-              customStyle || customStyleDefault
-            }`}
+            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${customStyle || customStyleDefault
+              }`}
           >
             <MapPin className="h-5 w-5" />
             {t("view_map")}
@@ -1370,9 +1353,8 @@ export default function MonumentDetailModal({
                   prev === "environment" ? "user" : "environment",
                 )
               }
-              className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${
-                isMobile ? "" : "hidden"
-              }`}
+              className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${isMobile ? "" : "hidden"
+                }`}
               aria-label="Switch camera"
             >
               <SwitchCamera className="h-6 w-6" />
