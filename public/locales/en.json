@@ -89,7 +89,11 @@
   "stops": "{count, plural, one {# stop} other {# stops}}",
   "buttons": {
     "details": "Details",
-    "navigate": "Navigate"
+    "navigate": "Navigate",
+    "resume_tour": "Resume Tour",
+    "view_route": "View Route",
+    "certificate": "Certificate",
+    "history": "History"
   },
   "empty": {
     "title": "No tours available",
@@ -528,6 +532,10 @@
   "you_collected": "You collected",
   "out_of": "out of",
   "checkpoints": "checkpoints",
+  "result": "Result",
+  "keep_going": "Keep Going!",
+  "tour_status": "Tour Status",
+  "back_to_list": "Back to List",
   "travel_time": "Travel Time",
   "tour_description": "Tour Description",
   "completed_points": "Completed Points",
