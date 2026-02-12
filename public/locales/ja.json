@@ -833,5 +833,9 @@
   "complete_desc": "この素晴らしいツアーを完了しました！",
   "copied_to_clipboard": "クリップボードにコピーしました",
   "copy": "コピー",
-  "failed_to_copy": "コピーに失敗しました"
+  "failed_to_copy": "コピーに失敗しました",
+  "captured_nara_monument": "奈良の史跡で撮影しました",
+  "captured_at": "で撮影しました",
+  "monument_": "史跡",
+  "nara_visit":"奈良訪問"
 }

@@ -834,5 +834,9 @@
   "complete_desc": "I completed this amazing tour!",
   "copied_to_clipboard": "Copied to clipboard",
   "copy": "Copy",
-  "failed_to_copy": "Failed to copy"
+  "failed_to_copy": "Failed to copy",
+  "captured_nara_monument": "Captured Nara Monument",
+  "captured_at": "Captured at ",
+  "monument_": "Monument",
+  "nara_visit":"Nara Visit"
 }
