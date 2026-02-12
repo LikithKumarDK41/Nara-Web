@@ -255,6 +255,20 @@ export default function LibraryPage() {
     currentPage * limit,
   );
 
+  /**
+ * PAGINATION AUTO-ADJUST:
+ * If an item is deleted and the current page becomes empty, jump back.
+ */
+  useEffect(() => {
+    const key = getPageKey();
+    const currentPageVal = page[key];
+    const totalPagesVal = Math.ceil(dataList.length / limit) || 1;
+
+    if (currentPageVal > totalPagesVal) {
+      setPage((prev) => ({ ...prev, [key]: totalPagesVal }));
+    }
+  }, [dataList.length, limit, topTab, innerTab, page]);
+
   /* ============================
         MONUMENT DETAILS
      ============================ */
