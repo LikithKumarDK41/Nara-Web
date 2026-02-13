@@ -89,7 +89,11 @@
   "stops": "{count, plural, one {# 箇所} other {# 箇所}}",
   "buttons": {
     "details": "詳細",
-    "navigate": "ナビゲート"
+    "navigate": "ナビゲート",
+    "resume_tour": "ツアーを再開",
+    "view_route": "ルートを確認",
+    "certificate": "認定証",
+    "history": "履歴"
   },
   "empty": {
     "title": "利用可能なツアーがありません",
@@ -528,6 +532,10 @@
   "you_collected": "あなたは",
   "out_of": "／",
   "checkpoints": "チェックポイントを回収しました",
+  "result": "結果",
+  "keep_going": "進み続けよう！",
+  "tour_status": "ツアーステータス",
+  "back_to_list": "リストに戻る",
   "travel_time": "移動時間",
   "tour_description": "ツアー説明",
   "completed_points": "達成したポイント",
@@ -813,5 +821,21 @@
     "error_invalid": "無効な応答形式です"
   },
   "open_chat": "チャットを開く",
-  "close_chat": "チャットを閉じる"
+  "close_chat": "チャットを閉じる",
+  "check_out_my_tour": "私のツアーを見てください！",
+  "map_loading": "地図を読み込み中です。しばらくお待ちください...",
+  "download_success": "ダウンロードが完了しました",
+  "download_failed": "ダウンロードに失敗しました",
+  "failed_to_share": "共有に失敗しました",
+  "download": "ダウンロード",
+  "loading_share": "読み込み中...",
+  "share": "共有",
+  "complete_desc": "この素晴らしいツアーを完了しました！",
+  "copied_to_clipboard": "クリップボードにコピーしました",
+  "copy": "コピー",
+  "failed_to_copy": "コピーに失敗しました",
+  "captured_nara_monument": "奈良の史跡で撮影しました",
+  "captured_at": "で撮影しました",
+  "monument_": "史跡",
+  "nara_visit":"奈良訪問"
 }

@@ -186,12 +186,17 @@ export default function MonumentsMap({
 
   function createPopupHTML(item: any) {
     const rawBrief = item.content?.brief || item.brief || "";
+
+    const imageUrl =
+      typeof item.image === "string"
+        ? item.image
+        : item?.image?.secure_url || item?.image?.url || null;
+
     return `
     <div class="monument_map-popup__card">
-      ${
-        item.image?.secure_url
-          ? `<img src="${item.image.secure_url}" />`
-          : `
+      ${imageUrl
+        ? `<img src="${imageUrl}" />`
+        : `
             <div class="tour-popup__noimg">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -240,41 +245,7 @@ export default function MonumentsMap({
             closeButton: true,
             closeOnClick: true,
             className: popupClass,
-          }).setHTML(`
-          <div class="monument_map-popup__card">
-            ${
-              item.image?.secure_url
-                ? `<img src="${item.image.secure_url}" />`
-                : `
-    <div class="tour-popup__noimg">
-    <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  stroke-width="1.8"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  class="tour-popup__icon"
->
-  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-  <path d="M21 15l-5-5L5 21"></path>
-</svg>
-
-    </div>
-  `
-            }
-            <div class="monument_map-popup__title">
-              ${escapeText(item.title || item.name)}
-            </div>
-            <div class="monument_map-popup__brief">
-              ${(item.content?.brief || "").replace(/<[^>]+>/g, "")}
-            </div>
-          </div>
-        `)
+          }).setHTML(createPopupHTML(item))
         )
         .addTo(map);
       marker.getPopup()?.on("open", () => {
@@ -340,7 +311,7 @@ export default function MonumentsMap({
           const { lat, lng } = singleLocation;
 
           // ✅ main marker uses same pin style
-          const pin = makePin("monument", "rgb(20, 184, 166)");
+          const pin = makePin("monument");
 
           const mainMarker = new mapboxgl.Marker({ element: pin })
             .setLngLat([lng, lat])

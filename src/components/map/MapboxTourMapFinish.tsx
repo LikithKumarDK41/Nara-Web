@@ -13,6 +13,7 @@ type Props = {
   stampedPoints: TourPoint[]; // ⭐ NEW
   height?: number | string;
   profile?: "walking" | "driving" | "cycling";
+  onMapReady?: (map: mapboxgl.Map) => void; // Callback when map is fully loaded
 };
 
 /* -------------------- helpers -------------------- */
@@ -32,11 +33,11 @@ function normalizeLngLat(
 }
 
 function colorFor(kind?: string) {
-  if (!kind) return "#f59e0b";
+  if (!kind) return "#0d9488";
   const k = kind.toLowerCase();
   if (k === "start") return "#16a34a";
   if (k === "end") return "#ef4444";
-  return "#f59e0b";
+  return "#0d9488";
 }
 
 function makeNumberedPin(label: string, fill: string) {
@@ -93,6 +94,7 @@ export default function MapboxTourMap({
   stampedPoints,
   height = 420,
   profile = "walking",
+  onMapReady
 }: Props) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapDivRef = useRef<HTMLDivElement | null>(null);
@@ -146,6 +148,8 @@ export default function MapboxTourMap({
         center: firstPoint,
         zoom: 13,
         antialias: true,
+        // ensure we can read pixels for screenshots
+        preserveDrawingBuffer: true,
       });
 
       mapRef.current = map;
@@ -332,37 +336,67 @@ export default function MapboxTourMap({
         /* -------------------- ROUTE -------------------- */
         removeRouteLayers(map);
 
-        if (tour.routeJson) {
-          try {
-            const parsed = JSON.parse(tour.routeJson);
-            if (parsed?.type === "FeatureCollection") {
-              map.addSource("custom-route", { type: "geojson", data: parsed });
+        if (positions.length > 1) {
+          const coordinatesStr = positions
+            .map((pos) => `${pos[0]},${pos[1]}`)
+            .join(";");
 
-              map.addLayer({
-                id: "custom-route-outline",
-                type: "line",
-                source: "custom-route",
-                paint: {
-                  "line-width": 8,
-                  "line-color": "#ffffff",
-                  "line-opacity": 0.85,
-                },
-              });
+          const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${coordinatesStr}?alternatives=false&geometries=geojson&steps=false&access_token=${token}`;
 
-              map.addLayer({
-                id: "custom-route-line",
-                type: "line",
-                source: "custom-route",
-                paint: {
-                  "line-width": 4,
-                  "line-color": "#f97316",
-                  "line-opacity": 0.95,
-                },
-              });
-            }
-          } catch (err) {
-            console.error("Invalid routeJson:", err);
-          }
+          fetch(directionsUrl)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.routes && data.routes.length > 0) {
+                const route = data.routes[0];
+                const geojsonData = {
+                  type: "FeatureCollection" as const,
+                  features: [
+                    {
+                      type: "Feature" as const,
+                      geometry: route.geometry,
+                      properties: {},
+                    },
+                  ],
+                };
+
+                if (!map.getSource("custom-route")) {
+                  map.addSource("custom-route", {
+                    type: "geojson",
+                    data: geojsonData,
+                  });
+                } else {
+                  const s = map.getSource("custom-route") as mapboxgl.GeoJSONSource;
+                  s.setData(geojsonData);
+                }
+
+                if (!map.getLayer("custom-route-outline")) {
+                  map.addLayer({
+                    id: "custom-route-outline",
+                    type: "line",
+                    source: "custom-route",
+                    paint: {
+                      "line-width": 8,
+                      "line-color": "#ffffff",
+                      "line-opacity": 0.85,
+                    },
+                  });
+                }
+
+                if (!map.getLayer("custom-route-line")) {
+                  map.addLayer({
+                    id: "custom-route-line",
+                    type: "line",
+                    source: "custom-route",
+                    paint: {
+                      "line-width": 4,
+                      "line-color": "#0d9488", // Using teal color as seen in Navigation
+                      "line-opacity": 0.95,
+                    },
+                  });
+                }
+              }
+            })
+            .catch((e) => console.error("Directions API error:", e));
         }
 
         /* ---- Fit bounds ---- */
@@ -374,7 +408,11 @@ export default function MapboxTourMap({
           map.fitBounds(bounds, { padding: 56, duration: 800 });
         }
 
-        setTimeout(() => map.resize(), 200);
+        setTimeout(() => {
+          map.resize();
+          // Call onMapReady after map is fully rendered and pass map instance
+          onMapReady?.(map);
+        }, 200);
       });
     })().catch((e) => setError(String(e)));
 
