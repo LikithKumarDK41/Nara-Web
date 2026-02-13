@@ -188,6 +188,21 @@ export async function apiFetchAllMonumentsWithQuery({
 }
 
 /* ------------------------------------------------------------
+   Fetch a single User Tour by ID
+   GET /v1/usertours/:id
+------------------------------------------------------------ */
+export async function apiGetUserTourById(id: string): Promise<any> {
+    try {
+        const { data } = await api.get(`/v1/usertours/${id}`);
+        return data; // Usually returns { _id, user, tour, ... }
+    } catch (err: any) {
+        throw new Error(
+            parseAxiosError(err, `Failed to fetch user tour with ID: ${id}`)
+        );
+    }
+}
+
+/* ------------------------------------------------------------
    🗑️ Delete (soft-remove) a User Tour
    PATCH /v1/usertours/:id
 ------------------------------------------------------------ */

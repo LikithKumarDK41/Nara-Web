@@ -11,7 +11,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const authData = useAppSelector((s) => s.auth.data);
   const isLoggedIn = !!authData?.user;
-  const {t} = useLocale();
+  const { t } = useLocale();
 
   return (
     <>
@@ -91,7 +91,7 @@ function DiamondButton({
           text-white text-xs font-semibold tracking-wide
           px-3 py-2 rounded-full
           shadow-[0_8px_30px_rgba(0,0,0,0.35)]
-          z-[9999] mr-2
+          z-[30] mr-2
           ${isOpen ? "hidden sm:flex" : "flex"}
         `}
       >
@@ -113,7 +113,7 @@ function DiamondButton({
           text-white
           shadow-lg hover:shadow-xl
           transition-shadow
-          z-[9998]
+          z-[30]
           flex items-center justify-center
           rotate-45 rounded-lg
           ${isOpen ? "hidden sm:flex" : "flex"}
