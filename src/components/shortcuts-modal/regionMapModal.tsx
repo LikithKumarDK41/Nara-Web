@@ -135,16 +135,15 @@ export default function RegionMapModal({
             >
               {/* ===== Toggle ===== */}
               <div className="mt-6 flex justify-center">
-                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border">
+                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur border">
                   {["region", "map"].map((v) => (
                     <button
                       key={v}
                       onClick={() => setView(v as any)}
-                      className={`cursor-pointer truncate px-6 py-3 rounded-xl font-semibold transition-all text-center ${
-                        view === v
-                          ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
-                          : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
-                      }`}
+                      className={`cursor-pointer truncate px-6 py-3 rounded-xl font-semibold transition-all text-center ${view === v
+                        ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
+                        : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
+                        }`}
                     >
                       {v === "region" ? t("region_title") : t("map_title")}
                     </button>
@@ -352,14 +351,14 @@ function RegionCard({ r }: { r: any }) {
   const router = useRouter();
   return (
     <div
-      className="mb-4 mt-4 group relative flex flex-col h-[400px] rounded-[32px] overflow-hidden bg-white dark:bg-[#15191f] border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_20px_40px_rgba(0,184,166,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
+      className="mt-4 mb-4 group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
       onClick={() => {
         sessionStorage.setItem("returnToRegionModal", "true");
         router.push(`/regions?id=${r._id}`);
       }}
     >
       {/* IMAGE */}
-      <div className="relative h-[220px] w-full overflow-hidden flex-shrink-0">
+      <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
         {r.image?.secure_url ? (
           <img
             src={r.image.secure_url}
@@ -367,35 +366,35 @@ function RegionCard({ r }: { r: any }) {
             className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
-            <ImageIcon className="h-12 w-12 text-slate-300" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#15191f] via-transparent to-transparent opacity-0 dark:opacity-60 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-0 group-hover:opacity-10 dark:group-hover:opacity-0 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
       </div>
       {/* CONTENT */}
-      <div className="relative flex-1 p-8 flex flex-col justify-between bg-white dark:bg-[#15191f]">
+      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
         <div className="space-y-3">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
             {r.title}
           </h3>
 
           {r.content?.brief && (
             <p
-              className="text-sm font-light text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed"
+              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: r.content.brief }}
             />
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-6 mt-auto">
-          <span className="text-xs font-bold text-teal-600/70 dark:text-teal-400/70 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
+          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
             {t("tourDetails.viewDetails")}
           </span>
-          <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-teal-500 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
-            <ArrowRight className="w-5 h-5 -ml-0.5" />
+          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
+            <ArrowRight className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -468,10 +467,9 @@ function PageNavigator({ totalPages, page, onPageChange, t }: any) {
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                    : `
                         text-teal-600 dark:text-teal-400
                         hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `

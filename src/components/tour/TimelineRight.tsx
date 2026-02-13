@@ -170,15 +170,13 @@ export default function MapTimelineRight({
               return (
                 <Fragment key={p._id}>
                   <li
-                    className={`grid grid-cols-[90px_1fr] gap-1 ${
-                      hideBottom ? "pb-8" : "md:pb-10 pb-0"
-                    }`}
+                    className={`grid grid-cols-[90px_1fr] gap-1 ${hideBottom ? "pb-8" : "md:pb-10 pb-0"
+                      }`}
                   >
                     <div className="relative h-full w-[90px]">
                       <div
-                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${
-                          hideTop ? "top-[50%]" : "top-0"
-                        } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
+                        className={`absolute left-[52px] w-[3px] bg-teal-500 ${hideTop ? "top-[50%]" : "top-0"
+                          } ${hideBottom ? "bottom-[50%]" : "bottom-0"}`}
                       />
                       <div className="absolute left-[52px] top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <div
@@ -390,7 +388,7 @@ export default function MapTimelineRight({
                           />
                         </div>
                       )}
-                      <div className="group relative rounded-2xl bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-all hover:shadow-md">
+                      <div className="group relative rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-sm border overflow-hidden transition-all hover:shadow-md">
                         {/* Image Thumbnail */}
                         <div
                           className="relative h-40 w-full cursor-pointer overflow-hidden"
@@ -405,7 +403,7 @@ export default function MapTimelineRight({
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-800">
-                              <ImageIcon className="h-8 w-8 text-gray-400" />
+                              <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                             </div>
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
@@ -425,7 +423,7 @@ export default function MapTimelineRight({
                         </div>
 
                         {/* Card Body: Brief + Action */}
-                        <div className="p-4 bg-white dark:bg-zinc-900 border-t dark:border-zinc-800">
+                        <div className="p-4 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 border-t">
                           {/* Brief Description */}
                           {m?.content?.brief && (
                             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed">
@@ -461,7 +459,7 @@ export default function MapTimelineRight({
                     hasStart={hasStart}
                   />
 
-                  <article className="relative col-start-2 w-full rounded-2xl bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-lg transition hover:-translate-y-[2px] hover:shadow-xl">
+                  <article className="relative col-start-2 w-full rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 text-gray-900 dark:text-white shadow-lg transition hover:-translate-y-[2px] hover:shadow-xl">
                     {/* For above div parent above the relative rounded-xl removed 'overflow-hidden' classname for 'stamp' related if issue in please add 'overflow-hidden' */}
                     {isCheckedIn(p._id) && (
                       <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 z-[2]">
@@ -486,7 +484,7 @@ export default function MapTimelineRight({
                         />
                       ) : (
                         <div className="grid h-full w-full place-items-center bg-gray-200 dark:bg-gray-800  rounded-t-2xl">
-                          <ImageIcon className="h-8 w-8 text-gray-500 dark:text-gray-400s" />
+                          <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

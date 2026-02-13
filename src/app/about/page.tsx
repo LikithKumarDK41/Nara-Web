@@ -459,7 +459,7 @@ export default function AboutDetailPage() {
                   </button>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
                   <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
@@ -467,11 +467,10 @@ export default function AboutDetailPage() {
                     <DropdownMenuItem
                       key={so._id}
                       onClick={() => setSelectedSort(so.link || so.name || "")}
-                      className={`cursor-pointer flex items-center gap-2 ${
-                        selectedSort === so.link
-                          ? "bg-slate-100 dark:bg-neutral-800 font-semibold"
-                          : ""
-                      }`}
+                      className={`cursor-pointer flex items-center gap-2 ${selectedSort === so.link
+                        ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
+                        : ""
+                        }`}
                     >
                       {/* optional icon */}
                       {so.icon?.secure_url ? (
@@ -594,11 +593,10 @@ export default function AboutDetailPage() {
                           key={i}
                           className={`
         w-4 h-4
-        ${
-          i < (m.popularity || 0)
-            ? "fill-amber-400 text-amber-400"
-            : "text-slate-300 dark:text-slate-600"
-        }
+        ${i < (m.popularity || 0)
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-slate-300 dark:text-slate-600"
+                            }
       `}
                         />
                       ))}
@@ -802,9 +800,8 @@ export default function AboutDetailPage() {
         relative
         cursor-pointer
         rounded-2xl
-        bg-white/70 dark:bg-white/5
+        bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60
         backdrop-blur-md
-        border border-black/5 dark:border-white/10
         shadow-sm hover:shadow-lg
         transition-all
         overflow-hidden

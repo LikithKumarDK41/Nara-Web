@@ -21,7 +21,7 @@ export function ChatOptions({ options, onSelect }: ChatOptionsProps) {
           onClick={() => onSelect(option.value, option.label)}
           title={option.helptext} // Show helptext on hover
           className={cn(
-            "p-3 text-sm font-semibold rounded-lg shadow-sm border transition-all text-left",
+            "cursor-pointer p-3 text-sm font-semibold rounded-lg shadow-sm border transition-all text-left",
             "bg-background text-foreground hover:bg-muted", // Theme aware
             "border-border"
           )}
