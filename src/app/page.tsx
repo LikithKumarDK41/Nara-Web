@@ -161,15 +161,16 @@ export default function ToursDashboardPage() {
 
   /* -------------------- Render -------------------- */
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    // <div className="flex flex-col w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 dark:from-[#0a0d12] dark:via-[#0f1318] dark:to-[#0d1520]">
+    <div className="flex flex-col w-full min-h-screen ">
       {/* ================= HERO CAROUSEL ================= */}
       <HeroCarousel />
 
       {/* ================= SECTION DIVIDER ================= */}
-      <div className="relative z-10 flex justify-center -mt-8 mb-8">
-        <div className="flex items-center gap-4 px-8 py-3 bg-white/80 dark:bg-[#1a1d24]/90 backdrop-blur-md rounded-full border border-white/20 shadow-lg">
-          <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
-          <span className="text-xs tracking-[0.2em] uppercase text-slate-800 dark:text-slate-100 font-bold">
+      <div className="relative z-10 flex justify-center -mt-8 mb-10">
+        <div className="flex items-center gap-4 px-8 py-3.5 bg-white/90 dark:bg-[#1a1d24]/95 backdrop-blur-xl rounded-full border border-teal-200/40 dark:border-teal-500/20 shadow-xl shadow-teal-500/10 dark:shadow-teal-900/30">
+          <span className="h-2 w-2 rounded-full bg-gradient-to-r from-teal-400 to-teal-600 animate-pulse shadow-lg shadow-teal-500/50" />
+          <span className="text-xs tracking-[0.25em] uppercase text-slate-800 dark:text-slate-100 font-bold">
             {t("home.quick_access")}
           </span>
         </div>
@@ -177,13 +178,13 @@ export default function ToursDashboardPage() {
 
       {/* ================= PRIMARY SHORTCUTS (Dock Style) ================= */}
       {!globalLoading && sectionOne.length > 0 && (
-        <section className="w-full p-4">
+        <section className="w-full px-4 pb-6">
           <div
             className="
-    grid grid-cols-3 gap-3           /* ✅ MOBILE: force 3 in one row */
-    md:flex md:flex-nowrap md:gap-4 /* ✅ TAB & DESKTOP: SAME AS BEFORE */
-    justify-center
-    md:overflow-visible
+    grid grid-cols-3 gap-3 sm:gap-4
+    md:flex md:flex-nowrap md:gap-5
+    justify-center items-center
+    max-w-4xl mx-auto
   "
           >
             <ShortcutRow
@@ -198,16 +199,17 @@ export default function ToursDashboardPage() {
       )}
 
       {/* ================= CONTENT CONTAINER ================= */}
+      {/* <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16 pb-16"> */}
       <div className="mx-auto w-full px-4 space-y-10 pb-0">
 
         {/* ================= SERVICE INFO (Modern Grid) ================= */}
         {!globalLoading && sectionTwo.length > 0 && (
           <section>
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-2 rounded-lg bg-teal-500/10">
-                <Layers className="h-6 w-6 text-teal-500" />
+            <div className="flex items-center gap-4 mb-8 pb-4 border-b border-slate-200/60 dark:border-slate-700/60">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm border border-teal-200/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5">
+                <Layers className="h-6 w-6 text-teal-600 dark:text-teal-400" />
               </div>
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
                 {t("home.explore_categories")}
               </h2>
             </div>
@@ -227,12 +229,12 @@ export default function ToursDashboardPage() {
         {/* ================= ABOUT NARA HERITAGE ================= */}
         {abouts.length > 0 && (
           <section className="w-full relative">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-teal-500/10">
-                  <BookOpen className="h-6 w-6 text-teal-500" />
+            <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200/60 dark:border-slate-700/60">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm border border-teal-200/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5">
+                  <BookOpen className="h-6 w-6 text-teal-600 dark:text-teal-400" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
                   {t("home.about_nara")}
                 </h2>
               </div>
@@ -313,17 +315,19 @@ export default function ToursDashboardPage() {
         {/* ================= FEATURED TOURS ================= */}
         {!loading && hasTours && (
           <section>
-            <div className="flex items-center justify-between mb-6 px-1 border-b border-dashed border-teal-500/30 pb-2">
-              <div className="flex items-center gap-3">
-                <Route className="h-5 w-5 text-teal-500" />
-                <h2 className="text-xl font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+            <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-dashed border-teal-500/30 dark:border-teal-500/20">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm border border-teal-200/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5">
+                  <Route className="h-6 w-6 text-teal-600 dark:text-teal-400" />
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent uppercase tracking-wide">
                   {t("home.guide_tour")}
                 </h2>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+                className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-700 dark:hover:text-teal-300 transition-all duration-200"
                 asChild
               >
                 <Link href="/tours">
@@ -384,7 +388,7 @@ export default function ToursDashboardPage() {
 function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
   return (
     <div
-      className="group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:shadow-teal-900/10 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
+      className="group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
       style={{ transitionDelay: `${idx * 50}ms` }}
       onClick={() => (window.location.href = `/tours/detail?id=${tour._id}`)}
     >
@@ -396,32 +400,33 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
             className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
-            <ImageIcon className="h-12 w-12 text-slate-300" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
           </div>
         )}
 
         <div className="absolute top-5 left-5 z-20">
-          <div className="px-4 py-1.5 rounded-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1.5 shadow-sm border border-teal-100 dark:border-teal-900/50">
-            <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500" />
+          <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
+            <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500 dark:fill-teal-400 dark:text-teal-400" />
             <span className="tracking-wide uppercase">
               {t("actions.featured")}
             </span>
           </div>
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#15191f] via-transparent to-transparent opacity-0 dark:opacity-60 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-0 group-hover:opacity-10 dark:group-hover:opacity-0 transition-opacity duration-500" />
+        {/* Gradient overlays for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
       </div>
 
-      <div className="relative flex-1 p-8 flex flex-col justify-between bg-white dark:bg-[#15191f]">
+      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
         <div className="space-y-3">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
             {tour.title}
           </h3>
           {tour.content?.brief && (
             <p
-              className="text-sm font-light text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed"
+              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
               dangerouslySetInnerHTML={{
                 __html: normalizeHTML(tour.content.brief),
               }}
@@ -429,12 +434,12 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-6 mt-auto">
-          <span className="text-xs font-bold text-teal-600/70 dark:text-teal-400/70 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
+          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
             {t("home.explore_link")}
           </span>
-          <div className="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-teal-500 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
-            <ArrowRight className="w-5 h-5 -ml-0.5" />
+          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
+            <ArrowRight className="w-5 h-5" />
           </div>
         </div>
       </div>
@@ -523,11 +528,12 @@ function ShortcutRow({
         const baseCardStyles = `
            group relative cursor-pointer
            bg-white dark:bg-[#0f1115] 
-           border border-slate-200 dark:border-white/10
-           hover:border-teal-500 dark:hover:border-teal-400
+           border border-slate-200/80 dark:border-slate-700/60
+           hover:border-teal-400 dark:hover:border-teal-500
            transition-all duration-300 ease-out
            hover:-translate-y-1 
-           hover:shadow-[0_10px_40px_-5px_rgba(20,184,166,0.15)]
+           hover:shadow-[0_12px_40px_-8px_rgba(20,184,166,0.25)]
+           dark:hover:shadow-[0_12px_40px_-8px_rgba(20,184,166,0.35)]
            active:scale-95
            flex items-center
         `;
@@ -539,21 +545,24 @@ function ShortcutRow({
               onClick={() => handleShortcutClick(item)}
               className={`
   ${baseCardStyles}
-  flex flex-col items-center justify-center
-  w-full md:min-w-[140px] md:max-w-[140px]  /* ✅ fixed ONLY on md+ */
-  h-[101px] md:h-[110px]
-  rounded-2xl
-  shadow-md
-  bg-white dark:bg-[#0f1115]
+  flex flex-col items-center justify-center gap-3
+  w-full md:min-w-[150px] md:max-w-[150px]
+  h-[110px] md:h-[120px]
+  rounded-2xl md:rounded-3xl
+  shadow-md hover:shadow-xl
+  bg-gradient-to-br from-white to-slate-50/80 dark:from-[#0f1115] dark:to-[#15191f]
+  border-slate-200/80 dark:border-slate-700/60
+  hover:scale-105
+  hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40
 `}
             >
               {/* Icon */}
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 mb-2">
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-900/30 dark:to-teal-800/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-500/30 shadow-sm group-hover:shadow-md group-hover:shadow-teal-500/30 transition-all duration-300">
                 {item.icon?.secure_url ? (
                   <img
                     src={item.icon.secure_url}
                     alt={item.title}
-                    className="w-7 h-7 md:w-8 md:h-8 object-contain"
+                    className="w-6 h-6 md:w-9 md:h-9 object-contain"
                     style={{
                       filter: isDark
                         ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
@@ -571,11 +580,13 @@ function ShortcutRow({
     text-xs md:text-sm font-bold
     text-center
     text-slate-800 dark:text-slate-200
+    group-hover:text-teal-700 dark:group-hover:text-teal-300
     whitespace-nowrap
     overflow-hidden
     text-ellipsis
     max-w-full
     px-2
+    transition-colors duration-200
   "
                 title={item.title}
               >
@@ -592,16 +603,19 @@ function ShortcutRow({
             onClick={() => handleShortcutLink2(item)}
             className={`
     ${baseCardStyles}
-    flex-col items-center md:flex-row gap-2 md:gap-4 px-2 md:px-4 py-3.5 md:py-3.5
-    w-full min-w-0 h-auto md:min-h-[72px]
-    rounded-2xl
-    shadow-sm hover:shadow-lg hover:shadow-teal-500/10 dark:hover:shadow-teal-900/20
-    bg-white dark:bg-[#0f1115] border-slate-200 dark:border-white/5
+    flex-col items-center md:flex-row gap-3 md:gap-4 px-3 md:px-5 py-4 md:py-4
+    w-full min-w-0 h-auto md:min-h-[80px]
+    rounded-2xl md:rounded-3xl
+    shadow-md hover:shadow-xl
+    bg-gradient-to-br from-white to-slate-50/80 dark:from-[#0f1115] dark:to-[#15191f]
+    border-slate-200/80 dark:border-slate-700/60
+    hover:scale-[1.02]
+    hover:shadow-teal-500/15 dark:hover:shadow-teal-900/30
   `}
           >
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20 transition-all duration-300">
+            <div className="flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-900/30 dark:to-teal-800/20 flex items-center justify-center text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-500/30 shadow-sm group-hover:shadow-md group-hover:shadow-teal-500/30 transition-all duration-300">
               {item.icon?.secure_url ? (
-                <div className="w-5 h-5 text-current">
+                <div className="w-6 h-6 text-current">
                   <img
                     src={item.icon.secure_url}
                     alt={item.title}
@@ -614,30 +628,31 @@ function ShortcutRow({
                   />
                 </div>
               ) : (
-                <Search className="w-5 h-5" />
+                <Search className="w-6 h-6" />
               )}
             </div>
 
             <span
               className="
     text-xs md:text-sm font-bold
-    text-left
+    text-center md:text-left
     text-slate-700 dark:text-slate-200
-    group-hover:text-teal-700 dark:group-hover:text-white
+    group-hover:text-teal-700 dark:group-hover:text-teal-300
     leading-tight
     whitespace-nowrap
     overflow-hidden
     text-ellipsis
     flex-1
+    transition-colors duration-200
   "
-              title={item.title} // 👈 tooltip on hover (desktop)
+              title={item.title}
             >
               {item.title}
             </span>
 
             {/* Arrow Hint */}
-            <div className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-500 dark:text-teal-400 cursor-pointer">
-              <ChevronRight className="w-4 h-4" />
+            <div className="hidden md:block ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 text-teal-600 dark:text-teal-400">
+              <ChevronRight className="w-5 h-5" />
             </div>
           </div>
         );

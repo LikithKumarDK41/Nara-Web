@@ -86,7 +86,7 @@ export default function TermsOfUsePage() {
       </section>
 
       <div className="sm:px-6">
-        <div className="bg-white/70 dark:bg-white/10 p-8 rounded-2xl shadow-md">
+        <div className=" bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 p-8 rounded-2xl shadow-md">
           <Section
             title={isEN ? "Introduction" : "はじめに"}
             desc={

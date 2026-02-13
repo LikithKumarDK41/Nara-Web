@@ -194,7 +194,7 @@ export default function PlaceDetailModal({
                   {!details.image?.secure_url && (
                     <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
                       <div className="flex justify-center items-center h-full bg-gray-200 dark:bg-gray-700 rounded-t-2xl">
-                        <ImageIcon className="h-8 w-8 text-gray-500 dark:text-gray-300" />
+                        <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                       </div>
                     </div>
                   )}

@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
 
       <div className="sm:px-6">
         {/* Sections */}
-        <div className="bg-white/70 dark:bg-white/10 p-8 rounded-2xl shadow-md">
+        <div className="bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 p-8 rounded-2xl shadow-md">
           <PolicySection
             title={t("privacy.general.title")}
             desc={t("privacy.general.desc")}

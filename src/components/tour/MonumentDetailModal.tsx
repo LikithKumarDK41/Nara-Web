@@ -688,7 +688,7 @@ export default function MonumentDetailModal({
                 {!details.image?.secure_url && (
                   <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
                     <div className="flex justify-center items-center h-full bg-gray-200 dark:bg-gray-700 rounded-t-2xl">
-                      <ImageIcon className="h-8 w-8 text-gray-500 dark:text-gray-300" />
+                      <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                     </div>
 
                     <button
@@ -1001,7 +1001,7 @@ export default function MonumentDetailModal({
                 {!!details.gallery?.length && (
                   <section>
                     <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <ImageIcon className="h-5 w-5 text-gray-500" />
+                      <ImageIcon className="h-5 w-5 text-slate-400 dark:text-slate-600" />
                       {t("shortcut.tourist_attraction_details.gallery")}
                     </h3>
 
@@ -1106,7 +1106,7 @@ export default function MonumentDetailModal({
                         <div
                           key={m._id}
                           onClick={() => onOpenAnother(m._id)}
-                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
                             {m.image?.secure_url ? (
@@ -1116,7 +1116,7 @@ export default function MonumentDetailModal({
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                               />
                             ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                              <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                             )}
                           </div>
 
@@ -1180,7 +1180,7 @@ export default function MonumentDetailModal({
                               }}
                               className={`
   group relative flex flex-col h-full overflow-hidden rounded-2xl
-  bg-white/90 dark:bg-slate-900/40 shadow-md transition-all border
+  bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md transition-all border
   ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
    ${!(localTourId !== tour._id)
                                   ? "cursor-pointer hover:shadow-xl"
@@ -1197,7 +1197,7 @@ export default function MonumentDetailModal({
                                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                                   />
                                 ) : (
-                                  <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                                  <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                                 )}
                               </div>
 
@@ -1261,7 +1261,7 @@ export default function MonumentDetailModal({
                         <div
                           key={srv._id || srv.name}
                           onClick={() => openPlaceDetails(srv)}
-                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           {/* IMAGE */}
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
@@ -1272,7 +1272,7 @@ export default function MonumentDetailModal({
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                               />
                             ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                              <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                             )}
                           </div>
                           <div className="flex flex-col flex-1 justify-between p-4">
