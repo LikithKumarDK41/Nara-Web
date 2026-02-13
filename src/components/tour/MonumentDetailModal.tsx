@@ -556,7 +556,7 @@ export default function MonumentDetailModal({
                     >
                       {isBookmarked ? (
                         <BookmarkCheck
-                          className="
+                          className="cursor-pointer
         h-8 w-8
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
@@ -565,7 +565,7 @@ export default function MonumentDetailModal({
                       ) : (
                         <Bookmark
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-white/90
         hover:text-teal-300
         transition-colors
@@ -699,7 +699,7 @@ export default function MonumentDetailModal({
                       {isBookmarked ? (
                         <BookmarkCheck
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
       "
@@ -707,7 +707,7 @@ export default function MonumentDetailModal({
                       ) : (
                         <Bookmark
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-white/90
         hover:text-teal-300
         transition-colors
@@ -1393,7 +1393,7 @@ export default function MonumentDetailModal({
             {/* Close */}
             <button
               onClick={() => setPreviewOpen(false)}
-              className="absolute top-4 right-4 text-white bg-black/60 p-2 rounded-full"
+              className="cursor-pointer absolute top-4 right-4 text-white bg-black/60 p-2 rounded-full"
             >
               <X />
             </button>

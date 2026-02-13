@@ -432,7 +432,7 @@ export default function TourDetailsClientPage() {
           >
             {bookmarked ? (
               <BookmarkCheck
-                className="
+                className="cursor-pointer
         h-8 w-8
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
@@ -440,7 +440,7 @@ export default function TourDetailsClientPage() {
               />
             ) : (
               <Bookmark
-                className="
+                className="cursor-pointer
         h-8 w-8
         text-white/90
         hover:text-teal-300
@@ -506,7 +506,7 @@ export default function TourDetailsClientPage() {
                 {[
                   {
                     // value: tour.tourpoints?.length ?? 0,
-                    value: tour.tourpoints?.filter((p:any) => p.pointtype !== "lunch").length ?? 0,
+                    value: tour.tourpoints?.filter((p: any) => p.pointtype !== "lunch").length ?? 0,
                     label: t("tourDetails.stops"),
                   },
                   { value: tour.duration, label: t("tourDetails.duration") },
