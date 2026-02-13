@@ -240,7 +240,7 @@ export default function CategoryExplorer() {
         font-light
       "
           >
-            { t("category_desc") }
+            {t("category_desc")}
           </p>
 
           {/* Stats row */}
@@ -289,18 +289,24 @@ export default function CategoryExplorer() {
               //   const themeTitle = s.theme?.[0]?.title || s.theme?.[0]?.name;
 
               const themeTitle = s.theme
-                ?.map((tt:any) => tt.title || tt.name)
+                ?.map((tt: any) => tt.title || tt.name)
                 .filter(Boolean)
                 .join(", ");
 
               return (
                 <div
                   key={s._id}
-                  className="
+                  className="cursor-pointer
               group relative
               h-[150px]
               rounded-xl overflow-hidden
-            "
+            " onClick={async (e) => {
+                    e.stopPropagation(); // 🔥 important
+                    setActiveSubtheme(s);
+                    setMonuments([]);
+                    setMonumentsLoading(true);
+                    setView("monuments");
+                  }}
                 >
                   {/* Image */}
                   {s.image?.secure_url && (
@@ -363,7 +369,7 @@ export default function CategoryExplorer() {
                   text-xs font-semibold
                   text-teal-300
                   opacity-90
-                  hover:opacity-100
+                  group-hover:opacity-100
                   transition
                   cursor-pointer
                 "
@@ -411,11 +417,10 @@ export default function CategoryExplorer() {
                     <DropdownMenuItem
                       key={so._id}
                       onClick={() => setSelectedSort(so.link || so.name || "")}
-                      className={`cursor-pointer flex items-center gap-2 ${
-                        selectedSort === so.link
-                          ? "bg-slate-100 dark:bg-neutral-800 font-semibold"
-                          : ""
-                      }`}
+                      className={`cursor-pointer flex items-center gap-2 ${selectedSort === so.link
+                        ? "bg-slate-100 dark:bg-neutral-800 font-semibold"
+                        : ""
+                        }`}
                     >
                       {/* optional icon */}
                       {so.icon?.secure_url ? (
@@ -605,11 +610,10 @@ export default function CategoryExplorer() {
                         key={i}
                         className={`
                     w-4 h-4
-                    ${
-                      i < (m.popularity || 0)
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-slate-300 dark:text-slate-600"
-                    }
+                    ${i < (m.popularity || 0)
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-slate-300 dark:text-slate-600"
+                          }
                   `}
                       />
                     ))}

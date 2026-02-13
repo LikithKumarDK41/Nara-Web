@@ -240,13 +240,13 @@ export default function ToursDashboardPage() {
               <div className="hidden md:flex gap-2">
                 <button
                   onClick={() => scrollAbout("left")}
-                  className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="cursor-pointer p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => scrollAbout("right")}
-                  className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="cursor-pointer p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
