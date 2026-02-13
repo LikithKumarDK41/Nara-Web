@@ -21,7 +21,6 @@ import {
   Globe,
   Info,
   X,
-  CalendarDays,
   BookmarkCheck,
   Bookmark,
   ChevronLeft,
@@ -29,6 +28,7 @@ import {
   MapPinned,
   Camera,
   SwitchCamera,
+  Maximize2,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useRef, useEffect, useState } from "react";
@@ -38,6 +38,7 @@ import {
   apiRemoveBookmark,
   apiCreateBookmark,
 } from "@/services/userGlobalservice";
+import { motion, AnimatePresence } from "framer-motion";
 import type { EventItem } from "@/lib/types/userGlobal.types";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
@@ -126,6 +127,22 @@ export default function MonumentDetailModal({
     if (isSingleImage) return;
     setActiveIndex((i) => (i === details.gallery.length - 1 ? 0 : i + 1));
   };
+
+  // Keyboard navigation for gallery viewer
+  useEffect(() => {
+    if (!viewerOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        prevImage();
+      } else if (e.key === "ArrowRight") {
+        nextImage();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [viewerOpen, activeIndex, isSingleImage]);
 
   useEffect(() => {
     if (details?._id) {
@@ -507,14 +524,21 @@ export default function MonumentDetailModal({
               <>
                 {/* 🖼 Main Image */}
                 {details.image?.secure_url && (
-                  <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
+                  <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border group">
                     <Image
                       src={details.image.secure_url}
                       alt={safeText(details.title)}
                       fill
                       onClick={() => setMainViewerOpen(true)}
-                      className="cursor-pointer object-cover transition-transform hover:scale-105"
+                      className="cursor-pointer object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+
+                    {/* Hover Icon Overlay */}
+                    <div className="absolute inset-0 bg-black/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 scale-100 md:scale-90 md:group-hover:scale-100 transition-transform duration-300">
+                        <Maximize2 size={20} />
+                      </div>
+                    </div>
                     {/* 🔖 Bookmark Button */}
                     <button
                       onClick={handleBookmarkToggle}
@@ -627,36 +651,39 @@ export default function MonumentDetailModal({
                   </div>
                 )}
 
-                {mainViewerOpen && details.image?.secure_url && (
-                  <div
-                    className="h-[100%] fixed inset-0 z-[9999] bg-black/90"
-                    onClick={() => setMainViewerOpen(false)}
-                  >
-                    {/* CLOSE BUTTON */}
-                    <button
+                <AnimatePresence>
+                  {mainViewerOpen && details.image?.secure_url && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="h-[100%] fixed inset-0 z-[9999] bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-8"
                       onClick={() => setMainViewerOpen(false)}
-                      className="cursor-pointer absolute top-4 right-4 z-20 text-white bg-black p-2 rounded-full hover:bg-black/40 dark:hover:bg-white/10 transition"
                     >
-                      <X className="h-6 w-6" />
-                    </button>
+                      {/* CLOSE BUTTON */}
+                      <button
+                        onClick={() => setMainViewerOpen(false)}
+                        className="cursor-pointer absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
+                      >
+                        <X size={32} />
+                      </button>
 
-                    {/* IMAGE CENTER */}
-                    <div
-                      className="flex items-center justify-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="relative w-screen h-screen">
-                        <Image
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="relative max-w-7xl max-h-[90vh] w-auto h-auto outline-none flex flex-col items-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
                           src={details.image.secure_url}
                           alt={safeText(details.title)}
-                          fill
-                          priority
-                          className="object-contain"
+                          className="max-w-full max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
                         />
-                      </div>
-                    </div>
-                  </div>
-                )}
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {!details.image?.secure_url && (
                   <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
@@ -981,92 +1008,89 @@ export default function MonumentDetailModal({
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                       {details.gallery.map((img: any, i: number) =>
                         img.secure_url ? (
-                          <button
+                          <div
                             key={img.secure_url || `gallery-${i}`}
                             onClick={() => openViewer(i)}
-                            className="cursor-pointer relative h-40 overflow-hidden rounded-md shadow-sm focus:outline-none"
+                            className="cursor-pointer group relative h-40 overflow-hidden rounded-xl shadow-md ring-1 ring-border"
                           >
                             <Image
                               src={img.secure_url}
                               alt=""
                               fill
-                              className="object-cover hover:scale-105 transition-transform"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                          </button>
+                            {/* Hover Icon Overlay */}
+                            <div className="absolute inset-0 bg-black/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
+                              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 scale-100 md:scale-90 md:group-hover:scale-100 transition-transform duration-300">
+                                <Maximize2 size={18} />
+                              </div>
+                            </div>
+                          </div>
                         ) : null,
                       )}
                     </div>
                   </section>
                 )}
 
-                {viewerOpen && (
-                  <div
-                    className="h-[100%] fixed inset-0 z-[9999] bg-black/90"
-                    onClick={closeViewer}
-                  >
-                    {/* CLOSE BUTTON */}
-                    <button
+                <AnimatePresence>
+                  {viewerOpen && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="h-[100%] fixed inset-0 z-[9999] bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-8"
                       onClick={closeViewer}
-                      className="cursor-pointer absolute top-4 right-4 z-20 text-white bg-black p-2 rounded-full hover:bg-black/40 dark:hover:bg-white/10 transition"
                     >
-                      <X className="h-6 w-6" />
-                    </button>
+                      {/* CLOSE BUTTON */}
+                      <button
+                        onClick={closeViewer}
+                        className="cursor-pointer absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
+                      >
+                        <X size={32} />
+                      </button>
 
-                    {/* PREVIOUS */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevImage();
-                      }}
-                      disabled={isSingleImage}
-                      className={`
-    absolute left-4 top-1/2 -translate-y-1/2 z-20
-    p-2 md:p-3 rounded-full transition-all duration-200
-    ${isSingleImage
-                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-                        }
-  `}
-                    >
-                      <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
-                    </button>
+                      {/* PREVIOUS */}
+                      {!isSingleImage && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage();
+                          }}
+                          className="cursor-pointer absolute left-6 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
+                        >
+                          <ChevronLeft className="h-8 w-8" />
+                        </button>
+                      )}
 
-                    {/* IMAGE CENTER */}
-                    <div
-                      className="flex items-center justify-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="relative w-screen h-screen">
-                        <Image
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="relative max-w-7xl max-h-[90vh] w-auto h-auto outline-none flex flex-col items-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
                           src={details.gallery[activeIndex].secure_url}
                           alt=""
-                          fill
-                          priority
-                          className="object-contain rounded-xl shadow-2xl"
+                          className="max-w-full max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
                         />
-                      </div>
-                    </div>
+                      </motion.div>
 
-                    {/* NEXT */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextImage();
-                      }}
-                      disabled={isSingleImage}
-                      className={`
-    absolute right-4 top-1/2 -translate-y-1/2 z-20
-    p-2 md:p-3 rounded-full transition-all duration-200
-    ${isSingleImage
-                          ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-                          : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-                        }
-  `}
-                    >
-                      <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
-                    </button>
-                  </div>
-                )}
+                      {/* NEXT */}
+                      {!isSingleImage && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage();
+                          }}
+                          className="cursor-pointer absolute right-6 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
+                        >
+                          <ChevronRight className="h-8 w-8" />
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* 🏛 Nearby Monuments */}
                 {!!details.nearbymonuments?.length && (
