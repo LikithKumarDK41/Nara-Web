@@ -49,7 +49,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
     const [subthemes, setSubthemes] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [themeInfo, setThemeInfo] = useState<any | null>(null);
-    const { t } = useLocale();
+    const { t, locale } = useLocale();
 
     const [view, setView] = useState<"subthemes" | "monuments">("subthemes");
     const [activeSubtheme, setActiveSubtheme] = useState<any | null>(null);
@@ -156,7 +156,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
         return () => {
             mounted = false;
         };
-    }, [themeId, show, hide]);
+    }, [themeId, show, hide, locale]);
 
     useEffect(() => {
         let mounted = true;
@@ -225,7 +225,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
         return () => {
             mounted = false;
         };
-    }, [selectedSort, activeSubtheme, view]);
+    }, [selectedSort, activeSubtheme, view, locale]);
 
     return (
         <div className="w-full">

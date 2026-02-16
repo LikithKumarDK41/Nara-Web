@@ -36,16 +36,15 @@ function ExplorePageContent() {
         let mounted = true;
         const load = async () => {
             try {
-                if (shortcuts.length === 0) {
-                    await dispatch(fetchShortcuts());
-                }
+                // Always fetch to ensure we have data for the current locale
+                await dispatch(fetchShortcuts());
             } catch (e) {
                 console.error(e);
             }
         }
         load();
         return () => { mounted = false; };
-    }, [dispatch, shortcuts.length]);
+    }, [dispatch, locale]);
 
     /* -------------------- Priority Logic (Copy/Share?) -------------------- */
     const sectionTwo = useMemo(() => {
@@ -245,7 +244,7 @@ function ExplorePageContent() {
                             </div>
 
                             {/* --- Dynamic Content --- */}
-                            <div className="min-h-[400px]">
+                            <div className="h-auto">
                                 {selectedThemeId ? (
                                     <CategoryContent themeId={selectedThemeId} hideHero={true} />
                                 ) : (
