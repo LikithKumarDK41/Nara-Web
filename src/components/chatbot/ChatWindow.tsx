@@ -653,7 +653,7 @@ export function ChatWindow({ onClose }: ChatWindowProps) {
         <div className="flex gap-2">
           <button
             onClick={onClose}
-            className="p-1 hover:bg-white/20 rounded-full transition-colors"
+            className="cursor-pointer p-1 hover:bg-white/20 rounded-full transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

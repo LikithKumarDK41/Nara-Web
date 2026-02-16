@@ -409,7 +409,7 @@ export default function CategoryExplorer() {
                   </button>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
                   <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
@@ -418,7 +418,7 @@ export default function CategoryExplorer() {
                       key={so._id}
                       onClick={() => setSelectedSort(so.link || so.name || "")}
                       className={`cursor-pointer flex items-center gap-2 ${selectedSort === so.link
-                        ? "bg-slate-100 dark:bg-neutral-800 font-semibold"
+                        ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
                         : ""
                         }`}
                     >

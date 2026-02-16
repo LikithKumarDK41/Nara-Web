@@ -586,7 +586,7 @@ function MonumentCard({
   const { t } = useLocale();
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl border">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl  bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl">
       {/* DELETE BUTTON */}
       <button
         className="cursor-pointer absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow hover:bg-red-600 z-20"
@@ -609,7 +609,7 @@ function MonumentCard({
           />
         ) : (
           <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
+            <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
           </div>
         )}
       </div>
@@ -650,7 +650,7 @@ function TourCard({
   const { t: tr } = useLocale();
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl border">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl  bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl">
       {/* DELETE BUTTON */}
       <button
         className="cursor-pointer absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow hover:bg-red-600 z-20"
@@ -674,7 +674,7 @@ function TourCard({
           />
         ) : (
           <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
+            <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
           </div>
         )}
 
