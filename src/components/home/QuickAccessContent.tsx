@@ -8,12 +8,14 @@ import { MapPinned, Search, ChevronRight } from "lucide-react";
 import SearchModal from "@/components/shortcuts-modal/searchModal";
 import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
 import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
+import { useLocale } from "@/providers/LocaleProvider";
 
 export default function QuickAccessContent() {
     const shortcuts = useAppSelector(selectShortcuts);
     const [searchOpen, setSearchOpen] = useState(false);
     const [streetViewOpen, setStreetViewOpen] = useState(false);
     const [regionMapOpen, setRegionMapOpen] = useState(false);
+    const { t } = useLocale();
 
     /* -------------------- Priority Logic -------------------- */
     function placeByPriority(list: any[]) {
@@ -41,6 +43,7 @@ export default function QuickAccessContent() {
 
     return (
         <>
+            <span className="text-2xl font-bold mb-8 text-center  bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent block sm:hidden">{t("home.quick_access")}</span>
             <div
                 className="
             grid grid-cols-3 gap-3 sm:gap-4

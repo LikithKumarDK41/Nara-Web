@@ -16,6 +16,7 @@ export default function HomeTabs({ activeTab }: HomeTabsProps) {
             <div className="flex p-1.5 gap-2 bg-white/90 dark:bg-[#1a1d24]/95 backdrop-blur-xl rounded-2xl border border-teal-200/40 dark:border-teal-500/20 shadow-xl shadow-teal-500/10 dark:shadow-teal-900/30">
                 <Link
                     href="/"
+                    title={t("home.quick_access")}
                     className={`
             flex items-center gap-2 px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all duration-300
             ${activeTab === "shortcuts"
@@ -30,6 +31,7 @@ export default function HomeTabs({ activeTab }: HomeTabsProps) {
 
                 <Link
                     href="/explore"
+                    title={t("home.explore_categories")}
                     className={`
             flex items-center gap-2 px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all duration-300
             ${activeTab === "categories"
