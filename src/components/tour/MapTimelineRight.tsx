@@ -630,73 +630,82 @@ export default function MapTimelineRight({
                     hasStart={hasStart}
                   />
 
-                  <article className="relative col-start-2 w-full rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 text-gray-900 dark:text-white shadow-lg transition hover:-translate-y-[2px] hover:shadow-xl">
+                  <article className="relative col-start-2 w-full group rounded-3xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-md text-gray-900 dark:text-white shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-orange-500/10 border border-white/50 dark:border-gray-800/50">
                     {/* For above div parent above the relative rounded-xl removed 'overflow-hidden' classname for 'stamp' related if issue in please add 'overflow-hidden' */}
                     {p.stamp && Object.keys(p.stamp).length > 0 && (
-                      <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 z-[2]">
+                      <div className="absolute top-0 right-4 translate-x-1/2 -translate-y-1/2 z-[10] pointer-events-none">
                         <img
                           src="/stamp.png"
-                          className="w-16 h-16 rounded-full drop-shadow-xl"
+                          className="w-16 h-16 rounded-full drop-shadow-2xl animate-pulse-subtle"
                           alt={t("checked_in")}
                         />
                       </div>
                     )}
 
-                    <div
-                      className="relative w-full h-64 cursor-pointer"
-                      onClick={() => handleOpen(p._id)}
-                    >
-                      {m?.image?.secure_url ? (
-                        <Image
-                          src={m.image.secure_url}
-                          alt={m.name ?? ""}
-                          fill
-                          className="object-cover opacity-95 hover:opacity-100 transition rounded-t-2xl"
-                        />
-                      ) : (
-                        <div className="grid h-full w-full place-items-center bg-gray-200 dark:bg-gray-800 rounded-t-2xl">
-                          <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                    </div>
-
-                    <div className="p-6">
-                      <h3
+                    <div className="flex flex-col md:grid md:grid-cols-12 h-full min-h-[280px] overflow-hidden rounded-3xl">
+                      <div
+                        className="relative w-full h-64 md:h-auto md:col-span-5 cursor-pointer overflow-hidden"
                         onClick={() => handleOpen(p._id)}
-                        className="cursor-pointer text-lg font-semibold truncate text-teal-700 dark:text-teal-300 transition"
                       >
-                        {m?.title ?? m?.name ?? p.name}
-                      </h3>
+                        {m?.image?.secure_url ? (
+                          <Image
+                            src={m.image.secure_url}
+                            alt={m.name ?? ""}
+                            fill
+                            priority={i < 2}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 500px"
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="grid h-full w-full place-items-center bg-gray-50 dark:bg-gray-800/50">
+                            <ImageIcon className="h-12 w-12 text-gray-300" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/5 dark:to-black/20" />
+                      </div>
 
-                      {m?.region?.title && (
-                        <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                          <MapPin className="h-5 w-5" />
-                          <span>{m.region.title}</span>
-                        </div>
-                      )}
+                      <div className="p-8 md:col-span-7 flex flex-col justify-between">
+                        <div>
+                          <div className="flex justify-between items-start gap-4 mb-2">
+                            <h3
+                              onClick={() => handleOpen(p._id)}
+                              className="cursor-pointer text-2xl font-black tracking-tight text-gray-900 dark:text-white transition-colors duration-300 hover:text-orange-500"
+                            >
+                              {m?.title ?? m?.name ?? p.name}
+                            </h3>
+                          </div>
 
-                      {(m?.content?.brief || m?.content?.extended) && (
-                        <div className="mt-3 text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                          {m?.content?.brief && (
-                            <p className="line-clamp-2">
-                              {m.content.brief.replace(/<[^>]+>/g, "").trim()}
-                            </p>
+                          {m?.region?.title && (
+                            <div className="flex items-center gap-1.5 text-xs font-bold tracking-widest text-teal-600 dark:text-teal-500 uppercase mt-2 mb-4">
+                              <MapPin className="h-4 w-4" />
+                              <span>{m.region.title}</span>
+                            </div>
                           )}
-                          {m?.content?.extended && (
-                            <p className="line-clamp-2 text-gray-500 dark:text-gray-400">
-                              {m.content.extended
-                                .replace(/<[^>]+>/g, "")
-                                .trim()}
-                            </p>
+                          <div className="h-px w-12 bg-teal-200 dark:bg-teal-800 mb-4" />
+
+                          {(m?.content?.brief || m?.content?.extended) && (
+                            <div className="text-sm text-gray-600 dark:text-gray-400 space-y-3 leading-relaxed">
+                              {m?.content?.brief && (
+                                <p className="line-clamp-3">
+                                  {m.content.brief.replace(/<[^>]+>/g, "").trim()}
+                                </p>
+                              )}
+                              {m?.content?.extended && (
+                                <p className="line-clamp-3 italic">
+                                  {m.content.extended
+                                    .replace(/<[^>]+>/g, "")
+                                    .trim()}
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
-                      )}
 
-                      <div className="mt-5 flex gap-3">
-                        <Button
-                          size="sm"
-                          className="
+                        <div className="mt-8 flex flex-wrap gap-4 items-center">
+                          <Button
+                            size="lg"
+                            className="
     cursor-pointer flex-1 rounded-full
     bg-transparent
     text-teal-700
@@ -707,186 +716,187 @@ export default function MapTimelineRight({
     border border-teal-500/40
     transition
   "
-                          onClick={() => handleOpen(p._id)}
-                        >
-                          {t("tourDetails.viewDetails")}
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
-                          disabled={checkingIn}
-                          onClick={async () => {
-                            try {
-                              setCheckingIn(true);
-
-                              /* ------------------------------------------------
-                                 1️⃣ Validate User Logged In
-                              ------------------------------------------------ */
-                              const user =
-                                persisted?.user?._id ||
-                                persisted?.user?.id ||
-                                persisted?.user?.uuid ||
-                                null;
-
-                              if (!user) {
-                                toast.error(t("please_signin_to_checkin"));
-                                return;
-                              }
-
-                              /* ------------------------------------------------
-                                 2️⃣ Monument & TourPoint Validation
-                              ------------------------------------------------ */
-                              const monumentId = p?.monument?._id;
-                              const tourpointId = p?._id;
-
-                              if (!monumentId || !tourpointId) {
-                                toast.error(t("invalid_point_checkin"));
-                                return;
-                              }
-
-                              const m = p.monument;
-                              const radius = m?.georadius ?? 0;
-
-                              if (!m?.location) {
-                                toast.error(t("monument_location_missing"));
-                                return;
-                              }
-
-                              /* ------------------------------------------------
-                                 3️⃣ Parse Monument Coordinates (array OR object)
-                              ------------------------------------------------ */
-                              let monumentLat = 0;
-                              let monumentLng = 0;
-
-                              if (Array.isArray(m.location)) {
-                                monumentLng = Number(m.location[0]);
-                                monumentLat = Number(m.location[1]);
-                              } else {
-                                monumentLat = m.location?.lat ?? 0;
-                                monumentLng = m.location?.lng ?? 0;
-                              }
-
-                              if (!monumentLat || !monumentLng) {
-                                toast.error("invalid_monument_coordinates");
-                                return;
-                              }
-
-                              /* ------------------------------------------------
-                                4️⃣ Get User Live Location with getCurrentLocation helper
-                              ----------------------------------------------- */
+                            onClick={() => handleOpen(p._id)}
+                          >
+                            {t("tourDetails.viewDetails")}
+                          </Button>
+                          <Button
+                            size="lg"
+                            className="cursor-pointer flex-1 rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white flex items-center gap-2"
+                            disabled={checkingIn}
+                            onClick={async () => {
                               try {
-                                const location = await getCurrentLocation(
-                                  100,
-                                  20000,
-                                  3,
-                                ); // 100m accuracy, 20s timeout, 3 retries
-                                const userLocation = {
-                                  lat: location.lat,
-                                  lng: location.lng,
-                                };
+                                setCheckingIn(true);
 
                                 /* ------------------------------------------------
-                                  5️⃣ Calculate Distance (meters)
+                                   1️⃣ Validate User Logged In
                                 ------------------------------------------------ */
-                                const R = 6371e3;
-                                const dLat =
-                                  ((userLocation.lat - monumentLat) * Math.PI) /
-                                  180;
-                                const dLng =
-                                  ((userLocation.lng - monumentLng) * Math.PI) /
-                                  180;
+                                const user =
+                                  persisted?.user?._id ||
+                                  persisted?.user?.id ||
+                                  persisted?.user?.uuid ||
+                                  null;
 
-                                const a =
-                                  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                                  Math.cos((monumentLat * Math.PI) / 180) *
-                                  Math.cos(
-                                    (userLocation.lat * Math.PI) / 180,
-                                  ) *
-                                  Math.sin(dLng / 2) *
-                                  Math.sin(dLng / 2);
-
-                                const c =
-                                  2 *
-                                  Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                const distance = R * c;
+                                if (!user) {
+                                  toast.error(t("please_signin_to_checkin"));
+                                  return;
+                                }
 
                                 /* ------------------------------------------------
-                                   6️⃣ Check if user is within required radius
+                                   2️⃣ Monument & TourPoint Validation
                                 ------------------------------------------------ */
-                                if (distance > radius) {
+                                const monumentId = p?.monument?._id;
+                                const tourpointId = p?._id;
+
+                                if (!monumentId || !tourpointId) {
+                                  toast.error(t("invalid_point_checkin"));
+                                  return;
+                                }
+
+                                const m = p.monument;
+                                const radius = m?.georadius ?? 0;
+
+                                if (!m?.location) {
+                                  toast.error(t("monument_location_missing"));
+                                  return;
+                                }
+
+                                /* ------------------------------------------------
+                                   3️⃣ Parse Monument Coordinates (array OR object)
+                                ------------------------------------------------ */
+                                let monumentLat = 0;
+                                let monumentLng = 0;
+
+                                if (Array.isArray(m.location)) {
+                                  monumentLng = Number(m.location[0]);
+                                  monumentLat = Number(m.location[1]);
+                                } else {
+                                  monumentLat = m.location?.lat ?? 0;
+                                  monumentLng = m.location?.lng ?? 0;
+                                }
+
+                                if (!monumentLat || !monumentLng) {
+                                  toast.error("invalid_monument_coordinates");
+                                  return;
+                                }
+
+                                /* ------------------------------------------------
+                                  4️⃣ Get User Live Location with getCurrentLocation helper
+                                ----------------------------------------------- */
+                                try {
+                                  const location = await getCurrentLocation(
+                                    100,
+                                    20000,
+                                    3,
+                                  ); // 100m accuracy, 20s timeout, 3 retries
+                                  const userLocation = {
+                                    lat: location.lat,
+                                    lng: location.lng,
+                                  };
+
+                                  /* ------------------------------------------------
+                                    5️⃣ Calculate Distance (meters)
+                                  ------------------------------------------------ */
+                                  const R = 6371e3;
+                                  const dLat =
+                                    ((userLocation.lat - monumentLat) * Math.PI) /
+                                    180;
+                                  const dLng =
+                                    ((userLocation.lng - monumentLng) * Math.PI) /
+                                    180;
+
+                                  const a =
+                                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                    Math.cos((monumentLat * Math.PI) / 180) *
+                                    Math.cos(
+                                      (userLocation.lat * Math.PI) / 180,
+                                    ) *
+                                    Math.sin(dLng / 2) *
+                                    Math.sin(dLng / 2);
+
+                                  const c =
+                                    2 *
+                                    Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                  const distance = R * c;
+
+                                  /* ------------------------------------------------
+                                     6️⃣ Check if user is within required radius
+                                  ------------------------------------------------ */
+                                  if (distance > radius) {
+                                    toast.error(
+                                      t("too_far_from_monument") ||
+                                      `You need to be within ${radius}m to check in. Current distance: ${Math.round(
+                                        distance,
+                                      )}m`,
+                                    );
+                                    return;
+                                  }
+                                } catch (error) {
+                                  console.warn("Location error:", error);
                                   toast.error(
-                                    t("too_far_from_monument") ||
-                                    `You need to be within ${radius}m to check in. Current distance: ${Math.round(
-                                      distance,
-                                    )}m`,
+                                    t("error_getting_location") ||
+                                    "Could not get your location. Please try again.",
                                   );
                                   return;
                                 }
-                              } catch (error) {
-                                console.warn("Location error:", error);
-                                toast.error(
-                                  t("error_getting_location") ||
-                                  "Could not get your location. Please try again.",
+
+                                /* ------------------------------------------------
+                                   8️⃣ Create Visit History
+                                ------------------------------------------------ */
+                                const visitPayload: VisitHistoryPayload = {
+                                  user: String(user),
+                                  historytype: "monument",
+                                  monument: String(monumentId),
+                                  status: "active",
+                                  visitmode: "manual",
+                                  historytime: Date.now().toString(),
+                                };
+
+                                await apiCreateVisitHistory(visitPayload);
+
+                                /* ------------------------------------------------
+                                   9️⃣ Create Stamp
+                                ------------------------------------------------ */
+                                await apiCreateStamp({
+                                  monument: String(monumentId),
+                                  tourpoint: String(tourpointId),
+                                  user: String(user),
+                                  status: "active",
+                                  stamptime: Date.now(),
+                                });
+
+                                /* ------------------------------------------------
+                                   🔟 Success Notification
+                                ------------------------------------------------ */
+                                toast.success(
+                                  `${t("checked_in_at")} ${m?.name ?? "location"
+                                  }`,
+                                  {
+                                    description: t("visit_progress_success"),
+                                    duration: 5000,
+                                  },
                                 );
-                                return;
+
+                                /* ------------------------------------------------
+                                   1️⃣1️⃣ Refresh TourPoints ONLY After Stamp Success
+                                ------------------------------------------------ */
+                                if (onRefreshTourpoints) {
+                                  await onRefreshTourpoints();
+                                }
+                              } catch (err) {
+                                console.error("❌ Check-in failed:", err);
+                                toast.error(t("check_in_failed"));
+                              } finally {
+                                setCheckingIn(false);
                               }
-
-                              /* ------------------------------------------------
-                                 8️⃣ Create Visit History
-                              ------------------------------------------------ */
-                              const visitPayload: VisitHistoryPayload = {
-                                user: String(user),
-                                historytype: "monument",
-                                monument: String(monumentId),
-                                status: "active",
-                                visitmode: "manual",
-                                historytime: Date.now().toString(),
-                              };
-
-                              await apiCreateVisitHistory(visitPayload);
-
-                              /* ------------------------------------------------
-                                 9️⃣ Create Stamp
-                              ------------------------------------------------ */
-                              await apiCreateStamp({
-                                monument: String(monumentId),
-                                tourpoint: String(tourpointId),
-                                user: String(user),
-                                status: "active",
-                                stamptime: Date.now(),
-                              });
-
-                              /* ------------------------------------------------
-                                 🔟 Success Notification
-                              ------------------------------------------------ */
-                              toast.success(
-                                `${t("checked_in_at")} ${m?.name ?? "location"
-                                }`,
-                                {
-                                  description: t("visit_progress_success"),
-                                  duration: 5000,
-                                },
-                              );
-
-                              /* ------------------------------------------------
-                                 1️⃣1️⃣ Refresh TourPoints ONLY After Stamp Success
-                              ------------------------------------------------ */
-                              if (onRefreshTourpoints) {
-                                await onRefreshTourpoints();
-                              }
-                            } catch (err) {
-                              console.error("❌ Check-in failed:", err);
-                              toast.error(t("check_in_failed"));
-                            } finally {
-                              setCheckingIn(false);
-                            }
-                          }}
-                        >
-                          <MapPin className="h-5 w-5" />
-                          {checkingIn
-                            ? t("checking_in")
-                            : t("tourDetails.checkIn")}
-                        </Button>
+                            }}
+                          >
+                            <MapPin className="h-5 w-5" />
+                            {checkingIn
+                              ? t("checking_in")
+                              : t("tourDetails.checkIn")}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </article>
@@ -917,56 +927,58 @@ export default function MapTimelineRight({
         customStyle={customStyle}
       />
 
-      {distancePopup.show && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-[90%] max-w-sm rounded-2xl bg-white/90 dark:bg-zinc-900/80 border border-gray-200 dark:border-gray-700 shadow-2xl p-7 animate-scaleIn">
-            {/* Warning Icon */}
-            <div className="flex justify-center mb-4">
-              <div className="h-14 w-14 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shadow">
-                <svg
-                  className="w-8 h-8 text-red-600 dark:text-red-400"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v3m0 4h.01M12 3a9 9 0 11-9 9 9 9 0 019-9z"
-                  />
-                </svg>
+      {
+        distancePopup.show && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn">
+            <div className="relative w-[90%] max-w-sm rounded-2xl bg-white/90 dark:bg-zinc-900/80 border border-gray-200 dark:border-gray-700 shadow-2xl p-7 animate-scaleIn">
+              {/* Warning Icon */}
+              <div className="flex justify-center mb-4">
+                <div className="h-14 w-14 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shadow">
+                  <svg
+                    className="w-8 h-8 text-red-600 dark:text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v3m0 4h.01M12 3a9 9 0 11-9 9 9 9 0 019-9z"
+                    />
+                  </svg>
+                </div>
               </div>
+
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {t("too_far_away")}
+              </h3>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                {t("currently")}{" "}
+                <strong className="text-gray-900 dark:text-gray-100">
+                  {distancePopup.distance}m
+                </strong>{" "}
+                {t("away")}
+                <br />
+                {t("must_be")}{" "}
+                <strong className="text-gray-900 dark:text-gray-100">
+                  {distancePopup.required}m
+                </strong>{" "}
+                {t("within_for_checkin")}
+              </p>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setDistancePopup({ show: false })}
+                className="mt-6 w-full py-2.5 rounded-xl bg-gray-900 text-white dark:bg-gray-700 dark:text-white font-semibold hover:bg-gray-800 dark:hover:bg-gray-600 transition shadow"
+              >
+                {t("okay_close")}
+              </button>
             </div>
-
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-              {t("too_far_away")}
-            </h3>
-
-            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-              {t("currently")}{" "}
-              <strong className="text-gray-900 dark:text-gray-100">
-                {distancePopup.distance}m
-              </strong>{" "}
-              {t("away")}
-              <br />
-              {t("must_be")}{" "}
-              <strong className="text-gray-900 dark:text-gray-100">
-                {distancePopup.required}m
-              </strong>{" "}
-              {t("within_for_checkin")}
-            </p>
-
-            {/* Close Button */}
-            <button
-              onClick={() => setDistancePopup({ show: false })}
-              className="mt-6 w-full py-2.5 rounded-xl bg-gray-900 text-white dark:bg-gray-700 dark:text-white font-semibold hover:bg-gray-800 dark:hover:bg-gray-600 transition shadow"
-            >
-              {t("okay_close")}
-            </button>
           </div>
-        </div>
-      )}
+        )
+      }
       <div className="md:mt-4 px-4 text-sm text-muted-foreground text-center">
         {t("timeline_footer_desc")}
       </div>
