@@ -211,7 +211,7 @@ function ExplorePageContent() {
                     {!globalLoading && sectionTwo.length > 0 && (
                         <div className="space-y-6">
                             {/* --- Sub Navigation (Pills) --- */}
-                            <div className="flex flex-wrap gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+                            <div className="flex justify-center flex-wrap gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
                                 {sectionTwo.map((cat: any) => {
                                     const isActive = selectedCategory?._id === cat._id;
                                     return (
