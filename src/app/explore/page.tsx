@@ -128,7 +128,7 @@ function ExplorePageContent() {
     }, []);
 
     return (
-        <div className="flex flex-col w-full min-h-screen">
+        <div className="flex flex-col w-full">
             {/* ===== HERO SECTION ===== */}
             <section
                 className="mb-4
