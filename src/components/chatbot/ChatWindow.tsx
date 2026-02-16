@@ -36,7 +36,7 @@ const SEARCH_OPTIONS = [
 ];
 
 export function ChatWindow({ onClose }: ChatWindowProps) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   // Define options dynamically based on current locale
   const getInitialOptions = () => [
@@ -147,6 +147,8 @@ export function ChatWindow({ onClose }: ChatWindowProps) {
         // Use Local AI for typed messages (Limited Scope)
         const response = await api.post("/chat", {
           messages: [{ role: "user", content: userText }],
+          locale,
+          clientTime: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
         });
         data = response.data;
       } else {
