@@ -248,7 +248,7 @@ export default function ToursDashboardPage() {
             {/* Mobile Show More */}
             <div className="mt-8 md:hidden flex justify-center">
               <Button
-                className="rounded-full w-auto px-6 bg-teal-600/10 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-200 dark:border-teal-800"
+                className="rounded-full w-auto px-6 bg-teal-600/10 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 hover:bg-teal-500 hover:text-white dark:hover:bg-teal-700 dark:hover:text-white border border-teal-200 dark:border-teal-800"
                 asChild
               >
                 <Link href="/tours">{t("actions.show_more")}</Link>
