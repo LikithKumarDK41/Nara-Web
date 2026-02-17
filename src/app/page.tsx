@@ -312,14 +312,15 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
           </div>
         )}
 
-        <div className="absolute top-5 left-5 z-20">
+        {/* Featured Tour Badge */}
+        {/* <div className="absolute top-5 left-5 z-20">
           <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
             <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500 dark:fill-teal-400 dark:text-teal-400" />
             <span className="tracking-wide uppercase">
               {t("actions.featured")}
             </span>
           </div>
-        </div>
+        </div> */}
 
         {/* Gradient overlays for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
