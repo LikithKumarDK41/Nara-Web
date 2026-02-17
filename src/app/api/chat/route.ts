@@ -21,33 +21,13 @@ You must strictly follow these rules:
 
 export async function POST(req: Request) {
   try {
-    const { messages, locale, clientTime } = await req.json();
-
-    // clientTime is now sent as "HH:MM" (e.g., "18:55") from the client
-    const timeString = clientTime || new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-
-    // Stricter prompt engineering for Japanese to avoid hallucinations
-    const languageInstruction = locale === 'ja'
-      ? `
-IMPORTANT INSTRUCTIONS FOR JAPANESE MODE:
-1. Language: You MUST answer in natural, polite Japanese (Desu/Masu form - 丁寧語).
-2. Identity: You are the "Nara Kofun Transport Guide" (奈良古墳交通ガイド). Do NOT invent other names.
-3. Current User Location Time: ${timeString}.
-   - If morning (05:00-10:59): Use "おはようございます".
-   - If day (11:00-17:59): Use "こんにちは".
-   - If evening/night (18:00-04:59): Use "こんばんは".
-4. For simple greetings like "Hi" or "Hello":
-   - Greet based on time.
-   - Say something like "奈良の古墳へのアクセスについて、何かお手伝いできることはありますか？" (How can I help you with transport to Nara Kofuns?).
-5. Keep it concise.
-`
-      : `\nIMPORTANT: You must answer in English. Current User Time: ${timeString}. Greetings must match this time.`;
+    const { messages } = await req.json();
 
     // Add system prompt
     const completion = await openai.chat.completions.create({
       model: "llama-3.1-8b-instant",
       messages: [
-        { role: "system", content: SYSTEM_PROMPT + languageInstruction },
+        { role: "system", content: SYSTEM_PROMPT },
         ...messages,
       ],
     });
