@@ -17,7 +17,7 @@ export default function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
 
     return (
         <nav aria-label="Breadcrumb" className={`flex items-center text-sm ${className}`}>
-            <ol className="flex items-center gap-2 flex-wrap bg-transparent px-2 py-1.5">
+            <ol className="flex items-center gap-2 flex-wrap bg-transparent py-1.5">
                 {/* Home Icon */}
                 <li className="flex items-center">
                     <Link
