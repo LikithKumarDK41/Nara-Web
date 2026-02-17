@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
+import Image from "next/image";
 
 const HERO_SLIDES = [
     {
@@ -26,6 +27,20 @@ const HERO_SLIDES = [
         titleKey: "home.hero.slides.2.title",
         subtitleKey: "home.hero.slides.2.subtitle",
         descKey: "home.hero.slides.2.description",
+    },
+    {
+        id: 4,
+        image: "/naraiseki/4.png",
+        titleKey: "home.hero.slides.0.title",
+        subtitleKey: "home.hero.slides.0.subtitle",
+        descKey: "home.hero.slides.0.description",
+    },
+    {
+        id: 5,
+        image: "/naraiseki/5.png",
+        titleKey: "home.hero.slides.1.title",
+        subtitleKey: "home.hero.slides.1.subtitle",
+        descKey: "home.hero.slides.1.description",
     },
 ];
 
@@ -74,10 +89,15 @@ export default function HeroCarousel() {
                         animate={{ scale: 1 }}
                         transition={{ duration: 10, ease: "linear" }}
                     >
-                        <img
+                        <Image
                             src={currentSlide.image}
                             alt="Hero Slide"
-                            className="absolute inset-0 w-full h-full object-cover object-center"
+                            fill
+                            priority
+                            className="object-cover object-center"
+                            style={{ objectFit: "cover" }}
+                            sizes="100vw"
+                            quality={100}
                         />
                         {/* Enhanced Overlay Gradients for Readability */}
                         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80" />

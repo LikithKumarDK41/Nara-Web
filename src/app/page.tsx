@@ -303,18 +303,6 @@ export default function ToursDashboardPage() {
                   <TourCard key={tour._id} tour={tour} t={t} idx={idx} />
                 ))}
             </div>
-
-            <div className="mt-20 md:hidden flex justify-center">
-              <Link
-                href="/tours"
-                className="flex flex-col items-center gap-4 text-slate-900 dark:text-white group/mob"
-              >
-                <span className="text-xs font-black uppercase tracking-[0.5em]">
-                  {t("actions.show_more")}
-                </span>
-                <div className="w-24 h-px bg-slate-900/20 dark:bg-white/20 group-hover/mob:w-32 transition-all duration-500" />
-              </Link>
-            </div>
           </section>
         )}
 
@@ -353,27 +341,29 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-black border border-slate-200 dark:border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.12)] transition-all duration-700 cursor-pointer"
+      className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#0a0a0a] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer"
       onClick={() => (window.location.href = `/tours/detail?id=${tour._id}`)}
     >
-      <div className="relative h-[280px] w-full overflow-hidden shrink-0">
+      {/* 🖼️ Premium Inset Image Container */}
+      <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-50 dark:bg-zinc-900 shrink-0 border border-slate-50 dark:border-white/5">
         {tour.image?.secure_url ? (
           <img
             src={tour.image.secure_url}
             alt={tour.title}
-            className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="block h-full w-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-secondary">
-            <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+          <div className="flex h-full w-full items-center justify-center">
+            <ImageIcon className="h-10 w-10 text-slate-300 dark:text-zinc-700" />
           </div>
         )}
 
-        {/* Overlay for better text separation */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Ambient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
-      <div className="flex-1 p-8 md:p-10 flex flex-col min-h-0">
+      {/* ✍️ Content Area */}
+      <div className="flex-1 px-8 py-9 flex flex-col min-h-0 bg-transparent">
         <div className="flex-1 space-y-4">
           <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 font-serif italic tracking-tight leading-tight">
             {tour.title}
@@ -389,17 +379,16 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/5 flex items-center justify-between group-hover:border-slate-900/10 dark:group-hover:border-white/10 transition-colors">
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">
-              {t("home.heritage") || "Heritage"}
-            </span>
-            <span className="text-sm font-bold text-slate-900 dark:text-white">
+        {/* Architectural Full-Width Action */}
+        <div className="mt-8 pt-7 border-t border-slate-50 dark:border-white/5">
+          <div className="flex items-center justify-between group/link">
+            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.25em] transition-colors duration-300">
               {t("actions.explore_now") || "Explore Now"}
             </span>
-          </div>
-          <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-white/5 flex items-center justify-center group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all duration-500 shadow-sm">
-            <ArrowRight className="w-5 h-5" />
+            <div className="flex-1 mx-4 h-px bg-slate-100 dark:bg-white/5 relative overflow-hidden">
+              <div className="absolute inset-0 bg-slate-900 dark:bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-out" />
+            </div>
+            <ArrowRight className="w-5 h-5 text-slate-900 dark:text-white transform transition-transform duration-500 ease-out group-hover:translate-x-1" />
           </div>
         </div>
       </div>
