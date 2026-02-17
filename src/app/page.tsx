@@ -130,16 +130,16 @@ export default function ToursDashboardPage() {
       <HeroCarousel />
 
       {/* ================= TAB NAVIGATION ================= */}
-      <HomeTabs activeTab="shortcuts" />
+      <HomeTabs />
 
       {/* ================= CONTENT CONTAINER ================= */}
       <div className="mx-auto w-full px-4 space-y-10 pb-0">
 
         {/* ================= DYNAMIC TAB CONTENT ================= */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {!globalLoading && (
+          {/* {!globalLoading && (
             <QuickAccessContent />
-          )}
+          )} */}
         </div>
 
         {/* ================= ABOUT NARA HERITAGE ================= */}

@@ -839,5 +839,9 @@
   "captured_nara_monument": "Captured Nara Monument",
   "captured_at": "Captured at ",
   "monument_": "Monument",
-  "nara_visit":"Nara Visit"
+  "nara_visit": "Nara Visit",
+  "quick_access_page": {
+    "hero_title": "Quick Access",
+    "hero_subtitle": "Explore Nara's highlights through interactive maps, search tools, and panoramic street views."
+  }
 }

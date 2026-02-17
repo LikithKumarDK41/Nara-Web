@@ -91,7 +91,7 @@ export default function RegionDetailsPage() {
     return () => {
       mounted = false;
     };
-  }, [selectedSort, activeThemeId]);
+  }, [selectedSort, activeThemeId, regionId]);
 
   /* -------------------- Filtering -------------------- */
   useEffect(() => setPage(1), [query, selectedSort]);
@@ -146,6 +146,7 @@ export default function RegionDetailsPage() {
   /* =========================================================
             Render
         ========================================================= */
+
   if (error)
     return (
       <div className="text-center text-lg text-red-500 mt-10">{error}</div>
