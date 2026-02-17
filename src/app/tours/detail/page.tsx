@@ -402,7 +402,7 @@ export default function TourDetailsClientPage() {
 
       <div className="space-y-12">
         {/* ===== Banner ===== */}
-        <section className="relative rounded-2xl overflow-hidden shadow-md">
+        <section className="mt-[5.4%] relative rounded-2xl overflow-hidden shadow-md">
           {/* Banner Image */}
           <div className="relative h-[420px] sm:h-[480px] w-full">
             {tour.image?.secure_url ? (
@@ -574,48 +574,50 @@ export default function TourDetailsClientPage() {
           </div>
         </section>
         {/* BREADCRUMB */}
-        <div className="px-1 -mt-10">
-          <Breadcrumb
-            items={[
-              { label: t("tours_breadcrumb") || "Tours", href: "/tours" },
-              { label: tour.title }
-            ]}
-          />
-        </div>
-
-        {/* ===== Map Section ===== */}
-        {tour.tourpoints?.length ? (
-          <section className="space-y-4">
-            <h2 className="text-lg font-semibold">{t("tourDetails.map")}</h2>
-            <Suspense
-              fallback={
-                <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
-              }
-            >
-              <MapboxTourMap tour={tour} profile="walking" />
-            </Suspense>
-          </section>
-        ) : (
-          <div className="space-y-4">
-            <div className="h-6 w-1/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
-          </div>
-        )}
-
-        {/* ===== Timeline Section ===== */}
-        {tour.tourpoints?.length && (
-          <section id="timeline" className="space-y-4">
-            <h2 className="text-lg font-semibold">
-              {t("tourDetails.timeline")}
-            </h2>
-            <br />
-            <TimelineRight
-              tourpoints={tour.tourpoints}
-              customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
-                text-white font-semibold shadow-md hover:shadow-xl transition-all"
+        <div className="px-4 space-y-6">
+          <div className="px-1 -mt-10">
+            <Breadcrumb
+              items={[
+                { label: t("tours_breadcrumb") || "Tours", href: "/tours" },
+                { label: tour.title }
+              ]}
             />
-          </section>
-        )}
+          </div>
+
+          {/* ===== Map Section ===== */}
+          {tour.tourpoints?.length ? (
+            <section className="-mt-2 space-y-4">
+              <h2 className="text-lg font-semibold">{t("tourDetails.map")}</h2>
+              <Suspense
+                fallback={
+                  <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
+                }
+              >
+                <MapboxTourMap tour={tour} profile="walking" />
+              </Suspense>
+            </section>
+          ) : (
+            <div className="-mt-2 space-y-4">
+              <div className="h-6 w-1/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
+            </div>
+          )}
+
+          {/* ===== Timeline Section ===== */}
+          {tour.tourpoints?.length && (
+            <section id="timeline" className="space-y-4">
+              <h2 className="text-lg font-semibold">
+                {t("tourDetails.timeline")}
+              </h2>
+              <br />
+              <TimelineRight
+                tourpoints={tour.tourpoints}
+                customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
+                text-white font-semibold shadow-md hover:shadow-xl transition-all"
+              />
+            </section>
+          )}
+        </div>
       </div>
     </>
   );

@@ -25,9 +25,8 @@ export default function QuickAccessPage() {
         <main className="min-h-screen">
             {/* ===== HERO SECTION ===== */}
             <section
-                className="mb-4
+                className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]

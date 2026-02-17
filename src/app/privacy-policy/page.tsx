@@ -11,9 +11,8 @@ export default function PrivacyPolicyPage() {
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
       <section
-        className="mb-4
+        className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
@@ -86,7 +85,7 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* BREADCRUMB */}
-      <div className="mt-2 flex justify-start">
+      <div className="px-4 mt-2 flex justify-start">
         <Breadcrumb
           items={[
             { label: t("privacy.title") || "Privacy Policy" },
@@ -94,7 +93,7 @@ export default function PrivacyPolicyPage() {
         />
       </div>
 
-      <div className="sm:px-6">
+      <div className="px-4 sm:px-6">
         {/* Sections */}
         <div className="bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 p-8 rounded-2xl shadow-md">
           <PolicySection

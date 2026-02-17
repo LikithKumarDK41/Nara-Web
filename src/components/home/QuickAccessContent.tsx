@@ -72,10 +72,10 @@ function QuickAccessContentInner({ standalone }: { standalone: boolean }) {
     const activeItem = sectionOne.find(s => s._id === activeTabId);
 
     return (
-        <section className={`w-full space-y-8 ${standalone ? "py-8" : ""}`}>
+        <section className={`w-full space-y-8 ${standalone ? "py-8 px-4" : ""}`}>
             {/* BREADCRUMB - Standalone Only */}
             {standalone && (
-                <div className="flex justify-start -mt-10">
+                <div className="flex justify-start -mt-8">
                     <Breadcrumb
                         items={[
                             ...(activeItem ? [{ label: activeItem.title }] : [])
@@ -218,9 +218,10 @@ function QuickAccessTab({
             <div className={`
                 w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center
                 transition-all duration-500
-                ${isActive
-                    ? "bg-background text-foreground shadow-sm"
-                    : "bg-secondary text-foreground border border-border/50 shadow-sm group-hover:bg-foreground group-hover:text-background"
+               
+                  ${isActive
+                    ? "bg-teal-500 text-white shadow-md shadow-teal-500/20"
+                    : "bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-900/30 dark:to-teal-800/20 text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-500/30"
                 }
             `}>
                 {item.icon?.secure_url ? (
@@ -229,9 +230,11 @@ function QuickAccessTab({
                         alt={item.title}
                         className="w-6 h-6 md:w-8 md:h-8 object-contain transition-all duration-500"
                         style={{
-                            filter: isActive
-                                ? (isDark ? "none" : "brightness(0)")
-                                : (isDark ? "brightness(0) invert(1)" : "none")
+                            filter: isDark && !isActive
+                                ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                                : !isActive
+                                    ? "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)"
+                                    : "brightness(0) invert(1)" // White for active
                         }}
                     />
                 ) : (
