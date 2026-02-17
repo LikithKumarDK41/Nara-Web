@@ -33,18 +33,18 @@ export default function HeaderLogin() {
 
          /* 🌞 Light mode */
           bg-white
-          border border-teal-400/40
-          text-teal-600
-          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
+          border border-slate-200
+          text-slate-900
+          hover:shadow-md
 
-          /* 🌙 Dark mode */
+          /* 🌙 Dark mode: Black Bg + White Icon */
           dark:bg-black/80
-          dark:border-teal-400/40
-          dark:text-teal-300
-          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+          dark:border-slate-800
+          dark:text-white
+          dark:hover:bg-slate-950
         "
       >
-        <LogIn className="h-5 w-5 text-teal-500" />
+        <LogIn className="h-5 w-5" />
       </button>
     </div>
   );

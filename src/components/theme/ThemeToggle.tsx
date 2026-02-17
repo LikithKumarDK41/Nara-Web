@@ -34,7 +34,7 @@ function applyTheme(next: Mode) {
 
 export default function ThemeToggle() {
   const [mode, setMode] = useState<Mode>("system");
-  const { t } = useLocale(); // ✅ add this
+  const { t } = useLocale();
 
   useEffect(() => {
     const stored = (localStorage.getItem("theme-mode") as Mode) || "system";
@@ -58,24 +58,13 @@ export default function ThemeToggle() {
           aria-label={t("actions.theme.change")}
           title={t("actions.theme.change")}
           className="
-            h-9 w-9
-            flex items-center justify-center
-            rounded-full
-            transition-all duration-300
-            cursor-pointer
-            backdrop-blur-md
+            h-9 w-9 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer backdrop-blur-md shadow-sm
+            
+            /* ⚪ Light Mode */
+            bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 hover:shadow-md
 
-            /* 🌞 Light mode */
-            bg-white
-            border border-teal-400/40
-            text-teal-600
-            hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
-
-            /* 🌙 Dark mode */
-            dark:bg-black/80
-            dark:border-teal-400/40
-            dark:text-teal-300
-            dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+            /* ⚫ Dark Mode */
+            dark:bg-black/80 dark:border-slate-800 dark:text-white dark:hover:bg-slate-900
           "
         >
           {/* Sun */}
@@ -108,36 +97,36 @@ export default function ThemeToggle() {
 
           /* Light */
           bg-white
-          border border-teal-400/30
-          text-gray-800
+          border border-slate-200
+          text-slate-900
 
           /* Dark */
-          dark:bg-black/90
-          dark:border-teal-400/30
+          dark:bg-slate-950/90
+          dark:border-slate-800
           dark:text-white
         "
       >
         <DropdownMenuItem
           onClick={() => onPick("light")}
-          className="cursor-pointer hover:bg-teal-500/10"
+          className="cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
         >
-          <Sun className="mr-2 h-4 w-4 text-teal-500" />
+          <Sun className="mr-2 h-4 w-4" />
           {t("actions.theme.light")}
         </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={() => onPick("dark")}
-          className="cursor-pointer hover:bg-teal-500/10"
+          className="cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
         >
-          <Moon className="mr-2 h-4 w-4 text-teal-500" />
+          <Moon className="mr-2 h-4 w-4" />
           {t("actions.theme.dark")}
         </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={() => onPick("system")}
-          className="cursor-pointer hover:bg-teal-500/10"
+          className="cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
         >
-          <Monitor className="mr-2 h-4 w-4 text-teal-500" />
+          <Monitor className="mr-2 h-4 w-4" />
           {t("actions.theme.system")}
         </DropdownMenuItem>
       </DropdownMenuContent>

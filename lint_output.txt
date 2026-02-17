@@ -1,0 +1,291 @@
+
+> tourist-app@0.1.0 lint D:\Nichi-In\Nara_Web\Code
+> next lint
+
+
+./src/app/(auth)/signin/page.tsx
+45:3  Warning: 'verifyPhoneOtp' is defined but never used.  @typescript-eslint/no-unused-vars
+70:21  Warning: 'setLoginType' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+78:10  Warning: 'localFirebaseUid' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+81:10  Warning: 'socialProvider' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+108:10  Warning: 'idErrors' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+164:6  Warning: React Hook React.useEffect has a missing dependency: 'dispatch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+275:20  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+287:20  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/about/page.tsx
+98:16  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+113:6  Warning: React Hook useEffect has missing dependencies: 'hide' and 'show'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+169:9  Warning: 'fetchSubthemes' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+314:6  Warning: React Hook useEffect has missing dependencies: 'hide' and 'show'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+321:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+366:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+488:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+548:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+707:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+826:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/explore/page.tsx
+5:8  Warning: 'HeroCarousel' is defined but never used.  @typescript-eslint/no-unused-vars
+6:8  Warning: 'HomeTabs' is defined but never used.  @typescript-eslint/no-unused-vars
+29:13  Warning: 'show' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+29:19  Warning: 'hide' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+37:13  Warning: 'mounted' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+111:18  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+230:49  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/layout.tsx
+12:8  Warning: 'Chatbot' is defined but never used.  @typescript-eslint/no-unused-vars
+44:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+./src/app/mylist/page.tsx
+52:10  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+270:6  Warning: React Hook useEffect has a missing dependency: 'getPageKey'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+605:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+646:3  Warning: 'onDeleteVisit' is defined but never used.  @typescript-eslint/no-unused-vars
+670:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/page.tsx
+15:10  Warning: 'useAppSelector' is defined but never used.  @typescript-eslint/no-unused-vars
+18:3  Warning: 'selectShortcuts' is defined but never used.  @typescript-eslint/no-unused-vars
+19:3  Warning: 'selectGlobalLoading' is defined but never used.  @typescript-eslint/no-unused-vars
+208:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+363:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/regions/page.tsx
+95:6  Warning: React Hook useEffect has missing dependencies: 'hide' and 'show'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+115:6  Warning: React Hook useMemo has an unnecessary dependency: 'selectedSort'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+320:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+521:3  Warning: 'query' is defined but never used.  @typescript-eslint/no-unused-vars
+522:3  Warning: 'setQuery' is defined but never used.  @typescript-eslint/no-unused-vars
+525:3  Warning: 'activeThemeId' is defined but never used.  @typescript-eslint/no-unused-vars
+566:6  Warning: React Hook useEffect has a missing dependency: 'onSortSelect'. Either include it or remove the dependency array. If 'onSortSelect' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+604:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/tours/detail/navigation/finish/page.tsx
+22:10  Warning: 'normalizeHTML' is defined but never used.  @typescript-eslint/no-unused-vars
+72:6  Warning: React Hook useEffect has a missing dependency: 'resetAllData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/tours/detail/page.tsx
+140:6  Warning: React Hook useEffect has a missing dependency: 'auth.data?.user?._id'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+345:6  Warning: React Hook useCallback has a missing dependency: 't'. Either include it or remove the dependency array. Outer scope values like 'toast' aren't valid dependencies because mutating them doesn't re-render the component.  react-hooks/exhaustive-deps
+409:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/tours/history/finish/page.tsx
+6:10  Warning: 'ArrowLeft' is defined but never used.  @typescript-eslint/no-unused-vars
+9:5  Warning: 'selectNav' is defined but never used.  @typescript-eslint/no-unused-vars
+17:10  Warning: 'Button' is defined but never used.  @typescript-eslint/no-unused-vars
+20:21  Warning: 'TourPoint' is defined but never used.  @typescript-eslint/no-unused-vars
+30:11  Warning: 'auth' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+32:12  Warning: 'isResetting' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+46:8  Warning: React Hook useEffect has a missing dependency: 'resetAllData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+55:11  Warning: 'handleBackToTours' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/tours/page.tsx
+26:10  Warning: 'sanitizeHTML' is defined but never used.  @typescript-eslint/no-unused-vars
+45:19  Warning: 'setPerPage' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+213:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/category/CategoryContent.tsx
+50:12  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+116:8  Warning: React Hook useEffect has missing dependencies: 'modalOpen' and 'selectedMonument?._id'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+142:26  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+228:8  Warning: React Hook useEffect has missing dependencies: 'hide' and 'show'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+381:41  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+495:49  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+624:45  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/chatbot/ChatMessage.tsx
+42:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+69:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+71:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/chatbot/ChatWindow.tsx
+5:10  Warning: 'ChatOptions' is defined but never used.  @typescript-eslint/no-unused-vars
+26:7  Warning: 'INITIAL_OPTIONS' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+33:7  Warning: 'SEARCH_OPTIONS' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:6  Warning: React Hook useEffect has missing dependencies: 'getInitialOptions' and 'messages.length'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+379:13  Warning: 'currentState' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+694:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/geo/GeoWatcher.tsx
+195:6  Warning: React Hook useCallback has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+240:6  Warning: React Hook useEffect has a missing dependency: 'tour?.tourpoints?.length'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/home/embedded/EmbeddedRegionMap.tsx
+139:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/home/embedded/EmbeddedSearch.tsx
+111:38  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+136:30  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+416:49  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+473:45  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/home/embedded/EmbeddedStreetView.tsx
+37:13  Warning: 'show' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+37:19  Warning: 'hide' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+110:8  Warning: React Hook useMemo has an unnecessary dependency: 'selectedSort'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+209:28  Warning: 'onOpen' is defined but never used.  @typescript-eslint/no-unused-vars
+257:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+503:8  Warning: React Hook useEffect has a missing dependency: 'onSortSelect'. Either include it or remove the dependency array. If 'onSortSelect' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+533:37  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/home/HeroCarousel.tsx
+77:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/home/HomeTabs.tsx
+5:47  Warning: 'X' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/home/QuickAccessContent.tsx
+19:13  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+227:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/layout/AppShell.tsx
+10:8  Warning: 'FloatingToolbar' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/map/GlobalMap.tsx
+387:6  Warning: React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/map/MapboxTourMap.tsx
+467:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+485:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/map/MapboxTourMapFinish.tsx
+431:6  Warning: React Hook useEffect has a missing dependency: 'onMapReady'. Either include it or remove the dependency array. If 'onMapReady' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+458:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+477:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/map/MapBoxTourMapHistory.tsx
+181:8  Warning: React Hook useEffect has missing dependencies: 'onPointsLoaded' and 'onTourLoaded'. Either include them or remove the dependency array. If 'onTourLoaded' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+489:8  Warning: React Hook useEffect has a missing dependency: 'onMapReady'. Either include it or remove the dependency array. If 'onMapReady' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+516:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+535:29  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/map/MapboxTourMapNavigation.tsx
+641:6  Warning: React Hook useEffect has a missing dependency: 'removeRouteLayers'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/map/MonumentsMap.tsx
+55:10  Warning: 'nearbyMonuments' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+56:10  Warning: 'nearbyAttractions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+59:10  Warning: 'showAttractions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+59:27  Warning: 'setShowAttractions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+316:17  Warning: 'mainMarker' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+352:16  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+356:6  Warning: React Hook useEffect has a missing dependency: 'fetchAttractionCategories'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+456:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+456:21  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/components/map/NavigationOverlay.tsx
+111:3  Warning: 'onRefreshTourPoints' is defined but never used.  @typescript-eslint/no-unused-vars
+195:6  Warning: React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/map/regionMap.tsx
+387:6  Warning: React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/nav/FloatingToolbar.tsx
+16:43  Warning: 'onOpenSearch' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/nav/GlobalCheckinToasts.tsx
+30:10  Warning: 'sanitizeHTML' is defined but never used.  @typescript-eslint/no-unused-vars
+244:6  Warning: React Hook useEffect has missing dependencies: 'auth?.user?._id', 'auth?.user?.id', 'auth?.user?.uuid', 'dispatch', 'nav.usertour?._id', 'tourDetail?._id', and 'translate'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/nav/ProfileModal.tsx
+255:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+291:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+291:19  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/components/nav/SearchModal.tsx
+54:5  Warning: Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps').
+127:24  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+152:20  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+469:29  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+520:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/nav/UserProfileDropdown.tsx
+46:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/shortcuts-modal/regionMapModal.tsx
+43:10  Warning: 'error' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+91:6  Warning: React Hook useEffect has a missing dependency: 'openMapModal'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+363:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/shortcuts-modal/searchModal.tsx
+53:5  Warning: Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps').
+126:24  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+151:20  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+491:29  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+548:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/shortcuts-modal/streetViewModal.tsx
+73:5  Warning: Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps').
+113:6  Warning: React Hook useEffect has missing dependencies: 'hide' and 'show'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+135:6  Warning: React Hook useMemo has an unnecessary dependency: 'selectedSort'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+354:28  Warning: 'onOpen' is defined but never used.  @typescript-eslint/no-unused-vars
+402:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+648:6  Warning: React Hook useEffect has a missing dependency: 'onSortSelect'. Either include it or remove the dependency array. If 'onSortSelect' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+678:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/theme/ThemeToggle.tsx
+36:10  Warning: 'mode' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/tour/MapTimelineRight.tsx
+370:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+637:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1047:3  Warning: Expected an assignment or function call and instead saw an expression.  @typescript-eslint/no-unused-expressions
+
+./src/components/tour/MonumentDetailModal.tsx
+73:10  Warning: 'events' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+145:6  Warning: React Hook useEffect has missing dependencies: 'nextImage' and 'prevImage'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+233:6  Warning: React Hook useEffect has a missing dependency: 'auth.data?.user?._id'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+318:31  Warning: The ref value 'videoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'videoRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+321:6  Warning: React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+323:10  Warning: 'isNearby' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+357:11  Warning: 'lat' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+357:16  Warning: 'lng' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+678:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1072:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1113:31  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1194:35  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1269:31  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1359:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1402:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/tour/PlaceDetailModal.tsx
+184:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+284:14  Warning: 'locale' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+511:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/tour/ScreenshotButtons.tsx
+4:28  Warning: 'Copy' is defined but never used.  @typescript-eslint/no-unused-vars
+37:3  Warning: 'translationKeys' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+103:14  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+115:9  Warning: 'handleCopy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/tour/TimelineRight.tsx
+384:27  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+466:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+700:3  Warning: Expected an assignment or function call and instead saw an expression.  @typescript-eslint/no-unused-expressions
+
+./src/lib/gpsWatcher.ts
+73:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+156:16  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+178:3  Warning: 'desiredAccuracy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+196:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/screenshotUtils.ts
+47:3  Warning: 'options' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/store/persistStorage.ts
+4:13  Warning: '_key' is defined but never used.  @typescript-eslint/no-unused-vars
+10:16  Warning: '_key' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/store/slices/navSlice.ts
+7:3  Warning: 'UserTourSyncResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/providers/LocaleProvider.tsx
+97:59  Warning: React Hook useMemo has a missing dependency: 't'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/services/userGlobalservice.ts
+442:10  Warning: 'extractMonuments' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules

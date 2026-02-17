@@ -3,31 +3,23 @@
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 import {
   ImageIcon,
   ChevronLeft,
   ChevronRight,
-  Search,
-  MapPinned,
   ArrowRight,
-  Star,
-  BookOpen,
-  Route,
 } from "lucide-react";
 
-import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
+import { useAppDispatch } from "@/lib/store/hook";
 import {
   fetchShortcuts,
-  selectShortcuts,
-  selectGlobalLoading,
-  setActiveTheme,
 } from "@/lib/store/slices/globalSlice";
 import { setActiveAbout } from "@/lib/store/slices/globalSlice";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
-import { Button } from "@/components/ui/button";
 import { apiFetchToursVersionTwo } from "@/services/userTourService";
 import type { Tour } from "@/lib/types/userTour.types";
 import { normalizeHTML, stripHTML } from "@/lib/utils";
@@ -38,7 +30,6 @@ import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
 import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
 
 import HomeTabs from "@/components/home/HomeTabs";
-import QuickAccessContent from "@/components/home/QuickAccessContent";
 import HeroCarousel from "@/components/home/HeroCarousel";
 
 /* =======================================================================
@@ -56,8 +47,14 @@ export default function ToursDashboardPage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [streetViewOpen, setStreetViewOpen] = useState(false);
   const [regionMapOpen, setRegionMapOpen] = useState(false);
-  // Removed activeTab state
-  // Removed selectedCategory state
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollMosaic = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const amount = direction === "left" ? -450 : 450;
+      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -78,10 +75,9 @@ export default function ToursDashboardPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [show, hide]);
 
-  const shortcuts = useAppSelector(selectShortcuts);
-  const globalLoading = useAppSelector(selectGlobalLoading);
+
 
   /* -------------------- Data Fetching -------------------- */
   useEffect(() => {
@@ -124,164 +120,222 @@ export default function ToursDashboardPage() {
 
   /* -------------------- Render -------------------- */
   return (
-    // <div className="flex flex-col w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50/30 dark:from-[#0a0d12] dark:via-[#0f1318] dark:to-[#0d1520]">
-    <div className="flex flex-col w-full min-h-screen ">
+    <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
       <HeroCarousel />
 
       {/* ================= TAB NAVIGATION ================= */}
       <HomeTabs />
 
-      {/* ================= CONTENT CONTAINER ================= */}
-      <div className="mx-auto w-full px-4 space-y-10 pb-0">
-
-        {/* ================= DYNAMIC TAB CONTENT ================= */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {/* {!globalLoading && (
-            <QuickAccessContent />
-          )} */}
-        </div>
-
-        {/* ================= ABOUT NARA HERITAGE ================= */}
-        {abouts.length > 0 && (
-          <section className="w-full relative">
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200/60 dark:border-slate-700/60">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm border border-teal-200/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5">
-                  <BookOpen className="h-6 w-6 text-teal-600 dark:text-teal-400" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
-                  {t("home.about_nara")}
-                </h2>
-              </div>
+      {/* ================= DISCOVERY SECTION HEADER ================= */}
+      {abouts.length > 0 && (
+        <section className="w-full bg-white dark:bg-black py-10 px-6 border-b border-slate-200 dark:border-white/5 flex flex-col items-center justify-center text-center overflow-hidden relative transition-colors duration-500">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="z-10"
+          >
+            <div className="flex items-center justify-center gap-4 mb-3">
+              <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
+              <span className="text-[10px] font-black text-slate-500 dark:text-white/50 uppercase tracking-[0.5em]">
+                {t("home.heritage") || "Heritage"}
+              </span>
+              <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
             </div>
+            <h2 className="text-3xl md:text-5xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
+              {t("home.about_nara") || "Discovery Nara"}
+            </h2>
+            <p className="text-[11px] md:text-sm font-light text-slate-500 dark:text-white/40 tracking-[0.2em] uppercase mt-2">
+              Journey through the layers of Japan&apos;s ancient capital
+            </p>
+          </motion.div>
 
-            <div
-              className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory -mx-4 px-4 md:mx-0 md:px-0"
-            >
-              {abouts.map((item) => (
-                <div
-                  key={item._id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch(setActiveAbout(item._id));
-                    router.push("/about");
-                  }}
-                  className="
-                    relative
-                    min-w-[280px] md:min-w-[340px]
-                    aspect-[3/4]
-                    snap-center
-                    rounded-3xl overflow-hidden
-                    bg-slate-900
-                    shadow-lg hover:shadow-2xl hover:shadow-teal-900/20
-                    transition-all duration-500
-                    cursor-pointer
-                    group
-                    isolate
-                  "
-                >
-                  {/* Background Image */}
-                  {item.image?.secure_url ? (
-                    <img
-                      src={item.image.secure_url}
-                      alt={item.title ?? "About Nara"}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 w-full h-full bg-slate-800" />
-                  )}
+          {/* Subtle background texture/glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-slate-400/[0.05] dark:bg-white/[0.02] blur-[100px] pointer-events-none" />
+        </section>
+      )}
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+      {/* ================= ABOUT NARA HERITAGE (Interactive Snap-Scroll Panorama) ================= */}
+      {abouts.length > 0 && (
+        <section className="w-full relative bg-white dark:bg-black border-b border-slate-200 dark:border-white/5 scroll-smooth group/mosaic transition-colors duration-500">
+          {/* Navigation Arrows */}
+          <button
+            onClick={() => scrollMosaic("left")}
+            className="absolute left-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/40 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white backdrop-blur-lg opacity-0 group-hover/mosaic:opacity-100 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:scale-110 transition-all duration-300 pointer-events-auto shadow-lg"
+            aria-label="Scroll Left"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-                  {/* Content */}
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                      <div className="mb-2 w-10 h-1 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full" />
+          <button
+            onClick={() => scrollMosaic("right")}
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/40 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white backdrop-blur-lg opacity-0 group-hover/mosaic:opacity-100 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:scale-110 transition-all duration-300 pointer-events-auto shadow-lg"
+            aria-label="Scroll Right"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
 
-                      <h3 className="text-xl md:text-2xl font-bold text-white mb-3 leading-tight drop-shadow-md line-clamp-1">
-                        {item.title ?? ""}
-                      </h3>
+          <div
+            ref={scrollRef}
+            className="flex flex-col md:flex-row w-full md:h-[400px] overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+          >
+            {abouts.map((item, idx) => (
+              <motion.div
+                key={item._id}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: idx * 0.1 }}
+                onClick={() => {
+                  dispatch(setActiveAbout(item._id));
+                  router.push("/about");
+                }}
+                className="
+                  relative flex-shrink-0 md:flex-1 group overflow-hidden 
+                  w-full md:min-w-[400px]
+                  snap-center md:snap-start
+                  border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 last:border-0
+                  transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
+                  md:hover:flex-[1.6] min-h-[250px] md:min-h-0 cursor-pointer isolate
+                "
+              >
+                {/* Background Image */}
+                {item.image?.secure_url ? (
+                  <img
+                    src={item.image.secure_url}
+                    alt={item.title ?? "About Nara"}
+                    className="absolute inset-0 w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-slate-900" />
+                )}
 
-                      <p className="text-white/80 text-sm leading-relaxed mb-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100 hidden md:line-clamp-2">
-                        {stripHTML(item.content?.brief)}
-                      </p>
+                {/* Dark Cinematic Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black/95 via-transparent opacity-90 group-hover:opacity-40 transition-opacity duration-700" />
+                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white dark:from-black to-transparent" />
 
-                      <div className="inline-flex items-center gap-2 text-teal-300 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 group-hover:bg-teal-500 group-hover:text-white group-hover:border-teal-500 transition-all duration-300">
-                        {t("tourDetails.viewDetails")} <ArrowRight className="w-3.5 h-3.5" />
-                      </div>
+                {/* Content Overlay */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-all duration-500 translate-y-3 group-hover:translate-y-0">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-[0.4em] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                      {idx + 1 < 10 ? `0${idx + 1}` : idx + 1} / {t("home.heritage") || "Heritage"}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                      {item.title ?? ""}
+                    </h3>
+                  </div>
+
+                  {/* Detailed Reveal on Hover */}
+                  <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500 opacity-0 group-hover:opacity-100 mt-4">
+                    <p className="text-slate-600 dark:text-white/60 text-[11px] md:text-xs leading-relaxed mb-4 line-clamp-2 max-w-sm font-light">
+                      {stripHTML(item.content?.brief)}
+                    </p>
+                    <div className="flex items-center gap-3 text-slate-900 dark:text-white text-[11px] font-black uppercase tracking-[0.2em]">
+                      Explore Foundation
+                      <div className="w-8 h-px bg-slate-900/30 dark:bg-white/30 group-hover:w-12 transition-all duration-500" />
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ================= CONTENT CONTAINER ================= */}
+      <div className="mx-auto max-w-7xl w-full py-10 space-y-12">
 
         {/* ================= FEATURED TOURS ================= */}
         {!loading && hasTours && (
           <section>
-            <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-dashed border-teal-500/30 dark:border-teal-500/20">
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm border border-teal-200/30 dark:border-teal-500/20 shadow-lg shadow-teal-500/5">
-                  <Route className="h-6 w-6 text-teal-600 dark:text-teal-400" />
+            <div className="flex flex-col items-center justify-center text-center mb-16 px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl"
+              >
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
+                  <span className="text-[10px] font-black text-slate-500 dark:text-white/50 uppercase tracking-[0.5em]">
+                    {t("home.curated_tours") || "Experience"}
+                  </span>
+                  <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent uppercase tracking-wide">
+
+                <h2 className="text-4xl md:text-6xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-tight mb-4">
                   {t("home.guide_tour")}
                 </h2>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden md:flex gap-1 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-700 dark:hover:text-teal-300 transition-all duration-200"
-                asChild
-              >
-                <Link href="/tours">
-                  {t("actions.show_more")} <ChevronRight className="w-4 h-4" />
+
+                <p className="text-[11px] md:text-sm font-light text-slate-500 dark:text-white/40 tracking-[0.3em] uppercase mb-8">
+                  Artfully curated journeys through the heart of ancient Japan
+                </p>
+
+                <Link
+                  href="/tours"
+                  className="
+                    group/btn inline-flex items-center gap-4 
+                    text-slate-900 dark:text-white 
+                    transition-all duration-300
+                  "
+                >
+                  <span className="text-[11px] font-black uppercase tracking-[0.4em]">
+                    {t("actions.show_more")}
+                  </span>
+
+                  <div className="flex items-center gap-2 group-hover/btn:gap-3 transition-all duration-500">
+                    <div className="w-12 h-px bg-slate-900/20 dark:bg-white/30 group-hover/btn:w-20 group-hover/btn:bg-slate-900 dark:group-hover/btn:bg-white transition-all duration-500" />
+                    <ChevronRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-500" />
+                  </div>
                 </Link>
-              </Button>
+              </motion.div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
               {tours
                 .filter((tour) => tour.featured === true)
-                .slice(0, 6)
+                .slice(0, 3)
                 .map((tour, idx) => (
                   <TourCard key={tour._id} tour={tour} t={t} idx={idx} />
                 ))}
             </div>
 
-            {/* Mobile Show More */}
-            <div className="mt-8 md:hidden flex justify-center">
-              <Button
-                className="rounded-full w-auto px-6 bg-teal-600/10 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 hover:bg-teal-500 hover:text-white dark:hover:bg-teal-700 dark:hover:text-white border border-teal-200 dark:border-teal-800"
-                asChild
+            <div className="mt-20 md:hidden flex justify-center">
+              <Link
+                href="/tours"
+                className="flex flex-col items-center gap-4 text-slate-900 dark:text-white group/mob"
               >
-                <Link href="/tours">{t("actions.show_more")}</Link>
-              </Button>
+                <span className="text-xs font-black uppercase tracking-[0.5em]">
+                  {t("actions.show_more")}
+                </span>
+                <div className="w-24 h-px bg-slate-900/20 dark:bg-white/20 group-hover/mob:w-32 transition-all duration-500" />
+              </Link>
             </div>
-
-            {!loading && !hasTours && (
-              <div className="py-12 text-center border rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border-dashed border-slate-200 dark:border-slate-800">
-                <p className="text-muted-foreground text-sm">
-                  {t("no_tours_available")}
-                </p>
-              </div>
-            )}
           </section>
         )}
 
-        <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
-        <StreetViewModal
-          openModal={streetViewOpen}
-          onClose={() => setStreetViewOpen(false)}
-        />
-        <RegionMapModal
-          openMapModal={regionMapOpen}
-          onCloseMapModal={() => setRegionMapOpen(false)}
-        />
+        {!loading && !hasTours && (
+          <div className="py-12 text-center border rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border-dashed border-slate-200 dark:border-slate-800">
+            <p className="text-muted-foreground text-sm">
+              {t("no_tours_available")}
+            </p>
+          </div>
+        )}
       </div>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <StreetViewModal
+        openModal={streetViewOpen}
+        onClose={() => setStreetViewOpen(false)}
+      />
+      <RegionMapModal
+        openMapModal={regionMapOpen}
+        onCloseMapModal={() => setRegionMapOpen(false)}
+      />
     </div>
   );
 }
@@ -294,47 +348,40 @@ export default function ToursDashboardPage() {
 
 function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
   return (
-    <div
-      className="group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
-      style={{ transitionDelay: `${idx * 50}ms` }}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden bg-white dark:bg-black border border-slate-200 dark:border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.04)] hover:shadow-[0_25px_60px_rgba(0,0,0,0.12)] transition-all duration-700 cursor-pointer"
       onClick={() => (window.location.href = `/tours/detail?id=${tour._id}`)}
     >
-      <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
+      <div className="relative h-[280px] w-full overflow-hidden shrink-0">
         {tour.image?.secure_url ? (
           <img
             src={tour.image.secure_url}
             alt={tour.title}
-            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+            className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
-            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
+          <div className="flex h-full w-full items-center justify-center bg-secondary">
+            <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
           </div>
         )}
 
-        {/* Featured Tour Badge */}
-        {/* <div className="absolute top-5 left-5 z-20">
-          <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
-            <Star className="w-3.5 h-3.5 fill-teal-500 text-teal-500 dark:fill-teal-400 dark:text-teal-400" />
-            <span className="tracking-wide uppercase">
-              {t("actions.featured")}
-            </span>
-          </div>
-        </div> */}
-
-        {/* Gradient overlays for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
+        {/* Overlay for better text separation */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
-      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
-        <div className="space-y-3">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+      <div className="flex-1 p-8 md:p-10 flex flex-col min-h-0">
+        <div className="flex-1 space-y-4">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 font-serif italic tracking-tight leading-tight">
             {tour.title}
           </h3>
+
           {tour.content?.brief && (
             <p
-              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
+              className="text-sm text-slate-500 dark:text-white/40 line-clamp-3 leading-relaxed font-light"
               dangerouslySetInnerHTML={{
                 __html: normalizeHTML(tour.content.brief),
               }}
@@ -342,17 +389,20 @@ function TourCard({ tour, t, idx }: { tour: Tour; t: any; idx: number }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
-          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-            {t("home.explore_link")}
-          </span>
-          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
+        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/5 flex items-center justify-between group-hover:border-slate-900/10 dark:group-hover:border-white/10 transition-colors">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">
+              {t("home.heritage") || "Heritage"}
+            </span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">
+              {t("actions.explore_now") || "Explore Now"}
+            </span>
+          </div>
+          <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-white/5 flex items-center justify-center group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-all duration-500 shadow-sm">
             <ArrowRight className="w-5 h-5" />
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
-
-

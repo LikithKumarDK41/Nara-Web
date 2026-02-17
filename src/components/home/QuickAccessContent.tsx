@@ -205,40 +205,33 @@ function QuickAccessTab({
                 group relative cursor-pointer
                 flex flex-col items-center justify-center gap-3
                 w-full h-[110px] md:h-[120px]
-                rounded-2xl md:rounded-3xl
-                transition-all duration-300 ease-out
+                rounded-2xl md:rounded-[2.5rem]
+                transition-all duration-500 ease-[0.22,1,0.36,1]
                 border
                 ${isActive
-                    ? "bg-white dark:bg-[#1a1f2e] border-teal-500 shadow-lg shadow-teal-500/10 scale-[1.02]"
-                    : "bg-white dark:bg-[#0f1115] border-slate-200/80 dark:border-slate-700/60 hover:border-teal-400 dark:hover:border-teal-500 hover:-translate-y-1 hover:shadow-xl"
+                    ? "bg-foreground text-background border-foreground shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] scale-[1.02]"
+                    : "bg-card border-border/50 hover:border-foreground/30 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)]"
                 }
             `}
         >
-            {/* Active Indicator Dot */}
-            {isActive && (
-                <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-            )}
-
             {/* Icon */}
             <div className={`
-                w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center
-                transition-all duration-300
+                w-10 h-10 md:w-14 md:h-14 rounded-xl flex items-center justify-center
+                transition-all duration-500
                 ${isActive
-                    ? "bg-teal-500 text-white shadow-md shadow-teal-500/20"
-                    : "bg-gradient-to-br from-teal-50 to-teal-100/50 dark:from-teal-900/30 dark:to-teal-800/20 text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-500/30"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "bg-secondary text-foreground border border-border/50 shadow-sm group-hover:bg-foreground group-hover:text-background"
                 }
             `}>
                 {item.icon?.secure_url ? (
                     <img
                         src={item.icon.secure_url}
                         alt={item.title}
-                        className="w-6 h-6 md:w-9 md:h-9 object-contain"
+                        className="w-6 h-6 md:w-8 md:h-8 object-contain transition-all duration-500"
                         style={{
-                            filter: isDark && !isActive
-                                ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
-                                : !isActive
-                                    ? "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)"
-                                    : "brightness(0) invert(1)" // White for active
+                            filter: isActive
+                                ? (isDark ? "none" : "brightness(0)")
+                                : (isDark ? "brightness(0) invert(1)" : "none")
                         }}
                     />
                 ) : (
@@ -249,11 +242,11 @@ function QuickAccessTab({
             {/* Text */}
             <span
                 className={`
-                    text-xs md:text-sm font-bold text-center px-2
+                    text-[10px] md:text-xs font-black uppercase tracking-[0.1em] text-center px-2
                     transition-colors duration-200
                     ${isActive
-                        ? "text-teal-700 dark:text-teal-300"
-                        : "text-slate-800 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-300"
+                        ? "text-background"
+                        : "text-muted-foreground group-hover:text-foreground"
                     }
                 `}
             >

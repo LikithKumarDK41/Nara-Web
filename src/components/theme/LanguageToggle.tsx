@@ -32,33 +32,17 @@ export default function LanguageToggle() {
           : t("actions.switchToEnglish")
       }
       className="
-        relative
-        h-9 w-9
-        flex items-center justify-center
-        rounded-full
-        border border-teal-500/40
-        bg-black/80
-        backdrop-blur-md
-        shadow
-        cursor-pointer
-        transition-all
+        relative h-9 w-9 flex items-center justify-center rounded-full backdrop-blur-md shadow-sm cursor-pointer transition-all
+        
+        /* ⚪ Light Mode: White Bg + Black Icon */
+        bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 hover:shadow-md
 
-         /* 🌞 Light mode */
-          bg-white
-          border border-teal-400/40
-          text-teal-600
-          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
-
-
-          /* 🌙 Dark mode */
-          dark:bg-black/80
-          dark:border-teal-400/40
-          dark:text-teal-300
-          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+        /* ⚫ Dark Mode: Black Bg + White Icon */
+        dark:bg-black/80 dark:border-slate-800 dark:text-white dark:hover:bg-slate-900
       "
     >
       {/* 🌐 Icon */}
-      <Languages className="h-4 w-4 text-teal-600 dark:text-teal-300" />
+      <Languages className="h-4 w-4" />
     </button>
   );
 }

@@ -126,7 +126,7 @@ export default function RootLayout({
 
               <GeoWatcher />
               <GlobalCheckinToasts />
-              <Chatbot />
+              {/* <Chatbot /> */}
             </LocaleProvider>
           </LoaderProvider>
         </StoreProvider>
