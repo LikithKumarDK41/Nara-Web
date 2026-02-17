@@ -838,5 +838,9 @@
   "captured_nara_monument": "奈良の史跡で撮影しました",
   "captured_at": "で撮影しました",
   "monument_": "史跡",
-  "nara_visit":"奈良訪問"
+  "nara_visit": "奈良訪問",
+  "quick_access_page": {
+    "hero_title": "クイックアクセス",
+    "hero_subtitle": "インタラクティブマップ、検索ツール、パノラマストリートビューで、奈良の見どころを探索しましょう。"
+  }
 }
