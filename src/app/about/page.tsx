@@ -45,6 +45,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 type About = any;
 
@@ -373,6 +374,15 @@ export default function AboutDetailPage() {
           </span>
         </div>
       )}
+
+      {/* BREADCRUMB */}
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            ...(about ? [{ label: about.title }] : [])
+          ]}
+        />
+      </div>
 
       {selectedMonument && (
         <MonumentDetailModal

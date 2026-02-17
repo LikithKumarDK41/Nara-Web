@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const blueprintItems = [
   {
@@ -162,8 +163,17 @@ export default function BlueprintPage() {
         </div>
       </section>
 
+      {/* BREADCRUMB */}
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            { label: t("blueprint_title") || "Info" },
+          ]}
+        />
+      </div>
+
       {/* ================= TABS ================= */}
-      <div className="flex justify-center">
+      <div className="flex justify-center -mt-6">
         <div
           className="inline-flex gap-1 rounded-full p-1 border
           bg-white/70 border-orange-200
@@ -174,10 +184,9 @@ export default function BlueprintPage() {
               key={tab}
               onClick={() => setActiveTab(tab as any)}
               className={`cursor-pointer px-5 py-2 rounded-full text-sm font-medium transition
-                ${
-                  activeTab === tab
-                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                ${activeTab === tab
+                  ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
+                  : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 }`}
             >
               {t(
@@ -201,10 +210,9 @@ export default function BlueprintPage() {
                   item.title === "blueprint_tours" ? "tours-section" : undefined
                 }
                 className={`rounded-xl border p-6 transition shadow-sm
-                  ${
-                    item.title === "blueprint_tours" && highlightTours
-                      ? "border-teal-500 ring-2 ring-teal-400/60 bg-teal-50/60 dark:bg-teal-500/10"
-                      : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60"
+                  ${item.title === "blueprint_tours" && highlightTours
+                    ? "border-teal-500 ring-2 ring-teal-400/60 bg-teal-50/60 dark:bg-teal-500/10"
+                    : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60"
                   }`}
               >
                 <div className="text-3xl mb-3">{item.icon}</div>
@@ -212,11 +220,10 @@ export default function BlueprintPage() {
                 <h3
                   className={`text-lg font-semibold
                     text-teal-700 dark:text-teal-300
-                    ${
-                      item.title === "blueprint_home" ||
+                    ${item.title === "blueprint_home" ||
                       item.title === "blueprint_tours"
-                        ? "cursor-pointer hover:underline"
-                        : ""
+                      ? "cursor-pointer hover:underline"
+                      : ""
                     }`}
                   onClick={() => {
                     if (item.title === "blueprint_tours")
@@ -250,10 +257,9 @@ export default function BlueprintPage() {
 
                         <p
                           className={`font-semibold
-                            ${
-                              child.title === "blueprint_home_tour_list"
-                                ? "cursor-pointer text-teal-700 dark:text-teal-300 hover:underline"
-                                : "text-slate-800 dark:text-slate-100"
+                            ${child.title === "blueprint_home_tour_list"
+                              ? "cursor-pointer text-teal-700 dark:text-teal-300 hover:underline"
+                              : "text-slate-800 dark:text-slate-100"
                             }`}
                           onClick={() => {
                             if (child.title === "blueprint_home_tour_list") {

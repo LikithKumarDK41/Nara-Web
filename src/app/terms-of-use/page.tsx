@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export default function TermsOfUsePage() {
   const { t, locale } = useLocale();
@@ -84,6 +85,14 @@ export default function TermsOfUsePage() {
           </p>
         </div>
       </section>
+
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            { label: isEN ? "Terms of Use" : "利用規約／サービス規約" },
+          ]}
+        />
+      </div>
 
       <div className="sm:px-6">
         <div className=" bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 p-8 rounded-2xl shadow-md">

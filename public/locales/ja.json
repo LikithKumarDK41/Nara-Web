@@ -842,5 +842,6 @@
   "quick_access_page": {
     "hero_title": "クイックアクセス",
     "hero_subtitle": "インタラクティブマップ、検索ツール、パノラマストリートビューで、奈良の見どころを探索しましょう。"
-  }
+  },
+  "tours_breadcrumb": "ツアー"
 }

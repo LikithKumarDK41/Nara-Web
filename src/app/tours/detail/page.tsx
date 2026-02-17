@@ -9,6 +9,7 @@ import { useLocale } from "@/providers/LocaleProvider";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 
 import { Button } from "@/components/ui/button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import MapboxTourMap from "@/components/map/MapboxTourMap";
 import TimelineRight from "@/components/tour/TimelineRight";
 
@@ -572,7 +573,15 @@ export default function TourDetailsClientPage() {
             </div>
           </div>
         </section>
-
+        {/* BREADCRUMB */}
+        <div className="px-1 -mt-10">
+          <Breadcrumb
+            items={[
+              { label: t("tours_breadcrumb") || "Tours", href: "/tours" },
+              { label: tour.title }
+            ]}
+          />
+        </div>
 
         {/* ===== Map Section ===== */}
         {tour.tourpoints?.length ? (

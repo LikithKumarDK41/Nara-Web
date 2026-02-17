@@ -843,5 +843,6 @@
   "quick_access_page": {
     "hero_title": "Quick Access",
     "hero_subtitle": "Explore Nara's highlights through interactive maps, search tools, and panoramic street views."
-  }
+  },
+  "tours_breadcrumb": "Tours"
 }
