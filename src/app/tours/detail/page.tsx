@@ -402,7 +402,7 @@ export default function TourDetailsClientPage() {
 
       <div className="space-y-12">
         {/* ===== Banner ===== */}
-        <section className="mt-[5.4%] relative rounded-2xl overflow-hidden shadow-md">
+        <section className="mt-[5.4%] relative overflow-hidden shadow-md">
           {/* Banner Image */}
           <div className="relative h-[420px] sm:h-[480px] w-full">
             {tour.image?.secure_url ? (
