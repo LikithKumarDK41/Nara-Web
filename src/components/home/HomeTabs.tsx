@@ -26,7 +26,7 @@ export default function HomeTabs() {
                 </Link>
 
                 {/* Separator */}
-                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 my-auto mx-1" />
+                <div className="w-px h-6 bg-slate-400 dark:bg-slate-700 my-auto mx-1" />
 
                 <Link
                     href="/explore"
