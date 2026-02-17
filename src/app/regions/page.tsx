@@ -157,9 +157,8 @@ export default function RegionDetailsPage() {
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
       <section
-        className="mb-4
+        className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
@@ -230,61 +229,59 @@ export default function RegionDetailsPage() {
         </div>
       </section>
 
-      {/* BREADCRUMB */}
-      <div className="container mx-auto px-1 pt-4">
+      <div className="px-4 space-y-6">
 
-      </div>
-
-      {/* ===== SEARCH + FILTER BAR ===== */}
-      <MonumentsToolbar
-        query={query}
-        setQuery={setQuery}
-        onSortSelect={(v) => setSelectedSort(v)}
-        selectedSort={selectedSort}
-        activeThemeId={activeThemeId}
-      />
-
-      {/* ===== EMPTY STATE ===== */}
-      {filtered.length === 0 && (
-        <EmptyState
-          icon={<Landmark className="h-8 w-8" />}
-          title={t("tourist_attractions.no_results_title")}
-          subtitle={t("tourist_attractions.no_results_subtitle")}
+        {/* ===== SEARCH + FILTER BAR ===== */}
+        <MonumentsToolbar
+          query={query}
+          setQuery={setQuery}
+          onSortSelect={(v) => setSelectedSort(v)}
+          selectedSort={selectedSort}
+          activeThemeId={activeThemeId}
         />
-      )}
 
-      {/* ===== GRID ===== */}
-      {filtered.length > 0 && (
-        <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {currentData.map((m) => (
-              <MonumentCard
-                key={m._id}
-                m={m}
-                onOpen={() => handleOpenMonument(m._id)}
-              />
-            ))}
-          </div>
-          <PageNavigator
-            totalPages={totalPages}
-            page={page}
-            onPageChange={setPage}
-            t={t}
+        {/* ===== EMPTY STATE ===== */}
+        {filtered.length === 0 && (
+          <EmptyState
+            icon={<Landmark className="h-8 w-8" />}
+            title={t("tourist_attractions.no_results_title")}
+            subtitle={t("tourist_attractions.no_results_subtitle")}
           />
-        </>
-      )}
+        )}
 
-      {/* ===== DETAIL MODAL ===== */}
-      {selectedMonument && (
-        <MonumentDetailModal
-          open={open}
-          onClose={() => setOpen(false)}
-          loading={modalLoading}
-          details={selectedMonument}
-          onOpenAnother={handleOpenAnother}
-          customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
-        />
-      )}
+        {/* ===== GRID ===== */}
+        {filtered.length > 0 && (
+          <>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {currentData.map((m) => (
+                <MonumentCard
+                  key={m._id}
+                  m={m}
+                  onOpen={() => handleOpenMonument(m._id)}
+                />
+              ))}
+            </div>
+            <PageNavigator
+              totalPages={totalPages}
+              page={page}
+              onPageChange={setPage}
+              t={t}
+            />
+          </>
+        )}
+
+        {/* ===== DETAIL MODAL ===== */}
+        {selectedMonument && (
+          <MonumentDetailModal
+            open={open}
+            onClose={() => setOpen(false)}
+            loading={modalLoading}
+            details={selectedMonument}
+            onOpenAnother={handleOpenAnother}
+            customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
+          />
+        )}
+      </div>
     </div>
   );
 }

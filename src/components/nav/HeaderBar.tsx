@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,13 +34,23 @@ export default function HeaderBar() {
   const authData = useAppSelector((s) => s.auth.data);
   const isLoggedIn = !!authData?.user;
 
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   useEffect(() => {
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHome]);
 
   async function handleItemClick(item: NavItem) {
     if (item.type !== "action") return;

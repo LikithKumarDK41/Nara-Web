@@ -32,6 +32,7 @@ import { useAppSelector } from "@/lib/store/hook";
 import { selectNav, resetAll as resetNav } from "@/lib/store/slices/navSlice";
 import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
 import { clearTourDetail } from "@/lib/store/slices/touristSlice";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 /* MAIN PAGE */
 export default function LibraryPage() {
@@ -354,9 +355,8 @@ export default function LibraryPage() {
     <div className="space-y-6">
       {/* HERO BANNER */}
       <section
-        className="mb-4
+        className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
@@ -427,52 +427,63 @@ export default function LibraryPage() {
         </div>
       </section>
 
-      {/* MAIN TABS */}
-      <Tabs
-        value={topTab}
-        onValueChange={(v) => setTopTab(v as any)}
-        className="space-y-6"
-      >
-        <TabsList className="grid w-full grid-cols-2 rounded-full bg-muted/70 p-1 shadow ring-1 ring-border">
-          <TabsTrigger value="bookmarks" className="cursor-pointer">
-            <Bookmark className="mr-2 h-4 w-4" /> {t("Bookmarks")}
-          </TabsTrigger>
-          <TabsTrigger value="visited" className="cursor-pointer">
-            <CheckCircle2 className="mr-2 h-4 w-4" /> {t("Visited")}
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value={topTab}>
-          <InnerTabs
-            key={`${topTab}-${innerTab}`}
-            value={innerTab}
-            onChange={setInnerTab}
-            data={currentData}
-            totalPages={totalPages}
-            page={currentPage}
-            onPageChange={handlePageChange}
-            t={t}
-            onOpenMonument={handleOpenMonument}
-            onDeleteBookmark={deleteBookmark}
-            onDeleteVisit={deleteVisit}
-            onDeleteUserTour={deleteUserTour}
-            isBookmarkTab={topTab === "bookmarks"}
+      <div className="px-4 space-y-6">
+        {/* BREADCRUMB */}
+        <div className="mt-2 flex justify-start">
+          <Breadcrumb
+            items={[
+              { label: t("personal_library") || "My List" },
+            ]}
           />
-        </TabsContent>
-      </Tabs>
+        </div>
 
-      {selectedMonument && (
-        <MonumentDetailModal
-          open={open}
-          onClose={async () => {
-            setOpen(false);
-            await refreshAll(); // 🔥 reload list on modal close
-          }}
-          loading={modalLoading || loadingState}
-          details={selectedMonument}
-          onOpenAnother={handleOpenAnother}
-        />
-      )}
+        {/* MAIN TABS */}
+        <Tabs
+          value={topTab}
+          onValueChange={(v) => setTopTab(v as any)}
+          className="space-y-6"
+        >
+          <TabsList className="grid w-full grid-cols-2 rounded-full bg-muted/70 p-1 shadow ring-1 ring-border">
+            <TabsTrigger value="bookmarks" className="cursor-pointer">
+              <Bookmark className="mr-2 h-4 w-4" /> {t("Bookmarks")}
+            </TabsTrigger>
+            <TabsTrigger value="visited" className="cursor-pointer">
+              <CheckCircle2 className="mr-2 h-4 w-4" /> {t("Visited")}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value={topTab}>
+            <InnerTabs
+              key={`${topTab}-${innerTab}`}
+              value={innerTab}
+              onChange={setInnerTab}
+              data={currentData}
+              totalPages={totalPages}
+              page={currentPage}
+              onPageChange={handlePageChange}
+              t={t}
+              onOpenMonument={handleOpenMonument}
+              onDeleteBookmark={deleteBookmark}
+              onDeleteVisit={deleteVisit}
+              onDeleteUserTour={deleteUserTour}
+              isBookmarkTab={topTab === "bookmarks"}
+            />
+          </TabsContent>
+        </Tabs>
+
+        {selectedMonument && (
+          <MonumentDetailModal
+            open={open}
+            onClose={async () => {
+              setOpen(false);
+              await refreshAll(); // 🔥 reload list on modal close
+            }}
+            loading={modalLoading || loadingState}
+            details={selectedMonument}
+            onOpenAnother={handleOpenAnother}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -779,7 +790,7 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-6">
+    <div className="mb-4 flex items-center justify-between gap-3 pt-6">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {t("pagination_left", { current: page, total: totalPages })}
