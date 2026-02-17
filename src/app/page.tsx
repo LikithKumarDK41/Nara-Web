@@ -217,9 +217,9 @@ export default function ToursDashboardPage() {
                 <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white dark:from-black to-transparent" />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-all duration-500 translate-y-3 group-hover:translate-y-0">
+                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-all duration-500 translate-y-0 md:translate-y-3 md:group-hover:translate-y-0">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-[0.4em] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] transition-colors text-slate-900 dark:text-white md:text-slate-500 md:dark:text-white/40 md:group-hover:text-slate-900 md:dark:group-hover:text-white">
                       {idx + 1 < 10 ? `0${idx + 1}` : idx + 1} / {t("home.heritage") || "Heritage"}
                     </span>
                     <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
@@ -227,8 +227,8 @@ export default function ToursDashboardPage() {
                     </h3>
                   </div>
 
-                  {/* Detailed Reveal on Hover */}
-                  <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500 opacity-0 group-hover:opacity-100 mt-4">
+                  {/* Detailed Reveal on Hover (Desktop) / Always Visible (Mobile) */}
+                  <div className="h-auto opacity-100 mt-4 md:h-0 md:opacity-0 md:mt-0 md:group-hover:h-auto md:group-hover:opacity-100 md:group-hover:mt-4 overflow-hidden transition-all duration-500">
                     <p className="text-slate-600 dark:text-white/60 text-[11px] md:text-xs leading-relaxed mb-4 line-clamp-2 max-w-sm font-light">
                       {stripHTML(item.content?.brief)}
                     </p>

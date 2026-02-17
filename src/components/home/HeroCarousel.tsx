@@ -45,7 +45,7 @@ const HERO_SLIDES = [
 ];
 
 export default function HeroCarousel() {
-    const { t } = useLocale();
+    const { t, locale } = useLocale();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -109,7 +109,7 @@ export default function HeroCarousel() {
             {/* Content Layer */}
             <motion.div
                 style={{ y: y1, opacity }}
-                className="absolute inset-x-0 bottom-0 h-full flex flex-col justify-end pb-52 px-6 md:px-16 lg:px-24 z-10 pointer-events-none"
+                className="absolute inset-x-0 bottom-0 h-full flex flex-col justify-end px-6 md:px-16 lg:px-24 z-10 pointer-events-none pb-60 md:pb-64"
             >
                 <div className="max-w-6xl w-full pointer-events-auto">
                     <AnimatePresence mode="wait">
