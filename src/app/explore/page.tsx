@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import HomeTabs from "@/components/home/HomeTabs";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import CategoryContent from "@/components/category/CategoryContent";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
 import { selectShortcuts, selectGlobalLoading, fetchShortcuts } from "@/lib/store/slices/globalSlice";
@@ -205,7 +206,7 @@ function ExplorePageContent() {
             </section>
             {/* <HomeTabs activeTab="categories" /> */}
 
-            <div className="mx-auto w-full px-4 space-y-10 pb-0">
+            <div className="mx-auto w-full px-4 space-y-6 pb-0">
                 <div className="min-h-[200px] animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {!globalLoading && sectionTwo.length > 0 && (
                         <div className="space-y-6">
@@ -241,6 +242,19 @@ function ExplorePageContent() {
                                         </button>
                                     )
                                 })}
+                            </div>
+
+                            {/* BREADCRUMB */}
+                            <div className="flex justify-start -mt-10">
+                                <Breadcrumb
+                                    items={[
+                                        { label: t("explore_nara") || "Explore", href: "/explore" },
+                                        ...(selectedCategory ? [{
+                                            label: selectedCategory.title,
+                                            href: `/explore?category=${selectedCategory._id}`
+                                        }] : [])
+                                    ]}
+                                />
                             </div>
 
                             {/* --- Dynamic Content --- */}

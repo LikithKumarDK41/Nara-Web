@@ -19,12 +19,14 @@ export default function HomeTabs() {
                     title={t("home.quick_access")}
                     className="group
             flex items-center gap-2 px-6 py-3 rounded-xl text-sm md:text-base font-bold transition-all duration-300
-           text-slate-600 dark:text-slate-400 hover:bg-gradient-to-r from-teal-500 to-teal-600 hover:text-white dark:hover:text-white
-`          "
+            text-slate-600 dark:text-slate-400 hover:bg-gradient-to-r from-teal-500 to-teal-600 hover:text-white dark:hover:text-white"
                 >
                     <MapPinned className="w-5 h-5 text-teal-600 dark:text-teal-400 group-hover:text-white dark:group-hover:text-white" />
                     <span className="hidden sm:block">{t("home.quick_access")}</span>
                 </Link>
+
+                {/* Separator */}
+                <div className="w-px h-6 bg-slate-400 dark:bg-slate-700 my-auto mx-1" />
 
                 <Link
                     href="/explore"

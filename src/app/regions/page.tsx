@@ -14,6 +14,7 @@ import { useGlobalLoader } from "@/providers/LoaderProvider";
 import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -228,6 +229,11 @@ export default function RegionDetailsPage() {
           </p>
         </div>
       </section>
+
+      {/* BREADCRUMB */}
+      <div className="container mx-auto px-1 pt-4">
+
+      </div>
 
       {/* ===== SEARCH + FILTER BAR ===== */}
       <MonumentsToolbar
@@ -560,51 +566,60 @@ function MonumentsToolbar({
   }, []);
 
   return (
-    <div className="flex justify-end items-center gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
-          <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {loadingSorts ? (
-            <DropdownMenuItem disabled>{t("loading")}</DropdownMenuItem>
-          ) : sortOptions.length > 0 ? (
-            sortOptions.map((s) => (
-              <DropdownMenuItem
-                key={s._id}
-                onClick={() => onSortSelect(s.link || s.name || "")}
-                className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${selectedSort == s.link
-                  ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
-                  : ""
-                  }`}
-              >
-                {s.icon?.secure_url ? (
-                  <img
-                    src={s.icon.secure_url}
-                    alt={s.title || s.name}
-                    className="h-4 w-4 rounded-sm object-contain"
-                  />
-                ) : (
-                  <ImageIcon className="h-4 w-4 " />
-                )}
-                <span>{s.title || s.name}</span>
+    <div className="flex gap-2 justify-between items-center">
+      <div className="pl-2 flex gap-2 items-center">
+        <Breadcrumb
+          items={[
+            { label: t("region_desc_title") || "Region Details" }
+          ]}
+        />
+      </div>
+      <div className="flex justify-end items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
+            <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {loadingSorts ? (
+              <DropdownMenuItem disabled>{t("loading")}</DropdownMenuItem>
+            ) : sortOptions.length > 0 ? (
+              sortOptions.map((s) => (
+                <DropdownMenuItem
+                  key={s._id}
+                  onClick={() => onSortSelect(s.link || s.name || "")}
+                  className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${selectedSort == s.link
+                    ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
+                    : ""
+                    }`}
+                >
+                  {s.icon?.secure_url ? (
+                    <img
+                      src={s.icon.secure_url}
+                      alt={s.title || s.name}
+                      className="h-4 w-4 rounded-sm object-contain"
+                    />
+                  ) : (
+                    <ImageIcon className="h-4 w-4 " />
+                  )}
+                  <span>{s.title || s.name}</span>
+                </DropdownMenuItem>
+              ))
+            ) : (
+              <DropdownMenuItem disabled>
+                {t("tourist_attractions.no_sort_options")}
               </DropdownMenuItem>
-            ))
-          ) : (
-            <DropdownMenuItem disabled>
-              {t("tourist_attractions.no_sort_options")}
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

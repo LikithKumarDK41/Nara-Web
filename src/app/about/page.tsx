@@ -16,7 +16,7 @@ import {
   ImageIcon,
   ArrowUpDown,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 import {
   apiFetchAboutById,
@@ -45,11 +45,14 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 type About = any;
 
 export default function AboutDetailPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const activeAboutId = useSelector(selectActiveAboutId);
   const { t } = useLocale();
 
@@ -188,32 +191,31 @@ export default function AboutDetailPage() {
   }, [parsedLink, show, hide]);
 
   const handleExploreSubtheme = useCallback(
-    async (subthemeId: string) => {
-      try {
-        show();
+    (subthemeId: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("subthemeId", subthemeId);
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [searchParams, pathname, router],
+  );
 
-        const subtheme = subthemes.find((s) => s._id === subthemeId) || null;
+  useEffect(() => {
+    const subthemeId = searchParams.get("subthemeId");
+
+    if (subthemeId && subthemes.length > 0) {
+      const subtheme = subthemes.find((s) => s._id === subthemeId);
+      if (subtheme) {
         setResourceType("monuments");
         setActiveSubtheme(subtheme);
-
-        const filter = { subtheme: subthemeId };
-
-        const data = await apiFetchByLink<Monument>(
-          "monuments",
-          filter,
-          "-popularity",
-        );
-
-        setMonuments(data);
         setView("monuments");
-      } catch (err) {
-        console.error(err);
-      } finally {
-        hide();
       }
-    },
-    [subthemes, show, hide],
-  );
+    } else if (!subthemeId && view === "monuments") {
+      setView("subthemes");
+      setResourceType("subthemes");
+      setActiveSubtheme(null);
+      setMonuments([]);
+    }
+  }, [searchParams, subthemes, view]);
 
   const handleOpenMonument = useCallback(
     async (id: string) => {
@@ -374,6 +376,15 @@ export default function AboutDetailPage() {
         </div>
       )}
 
+      {/* BREADCRUMB */}
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            ...(about ? [{ label: about.title }] : [])
+          ]}
+        />
+      </div>
+
       {selectedMonument && (
         <MonumentDetailModal
           open={modalOpen}
@@ -447,7 +458,7 @@ export default function AboutDetailPage() {
                 {t("related_spots")}
               </h2>
             </div>
-            <div className="flex justify-end items-end gap-3">
+            <div className="flex justify-end items-center gap-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -489,24 +500,26 @@ export default function AboutDetailPage() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {/* Right: Back */}
+              {view === "monuments" && (
+                <button
+                  onClick={() => router.back()}
+                  className="
+                    inline-flex items-center gap-1.5
+                    text-xs font-semibold
+                    text-teal-600 dark:text-teal-400
+                    hover:text-teal-500
+                    transition-colors cursor-pointer
+                  "
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {t("Back")}
+                </button>
+              )}
             </div>
 
-            {/* Right: Back */}
-            {view === "monuments" && (
-              <button
-                onClick={fetchSubthemes}
-                className="
-      inline-flex items-center gap-1.5
-      text-xs font-semibold
-      text-teal-600 dark:text-teal-400
-      hover:text-teal-500
-      transition-colors cursor-pointer
-    "
-              >
-                <ArrowLeft className="w-4 h-4" />
-                {t("Back")}
-              </button>
-            )}
+
           </div>
 
           <div className="space-y-16">

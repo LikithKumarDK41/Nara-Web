@@ -18,6 +18,7 @@ import {
 import { apiFetchToursVersionTwo } from "@/services/userTourService";
 import type { Tour } from "@/lib/types/userTour.types";
 import { normalizeHTML } from "@/lib/utils";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 /* =========================================================
    🧹 Safe HTML Sanitizer
@@ -291,64 +292,74 @@ function ToursToolbar({
   const { t } = useLocale();
 
   return (
-    <div className="flex justify-end items-center gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
-          >
-            <Search className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64 p-2 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
-          <DropdownMenuLabel>{t("tours.search_tours")}</DropdownMenuLabel>
-          <Input
-            autoFocus
-            placeholder={t("tours.searchPlaceholder")}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="mt-2"
-          />
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex justify-between items-center gap-2">
+      {/* BREADCRUMB */}
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            { label: t("tours_breadcrumb") || "Tours" },
+          ]}
+        />
+      </div>
+      <div className="flex justify-end items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64 p-2 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
+            <DropdownMenuLabel>{t("tours.search_tours")}</DropdownMenuLabel>
+            <Input
+              autoFocus
+              placeholder={t("tours.searchPlaceholder")}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="mt-2"
+            />
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
-          <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => setSortOrder("asc")}
-            className={
-              sortOrder === "asc"
-                ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
-                : ""
-            }
-          >
-            {t("sort_asc")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setSortOrder("desc")}
-            className={
-              sortOrder === "desc"
-                ? "bg-gray-100 dark:bg-neutral-700 font-semibold"
-                : ""
-            }
-          >
-            {t("sort_desc")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
+            <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => setSortOrder("asc")}
+              className={
+                sortOrder === "asc"
+                  ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
+                  : ""
+              }
+            >
+              {t("sort_asc")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortOrder("desc")}
+              className={
+                sortOrder === "desc"
+                  ? "bg-gray-100 dark:bg-neutral-700 font-semibold"
+                  : ""
+              }
+            >
+              {t("sort_desc")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

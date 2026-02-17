@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import EmbeddedRegionMap from "./embedded/EmbeddedRegionMap";
 import EmbeddedSearch from "./embedded/EmbeddedSearch";
 import EmbeddedStreetView from "./embedded/EmbeddedStreetView";
+import Breadcrumb from "../ui/Breadcrumb";
 
 function QuickAccessContentInner({ standalone }: { standalone: boolean }) {
     const shortcuts = useAppSelector(selectShortcuts);
@@ -72,9 +73,16 @@ function QuickAccessContentInner({ standalone }: { standalone: boolean }) {
 
     return (
         <section className={`w-full space-y-8 ${standalone ? "py-8" : ""}`}>
-            <span className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent block sm:hidden">
-                {t("home.quick_access")}
-            </span>
+            {/* BREADCRUMB - Standalone Only */}
+            {standalone && (
+                <div className="flex justify-start -mt-10">
+                    <Breadcrumb
+                        items={[
+                            ...(activeItem ? [{ label: activeItem.title }] : [])
+                        ]}
+                    />
+                </div>
+            )}
 
             {/* TABS GRID */}
             <div

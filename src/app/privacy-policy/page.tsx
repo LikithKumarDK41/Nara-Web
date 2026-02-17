@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export default function PrivacyPolicyPage() {
   const { t, locale } = useLocale();
@@ -83,6 +84,15 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
       </section>
+
+      {/* BREADCRUMB */}
+      <div className="mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            { label: t("privacy.title") || "Privacy Policy" },
+          ]}
+        />
+      </div>
 
       <div className="sm:px-6">
         {/* Sections */}
