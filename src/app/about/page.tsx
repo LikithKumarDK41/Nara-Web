@@ -316,7 +316,7 @@ export default function AboutDetailPage() {
   return (
     <div className="text-slate-100 min-h-screen">
       {/* ================= HERO BANNER ================= */}
-      <section className="mt-[5.4%] relative h-[380px] w-full overflow-hidden flex items-end">
+      <section className="relative h-[380px] w-full overflow-hidden flex items-end">
         {about?.image?.secure_url && (
           <img
             src={about?.image?.secure_url}

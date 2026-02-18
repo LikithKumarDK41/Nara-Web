@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
       <section
-        className="mt-[5.4%] mb-4
+        className="mb-4
     w-full
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
