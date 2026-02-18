@@ -169,6 +169,7 @@ export default function BlueprintPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {t("blueprint_title")}

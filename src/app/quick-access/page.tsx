@@ -70,6 +70,7 @@ export default function QuickAccessPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                     >
                         {t("quick_access_page.hero_title")}

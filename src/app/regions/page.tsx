@@ -202,6 +202,7 @@ export default function RegionDetailsPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {t("region_desc_title")}
@@ -346,7 +347,7 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
       <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
         <div className="space-y-3">
           {/* TITLE */}
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+          <h3 className="font-serif italic text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
             {m.title || m.name}
           </h3>
 
@@ -398,7 +399,7 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
 ========================================================= */
 function PageNavigator({ totalPages, page, onPageChange, t }: any) {
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="mb-6 flex items-center justify-between gap-3">
       <div className="text-xs text-muted-foreground">
         {t("pagination_left", { current: page, total: totalPages })}
       </div>

@@ -211,6 +211,7 @@ Sumitomo Life Minatomachi MT Building 2F, 1-18-4 Minamihorie, Nishi-ku, Osaka Ci
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {isEN ? "Terms of Use" : "利用規約／サービス規約"}

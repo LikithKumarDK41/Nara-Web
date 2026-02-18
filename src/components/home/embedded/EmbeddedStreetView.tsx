@@ -287,7 +287,7 @@ function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
             <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
                 <div className="space-y-3">
                     {/* TITLE */}
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+                    <h3 className="font-serif italic text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
                         {m.title || m.name}
                     </h3>
 

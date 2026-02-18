@@ -72,8 +72,8 @@ export default function EmbeddedRegionMap() {
                             key={v}
                             onClick={() => setView(v as any)}
                             className={`cursor-pointer truncate px-6 py-3 rounded-xl font-semibold transition-all text-center ${view === v
-                                    ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
-                                    : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
+                                ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
+                                : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
                                 }`}
                         >
                             {v === "region" ? t("region_title") : t("map_title")}
@@ -153,7 +153,7 @@ function RegionCard({ r }: { r: any }) {
             {/* CONTENT */}
             <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
                 <div className="space-y-3">
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+                    <h3 className="font-serif italic text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
                         {r.title}
                     </h3>
 

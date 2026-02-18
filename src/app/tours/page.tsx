@@ -160,6 +160,7 @@ export default function ToursPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {t("tours.exploreTours")}

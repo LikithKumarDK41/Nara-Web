@@ -351,7 +351,7 @@ export default function AboutDetailPage() {
             <Badge className="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-3 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase">
               Heritage Story
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            <h1 className="font-serif italic text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
               {about?.title}
             </h1>
           </div>
