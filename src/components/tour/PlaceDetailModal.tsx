@@ -105,7 +105,7 @@ export default function PlaceDetailModal({
           {/* === Header === */}
           <DialogHeader className="flex items-center justify-center border-b bg-background py-4 px-8 relative">
             <DialogTitle
-              className="
+              className="font-serif italic
     text-xl font-semibold 
     px-12 
     whitespace-nowrap 
