@@ -205,7 +205,7 @@ function ExplorePageContent() {
             </section>
             {/* <HomeTabs activeTab="categories" /> */}
 
-            <div className="mx-auto w-full px-4 space-y-6 pb-0">
+            <div className="mx-auto w-full px-4 space-y-6 pb-6">
                 <div className="min-h-[200px] animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {!globalLoading && sectionTwo.length > 0 && (
                         <div className="space-y-6">

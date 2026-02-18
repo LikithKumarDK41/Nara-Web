@@ -360,7 +360,7 @@ export default function AboutDetailPage() {
 
       {showImage && about.image?.secure_url && (
         <div
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center cursor-pointer"
+          className="h-[100dvh] fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-pointer"
           onClick={() => setShowImage(false)}
         >
           <img
