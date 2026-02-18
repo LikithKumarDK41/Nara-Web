@@ -262,6 +262,7 @@ export default function StreetViewModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                   >
                     {t("street_view_title")}

@@ -200,6 +200,7 @@ export default function RegionMapModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                       >
                         {t("region_title")}
@@ -305,6 +306,7 @@ export default function RegionMapModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                       >
                         {t("map_title")}

@@ -316,7 +316,7 @@ export default function AboutDetailPage() {
   return (
     <div className="text-slate-100 min-h-screen">
       {/* ================= HERO BANNER ================= */}
-      <section className="mt-[5.4%] relative h-[380px] w-full overflow-hidden flex items-end">
+      <section className="relative h-[380px] w-full overflow-hidden flex items-end">
         {about?.image?.secure_url && (
           <img
             src={about?.image?.secure_url}
@@ -351,7 +351,7 @@ export default function AboutDetailPage() {
             <Badge className="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-3 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase">
               Heritage Story
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            <h1 className="font-serif italic text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
               {about?.title}
             </h1>
           </div>
@@ -360,7 +360,7 @@ export default function AboutDetailPage() {
 
       {showImage && about.image?.secure_url && (
         <div
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center cursor-pointer"
+          className="h-[100dvh] fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-pointer"
           onClick={() => setShowImage(false)}
         >
           <img

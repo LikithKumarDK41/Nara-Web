@@ -255,6 +255,9 @@ export default function HeaderBar() {
       </AnimatePresence>
 
       <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
+
+      {/* Spacer for fixed header on non-home pages */}
+      {!isHome && <div className="h-[73px]" />}
     </>
   );
 }

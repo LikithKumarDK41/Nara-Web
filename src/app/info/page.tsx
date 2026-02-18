@@ -3,14 +3,44 @@
 import React, { useState } from "react";
 import { useLocale } from "@/providers/LocaleProvider";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  Map,
+  Info,
+  List,
+  Layers,
+  Globe,
+  Video,
+  MapPin,
+  Play,
+  CheckCircle,
+  AlertTriangle,
+  Wifi,
+  Monitor,
+  ShieldAlert,
+  MoreHorizontal,
+  Navigation,
+  MousePointerClick
+} from "lucide-react";
+
+// Lucide Icon Mapping
+const itemIcons: Record<string, React.ReactNode> = {
+  blueprint_home: <Home className="w-8 h-8" />,
+  blueprint_tours: <Map className="w-8 h-8" />,
+
+  // Child Icons (Generic fallbacks if needed)
+  default: <Info className="w-5 h-5" />
+};
 
 const blueprintItems = [
   {
-    icon: "🏠",
+    icon: <Home className="w-10 h-10 text-teal-600 dark:text-teal-400" />,
     title: "blueprint_home",
     desc: "blueprint_home_desc",
     children: [
       {
+        icon: <Layers className="w-5 h-5" />,
         title: "blueprint_home_main_categories",
         desc: "blueprint_home_main_categories_desc",
         points: [
@@ -20,6 +50,7 @@ const blueprintItems = [
         ],
       },
       {
+        icon: <MoreHorizontal className="w-5 h-5" />,
         title: "blueprint_home_more_options",
         desc: "blueprint_home_more_options_desc",
         points: [
@@ -32,10 +63,12 @@ const blueprintItems = [
         ],
       },
       {
+        icon: <Info className="w-5 h-5" />,
         title: "blueprint_about_kofun_title",
         desc: "blueprint_about_kofun_desc",
       },
       {
+        icon: <List className="w-5 h-5" />,
         title: "blueprint_home_tour_list",
         desc: "blueprint_home_tour_list_desc",
         points: [
@@ -45,26 +78,27 @@ const blueprintItems = [
         ],
       },
       {
+        icon: <CheckCircle className="w-5 h-5" />,
         title: "blueprint_global_header_my_list",
         desc: "blueprint_global_header_my_list_desc",
       },
-      // { title: "blueprint_global_header_map", desc: "blueprint_global_header_map_desc" },
-      // { title: "blueprint_home_global_search", desc: "blueprint_home_global_search_desc" },
-      { title: "blueprint_home_video", desc: "blueprint_home_video_desc" },
+      { icon: <Video className="w-5 h-5" />, title: "blueprint_home_video", desc: "blueprint_home_video_desc" },
     ],
   },
   {
-    icon: "🗺️",
+    icon: <Map className="w-10 h-10 text-teal-600 dark:text-teal-400" />,
     title: "blueprint_tours",
     desc: "blueprint_tours_desc",
     children: [
       {
+        icon: <Info className="w-5 h-5" />,
         title: "blueprint_tours_details",
         desc: "blueprint_tours_details_desc",
       },
-      { title: "blueprint_tours_start", desc: "blueprint_tours_start_desc" },
-      { title: "blueprint_tours_active", desc: "blueprint_tours_active_desc" },
+      { icon: <Play className="w-5 h-5" />, title: "blueprint_tours_start", desc: "blueprint_tours_start_desc" },
+      { icon: <Navigation className="w-5 h-5" />, title: "blueprint_tours_active", desc: "blueprint_tours_active_desc" },
       {
+        icon: <CheckCircle className="w-5 h-5" />,
         title: "blueprint_tours_completion",
         desc: "blueprint_tours_completion_desc",
       },
@@ -73,12 +107,12 @@ const blueprintItems = [
 ];
 
 const appLimitations = [
-  { title: "location.noGps.title", desc: "location.noGps.desc" },
-  { title: "location.wifiAccuracy.title", desc: "location.wifiAccuracy.desc" },
-  { title: "location.ethernet.title", desc: "location.ethernet.desc" },
-  { title: "location.vpn.title", desc: "location.vpn.desc" },
-  { title: "location.background.title", desc: "location.background.desc" },
-  { title: "location.motion.title", desc: "location.motion.desc" },
+  { icon: <Globe className="w-5 h-5 text-red-500" />, title: "location.noGps.title", desc: "location.noGps.desc" },
+  { icon: <Wifi className="w-5 h-5 text-red-500" />, title: "location.wifiAccuracy.title", desc: "location.wifiAccuracy.desc" },
+  { icon: <Monitor className="w-5 h-5 text-red-500" />, title: "location.ethernet.title", desc: "location.ethernet.desc" },
+  { icon: <ShieldAlert className="w-5 h-5 text-red-500" />, title: "location.vpn.title", desc: "location.vpn.desc" },
+  { icon: <MapPin className="w-5 h-5 text-red-500" />, title: "location.background.title", desc: "location.background.desc" },
+  { icon: <MousePointerClick className="w-5 h-5 text-red-500" />, title: "location.motion.title", desc: "location.motion.desc" },
 ];
 
 export default function BlueprintPage() {
@@ -87,10 +121,10 @@ export default function BlueprintPage() {
   const [highlightTours, setHighlightTours] = useState(false);
 
   return (
-    <div className="space-y-8">
-      {/* ================= HERO ================= */}
+    <div className="min-h-screen space-y-8 pb-20">
+      {/* ================= HERO (PRESERVED) ================= */}
       <section
-        className="mt-[5.4%] mb-4
+        className="mb-4
     w-full
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
@@ -135,6 +169,7 @@ export default function BlueprintPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {t("blueprint_title")}
@@ -163,189 +198,195 @@ export default function BlueprintPage() {
       </section>
 
       {/* BREADCRUMB */}
-      <div className="px-4 space-y-8">
-        <div className="mt-2 flex justify-start">
-          <Breadcrumb
-            items={[
-              { label: t("blueprint_title") || "Info" },
-            ]}
-          />
-        </div>
+      <div className="px-4 w-full">
+        <Breadcrumb
+          items={[
+            { label: t("blueprint_title") || "Info" },
+          ]}
+        />
 
         {/* ================= TABS ================= */}
-        <div className="flex justify-center -mt-6">
-          <div
-            className="inline-flex gap-1 rounded-full p-1 border
-          bg-white/70 border-teal-400
-          dark:bg-slate-900/60 dark:border-teal-700"
-          >
+        <div className="mt-8 flex justify-center">
+          <div className="relative inline-flex bg-slate-100 dark:bg-slate-800/50 p-1 rounded-full border border-slate-200 dark:border-slate-700/50 backdrop-blur-md">
             {["info", "limits"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`cursor-pointer px-5 py-2 rounded-full text-sm font-medium transition
+                className={`cursor-pointer relative z-10 px-6 py-2 rounded-full text-sm font-bold transition-colors duration-300
                 ${activeTab === tab
-                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    ? "text-white"
+                    : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                   }`}
               >
-                {t(
-                  tab === "info"
-                    ? "blueprint_tab_app_info"
-                    : "blueprint_tab_app_restrictions",
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 bg-teal-600 rounded-full shadow-md"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
                 )}
+                <span className="relative z-10">
+                  {t(
+                    tab === "info"
+                      ? "blueprint_tab_app_info"
+                      : "blueprint_tab_app_restrictions",
+                  )}
+                </span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* ================= INFO TAB ================= */}
-        {activeTab === "info" && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {blueprintItems.map((item, index) => (
-                <div
-                  key={index}
-                  id={
-                    item.title === "blueprint_tours" ? "tours-section" : undefined
-                  }
-                  className={`rounded-xl border p-6 transition shadow-sm
-                  ${item.title === "blueprint_tours" && highlightTours
-                      ? "border-teal-500 ring-2 ring-teal-400/60 bg-teal-50/60 dark:bg-teal-500/10"
-                      : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60"
-                    }`}
-                >
-                  <div className="text-3xl mb-3">{item.icon}</div>
-
-                  <h3
-                    className={`text-lg font-semibold
-                    text-teal-700 dark:text-teal-300
-                    ${item.title === "blueprint_home" ||
-                        item.title === "blueprint_tours"
-                        ? "cursor-pointer hover:underline"
-                        : ""
-                      }`}
-                    onClick={() => {
-                      if (item.title === "blueprint_tours")
-                        window.location.href = "/tours";
-                      if (item.title === "blueprint_home")
-                        window.location.href = "/";
-                    }}
+        {/* ================= CONTENT AREA ================= */}
+        <div className="mt-10">
+          <AnimatePresence mode="wait">
+            {activeTab === "info" ? (
+              <motion.div
+                key="info"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+              >
+                {blueprintItems.map((item, index) => (
+                  <div
+                    key={index}
+                    id={item.title === "blueprint_tours" ? "tours-section" : undefined}
+                    className={`
+                    group relative overflow-hidden rounded-3xl p-8 border transition-all duration-300
+                    ${item.title === "blueprint_tours" && highlightTours
+                        ? "border-teal-400 ring-2 ring-teal-400/50 bg-teal-50 dark:bg-teal-900/10"
+                        : "bg-white dark:bg-[#15191f] border-slate-200/80 dark:border-slate-700/60 shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-1"
+                      }
+                `}
                   >
-                    {t(item.title)}
-                  </h3>
+                    {/* Decorative blob */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 dark:bg-teal-900/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110 duration-500" />
 
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    {t(item.desc)}
-                  </p>
+                    <div className="relative z-10">
+                      <div className="mb-4 bg-teal-50 dark:bg-teal-900/20 w-16 h-16 rounded-2xl flex items-center justify-center border border-teal-100 dark:border-teal-800">
+                        {item.icon}
+                      </div>
 
-                  {item.children && (
-                    <div className="relative mt-6 pl-8 space-y-6">
-                      {item.children.map((child, idx) => (
-                        <div key={idx} className="relative">
-                          {idx !== item.children.length - 1 && (
-                            <span
-                              className="absolute left-[-15px] top-4 bottom-[-32px] w-px
-                            bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500"
-                            />
-                          )}
+                      <h3
+                        className={`text-2xl font-serif font-bold text-slate-800 dark:text-slate-100 mb-2
+                    ${item.title === "blueprint_home" || item.title === "blueprint_tours"
+                            ? "cursor-pointer group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors"
+                            : ""
+                          }`}
+                        onClick={() => {
+                          if (item.title === "blueprint_tours") window.location.href = "/tours";
+                          if (item.title === "blueprint_home") window.location.href = "/";
+                        }}
+                      >
+                        {t(item.title)}
+                      </h3>
 
-                          <span
-                            className="absolute left-[-20px] top-2 w-3 h-3 rounded-full
-                          bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500"
-                          />
+                      <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+                        {t(item.desc)}
+                      </p>
 
-                          <p
-                            className={`font-semibold
-                            ${child.title === "blueprint_home_tour_list"
-                                ? "cursor-pointer text-teal-700 dark:text-teal-300 hover:underline"
-                                : "text-slate-800 dark:text-slate-100"
-                              }`}
-                            onClick={() => {
-                              if (child.title === "blueprint_home_tour_list") {
-                                document
-                                  .getElementById("tours-section")
-                                  ?.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "start",
-                                  });
+                      {item.children && (
+                        <div className="mt-8 space-y-8 relative">
+                          {/* Connecting Line - properly centered under icons (w-10 = 40px, center 20px, line 2px -> left-[19px]) */}
+                          <div className="absolute left-[19px] top-4 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700/50" />
 
-                                setHighlightTours(true);
-                                setTimeout(() => setHighlightTours(false), 2500);
-                              }
-                            }}
-                          >
-                            {t(child.title)}
-                          </p>
+                          {item.children.map((child, idx) => (
+                            <div key={idx} className="relative flex gap-5 group/child">
+                              {/* Icon Wrapper */}
+                              <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center text-teal-600 dark:text-teal-400 shadow-sm transition-all duration-300 group-hover/child:scale-110 group-hover/child:border-teal-300 dark:group-hover/child:border-teal-700 group-hover/child:shadow-md">
+                                {child.icon}
+                              </div>
 
-                          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                            {t(child.desc)}
-                          </p>
-
-                          {child.points && (
-                            <ul
-                              className="mt-2 list-disc pl-5 text-sm
-                            text-slate-600 dark:text-slate-400"
-                            >
-                              {child.points.map((p, i) => (
-                                <li key={i}>{t(p)}</li>
-                              ))}
-                            </ul>
-                          )}
+                              <div className="flex-1 pt-0.5">
+                                <p
+                                  className={`font-semibold text-lg
+                                    ${child.title === "blueprint_home_tour_list"
+                                      ? "cursor-pointer text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 underline decoration-teal-300 dark:decoration-teal-700 underline-offset-4"
+                                      : "text-slate-700 dark:text-slate-200"
+                                    }`}
+                                  onClick={() => {
+                                    if (child.title === "blueprint_home_tour_list") {
+                                      document.getElementById("tours-section")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                      setHighlightTours(true);
+                                      setTimeout(() => setHighlightTours(false), 2500);
+                                    }
+                                  }}
+                                >
+                                  {t(child.title)}
+                                </p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                  {t(child.desc)}
+                                </p>
+                                {child.points && (
+                                  <ul className="mt-3 space-y-2">
+                                    {child.points.map((p, i) => (
+                                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 flex-shrink-0" />
+                                        <span>{t(p)}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
+                  </div>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="limits"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="max-w-4xl mx-auto"
+              >
+                <div className="bg-white dark:bg-[#15191f] border border-red-100 dark:border-red-900/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-red-100/20 dark:shadow-none relative overflow-hidden">
+                  {/* Decorative Alert Icon BG */}
+                  <AlertTriangle className="absolute -top-10 -right-10 w-64 h-64 text-red-50 dark:text-red-900/10 opacity-50" />
+
+                  <div className="relative z-10 text-center mb-12">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold text-sm mb-4">
+                      <AlertTriangle className="w-4 h-4" />
+                      {t("applicationRestrictions.title")}
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                      {t("applicationRestrictions.desktopOnly")}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+                    {appLimitations.map((item, index) => (
+                      <div key={index} className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md transition-all duration-300">
+                        <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0 border border-red-200 dark:border-red-800/50">
+                          {item.icon}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-1">
+                            {t(item.title)}
+                          </h4>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            {t(item.desc)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-12 text-center">
+                    <p className="inline-block px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-mono text-slate-500 dark:text-slate-400">
+                      {t("applicationRestrictions.browserLimitations")}
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-              {t("blueprint_footer_note")}
-            </p>
-          </>
-        )}
-
-        {/* ================= LIMITS TAB ================= */}
-        {activeTab === "limits" && (
-          <section
-            className="max-w-4xl mx-auto rounded-2xl p-8 shadow-sm
-          bg-white border border-red-200
-          dark:bg-slate-900/60 dark:border-slate-700"
-          >
-            <h2 className="text-2xl font-semibold text-teal-700 dark:text-teal-300">
-              {t("applicationRestrictions.title")}
-            </h2>
-
-            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
-              {t("applicationRestrictions.desktopOnly")}
-            </p>
-
-            <div className="relative pl-8 space-y-8">
-              {appLimitations.map((item, index, arr) => (
-                <div key={index} className="relative">
-                  {index !== arr.length - 1 && (
-                    <span
-                      className="absolute left-[-15px] top-4 bottom-[-40px] w-px
-                    bg-slate-300 dark:bg-slate-700"
-                    />
-                  )}
-                  <span className="absolute left-[-20px] top-2 w-3 h-3 rounded-full bg-red-500" />
-                  <p className="font-medium text-slate-800 dark:text-slate-100">
-                    {t(item.title)}
-                  </p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {t(item.desc)}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">
-              {t("applicationRestrictions.browserLimitations")}
-            </p>
-          </section>
-        )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

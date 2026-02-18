@@ -486,7 +486,7 @@ export default function MonumentDetailModal({
         {/* ---------------- Header ---------------- */}
         <DialogHeader className="flex items-center border-b bg-background py-4 px-8 relative">
           <DialogTitle
-            className="
+            className="font-serif italic
     text-xl font-semibold 
     px-12 
     whitespace-nowrap 

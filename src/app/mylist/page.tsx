@@ -355,7 +355,7 @@ export default function LibraryPage() {
     <div className="space-y-6">
       {/* HERO BANNER */}
       <section
-        className="mt-[5.4%] mb-4
+        className="mb-4
     w-full
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
@@ -400,6 +400,7 @@ export default function LibraryPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
           >
             {t("personal_library")}
@@ -627,7 +628,7 @@ function MonumentCard({
 
       <div className="flex flex-1 flex-col justify-between p-4">
         <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
+          <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
             {m.name}
           </h3>
           {m.description && (
@@ -716,7 +717,7 @@ function TourCard({
 
       <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
         <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
+          <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
             {tour.title}
           </h3>
           {tour.description && (

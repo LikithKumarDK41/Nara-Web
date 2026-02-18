@@ -402,7 +402,7 @@ export default function TourDetailsClientPage() {
 
       <div className="space-y-12">
         {/* ===== Banner ===== */}
-        <section className="mt-[5.4%] relative overflow-hidden shadow-md">
+        <section className="relative overflow-hidden shadow-md">
           {/* Banner Image */}
           <div className="relative h-[420px] sm:h-[480px] w-full">
             {tour.image?.secure_url ? (
@@ -453,7 +453,7 @@ export default function TourDetailsClientPage() {
 
           {/* Title + Subtitle */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
-            <h1 className="text-4xl sm:text-5xl font-bold drop-shadow-lg">
+            <h1 className="font-serif italic text-4xl sm:text-5xl font-bold drop-shadow-lg">
               {tour.title}
             </h1>
             {tour.content?.brief && (
