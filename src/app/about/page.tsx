@@ -410,7 +410,7 @@ export default function AboutDetailPage() {
 "
             >
               <BookOpen className="w-5 h-5 text-teal-500" />
-              <h2 className="text-lg font-bold tracking-wider text-slate-900 dark:text-white uppercase">
+              <h2 className="font-serif italic text-lg font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                 {about.title}{t("about")}
               </h2>
             </div>
@@ -452,7 +452,7 @@ export default function AboutDetailPage() {
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-teal-500" />
                 <h2
-                  className="text-lg font-bold tracking-wider uppercase
+                  className="font-serif italic text-lg font-bold tracking-wider uppercase
       text-slate-900 dark:text-white
     "
                 >
@@ -506,7 +506,7 @@ export default function AboutDetailPage() {
                 {view === "monuments" && (
                   <button
                     onClick={() => router.back()}
-                    className="
+                    className="font-serif italic
                     inline-flex items-center gap-1.5
                     text-xs font-semibold
                     text-teal-600 dark:text-teal-400
@@ -625,7 +625,7 @@ export default function AboutDetailPage() {
               >
                 <Layers className="w-5 h-5 text-teal-500" />
                 <h2
-                  className="text-lg font-bold tracking-wider uppercase
+                  className="font-serif italic text-lg font-bold tracking-wider uppercase
         text-slate-900 dark:text-white
       "
                 >
@@ -681,7 +681,7 @@ export default function AboutDetailPage() {
                       {/* 🏷 Theme Badge */}
                       {themeTitle && (
                         <div
-                          className="
+                          className="font-serif italic
                 absolute top-3 left-3
                 px-2.5 py-1
                 rounded-full
@@ -697,10 +697,10 @@ export default function AboutDetailPage() {
 
                       {/* Bottom Content */}
                       <div
-                        className="
+                        className="font-serif italic
               absolute inset-x-0 bottom-0
               px-4 py-3
-              flex items-center justify-between
+              flex items-center gap-2 justify-between
             "
                       >
                         {/* Title */}
@@ -750,7 +750,7 @@ export default function AboutDetailPage() {
 "
             >
               <Route className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-              <h2 className="text-lg font-bold tracking-wider text-slate-900 dark:text-white uppercase">
+              <h2 className="font-serif italic text-lg font-bold tracking-wider text-slate-900 dark:text-white uppercase">
                 {t("recommended_experiences")}
               </h2>
             </div>

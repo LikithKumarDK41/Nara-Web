@@ -396,7 +396,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                                     {/* Theme badge */}
                                     {themeTitle && (
                                         <div
-                                            className="
+                                            className="font-serif italic
                 absolute top-3 left-3
                 px-2.5 py-1
                 rounded-full
@@ -412,14 +412,15 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
 
                                     {/* Bottom content */}
                                     <div
-                                        className="
+                                        className="font-serif italic
               absolute inset-x-0 bottom-0
               px-4 py-3
-              flex items-center justify-between
+              flex items-center gap-2 justify-between
             "
                                     >
                                         {/* Title */}
-                                        <h3 className="text-sm font-semibold text-white leading-tight line-clamp-2">
+                                        <h3 className="font-serif italic
+ text-sm font-semibold text-white leading-tight line-clamp-2">
                                             {s.title || s.name}
                                         </h3>
 
@@ -460,7 +461,8 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                     <div className="flex justify-between  border-b border-slate-200 dark:border-white/10">
                         <div className="flex items-center gap-3 pb-4">
                             <BookOpen className="w-5 h-5 text-teal-500" />
-                            <h2 className="text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
+                            <h2 className="font-serif italic
+ text-lg font-bold tracking-wider uppercase text-slate-900 dark:text-white">
                                 {t("theme_overview")}
                             </h2>
                         </div>
@@ -514,7 +516,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                     <div className="pt-2">
                         {/* Title */}
                         <h1
-                            className="
+                            className="font-serif italic
         text-3xl md:text-4xl
         font-bold
         text-slate-900 dark:text-white
@@ -558,7 +560,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                 <section className="space-y-14 pt-8">
                     {/* Header */}
                     <div
-                        className="
+                        className="font-serif italic
         flex items-center justify-between
         pb-4
         border-b border-slate-200 dark:border-white/10
@@ -579,7 +581,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                                 params.delete("monument");
                                 router.push(`${pathname}?${params.toString()}`, { scroll: false });
                             }}
-                            className="
+                            className="font-serif italic
           inline-flex items-center gap-1.5
           text-xs font-semibold
           text-teal-600 dark:text-teal-400

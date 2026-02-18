@@ -587,7 +587,7 @@ export default function TourDetailsClientPage() {
           {/* ===== Map Section ===== */}
           {tour.tourpoints?.length ? (
             <section className="-mt-2 space-y-4">
-              <h2 className="text-lg font-semibold">{t("tourDetails.map")}</h2>
+              <h2 className="font-serif italic text-lg font-semibold">{t("tourDetails.map")}</h2>
               <Suspense
                 fallback={
                   <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
@@ -606,7 +606,7 @@ export default function TourDetailsClientPage() {
           {/* ===== Timeline Section ===== */}
           {tour.tourpoints?.length && (
             <section id="timeline" className="space-y-4">
-              <h2 className="text-lg font-semibold">
+              <h2 className="font-serif italic text-lg font-semibold">
                 {t("tourDetails.timeline")}
               </h2>
               <br />
