@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useLocale } from "@/providers/LocaleProvider";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export default function TermsOfUsePage() {
   const { t, locale } = useLocale();
@@ -11,9 +12,8 @@ export default function TermsOfUsePage() {
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
       <section
-        className="mb-4
+        className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
@@ -85,7 +85,15 @@ export default function TermsOfUsePage() {
         </div>
       </section>
 
-      <div className="sm:px-6">
+      <div className="px-4 mt-2 flex justify-start">
+        <Breadcrumb
+          items={[
+            { label: isEN ? "Terms of Use" : "利用規約／サービス規約" },
+          ]}
+        />
+      </div>
+
+      <div className="px-4 sm:px-6">
         <div className=" bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 p-8 rounded-2xl shadow-md">
           <Section
             title={isEN ? "Introduction" : "はじめに"}

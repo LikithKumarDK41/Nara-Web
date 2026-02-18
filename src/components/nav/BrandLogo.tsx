@@ -8,11 +8,15 @@ export default function BrandLogo({
   label = "Nara Kofun & Heritage Foundation",
   imgSize = 44,
   showText = true,
+  scrolled = false,
+  isFooter = false,
 }: {
   href?: string;
   label?: string;
   imgSize?: number;
   showText?: boolean;
+  scrolled?: boolean;
+  isFooter?: boolean;
 }) {
   return (
     <Link
@@ -23,65 +27,55 @@ export default function BrandLogo({
       }}
       className="group inline-flex items-center focus:outline-none"
     >
-      {/* 🟠 Gradient Badge */}
+      {/* 🟠 Logo Capsule */}
       <div
         className="
           relative flex items-center justify-center
-          h-11 w-11 rounded-xl
-          bg-gradient-to-br from-teal-500 via-cyan-500 to-emerald-400
-          shadow-[0_0_14px_rgba(20,184,166,0.45)]
+          h-12 w-12 rounded-2xl
+          bg-white dark:bg-white/10
+          border border-slate-200 dark:border-white/10
+          shadow-md transition-all duration-300
+          group-hover:shadow-lg group-hover:scale-105
         "
       >
-        {/* Inner circle → white in light, black in dark */}
-        <div
-          className="
-            h-10 w-10 rounded-[10px]
-            bg-white dark:bg-black
-            flex items-center justify-center
-            transition-colors
-            p-1
-          "
-        >
-          <Image
-            src="/logos/nara_logo.png"
-            alt={label}
-            width={imgSize}
-            height={imgSize}
-            priority
-            className="object-contain rounded-[8px]"
-          />
-        </div>
+        <Image
+          src="/logos/nara_logo.png"
+          alt={label}
+          width={imgSize}
+          height={imgSize}
+          priority
+          className="object-contain p-1.5"
+        />
       </div>
 
       {/* 🟡 Vertical Divider */}
       <span
-        className="
-          mx-3 h-8 w-px
-          bg-gradient-to-b
-          from-transparent via-teal-400/70 to-transparent
-        "
+        className={`
+          mx-4 h-8 w-px
+          transition-colors duration-300
+          ${isFooter ? "bg-slate-200 dark:bg-white/40" : (scrolled ? "bg-slate-200" : "bg-white/30")}
+        `}
       />
 
       {/* 🧡 Text Block */}
       {showText && (
-        <div className="flex flex-col leading-tight select-none">
+        <div className="flex flex-col gap-1 leading-tight select-none">
           {/* Japanese title */}
           <span
-            className="
-              text-[15px] font-bold tracking-wide
-              bg-gradient-to-r from-teal-500 via-cyan-500 to-emerald-400
-              bg-clip-text text-transparent text-left
-            "
+            className={`
+              text-[16px] font-black tracking-tight text-left transition-colors duration-300
+              ${isFooter ? "text-slate-900 dark:text-white" : (scrolled ? "text-slate-900" : "text-white")}
+            `}
           >
             奈良遺跡めぐり
           </span>
 
           {/* English subtitle */}
           <span
-            className="
-              text-[12px] tracking-wide
-              text-gray-600 dark:text-gray-300 text-left
-            "
+            className={`
+              text-[9px] font-black tracking-[0.1em] uppercase text-left transition-colors duration-300
+              ${isFooter ? "text-slate-500 dark:text-white/50" : (scrolled ? "text-slate-500" : "text-slate-200")}
+            `}
           >
             {label}
           </span>

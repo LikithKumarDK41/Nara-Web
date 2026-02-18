@@ -728,6 +728,7 @@
     "about_nara": "奈良の古墳・遺跡について",
     "guide_tour": "古墳・遺跡ツアー",
     "explore_link": "詳細を見る",
+    "explore_subtitle": "厳選されたテーマや史跡コレクションを通じて、奈良の豊かな文化遺産を発見しましょう。",
     "open": "開く",
     "hero": {
       "slides": [
@@ -837,5 +838,10 @@
   "captured_nara_monument": "奈良の史跡で撮影しました",
   "captured_at": "で撮影しました",
   "monument_": "史跡",
-  "nara_visit":"奈良訪問"
+  "nara_visit": "奈良訪問",
+  "quick_access_page": {
+    "hero_title": "クイックアクセス",
+    "hero_subtitle": "インタラクティブマップ、検索ツール、パノラマストリートビューで、奈良の見どころを探索しましょう。"
+  },
+  "tours_breadcrumb": "ツアー"
 }

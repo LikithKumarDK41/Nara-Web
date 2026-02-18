@@ -14,6 +14,7 @@ import { useGlobalLoader } from "@/providers/LoaderProvider";
 import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -91,7 +92,7 @@ export default function RegionDetailsPage() {
     return () => {
       mounted = false;
     };
-  }, [selectedSort, activeThemeId]);
+  }, [selectedSort, activeThemeId, regionId]);
 
   /* -------------------- Filtering -------------------- */
   useEffect(() => setPage(1), [query, selectedSort]);
@@ -146,6 +147,7 @@ export default function RegionDetailsPage() {
   /* =========================================================
             Render
         ========================================================= */
+
   if (error)
     return (
       <div className="text-center text-lg text-red-500 mt-10">{error}</div>
@@ -155,9 +157,8 @@ export default function RegionDetailsPage() {
     <div className="space-y-6">
       {/* ===== HERO SECTION ===== */}
       <section
-        className="mb-4
+        className="mt-[5.4%] mb-4
     w-full
-    rounded-3xl
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
     dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
@@ -228,56 +229,59 @@ export default function RegionDetailsPage() {
         </div>
       </section>
 
-      {/* ===== SEARCH + FILTER BAR ===== */}
-      <MonumentsToolbar
-        query={query}
-        setQuery={setQuery}
-        onSortSelect={(v) => setSelectedSort(v)}
-        selectedSort={selectedSort}
-        activeThemeId={activeThemeId}
-      />
+      <div className="px-4 space-y-6">
 
-      {/* ===== EMPTY STATE ===== */}
-      {filtered.length === 0 && (
-        <EmptyState
-          icon={<Landmark className="h-8 w-8" />}
-          title={t("tourist_attractions.no_results_title")}
-          subtitle={t("tourist_attractions.no_results_subtitle")}
+        {/* ===== SEARCH + FILTER BAR ===== */}
+        <MonumentsToolbar
+          query={query}
+          setQuery={setQuery}
+          onSortSelect={(v) => setSelectedSort(v)}
+          selectedSort={selectedSort}
+          activeThemeId={activeThemeId}
         />
-      )}
 
-      {/* ===== GRID ===== */}
-      {filtered.length > 0 && (
-        <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {currentData.map((m) => (
-              <MonumentCard
-                key={m._id}
-                m={m}
-                onOpen={() => handleOpenMonument(m._id)}
-              />
-            ))}
-          </div>
-          <PageNavigator
-            totalPages={totalPages}
-            page={page}
-            onPageChange={setPage}
-            t={t}
+        {/* ===== EMPTY STATE ===== */}
+        {filtered.length === 0 && (
+          <EmptyState
+            icon={<Landmark className="h-8 w-8" />}
+            title={t("tourist_attractions.no_results_title")}
+            subtitle={t("tourist_attractions.no_results_subtitle")}
           />
-        </>
-      )}
+        )}
 
-      {/* ===== DETAIL MODAL ===== */}
-      {selectedMonument && (
-        <MonumentDetailModal
-          open={open}
-          onClose={() => setOpen(false)}
-          loading={modalLoading}
-          details={selectedMonument}
-          onOpenAnother={handleOpenAnother}
-          customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
-        />
-      )}
+        {/* ===== GRID ===== */}
+        {filtered.length > 0 && (
+          <>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {currentData.map((m) => (
+                <MonumentCard
+                  key={m._id}
+                  m={m}
+                  onOpen={() => handleOpenMonument(m._id)}
+                />
+              ))}
+            </div>
+            <PageNavigator
+              totalPages={totalPages}
+              page={page}
+              onPageChange={setPage}
+              t={t}
+            />
+          </>
+        )}
+
+        {/* ===== DETAIL MODAL ===== */}
+        {selectedMonument && (
+          <MonumentDetailModal
+            open={open}
+            onClose={() => setOpen(false)}
+            loading={modalLoading}
+            details={selectedMonument}
+            onOpenAnother={handleOpenAnother}
+            customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -559,51 +563,60 @@ function MonumentsToolbar({
   }, []);
 
   return (
-    <div className="flex justify-end items-center gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
-          <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {loadingSorts ? (
-            <DropdownMenuItem disabled>{t("loading")}</DropdownMenuItem>
-          ) : sortOptions.length > 0 ? (
-            sortOptions.map((s) => (
-              <DropdownMenuItem
-                key={s._id}
-                onClick={() => onSortSelect(s.link || s.name || "")}
-                className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${selectedSort == s.link
-                  ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
-                  : ""
-                  }`}
-              >
-                {s.icon?.secure_url ? (
-                  <img
-                    src={s.icon.secure_url}
-                    alt={s.title || s.name}
-                    className="h-4 w-4 rounded-sm object-contain"
-                  />
-                ) : (
-                  <ImageIcon className="h-4 w-4 " />
-                )}
-                <span>{s.title || s.name}</span>
+    <div className="flex gap-2 justify-between items-center">
+      <div className="pl-2 flex gap-2 items-center">
+        <Breadcrumb
+          items={[
+            { label: t("region_desc_title") || "Region Details" }
+          ]}
+        />
+      </div>
+      <div className="flex justify-end items-center gap-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-full text-teal-700 dark:text-teal-300 hover:text-teal-700 hover:bg-teal-50 dark:hover:bg-teal-900/30"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
+            <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {loadingSorts ? (
+              <DropdownMenuItem disabled>{t("loading")}</DropdownMenuItem>
+            ) : sortOptions.length > 0 ? (
+              sortOptions.map((s) => (
+                <DropdownMenuItem
+                  key={s._id}
+                  onClick={() => onSortSelect(s.link || s.name || "")}
+                  className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${selectedSort == s.link
+                    ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
+                    : ""
+                    }`}
+                >
+                  {s.icon?.secure_url ? (
+                    <img
+                      src={s.icon.secure_url}
+                      alt={s.title || s.name}
+                      className="h-4 w-4 rounded-sm object-contain"
+                    />
+                  ) : (
+                    <ImageIcon className="h-4 w-4 " />
+                  )}
+                  <span>{s.title || s.name}</span>
+                </DropdownMenuItem>
+              ))
+            ) : (
+              <DropdownMenuItem disabled>
+                {t("tourist_attractions.no_sort_options")}
               </DropdownMenuItem>
-            ))
-          ) : (
-            <DropdownMenuItem disabled>
-              {t("tourist_attractions.no_sort_options")}
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

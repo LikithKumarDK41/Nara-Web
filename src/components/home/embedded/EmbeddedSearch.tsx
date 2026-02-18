@@ -1,0 +1,662 @@
+"use client";
+
+import { useEffect, useState, useMemo } from "react";
+import { Search, X, Check, Star, ImageIcon, ArrowRight } from "lucide-react";
+
+import { useLocale } from "@/providers/LocaleProvider";
+import { Button } from "@/components/ui/button";
+import {
+    apiFetchMonumentDetails,
+    apiFetchAllMonumentsWithQuery,
+} from "@/services/userTourService";
+import {
+    apiFetchSearchFilters,
+    apiFetchSearchSuggestionsAdv,
+    apiFetchFreeTextSearch,
+} from "@/services/userGlobalservice";
+import type { Monument } from "@/lib/types/userTour.types";
+import type { SearchFilter } from "@/lib/types/userGlobal.types";
+import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
+import { normalizeHTML } from "@/lib/utils";
+
+export default function EmbeddedSearch() {
+    const { t, locale } = useLocale();
+
+    const [filters, setFilters] = useState<SearchFilter[]>([]);
+    const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+    const [monuments, setMonuments] = useState<Monument[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [perPage] = useState(6);
+    const [keyword, setKeyword] = useState("");
+    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
+        null,
+    );
+
+    /* -------------------- Initial Load -------------------- */
+    useEffect(() => {
+        fetchDefaultData();
+    }, []);
+
+    async function fetchDefaultData() {
+        try {
+            setLoading(true);
+            const [filtersData, monumentsData] = await Promise.all([
+                apiFetchSearchFilters(),
+                apiFetchAllMonumentsWithQuery({ sort: "-popularity" }),
+            ]);
+            setFilters(filtersData);
+            setMonuments(monumentsData);
+        } catch (err) {
+            console.error("Failed to load data:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function openMonumentModal(id: string) {
+        try {
+            setLoading(true);
+            const data = await apiFetchMonumentDetails(id);
+            setSelectedMonument(data);
+        } catch (err) {
+            console.error("Failed to fetch monument details:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    /* -------------------- Filter Change -------------------- */
+    useEffect(() => {
+        if (selectedFilters.length === 0) {
+            fetchDefaultData();
+            return;
+        }
+
+        async function applyFilters() {
+            try {
+                setLoading(true);
+
+                const selectedData = filters.filter((f) =>
+                    selectedFilters.includes(f._id),
+                );
+
+                const filter1 = filters[0];
+                const filter2 = filters[1];
+
+                const isFilter1Selected =
+                    filter1 && selectedFilters.includes(filter1._id);
+                const isFilter2Selected =
+                    filter2 && selectedFilters.includes(filter2._id);
+
+                // Case 1: Only filter 1 & 2 selected → call both APIs & combine
+                if (
+                    isFilter1Selected &&
+                    isFilter2Selected &&
+                    selectedFilters.length === 2
+                ) {
+                    const results = await Promise.all(
+                        [filter1, filter2].map(async (f) => {
+                            try {
+                                const parsed = f.link ? JSON.parse(f.link) : {};
+                                const sortOrder = f.sortby || "-popularity";
+                                const payload = { filter: parsed, sort: sortOrder };
+                                const data: any = await apiFetchAllMonumentsWithQuery(payload);
+
+                                return Array.isArray(data)
+                                    ? data
+                                    : data?.monuments?.results || [];
+                            } catch (err) {
+                                console.warn("Error fetching filter:", f.title);
+                                return [];
+                            }
+                        }),
+                    );
+
+                    const combined = results.flat();
+                    const unique = combined.filter(
+                        (m, i, arr) => arr.findIndex((x) => x._id === m._id) === i,
+                    );
+
+                    setMonuments(unique);
+                    return;
+                }
+
+                //  Case 2: For all other filters → merge filters normally
+                const mergedFilter: Record<string, any> = {};
+                let sortOrder = "-popularity";
+
+                selectedData.forEach((f) => {
+                    try {
+                        const parsed = f.link ? JSON.parse(f.link) : {};
+                        Object.assign(mergedFilter, parsed);
+                        if (f.sortby) sortOrder = f.sortby;
+                    } catch (err) {
+                        console.warn("Invalid link JSON:", f.link);
+                    }
+                });
+
+                const payload = { filter: mergedFilter, sort: sortOrder };
+                const data: any = await apiFetchAllMonumentsWithQuery(payload);
+                const results = Array.isArray(data)
+                    ? data
+                    : data?.monuments?.results || [];
+                setMonuments(results);
+            } catch (err) {
+                console.error("Failed to apply filters:", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        applyFilters();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedFilters]);
+
+    function toggleFilter(id: string) {
+        setSelectedFilters((prev) =>
+            prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id],
+        );
+    }
+
+    /* -------------------- Autocomplete Suggestions -------------------- */
+    useEffect(() => {
+        if (!keyword.trim()) {
+            setSuggestions([]);
+            return;
+        }
+
+        const debounce = setTimeout(async () => {
+            try {
+                setSearchLoading(true);
+                const data = await apiFetchSearchSuggestionsAdv(keyword);
+                setSuggestions(data || []);
+            } catch (err) {
+                console.error("Failed to fetch suggestions:", err);
+            } finally {
+                setSearchLoading(false);
+            }
+        }, 400);
+
+        return () => clearTimeout(debounce);
+    }, [keyword]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [keyword, selectedFilters]);
+
+    /* -------------------- Handle Suggestion Click -------------------- */
+    async function handleSuggestionClick(item: any, isAll: boolean) {
+        try {
+            setLoading(true);
+            setSuggestions([]);
+            setPage(1);
+
+            if (isAll) {
+                const data = await apiFetchFreeTextSearch(keyword);
+                setMonuments(data?.monuments || []);
+            } else {
+                const payload = {
+                    filter: item.filters || {},
+                    sort: "-popularity",
+                };
+                const data = await apiFetchAllMonumentsWithQuery(payload);
+                setMonuments(data || []);
+            }
+
+            setSuggestions([]);
+        } catch (err) {
+            console.error("Failed to load monuments:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    /* -------------------- Handle Clear / Reset -------------------- */
+    async function handleClear() {
+        setKeyword("");
+        setSuggestions([]);
+        setSelectedFilters([]);
+        await fetchDefaultData();
+    }
+
+    /* -------------------- Sorting -------------------- */
+    const sortedMonuments = useMemo(() => {
+        return monuments;
+    }, [monuments]);
+
+    /* -------------------- Pagination -------------------- */
+    const total = monuments.length;
+    const totalPages = Math.max(1, Math.ceil(total / perPage));
+    const current = Math.min(page, totalPages);
+    const startIdx = (current - 1) * perPage;
+    const pageItems = useMemo(() => {
+        return sortedMonuments.slice(startIdx, startIdx + perPage);
+    }, [sortedMonuments, startIdx, perPage]);
+
+    const shouldShowMonuments = pageItems.length > 0;
+
+    // Current mode light or dark to make icon image color change based on that
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        const html = document.documentElement;
+
+        // initial
+        setIsDark(html.classList.contains("dark"));
+
+        const observer = new MutationObserver(() => {
+            setIsDark(html.classList.contains("dark"));
+        });
+
+        observer.observe(html, {
+            attributes: true,
+            attributeFilter: ["class"],
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    /* -------------------- Render -------------------- */
+    return (
+        <div className="w-full flex flex-col items-center animate-in fade-in zoom-in duration-300">
+            {/* Search Bar + Suggestions */}
+            <div className="relative w-full max-w-2xl px-6 z-50 mx-auto flex justify-center">
+                <div className="relative w-full max-w-[640px]">
+                    <div
+                        className={`flex items-center w-full px-5 py-4 shadow-lg transition-all
+        border border-black/5 dark:border-white/10
+        bg-white dark:bg-slate-900
+        focus-within:ring-2 focus-within:ring-teal-400/40
+        ${keyword && suggestions.length > 0 ? "rounded-t-2xl" : "rounded-2xl"}
+      `}
+                    >
+                        {/* ICON — solid color */}
+                        <Search className="h-5 w-5 text-teal-500 dark:text-teal-400 mr-3" />
+
+                        {/* INPUT — solid text */}
+                        <input
+                            type="text"
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                            placeholder={locale === "en" ? "Search" : "検索"}
+                            className="
+          w-full bg-transparent
+          text-gray-900 dark:text-gray-100
+          placeholder:text-gray-500 dark:placeholder:text-gray-400
+          caret-teal-500
+          focus:outline-none text-base
+        "
+                            autoFocus={false}
+                        />
+
+                        {keyword && (
+                            <button
+                                onClick={handleClear}
+                                className="
+            ml-2 text-teal-500
+            hover:text-teal-600
+            dark:text-teal-400
+            dark:hover:text-teal-500
+            transition-colors focus:outline-none
+          "
+                                aria-label="Clear search"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Autocomplete Dropdown */}
+                    {keyword && suggestions.length > 0 && (
+                        <div
+                            className="
+          absolute top-full left-0 right-0
+          border-x border-b border-black/5 dark:border-white/10
+          bg-white dark:bg-slate-900
+          shadow-xl rounded-b-2xl
+          overflow-y-auto max-h-56
+          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+        "
+                            style={{ zIndex: 9999 }}
+                        >
+                            {searchLoading ? (
+                                <div className="flex justify-center py-6">
+                                    <div
+                                        className="
+                w-8 h-8 animate-spin rounded-full
+                border-4 border-transparent
+               border-t-teal-500
+          border-r-cyan-400
+          border-b-emerald-400
+              "
+                                    />
+                                </div>
+                            ) : (
+                                <>
+                                    {/* Static "All" Option */}
+                                    <div
+                                        onClick={() => handleSuggestionClick(null, true)}
+                                        className="
+                px-5 py-3 text-sm
+                text-gray-900 dark:text-gray-100
+                hover:bg-teal-50/60 dark:hover:bg-slate-800/70
+                cursor-pointer transition-colors
+                border-b border-black/5 dark:border-white/10
+              "
+                                    >
+                                        <span className="font-medium">{keyword}</span>{" "}
+                                        <span className="text-gray-500">@</span>{" "}
+                                        <span className="text-teal-600 dark:text-teal-400 font-medium">
+                                            {t("all")}
+                                        </span>
+                                    </div>
+
+                                    {/* API Suggestions */}
+                                    {suggestions.map((s: any, i: number) => (
+                                        <div
+                                            key={i}
+                                            onClick={() => handleSuggestionClick(s, false)}
+                                            className="
+                  px-5 py-3 text-sm
+                  text-gray-900 dark:text-gray-100
+                  hover:bg-teal-50/60 dark:hover:bg-slate-800/70
+                  cursor-pointer transition-colors
+                  border-b border-black/5 dark:border-white/10 last:border-0
+                "
+                                        >
+                                            <span className="font-medium">{keyword}</span>{" "}
+                                            <span className="text-gray-500">@</span>{" "}
+                                            <span className="text-teal-600 dark:text-teal-400 font-medium">
+                                                {s.title || s.key || ""}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Filters Section */}
+            <div className="mt-8 w-full px-6 flex flex-col items-center z-10">
+                {filters.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-10">
+                        {filters.map((f) => {
+                            const isActive = selectedFilters.includes(f._id);
+
+                            return (
+                                <div
+                                    key={f._id}
+                                    onClick={() => toggleFilter(f._id)}
+                                    className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-105 ${isActive
+                                        ? "opacity-100"
+                                        : "opacity-90 hover:opacity-100"
+                                        }`}
+                                >
+                                    <div
+                                        className={`relative h-20 w-20 rounded-full flex items-center justify-center shadow-md transition-all
+                bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500
+                ${!isActive ? "opacity-70" : ""}
+              `}
+                                    >
+                                        {/* ICON WRAPPER (KEY FIX) */}
+                                        <div
+                                            className="
+                h-12 w-12 rounded-full
+                bg-white/90 dark:bg-slate-900/90
+                flex items-center justify-center
+                shadow-sm
+              "
+                                        >
+                                            {f.icon?.secure_url ? (
+                                                <img
+                                                    src={f.icon.secure_url}
+                                                    alt={f.title}
+                                                    className="h-7 w-7 object-contain"
+                                                    style={{
+                                                        filter: isDark
+                                                            ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                                                            : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Search className="h-6 w-6 text-teal-600 dark:text-teal-400" />
+                                            )}
+                                        </div>
+
+                                        {isActive && (
+                                            <div className="absolute bottom-1 right-1 bg-white dark:bg-slate-800 rounded-full p-1 shadow">
+                                                <Check className="h-4 w-4 text-teal-500" />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <span className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-200 text-center">
+                                        {f.title}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* Monuments Grid */}
+            <div className="mt-16 w-full relative z-0">
+                {loading ? (
+                    <div className="flex justify-center items-center py-10">
+                        <div
+                            className="
+      w-10 h-10 animate-spin rounded-full
+      border-4 border-transparent
+      border-t-teal-500
+          border-r-cyan-400
+          border-b-emerald-400
+    "
+                        />
+                    </div>
+                ) : shouldShowMonuments ? (
+                    <>
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {pageItems.map((m) => (
+                                <div
+                                    key={m._id}
+                                    onClick={() => openMonumentModal(m._id)}
+                                    className="group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
+                                >
+                                    <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
+                                        {m.image?.secure_url ? (
+                                            <img
+                                                src={m.image.secure_url}
+                                                alt={m.title || m.name}
+                                                className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+                                                <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
+                                            </div>
+                                        )}
+                                        <div className="absolute top-5 left-5 z-20">
+                                            <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
+                                                {Array.from({ length: 4 }).map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        className={`h-3.5 w-3.5 ${i < (m.popularity ?? 0)
+                                                            ? "fill-amber-400 text-amber-400"
+                                                            : "text-gray-300 dark:text-gray-600"
+                                                            }`}
+                                                    />
+                                                ))}{" "}
+                                            </div>
+                                        </div>
+
+                                        {/* Gradient overlays for better text readability */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
+                                    </div>
+                                    <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
+                                        <div className="space-y-3">
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
+                                                {m.title || m.name}
+                                            </h3>
+
+                                            {m.content?.brief && (
+                                                <p
+                                                    className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: normalizeHTML(m.content.brief),
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
+                                            <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                                                {t("actions.details")}
+                                            </span>
+                                            <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
+                                                <ArrowRight className="w-5 h-5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <PageNavigator
+                            totalPages={totalPages}
+                            page={page}
+                            onPageChange={setPage}
+                            t={t}
+                        />
+
+                        {selectedMonument && (
+                            <MonumentDetailModal
+                                open={selectedMonument !== null}
+                                onClose={() => setSelectedMonument(null)}
+                                loading={loading}
+                                details={selectedMonument}
+                                onOpenAnother={(id: string) => openMonumentModal(id)}
+                            />
+                        )}
+                    </>
+                ) : (
+                    <div className="text-center text-gray-600 dark:text-gray-400">
+                        {t("no_information_to_display")}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+/* =======================================================================
+   PAGINATION
+======================================================================= */
+function PageNavigator({
+    totalPages,
+    page,
+    onPageChange,
+    t,
+}: {
+    totalPages: number;
+    page: number;
+    onPageChange: (n: number) => void;
+    t: any;
+}) {
+    return (
+        <div className="flex items-center justify-between gap-3 pt-8">
+            {/* PAGE INFO */}
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+                {t("pagination_left", { current: page, total: totalPages })}
+            </div>
+
+            <div className="flex items-center gap-1">
+                {/* PREV */}
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="
+            cursor-pointer h-8
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
+          "
+                    onClick={() => onPageChange(Math.max(1, page - 1))}
+                    disabled={page <= 1}
+                >
+                    ‹ {t("tours.prev")}
+                </Button>
+
+                {/* PAGE NUMBERS */}
+                <div className="hidden md:flex items-center gap-1">
+                    {rangeAround(page, totalPages, 2).map((n, i) =>
+                        n === "…" ? (
+                            <span
+                                key={`dots-${i}`}
+                                className="px-2 text-sm text-gray-400 dark:text-gray-500"
+                            >
+                                …
+                            </span>
+                        ) : (
+                            <button
+                                key={`page-${n}-${i}`}
+                                onClick={() => onPageChange(n)}
+                                className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
+                  ${n === page
+                                        ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                                        : `
+                        text-teal-600 dark:text-teal-400
+                        hover:bg-teal-50 dark:hover:bg-teal-900/30
+                      `
+                                    }
+                `}
+                            >
+                                {n}
+                            </button>
+                        ),
+                    )}
+                </div>
+
+                {/* NEXT */}
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="
+            cursor-pointer h-8
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
+          "
+                    onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+                    disabled={page >= totalPages}
+                >
+                    {t("tours.next")} ›
+                </Button>
+            </div>
+        </div>
+    );
+}
+
+/* Helper */
+function rangeAround(
+    current: number,
+    total: number,
+    radius: number,
+): (number | "…")[] {
+    const out: (number | "…")[] = [];
+    const start = Math.max(1, current - radius);
+    const end = Math.min(total, current + radius);
+    if (start > 1) {
+        out.push(1);
+        if (start > 2) out.push("…");
+    }
+    for (let i = start; i <= end; i++) out.push(i);
+    if (end < total) {
+        if (end < total - 1) out.push("…");
+        out.push(total);
+    }
+    return out;
+}

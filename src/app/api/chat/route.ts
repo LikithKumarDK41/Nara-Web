@@ -2,7 +2,7 @@ import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
 
 const openai = new OpenAI({
-  apiKey: process.env.GROK_API_KEY, 
+  apiKey: process.env.GROK_API_KEY,
   baseURL: "https://api.groq.com/openai/v1",
 });
 
@@ -22,7 +22,7 @@ You must strictly follow these rules:
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-    
+
     // Add system prompt
     const completion = await openai.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -36,16 +36,16 @@ export async function POST(req: Request) {
 
     // Return in the structure expected by ChatWindow.tsx (mimicking Dialogflow)
     const jsonResponse = [
-        {
-            queryResult: {
-                fulfillmentMessages: [
-                    {
-                        message: "text",
-                        text: { text: [aiResponse] }
-                    }
-                ]
+      {
+        queryResult: {
+          fulfillmentMessages: [
+            {
+              message: "text",
+              text: { text: [aiResponse] }
             }
+          ]
         }
+      }
     ];
 
     return NextResponse.json(jsonResponse);
