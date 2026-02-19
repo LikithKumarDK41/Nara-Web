@@ -605,7 +605,7 @@ export default function TourDetailsClientPage() {
 
           {/* ===== Timeline Section ===== */}
           {tour.tourpoints?.length && (
-            <section id="timeline" className="space-y-4">
+            <section id="timeline" className="space-y-4 mb-6">
               <h2 className="font-serif italic text-lg font-semibold">
                 {t("tourDetails.timeline")}
               </h2>
