@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef  } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -35,7 +35,7 @@ export default function FinishPage() {
   const detailTour = useAppSelector((s) => s.tourist.detail);
 
   const [isResetting, setIsResetting] = useState(false);
-   const [mapReady, setMapReady] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const mapInstanceRef = useRef<any>(null);
 
   const usertour = nav.usertour;
@@ -111,100 +111,100 @@ export default function FinishPage() {
       <div className="flex-1 overflow-y-auto">
         {/* CAPTURABLE SECTION: Hero + Map */}
         <div id="tour-screenshot-section">
-        {/* HERO */}
-        <div className="relative bg-gradient-to-b from-gray-100 via-white to-white dark:from-slate-900 dark:via-black dark:to-black">
-          {tourImage ? (
-            <div className="absolute inset-0">
-              <Image
-                src={tourImage}
-                alt={finalTour.title}
-                fill
-                className="object-cover opacity-80 dark:opacity-90"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/70 to-white dark:from-black/60 dark:via-black/70 dark:to-black" />
-            </div>
-          ) : (
-            <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800"></div>
-          )}
+          {/* HERO */}
+          <div className="relative bg-gradient-to-b from-gray-100 via-white to-white dark:from-slate-900 dark:via-black dark:to-black">
+            {tourImage ? (
+              <div className="absolute inset-0">
+                <Image
+                  src={tourImage}
+                  alt={finalTour.title}
+                  fill
+                  className="object-cover opacity-80 dark:opacity-90"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/70 to-white dark:from-black/60 dark:via-black/70 dark:to-black" />
+              </div>
+            ) : (
+              <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800"></div>
+            )}
 
-          <div className="relative p-6 text-black dark:text-white">
-            <h1 className="text-5xl font-black mb-2">🎉</h1>
-            <h2 className="text-3xl font-black">{t("tour_completed")}!</h2>
-            <p className="text-lg text-emerald-700 dark:text-emerald-300">
-              {finalTour.title}
-            </p>
+            <div className="relative p-6 text-black dark:text-white">
+              <h1 className="text-5xl font-black mb-2">🎉</h1>
+              <h2 className="font-serif italic text-3xl font-black">{t("tour_completed")}!</h2>
+              <p className="font-serif italic text-lg text-emerald-700 dark:text-emerald-300">
+                {finalTour.title}
+              </p>
 
-            <div
-              className="mt-6 p-4 rounded-xl text-center border
+              <div
+                className="mt-6 p-4 rounded-xl text-center border
               bg-emerald-100 text-emerald-700 border-emerald-300
               dark:bg-emerald-500/20 dark:border-emerald-400/30 dark:text-emerald-300"
-            >
-              <span className="font-bold">✨ {t("congratulations")}!</span>
-              <br />
-              <span className="text-black dark:text-gray-200">
-                {t("you_collected")}{" "}
-                <b className="text-emerald-700 dark:text-emerald-400">
-                  {stampedPoints.length}
-                </b>{" "}
-                {t("out_of")}{" "}
-                <b className="text-cyan-700 dark:text-cyan-400">
-                  {totalPoints}
-                </b>{" "}
-                {t("checkpoints")}
-              </span>
+              >
+                <span className="font-serif italic font-bold">✨ {t("congratulations")}!</span>
+                <br />
+                <span className="text-black dark:text-gray-200">
+                  {t("you_collected")}{" "}
+                  <b className="text-emerald-700 dark:text-emerald-400">
+                    {stampedPoints.length}
+                  </b>{" "}
+                  {t("out_of")}{" "}
+                  <b className="text-cyan-700 dark:text-cyan-400">
+                    {totalPoints}
+                  </b>{" "}
+                  {t("checkpoints")}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* MAP SECTION */}
-        <div className="px-6 pb-6 bg-white dark:bg-black">
-          {/* TOUR DETAILS */}
-          <div
-            className="mb-6 p-5 rounded-2xl shadow-lg border
+          {/* MAP SECTION */}
+          <div className="px-6 pb-6 bg-white dark:bg-black">
+            {/* TOUR DETAILS */}
+            <div
+              className="mb-6 p-5 rounded-2xl shadow-lg border
             bg-white border-gray-300 
             dark:bg-black dark:border-white/10"
-          >
-            <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">
-              {finalTour.title}
-            </h2>
+            >
+              <h2 className="font-serif italic text-3xl font-extrabold text-black dark:text-white mb-2">
+                {finalTour.title}
+              </h2>
 
-            {finalTour.content?.brief && (
-              <p
-                className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3 whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{
-                  __html: finalTour.content.brief,
-                }}
-              />
-            )}
+              {finalTour.content?.brief && (
+                <p
+                  className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3 whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{
+                    __html: finalTour.content.brief,
+                  }}
+                />
+              )}
 
-            {finalTour.content?.extended && (
-              <div
-                className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{
-                  __html: finalTour.content.extended,
-                }}
-              />
-            )}
-          </div>
+              {finalTour.content?.extended && (
+                <div
+                  className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{
+                    __html: finalTour.content.extended,
+                  }}
+                />
+              )}
+            </div>
 
-          {/* MAP */}
-          <div
-           id="tour-map-only"
-            className="rounded-2xl overflow-hidden border shadow-lg 
+            {/* MAP */}
+            <div
+              id="tour-map-only"
+              className="rounded-2xl overflow-hidden border shadow-lg 
             border-gray-300 dark:border-white/10"
-          >
-            <MapboxTourMapFinish
-              tour={finalTour}
-              stampedPoints={reduxUserTourPoints}
-              height={360}
-              profile="walking"
-               onMapReady={(map) => {
-                mapInstanceRef.current = map;
-                setMapReady(true);
-              }}
-            />
+            >
+              <MapboxTourMapFinish
+                tour={finalTour}
+                stampedPoints={reduxUserTourPoints}
+                height={360}
+                profile="walking"
+                onMapReady={(map) => {
+                  mapInstanceRef.current = map;
+                  setMapReady(true);
+                }}
+              />
+            </div>
           </div>
-        </div>
         </div>
       </div>
 

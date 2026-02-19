@@ -190,7 +190,7 @@ export default function MapTimelineRight({
                     </div>
 
                     <div className="flex flex-col justify-center mt-1">
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-50 leading-tight">
+                      <h3 className="font-serif italic text-lg font-semibold text-gray-800 dark:text-gray-50 leading-tight">
                         {p.pointtitle ||
                           (p.waypointtype === "start"
                             ? "Start Station"
@@ -410,7 +410,7 @@ export default function MapTimelineRight({
 
                           {/* Title Overlay on Image */}
                           <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
-                            <h3 className="text-lg font-bold leading-tight shadow-black drop-shadow-sm mb-1">
+                            <h3 className="font-serif italic text-lg font-bold leading-tight shadow-black drop-shadow-sm mb-1">
                               {m?.title || m?.name || p.name}
                             </h3>
                             {m?.region?.title && (
@@ -499,7 +499,7 @@ export default function MapTimelineRight({
                         <div>
                           <h3
                             onClick={() => handleOpen(p._id)}
-                            className="cursor-pointer text-2xl font-black tracking-tight text-gray-900 dark:text-white transition-colors duration-300 hover:text-orange-500"
+                            className="font-serif italic cursor-pointer text-2xl font-black tracking-tight text-gray-900 dark:text-white transition-colors duration-300 hover:text-orange-500"
                           >
                             {m?.title ?? m?.name ?? p.name}
                           </h3>

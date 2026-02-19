@@ -207,7 +207,7 @@ function TourPointsModal({
   md:h-screen bg-background shadow-2xl overflow-hidden flex flex-col border"
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background/90 px-4 py-3 backdrop-blur">
-          <div className="font-semibold truncate">{tour.title}</div>
+          <div className="font-serif italic font-semibold truncate">{tour.title}</div>
 
           <button
             onClick={onClose}
