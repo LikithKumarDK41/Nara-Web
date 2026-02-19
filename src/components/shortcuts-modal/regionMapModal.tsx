@@ -15,6 +15,7 @@ import RegionMap from "../map/regionMap";
 import { apiFetchRegions } from "@/services/userGlobalservice";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 export default function RegionMapModal({
   openMapModal,
@@ -24,6 +25,7 @@ export default function RegionMapModal({
   onCloseMapModal: () => void;
 }) {
   const { t } = useLocale();
+  const router = useRouter();
 
   const [view, setView] = useState<"region" | "map">("region");
   const [regions, setRegions] = useState<any[]>([]);
@@ -242,7 +244,15 @@ export default function RegionMapModal({
                     <>
                       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {currentData.map((r) => (
-                          <RegionCard key={r._id} r={r} />
+                          <MonumentCard
+                            key={r._id}
+                            monument={r}
+                            t={t}
+                            onClick={() => {
+                              sessionStorage.setItem("returnToRegionModal", "true");
+                              router.push(`/regions?id=${r._id}`);
+                            }}
+                          />
                         ))}
                       </div>
 
@@ -348,61 +358,7 @@ export default function RegionMapModal({
   );
 }
 
-function RegionCard({ r }: { r: any }) {
-  const { t } = useLocale();
-  const router = useRouter();
-  return (
-    <div
-      className="mt-4 mb-4 group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
-      onClick={() => {
-        sessionStorage.setItem("returnToRegionModal", "true");
-        router.push(`/regions?id=${r._id}`);
-      }}
-    >
-      {/* IMAGE */}
-      <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
-        {r.image?.secure_url ? (
-          <img
-            src={r.image.secure_url}
-            alt={r.title}
-            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
-            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
-          </div>
-        )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
-      </div>
-      {/* CONTENT */}
-      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
-        <div className="space-y-3">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
-            {r.title}
-          </h3>
-
-          {r.content?.brief && (
-            <p
-              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: r.content.brief }}
-            />
-          )}
-        </div>
-
-        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
-          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-            {t("tourDetails.viewDetails")}
-          </span>
-          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
-            <ArrowRight className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* =========================================================
    🪶 Empty State

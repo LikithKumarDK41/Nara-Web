@@ -33,6 +33,7 @@ import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
 import { Star } from "lucide-react";
 import { normalizeHTML } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 /* =========================================================
    🏛️ Monuments Page
@@ -163,6 +164,26 @@ export default function StreetViewModal({
       setModalLoading(false);
     }
   };
+
+  function openStreetViewFromApi(loc: [number, number]) {
+    if (!loc) return;
+    const [lng, lat] = loc;
+
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+
+    let url = "";
+
+    if (isIOS) {
+      // 🍎 Apple Maps (Look Around if available)
+      url = `https://maps.apple.com/?ll=${lat},${lng}&q=${lat},${lng}`;
+    } else {
+      // 🌍 Google Street View
+      url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+    }
+
+    window.open(url, "_blank");
+  }
 
   /* =========================================================
             Render
@@ -316,8 +337,9 @@ export default function StreetViewModal({
                     {currentData.map((m) => (
                       <MonumentCard
                         key={m._id}
-                        m={m}
-                        onOpen={() => handleOpenMonument(m._id)}
+                        monument={m}
+                        t={t}
+                        onClick={() => openStreetViewFromApi((m as any)?.avlocation)}
                       />
                     ))}
                   </div>
@@ -349,136 +371,7 @@ export default function StreetViewModal({
   );
 }
 
-/* =========================================================
-   📦 Monument Card
-========================================================= */
-function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
-  const { t } = useLocale();
 
-  const activeThemeId = useSelector((state: any) => state.global.activeThemeId);
-
-  // normalize
-  const subthemes = m.subtheme ?? [];
-
-  // only matching subthemes
-  const matchedSubthemes = activeThemeId
-    ? subthemes.filter(
-      (st) => Array.isArray(st.theme) && st.theme.includes(activeThemeId),
-    )
-    : subthemes;
-
-  const popularity: number = m.popularity ?? 0;
-
-  function openStreetViewFromApi(loc: [number, number]) {
-    const [lng, lat] = loc;
-
-    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
-    const isIOS = /iPad|iPhone|iPod/.test(ua);
-
-    let url = "";
-
-    if (isIOS) {
-      // 🍎 Apple Maps (Look Around if available)
-      url = `https://maps.apple.com/?ll=${lat},${lng}&q=${lat},${lng}`;
-    } else {
-      // 🌍 Google Street View
-      url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
-    }
-
-    window.open(url, "_blank");
-  }
-
-  return (
-    <div
-      className="mt-4 mb-4 group relative flex flex-col min-h-[520px] h-auto rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
-      onClick={(e) => {
-        e.stopPropagation();
-        openStreetViewFromApi((m as any)?.avlocation);
-      }}
-    >
-      {" "}
-      {/* IMAGE */}
-      <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
-        {m.image?.secure_url ? (
-          <img
-            src={m.image.secure_url}
-            alt={m.title || m.name}
-            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
-            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
-          </div>
-        )}
-
-        <div className="absolute top-5 left-5 z-20">
-          <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Star
-                key={i}
-                className={`h-3.5 w-3.5 ${i < popularity
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-gray-300 dark:text-gray-600"
-                  }`}
-              />
-            ))}{" "}
-          </div>
-        </div>
-
-        {/* Gradient overlays for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
-      </div>
-      {/* CONTENT */}
-      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
-        <div className="space-y-3">
-          {/* TITLE */}
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
-            {m.title || m.name}
-          </h3>
-
-          {/* BRIEF */}
-          {m.content?.brief && (
-            <p
-              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: normalizeHTML(m.content.brief),
-              }}
-            />
-          )}
-
-          {/* ✅ ONLY MATCHING SUBTHEME CHIPS */}
-          {matchedSubthemes.length > 0 && (
-            <div className="mt-4 mb-4 flex flex-wrap gap-1.5">
-              {matchedSubthemes.map((s) => (
-                <span
-                  key={s._id}
-                  className="
-                    rounded-full px-2.5 py-0.5 text-[11px] font-medium
-                    bg-teal-100 text-teal-800
-                    dark:bg-teal-900/40 dark:text-teal-300
-                  "
-                >
-                  {s.title}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* BUTTON */}
-        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
-          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-            {t("open_street_view")}
-          </span>
-          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
-            <ArrowRight className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* =========================================================
    🧭 Pagination
