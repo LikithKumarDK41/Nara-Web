@@ -66,7 +66,7 @@ export default function EmbeddedRegionMap() {
 
             {/* ===== Toggle ===== */}
             <div className="flex justify-center">
-                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur border">
+                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-card border-foreground/30 backdrop-blur border">
                     {["region", "map"].map((v) => (
                         <button
                             key={v}
