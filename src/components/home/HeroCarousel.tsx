@@ -229,16 +229,16 @@ export default function HeroCarousel() {
 
                 {/* Extended Background & Decorations (Masking the image slant) */}
                 <div className="absolute inset-y-0 right-0 w-[140%] bg-white dark:bg-slate-950 -z-10 transition-colors duration-500 md:[clip-path:polygon(28%_0,100%_0,100%_100%,0%_100%)]">
-                    <div className="absolute inset-0 opacity-40 dark:opacity-30">
+                    <div className="absolute inset-0 opacity-70 dark:opacity-50">
                         {/* Radial Glow */}
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_86%_50%,_var(--tw-gradient-stops))] from-slate-200/40 via-white/80 to-white dark:from-slate-800/20 dark:via-slate-950/50 dark:to-slate-950 transition-colors duration-500" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_86%_50%,_var(--tw-gradient-stops))] from-slate-200/30 via-white/40 to-white dark:from-slate-800/10 dark:via-slate-950/30 dark:to-slate-950 transition-colors duration-500" />
 
                         {/* Criss-Cross (Mesh) Pattern */}
-                        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
+                        <div className="absolute inset-0 opacity-[0.4] dark:opacity-[0.3]"
                             style={{
                                 backgroundImage: `
-                                    repeating-linear-gradient(45deg, #cbd5e1, #cbd5e1 1px, transparent 1px, transparent 30px),
-                                    repeating-linear-gradient(-45deg, #cbd5e1, #cbd5e1 1px, transparent 1px, transparent 30px)
+                                    repeating-linear-gradient(45deg, #94a3b8, #94a3b8 1px, transparent 1px, transparent 30px),
+                                    repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, transparent 1px, transparent 30px)
                                 `
                             }}
                         />
