@@ -16,7 +16,7 @@ export default function FooterBar() {
   const { t } = useLocale();
 
   return (
-    <footer className="relative w-full overflow-hidden bg-white dark:bg-black border-t border-slate-200 dark:border-white/5 pt-24 pb-12 transition-colors duration-500">
+    <footer className="relative w-full overflow-hidden bg-gradient-to-br from-rose-100 via-violet-200 to-cyan-200 dark:bg-none dark:bg-black border-t border-slate-900/10 dark:border-white/10 pt-24 pb-12 transition-all duration-500">
       {/* ================= 3D BACKGROUND / MASK EFFECTS ================= */}
       <div className="absolute inset-0 pointer-events-none opacity-100">
         {/* Subtle Grid Pattern */}
@@ -54,11 +54,11 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 2: EXPLORE ================= */}
           <div className="lg:col-span-2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-950 dark:text-white">Explore</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Explore</h4>
             <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
               {['Tours', 'Monuments', 'Map View', 'Videos'].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="group flex items-center gap-2 text-sm text-slate-600 dark:text-white/40 hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <Link href="#" className="group flex items-center gap-2 text-base text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors">
                     <span className="w-0 group-hover:w-3 h-px bg-slate-950 dark:bg-white transition-all duration-300" />
                     {item}
                   </Link>
@@ -69,11 +69,11 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 3: SERVICES ================= */}
           <div className="lg:col-span-2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-950 dark:text-white">Services</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Services</h4>
             <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
               {['Community Bus', 'Street View', 'City Promotion', 'Events'].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="group flex items-center gap-2 text-sm text-slate-600 dark:text-white/40 hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <Link href="#" className="group flex items-center gap-2 text-base text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors">
                     <span className="w-0 group-hover:w-3 h-px bg-slate-950 dark:bg-white transition-all duration-300" />
                     {item}
                   </Link>
@@ -84,17 +84,17 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 4: CONTACT ================= */}
           <div className="lg:col-span-3 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-950 dark:text-white">Connect</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Connect</h4>
             <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
-              <div className="flex items-start gap-4 group cursor-pointer text-slate-600 dark:text-white/40 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
-                <MapPin className="w-5 h-5 shrink-0 text-slate-400 group-hover:text-slate-950 dark:group-hover:text-white transition-colors mt-1 lg:mt-0" />
-                <span className="text-sm leading-relaxed">
+              <div className="flex items-start gap-4 group cursor-pointer text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <MapPin className="w-5 h-5 shrink-0 text-slate-600 group-hover:text-slate-950 dark:group-hover:text-white transition-colors mt-1 lg:mt-0" />
+                <span className="text-base leading-relaxed">
                   1-6-25 Mamigaoka, Kashiba-shi,<br />Nara 639-0223 Japan
                 </span>
               </div>
-              <div className="flex items-center gap-4 group cursor-pointer text-slate-600 dark:text-white/40 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
-                <Mail className="w-5 h-5 shrink-0 text-slate-400 group-hover:text-slate-950 dark:group-hover:text-white transition-colors" />
-                <span className="text-sm">foundation@nara-heritage.jp</span>
+              <div className="flex items-center gap-4 group cursor-pointer text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <Mail className="w-5 h-5 shrink-0 text-slate-600 group-hover:text-slate-950 dark:group-hover:text-white transition-colors" />
+                <span className="text-base">foundation@nara-heritage.jp</span>
               </div>
             </div>
           </div>
@@ -102,16 +102,16 @@ export default function FooterBar() {
         </div>
 
         {/* ================= FOOTER BOTTOM ================= */}
-        <div className="pt-12 border-t border-slate-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest order-2 md:order-1">
+        <div className="pt-12 border-t border-slate-900/10 dark:border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest order-2 md:order-1">
             {t("footer.copyright", { year: new Date().getFullYear() })}
           </span>
           <div className="flex items-center justify-center md:justify-end gap-6 order-1 md:order-2">
-            <Link href="/privacy-policy" className="text-[10px] font-bold text-slate-500 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
+            <Link href="/privacy-policy" className="text-xs font-bold text-slate-600 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
               {t("privacyPolicy")}
             </Link>
-            <div className="w-px h-3 bg-slate-200 dark:bg-white/30" />
-            <Link href="/terms-of-use" className="text-[10px] font-bold text-slate-500 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
+            <div className="w-px h-3 bg-slate-400 dark:bg-white/30" />
+            <Link href="/terms-of-use" className="text-xs font-bold text-slate-600 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
               {t("termsOfUse")}
             </Link>
           </div>

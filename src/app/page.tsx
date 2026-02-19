@@ -129,7 +129,7 @@ export default function ToursDashboardPage() {
 
       {/* ================= DISCOVERY SECTION HEADER ================= */}
       {abouts.length > 0 && (
-        <section className="w-full bg-white dark:bg-black py-10 px-6 border-b border-slate-200 dark:border-white/5 flex flex-col items-center justify-center text-center overflow-hidden relative transition-colors duration-500">
+        <section className="w-full bg-transparent py-10 px-6 border-b border-slate-200 dark:border-white/5 flex flex-col items-center justify-center text-center overflow-hidden relative transition-colors duration-500">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ export default function ToursDashboardPage() {
 
       {/* ================= ABOUT NARA HERITAGE (Interactive Snap-Scroll Panorama) ================= */}
       {abouts.length > 0 && (
-        <section className="w-full relative bg-white dark:bg-black border-b border-slate-200 dark:border-white/5 scroll-smooth group/mosaic transition-colors duration-500">
+        <section className="w-full relative bg-transparent border-b border-slate-200 dark:border-white/5 scroll-smooth group/mosaic transition-colors duration-500">
           {/* Navigation Arrows */}
           <button
             onClick={() => scrollMosaic("left")}
