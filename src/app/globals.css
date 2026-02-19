@@ -609,62 +609,21 @@ html.dark .map-toggle-btn .check-badge {
   border-color: #1f2937;
 }
 
-/* ========================================================================
-   GLOBAL 3D TOPOGRAPHIC WAVE LANDSCAPE
-   A massive, 3D-oriented plane of flowing curves (Topography/Silk).
-   Creates an elegant, fluid "River of Time" effect.
-   ======================================================================== */
-body::before {
-  content: "";
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  z-index: -1;
-  pointer-events: none;
 
-  /* 
-    3D Cyber-Architectural Grid (Digital Tatami)
-    A sharp, geometric grid with intersection nodes for a "Portal" feel.
-  */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L100 50 M50 0 L50 100' fill='none' stroke='%230f766e' stroke-width='1.5' opacity='0.4'/%3E%3Ccircle cx='50' cy='50' r='2' fill='%230f766e' opacity='0.6'/%3E%3C/svg%3E");
 
-  background-size: 80px 80px;
-  background-repeat: repeat;
-
-  /* Deep 3D Perspective Tilt: "Infinite Horizon" look */
-  transform: perspective(100vh) rotateX(75deg) rotateZ(0deg) scale(2.5);
-  transform-style: preserve-3d;
-
-  /* High visibility enhanced */
-  opacity: 0.65;
-
-  /* Premium "Soft Box" Frame Mask (Highlighted & Expanded) */
-  mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent),
-    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  mask-composite: intersect;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent),
-    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  -webkit-mask-composite: destination-in;
-}
-
-/* Dark Mode: Brighter Teal Grid Nodes with higher contrast */
-.dark body::before {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L100 50 M50 0 L50 100' fill='none' stroke='%232dd4bf' stroke-width='1.5' opacity='0.4'/%3E%3Ccircle cx='50' cy='50' r='2' fill='%232dd4bf' opacity='0.6'/%3E%3C/svg%3E");
-  opacity: 0.4;
-}
 
 /* ========================================================================
-   GLOBAL BACKGROUND COLOR (Light Mode Override)
-   Adds a warm "Washi Paper" gradient for a sophisticated heritage feel.
+   GLOBAL BACKGROUND COLOR (Brand Sync)
+   Uses sophisticated Teal gradients to align with the Nara Logo.
    ======================================================================== */
-@media (prefers-color-scheme: light) {
+body {
+  /* Deep Mist Teal foundation (Darker for maximum card pop) */
+  background: linear-gradient(135deg, #e0f2f1 0%, #ccfbf1 40%, #cbd5e1 100%);
+  background-attachment: fixed;
+}
 
-  :root[data-theme="light"] body,
-  body:not(.dark) {
-    /* Warm Heritage Gradient: Cream to Warm Grey */
-    background: linear-gradient(135deg, #fdfbf7 0%, #e2e8f0 100%);
-    background-attachment: fixed;
-  }
+.dark body {
+  /* Deep Midnight Teal (Dark) */
+  background: radial-gradient(circle at top right, #042f2e 0%, #020617 100%);
+  background-attachment: fixed;
 }

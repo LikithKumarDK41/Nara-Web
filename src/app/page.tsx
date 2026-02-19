@@ -199,16 +199,16 @@ export default function ToursDashboardPage() {
             className="z-10"
           >
             <div className="flex items-center justify-center gap-4 mb-3">
-              <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
-              <span className="text-[10px] font-black text-slate-500 dark:text-white/50 uppercase tracking-[0.5em]">
+              <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
+              <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
                 {t("home.heritage") || "Heritage"}
               </span>
-              <div className="w-12 h-px bg-slate-900/10 dark:bg-white/20" />
+              <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
               {t("home.about_nara") || "Discovery Nara"}
             </h2>
-            <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.2em] uppercase mt-4">
+            <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4">
               Journey through the layers of Japan&apos;s ancient capital
             </p>
           </motion.div>
@@ -277,37 +277,27 @@ export default function ToursDashboardPage() {
                   <div className="absolute inset-0 bg-slate-900" />
                 )}
 
-                {/* Dark Cinematic Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black/95 via-transparent opacity-90 group-hover:opacity-40 transition-opacity duration-700" />
-                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white dark:from-black to-transparent" />
-
-                {/* Top Right Floating Index (Watermark Style) */}
-                <div className="absolute top-8 right-10 z-20 select-none">
-                  <div className="relative">
-                    <span className="text-5xl md:text-6xl font-serif italic font-bold text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover:text-teal-400 transition-colors duration-1000">
-                      {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
-                    </span>
-                    <div className="absolute -bottom-2 right-0 w-8 h-px bg-slate-900/20 dark:bg-white/30 group-hover:w-full group-hover:bg-teal-500/40 transition-all duration-700" />
-                  </div>
-                </div>
+                {/* Dark Cinematic Gradient Overlay - ALWAYS DARK for contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-700" />
+                <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-all duration-500 translate-y-0 md:translate-y-3 md:group-hover:translate-y-0">
+                <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   <div className="space-y-2">
-                    <div className="w-12 h-0.5 bg-teal-500/40 mb-2 transform origin-left group-hover:scale-x-150 transition-transform duration-700" />
-                    <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                    <div className="w-12 h-0.5 bg-teal-500/80 mb-2 transform origin-left group-hover:scale-x-150 transition-transform duration-700" />
+                    <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-white leading-tight tracking-tight drop-shadow-md">
                       {item.title ?? ""}
                     </h3>
                   </div>
 
-                  {/* Detailed Reveal on Hover (Desktop) / Always Visible (Mobile) */}
-                  <div className="h-auto opacity-100 mt-4 md:h-0 md:opacity-0 md:mt-0 md:group-hover:h-auto md:group-hover:opacity-100 md:group-hover:mt-4 overflow-hidden transition-all duration-500">
-                    <p className="text-slate-600 dark:text-white/60 text-[11px] md:text-xs leading-relaxed mb-4 line-clamp-2 max-w-sm font-light">
+                  {/* Content Always Visible */}
+                  <div className="mt-4">
+                    <p className="text-white/80 text-[11px] md:text-xs leading-relaxed mb-4 line-clamp-2 max-w-sm font-light drop-shadow-sm">
                       {stripHTML(item.content?.brief)}
                     </p>
-                    <div className="flex items-center gap-3 text-slate-900 dark:text-white text-[11px] font-black uppercase tracking-[0.2em]">
+                    <div className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] drop-shadow-md">
                       Explore Foundation
-                      <div className="w-8 h-px bg-slate-900/30 dark:bg-white/30 group-hover:w-12 transition-all duration-500" />
+                      <div className="w-8 h-px bg-white/50 group-hover:w-12 transition-all duration-500" />
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
@@ -385,17 +375,17 @@ export default function ToursDashboardPage() {
               transition={{ duration: 0.8 }}
               className="z-10"
             >
-              <div className="flex items-center justify-center gap-4 mb-3">
-                <div className="w-8 h-px bg-slate-900/10 dark:bg-white/10" />
-                <span className="text-[10px] font-black text-teal-600/80 dark:text-teal-400/60 uppercase tracking-[0.5em]">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="w-8 h-px bg-teal-500/30 dark:bg-teal-400/20" />
+                <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
                   {t("home.explore") || "Explore"}
                 </span>
-                <div className="w-8 h-px bg-slate-900/10 dark:bg-white/10" />
+                <div className="w-8 h-px bg-teal-500/30 dark:bg-teal-400/20" />
               </div>
-              <h2 className="text-3xl md:text-5xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
                 {t("home.explore_categories") || "Cultural Categories"}
               </h2>
-              <p className="text-[10px] md:text-xs font-light text-slate-600 dark:text-white/30 tracking-[0.2em] uppercase mt-2">
+              <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4">
                 Discover the diverse dimensions of Nara&apos;s heritage
               </p>
             </motion.div>
@@ -434,7 +424,7 @@ export default function ToursDashboardPage() {
                 transition={{ duration: 0.8 }}
                 className="max-w-3xl relative z-10"
               >
-                <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="flex items-center justify-center gap-4 mb-3">
                   <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
                   <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
                     {t("home.curated_tours") || "Experience"}
@@ -442,11 +432,11 @@ export default function ToursDashboardPage() {
                   <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-tight mb-4">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif italic text-slate-900 dark:text-white tracking-tighter leading-none mb-1">
                   {t("home.guide_tour")}
                 </h2>
 
-                <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.3em] uppercase mb-8">
+                <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4 mb-8">
                   Artfully curated journeys through the heart of ancient Japan
                 </p>
 
@@ -490,7 +480,7 @@ export default function ToursDashboardPage() {
               </div>
               <div
                 ref={toursScrollRef}
-                className="flex gap-8 overflow-x-auto scrollbar-hide snap-x px-[10%] pb-4 transition-all"
+                className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide snap-x px-[10%] pt-4 pb-12 transition-all"
               >
                 {tours
                   .filter((tour) => tour.featured === true)
@@ -501,18 +491,7 @@ export default function ToursDashboardPage() {
                   ))}
               </div>
 
-              {/* Scroll Indicator */}
-              {tours.filter((t) => t.featured).length > 1 && (
-                <div className="mx-auto max-w-7xl px-[10%] mt-6 mb-2 flex justify-center">
-                  <div className="w-64 h-1.5 bg-slate-900/15 dark:bg-white/10 rounded-full relative overflow-hidden">
-                    <motion.div
-                      className="absolute top-0 left-0 h-full bg-teal-600 dark:bg-teal-500 rounded-full"
-                      style={{ width: `${scrollProgress}%` }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  </div>
-                </div>
-              )}
+
             </div>
           </section>
         )
@@ -629,12 +608,12 @@ function ShortcutRow({
                 w-full md:min-w-[170px] md:max-w-[170px]
                 h-[120px] md:h-[135px]
                 rounded-[2.5rem]
-                bg-white dark:bg-[#0d1014]
-                border border-slate-200/60 dark:border-white/5
+                bg-white dark:bg-[#1e293b]
+                border border-teal-500/30 dark:border-teal-400/20
                 flex flex-col items-center justify-center gap-3
-                shadow-[0_10px_30px_-15px_rgba(0,0,0,0.1)]
+                shadow-[0_15px_35px_-12px_rgba(0,0,0,0.15),0_5px_15px_-5px_rgba(0,0,0,0.08)]
                 dark:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)]
-                hover:shadow-teal-500/10 dark:hover:shadow-teal-400/5
+                hover:shadow-[0_25px_50px_-15px_rgba(20,184,166,0.2)]
                 transition-all duration-500 overflow-hidden
               "
             >
@@ -666,7 +645,7 @@ function ShortcutRow({
                 )}
               </div>
 
-              <span className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+              <span className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white transition-colors">
                 {item.title}
               </span>
 
@@ -685,20 +664,20 @@ function ShortcutRow({
             className="
               group relative cursor-pointer
               flex items-center gap-4 px-5 py-5
-              bg-[#fcfdfe] dark:bg-[#151921]
-              hover:bg-white dark:hover:bg-[#1c212b]
-              border border-slate-200/80 dark:border-white/10
-              hover:border-teal-500/50 dark:hover:border-teal-400/30
+              bg-[#fcfdfe] dark:bg-[#1e293b]
+              hover:bg-white dark:hover:bg-[#334155]
+              border border-teal-500/30 dark:border-teal-400/20
+              hover:border-teal-500/60 dark:hover:border-teal-400/50
               transition-all duration-300
-              shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]
-              hover:shadow-[0_8px_30px_-10px_rgba(20,184,166,0.15)]
+              shadow-[0_8px_20px_-10px_rgba(0,0,0,0.12),0_2px_8px_-2px_rgba(0,0,0,0.06)]
+              hover:shadow-[0_15px_40px_-12px_rgba(20,184,166,0.2)]
               rounded-2xl
               w-full h-auto min-h-[75px]
               overflow-hidden
             "
           >
             {/* Accent Bar */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-slate-200 dark:bg-white/5 group-hover:bg-teal-500 transition-colors duration-300" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-teal-500 transition-colors duration-300" />
 
             {/* Pattern Overlay */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -729,15 +708,15 @@ function ShortcutRow({
             </div>
 
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase font-black tracking-widest text-slate-400 dark:text-white/20 group-hover:text-teal-600/60 dark:group-hover:text-teal-400/50 mb-0.5 transition-colors">
+              <span className="text-[10px] uppercase font-black tracking-widest text-teal-600/60 dark:text-teal-400/50 mb-0.5 transition-colors">
                 {t("home.explore") || "Explore"}
               </span>
-              <span className="text-sm font-bold text-slate-700 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors">
+              <span className="text-sm font-bold text-slate-900 dark:text-white transition-colors">
                 {item.title}
               </span>
             </div>
 
-            <div className="ml-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-500 text-teal-500 dark:text-teal-400 font-serif italic text-lg">
+            <div className="ml-auto opacity-100 translate-x-0 transition-all duration-500 text-teal-500 dark:text-teal-400 font-serif italic text-lg">
               →
             </div>
           </motion.div>

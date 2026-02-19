@@ -16,19 +16,14 @@ export default function FooterBar() {
   const { t } = useLocale();
 
   return (
-    <footer className="relative w-full overflow-hidden bg-gradient-to-br from-rose-100 via-violet-200 to-cyan-200 dark:bg-none dark:bg-black border-t border-slate-900/10 dark:border-white/10 pt-24 pb-12 transition-all duration-500">
+    <footer className="relative w-full overflow-hidden bg-gradient-to-br from-[#134e4a] via-[#0f2d2b] to-[#020617] dark:bg-none dark:bg-black border-t border-teal-800/30 dark:border-white/10 pt-24 pb-12 transition-all duration-500">
       {/* ================= 3D BACKGROUND / MASK EFFECTS ================= */}
-      <div className="absolute inset-0 pointer-events-none opacity-100">
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 dark:brightness-0 contrast-150" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Cinematic Radial Glows (Ambient Light - Enhanced Right Side) */}
+        <div className="absolute -top-[50%] -left-[20%] w-[80%] h-[150%] bg-teal-900/30 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
 
-        {/* Cinematic Radial Glows */}
-        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-slate-100 dark:bg-white/5 rounded-full blur-[120px] mix-blend-soft-light" />
-        <div className="absolute top-[40%] -right-[10%] w-[50%] h-[50%] bg-slate-50 dark:bg-white/5 rounded-full blur-[150px] mix-blend-soft-light" />
-
-        {/* Topographic Lines Mask (Simulated with Gradient Rules) */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07]"
-          style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        {/* THE 'GOOD' RIGHT-SIDE HIGHLIGHT MASK - LIGHT MODE BOOSTED */}
+        <div className="absolute -bottom-[15%] -right-[5%] w-[85%] h-[125%] bg-teal-400/50 dark:bg-teal-400/30 blur-[75px] rounded-full mix-blend-screen pointer-events-none" />
       </div>
 
       <div className="relative w-full px-4 md:px-8 z-10">
@@ -39,7 +34,7 @@ export default function FooterBar() {
             <div className="inline-block transform -translate-x-3">
               <BrandLogo scrolled={true} isFooter={true} />
             </div>
-            <p className="text-lg md:text-xl font-serif italic text-slate-600 dark:text-white/40 leading-relaxed max-w-md">
+            <p className="text-lg md:text-xl font-serif italic text-teal-100/80 dark:text-white/40 leading-relaxed max-w-md">
               &quot;Preserving the echoes of ancient Japan, one monument at a time. Journey through the soul of Nara.&quot;
             </p>
 
@@ -54,12 +49,12 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 2: EXPLORE ================= */}
           <div className="lg:col-span-2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Explore</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white/90">Explore</h4>
             <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
               {['Tours', 'Monuments', 'Map View', 'Videos'].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="group flex items-center gap-2 text-base text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors">
-                    <span className="w-0 group-hover:w-3 h-px bg-slate-950 dark:bg-white transition-all duration-300" />
+                  <Link href="#" className="group flex items-center gap-2 text-base text-teal-100/70 dark:text-white/60 hover:text-white transition-colors">
+                    <span className="w-0 group-hover:w-3 h-px bg-white transition-all duration-300" />
                     {item}
                   </Link>
                 </li>
@@ -69,12 +64,12 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 3: SERVICES ================= */}
           <div className="lg:col-span-2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Services</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white/90">Services</h4>
             <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
               {['Community Bus', 'Street View', 'City Promotion', 'Events'].map((item) => (
                 <li key={item}>
-                  <Link href="#" className="group flex items-center gap-2 text-base text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors">
-                    <span className="w-0 group-hover:w-3 h-px bg-slate-950 dark:bg-white transition-all duration-300" />
+                  <Link href="#" className="group flex items-center gap-2 text-base text-teal-100/70 dark:text-white/60 hover:text-white transition-colors">
+                    <span className="w-0 group-hover:w-3 h-px bg-white transition-all duration-300" />
                     {item}
                   </Link>
                 </li>
@@ -84,16 +79,16 @@ export default function FooterBar() {
 
           {/* ================= COLUMN 4: CONTACT ================= */}
           <div className="lg:col-span-3 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-950 dark:text-white">Connect</h4>
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white/90">Connect</h4>
             <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
-              <div className="flex items-start gap-4 group cursor-pointer text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
-                <MapPin className="w-5 h-5 shrink-0 text-slate-600 group-hover:text-slate-950 dark:group-hover:text-white transition-colors mt-1 lg:mt-0" />
+              <div className="flex items-start gap-4 group cursor-pointer text-teal-100/70 dark:text-white/60 hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <MapPin className="w-5 h-5 shrink-0 text-teal-200/50 group-hover:text-white transition-colors mt-1 lg:mt-0" />
                 <span className="text-base leading-relaxed">
                   1-6-25 Mamigaoka, Kashiba-shi,<br />Nara 639-0223 Japan
                 </span>
               </div>
-              <div className="flex items-center gap-4 group cursor-pointer text-slate-700 dark:text-white/60 hover:text-slate-950 dark:hover:text-white transition-colors p-3 rounded-2xl hover:bg-slate-900/5 dark:hover:bg-white/5 transition-all w-full max-w-xs justify-center lg:justify-start">
-                <Mail className="w-5 h-5 shrink-0 text-slate-600 group-hover:text-slate-950 dark:group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 group cursor-pointer text-teal-100/70 dark:text-white/60 hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <Mail className="w-5 h-5 shrink-0 text-teal-200/50 group-hover:text-white transition-colors" />
                 <span className="text-base">foundation@nara-heritage.jp</span>
               </div>
             </div>
@@ -102,16 +97,16 @@ export default function FooterBar() {
         </div>
 
         {/* ================= FOOTER BOTTOM ================= */}
-        <div className="pt-12 border-t border-slate-900/10 dark:border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest order-2 md:order-1">
+        <div className="pt-12 border-t border-teal-800/30 dark:border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <span className="text-xs font-bold text-teal-200/40 uppercase tracking-widest order-2 md:order-1">
             {t("footer.copyright", { year: new Date().getFullYear() })}
           </span>
           <div className="flex items-center justify-center md:justify-end gap-6 order-1 md:order-2">
-            <Link href="/privacy-policy" className="text-xs font-bold text-slate-600 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
+            <Link href="/privacy-policy" className="text-xs font-bold text-teal-200/60 hover:text-white uppercase tracking-widest transition-colors">
               {t("privacyPolicy")}
             </Link>
-            <div className="w-px h-3 bg-slate-400 dark:bg-white/30" />
-            <Link href="/terms-of-use" className="text-xs font-bold text-slate-600 hover:text-slate-950 dark:hover:text-white uppercase tracking-widest transition-colors">
+            <div className="w-px h-3 bg-white/20" />
+            <Link href="/terms-of-use" className="text-xs font-bold text-teal-200/60 hover:text-white uppercase tracking-widest transition-colors">
               {t("termsOfUse")}
             </Link>
           </div>

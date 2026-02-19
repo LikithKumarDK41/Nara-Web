@@ -26,7 +26,7 @@ export default function TourCard({ tour, t, idx = 0, onDelete, showStatus = fals
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#0a0a0a] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer"
+            className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#1e293b] dark:hover:bg-[#334155] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer"
             onClick={handleClick}
         >
             {/* 🖼️ Premium Inset Image Container */}

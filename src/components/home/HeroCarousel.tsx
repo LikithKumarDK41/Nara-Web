@@ -230,18 +230,24 @@ export default function HeroCarousel() {
                 {/* Extended Background & Decorations (Masking the image slant) */}
                 <div className="absolute inset-y-0 right-0 w-[140%] bg-white dark:bg-slate-950 -z-10 transition-colors duration-500 md:[clip-path:polygon(28%_0,100%_0,100%_100%,0%_100%)]">
                     <div className="absolute inset-0 opacity-70 dark:opacity-50">
-                        {/* Radial Glow */}
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_86%_50%,_var(--tw-gradient-stops))] from-slate-200/30 via-white/40 to-white dark:from-slate-800/10 dark:via-slate-950/30 dark:to-slate-950 transition-colors duration-500" />
+                        {/* Teal Radial Glow */}
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_86%_50%,_var(--tw-gradient-stops))] from-teal-50/20 via-white/40 to-white dark:from-teal-900/5 dark:via-slate-950/30 dark:to-slate-950 transition-colors duration-500" />
 
-                        {/* Criss-Cross (Mesh) Pattern */}
-                        <div className="absolute inset-0 opacity-[0.4] dark:opacity-[0.3]"
-                            style={{
-                                backgroundImage: `
-                                    repeating-linear-gradient(45deg, #94a3b8, #94a3b8 1px, transparent 1px, transparent 30px),
-                                    repeating-linear-gradient(-45deg, #94a3b8, #94a3b8 1px, transparent 1px, transparent 30px)
-                                `
-                            }}
-                        />
+                        {/* Large Heritage Kofun Shape Decoration */}
+                        <div className="absolute top-1/2 left-[60%] -translate-x-1/2 -translate-y-1/2 opacity-[0.06] dark:opacity-[0.1] transform rotate-[15deg] pointer-events-none w-[150%] h-[150%] flex items-center justify-center">
+                            <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-teal-900 dark:text-teal-300">
+                                <circle cx="300" cy="300" r="280" stroke="currentColor" strokeWidth="1" strokeDasharray="10 20" />
+                                <circle cx="300" cy="300" r="240" stroke="currentColor" strokeWidth="0.5" />
+                                <circle cx="300" cy="300" r="200" stroke="currentColor" strokeWidth="2" strokeDasharray="5 15" />
+                                <path
+                                    d="M300 120C233.726 120 180 173.726 180 240C180 286.046 205.954 326.046 244.131 346.5L200 480H400L355.869 346.5C394.046 326.046 420 286.046 420 240C420 173.726 366.274 120 300 120Z"
+                                    fill="currentColor"
+                                    fillOpacity="0.05"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                />
+                            </svg>
+                        </div>
 
                         {/* Noise Pattern */}
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] dark:opacity-10 mix-blend-overlay" />
@@ -256,17 +262,17 @@ export default function HeroCarousel() {
                         <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-0 rounded-full border-2 border-dashed border-amber-500 shadow-[0_0_25px_rgba(245,158,11,0.4)] dark:shadow-[0_0_35px_rgba(245,158,11,0.3)]"
+                            className="absolute inset-0 rounded-full border-2 border-dashed border-teal-500 shadow-[0_0_25px_rgba(20,184,166,0.4)] dark:shadow-[0_0_35px_rgba(20,184,166,0.3)]"
                         />
                         <motion.div
                             animate={{ rotate: -360 }}
                             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                            className="absolute -inset-4 rounded-full border border-amber-500/10 dark:border-amber-500/5 blur-[2px]"
+                            className="absolute -inset-4 rounded-full border border-teal-500/10 dark:border-teal-500/5 blur-[2px]"
                         />
                         <motion.div
                             animate={{ rotate: -360 }}
                             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-2 rounded-full border-2 border-dotted border-amber-600/60 dark:border-amber-400/50 shadow-[0_0_15px_rgba(217,119,6,0.2)]"
+                            className="absolute inset-2 rounded-full border-2 border-dotted border-teal-600/60 dark:border-teal-400/50 shadow-[0_0_15px_rgba(13,148,136,0.2)]"
                         />
 
                         <motion.div
@@ -275,12 +281,12 @@ export default function HeroCarousel() {
                             transition={{ duration: 1, delay: 0.5 }}
                             className="relative w-28 h-28 lg:w-36 lg:h-36 flex items-center justify-center"
                         >
-                            <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_20px_rgba(217,119,6,0.6)]">
+                            <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_20px_rgba(13,148,136,0.6)]">
                                 <defs>
                                     <linearGradient id="gold-gradient" x1="0" y1="0" x2="100" y2="120" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stopColor="#d97706" />
-                                        <stop offset="50%" stopColor="#f59e0b" />
-                                        <stop offset="100%" stopColor="#fbbf24" />
+                                        <stop offset="0%" stopColor="#0d9488" />
+                                        <stop offset="50%" stopColor="#14b8a6" />
+                                        <stop offset="100%" stopColor="#2dd4bf" />
                                     </linearGradient>
                                 </defs>
                                 <path
@@ -317,11 +323,11 @@ export default function HeroCarousel() {
                                         {(SIDEBAR_TITLE_MAP[currentSlide.titleKey] || { en: "NARA" }).en}
                                     </h2>
                                     <div className="flex items-center gap-2 w-full mt-1">
-                                        <div className="h-px flex-1 bg-amber-500/20" />
-                                        <h3 className="text-lg md:text-xl font-serif text-amber-600 dark:text-amber-500 tracking-[0.2em] font-medium whitespace-nowrap px-1">
+                                        <div className="h-px flex-1 bg-teal-500/20" />
+                                        <h3 className="text-lg md:text-xl font-serif text-teal-600 dark:text-teal-500 tracking-[0.2em] font-medium whitespace-nowrap px-1">
                                             {(SIDEBAR_TITLE_MAP[currentSlide.titleKey] || { ja: "奈良" }).ja}
                                         </h3>
-                                        <div className="h-px flex-1 bg-amber-500/20" />
+                                        <div className="h-px flex-1 bg-teal-500/20" />
                                     </div>
                                 </div>
 
@@ -357,7 +363,7 @@ export default function HeroCarousel() {
                         <linearGradient id="divider-grad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
                             <stop offset="30%" stopColor="currentColor" stopOpacity="0.4" />
-                            <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.9" />
+                            <stop offset="50%" stopColor="#14b8a6" stopOpacity="0.9" />
                             <stop offset="70%" stopColor="currentColor" stopOpacity="0.4" />
                             <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
                         </linearGradient>
@@ -370,8 +376,6 @@ export default function HeroCarousel() {
                         strokeWidth="0.4"
                         className="text-slate-200/50 dark:text-white/5"
                     />
-
-
 
                     {/* Main Technical Line (Matches Sidebar Border) */}
                     <line
