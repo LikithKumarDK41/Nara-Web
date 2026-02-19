@@ -98,8 +98,8 @@ export default function FinishPage() {
 
                         <div className="relative p-6 text-black dark:text-white">
                             <h1 className="text-5xl font-black mb-2">🎉</h1>
-                            <h2 className="text-3xl font-black">{t("tour_completed")}!</h2>
-                            <p className="text-lg text-emerald-700 dark:text-emerald-300">
+                            <h2 className="font-serif italic text-3xl font-black">{t("tour_completed")}!</h2>
+                            <p className="font-serif italic text-lg text-emerald-700 dark:text-emerald-300">
                                 {finalTour?.title ?? ""}
                             </p>
 
@@ -108,7 +108,7 @@ export default function FinishPage() {
                 bg-emerald-100 text-emerald-700 border-emerald-300
                 dark:bg-emerald-500/20 dark:border-emerald-400/30 dark:text-emerald-300"
                             >
-                                <span className="font-bold">✨ {t("congratulations")}!</span>
+                                <span className="font-serif italic font-bold">✨ {t("congratulations")}!</span>
                                 <br />
                                 <span className="text-black dark:text-gray-200">
                                     {t("you_collected")}{" "}
@@ -134,7 +134,7 @@ export default function FinishPage() {
               bg-white border-gray-300 
               dark:bg-black dark:border-white/10"
                             >
-                                <h2 className="text-3xl font-extrabold text-black dark:text-white mb-2">
+                                <h2 className="font-serif italic text-3xl font-extrabold text-black dark:text-white mb-2">
                                     {finalTour.title}
                                 </h2>
 

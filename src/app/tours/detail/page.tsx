@@ -402,7 +402,7 @@ export default function TourDetailsClientPage() {
 
       <div className="space-y-12">
         {/* ===== Banner ===== */}
-        <section className="mt-[5.4%] relative overflow-hidden shadow-md">
+        <section className="relative overflow-hidden shadow-md">
           {/* Banner Image */}
           <div className="relative h-[420px] sm:h-[480px] w-full">
             {tour.image?.secure_url ? (
@@ -453,7 +453,7 @@ export default function TourDetailsClientPage() {
 
           {/* Title + Subtitle */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
-            <h1 className="text-4xl sm:text-5xl font-bold drop-shadow-lg">
+            <h1 className="font-serif italic text-4xl sm:text-5xl font-bold drop-shadow-lg">
               {tour.title}
             </h1>
             {tour.content?.brief && (
@@ -587,7 +587,7 @@ export default function TourDetailsClientPage() {
           {/* ===== Map Section ===== */}
           {tour.tourpoints?.length ? (
             <section className="-mt-2 space-y-4">
-              <h2 className="text-lg font-semibold">{t("tourDetails.map")}</h2>
+              <h2 className="font-serif italic text-lg font-semibold">{t("tourDetails.map")}</h2>
               <Suspense
                 fallback={
                   <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
@@ -605,8 +605,8 @@ export default function TourDetailsClientPage() {
 
           {/* ===== Timeline Section ===== */}
           {tour.tourpoints?.length && (
-            <section id="timeline" className="space-y-4">
-              <h2 className="text-lg font-semibold">
+            <section id="timeline" className="space-y-4 mb-6">
+              <h2 className="font-serif italic text-lg font-semibold">
                 {t("tourDetails.timeline")}
               </h2>
               <br />

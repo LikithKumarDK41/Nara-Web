@@ -132,7 +132,7 @@ function ExplorePageContent() {
         <div className="flex flex-col w-full">
             {/* ===== HERO SECTION ===== */}
             <section
-                className="mt-[5.4%] mb-4
+                className="mb-4
     w-full
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
@@ -177,6 +177,7 @@ function ExplorePageContent() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                     >
                         {t("home.explore_categories")}
@@ -205,7 +206,7 @@ function ExplorePageContent() {
             </section>
             {/* <HomeTabs activeTab="categories" /> */}
 
-            <div className="mx-auto w-full px-4 space-y-6 pb-0">
+            <div className="mx-auto w-full px-4 space-y-6 pb-6">
                 <div className="min-h-[200px] animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {!globalLoading && sectionTwo.length > 0 && (
                         <div className="space-y-6">

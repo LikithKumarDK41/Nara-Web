@@ -486,7 +486,7 @@ export default function MonumentDetailModal({
         {/* ---------------- Header ---------------- */}
         <DialogHeader className="flex items-center border-b bg-background py-4 px-8 relative">
           <DialogTitle
-            className="
+            className="font-serif italic
     text-xl font-semibold 
     px-12 
     whitespace-nowrap 
@@ -794,7 +794,7 @@ export default function MonumentDetailModal({
 
                 {/* 🏛 Title + Region */}
                 <section>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                  <h2 className="font-serif italic text-2xl font-bold tracking-tight text-foreground">
                     {safeText(details.title || details.name)}
                   </h2>
                   {details.region &&
@@ -905,7 +905,7 @@ export default function MonumentDetailModal({
                 {/* 🏠 Address */}
                 {plainAddress && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-1">
                       <Layers className="h-4 w-4 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.address")}
                     </h3>
@@ -918,7 +918,7 @@ export default function MonumentDetailModal({
                 {/* 🌍 Region Info */}
                 {details.region.content && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-2">
                       <Globe className="h-4 w-4 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.region_info")}
                     </h3>
@@ -948,7 +948,7 @@ export default function MonumentDetailModal({
                 {/* 📷 Image Credit */}
                 {details?.imagecredit && details.imagecredit.replace(/<[^>]*>/g, "").trim() !== "" && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-1">
                       <Info className="h-4 w-4 text-gray-500" />
                       {t("shortcut.tourist_attraction_details.image_credit")}
                     </h3>
@@ -970,7 +970,7 @@ export default function MonumentDetailModal({
                 {(details?.theme?.length > 0 ||
                   details?.subtheme?.length > 0) && (
                     <section>
-                      <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                      <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-2">
                         <Star className="h-4 w-4 text-gray-500" />{" "}
                         {t("shortcut.tourist_attraction_details.classification")}
                       </h3>
@@ -1000,7 +1000,7 @@ export default function MonumentDetailModal({
                 {/* 🖼 Gallery */}
                 {!!details.gallery?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <ImageIcon className="h-5 w-5 text-slate-400 dark:text-slate-600" />
                       {t("shortcut.tourist_attraction_details.gallery")}
                     </h3>
@@ -1095,7 +1095,7 @@ export default function MonumentDetailModal({
                 {/* 🏛 Nearby Monuments */}
                 {!!details.nearbymonuments?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Landmark className="h-5 w-5 text-gray-500" />{" "}
                       {t(
                         "shortcut.tourist_attraction_details.nearby_monuments",
@@ -1121,7 +1121,7 @@ export default function MonumentDetailModal({
                           </div>
 
                           <div className="flex flex-col flex-1 justify-between p-4">
-                            <h4 className="text-sm font-semibold text-foreground">
+                            <h4 className="font-serif italic text-sm font-semibold text-foreground">
                               {safeText(m.title)}
                             </h4>
 
@@ -1156,7 +1156,7 @@ export default function MonumentDetailModal({
                     {details.relatedtours.filter(
                       (tour: any) => !(localTourId && localTourId === tour._id),
                     ).length > 0 && (
-                        <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                        <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                           <Route className="h-5 w-5 text-gray-500" />{" "}
                           {t("shortcut.tourist_attraction_details.related_tours")}
                         </h3>
@@ -1205,7 +1205,7 @@ export default function MonumentDetailModal({
                               <div className="flex flex-col flex-1 justify-between p-4">
                                 {/* Text Section (auto-height) */}
                                 <div className="flex-1">
-                                  <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                                  <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
                                     {safeText(tour.title)}
                                   </h3>
 
@@ -1252,7 +1252,7 @@ export default function MonumentDetailModal({
                 {/* 🏬 Nearby Services */}
                 {!!details.nearbyservices?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Store className="h-5 w-5 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.nearby_services")}
                     </h3>
@@ -1277,7 +1277,7 @@ export default function MonumentDetailModal({
                           </div>
                           <div className="flex flex-col flex-1 justify-between p-4">
                             <div className="flex-1">
-                              <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                              <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
                                 {safeText(srv.name)}
                               </h3>
                               {srv.category && (

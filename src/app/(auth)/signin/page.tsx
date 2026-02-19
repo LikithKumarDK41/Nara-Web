@@ -118,7 +118,7 @@ export default function SignInPage() {
     try {
       window.localStorage.clear();
       window.sessionStorage.clear();
-    } catch {}
+    } catch { }
 
     setEmailReg("");
     setOtp("");
@@ -140,7 +140,7 @@ export default function SignInPage() {
     try {
       window.localStorage.clear();
       window.sessionStorage.clear();
-    } catch {}
+    } catch { }
 
     const timer = setTimeout(() => {
       dispatch(setOtpMode(null));
@@ -409,7 +409,7 @@ export default function SignInPage() {
       let signAction;
       try {
         signAction = await dispatch(signin({ email: emailFromSocial }));
-      } catch {}
+      } catch { }
 
       if (signAction && signin.fulfilled.match(signAction)) {
         toast.success(t("auth.toast_login_success"));
@@ -549,11 +549,10 @@ export default function SignInPage() {
                 className="
                 p-3
                 rounded-3xl
-                shadow-[0_4px_16px_rgba(0,0,0,0.4)]
                 border border-white/10
               "
               >
-                <BrandLogo imgSize={60} />
+                <BrandLogo imgSize={60} scrolled={true} isFooter={true} />
               </div>
 
               <p
@@ -624,7 +623,7 @@ export default function SignInPage() {
                 <form className="grid gap-4" onSubmit={onSubmit} noValidate>
                   <div className="grid gap-2">
                     {/* Label + Swap */}
-                    <Label className="flex items-center justify-between text-teal-800 dark:text-teal-200">
+                    <Label className="flex items-center justify-between text-black dark:text-white">
                       <span>
                         {loginType === "email"
                           ? t("auth.label_email")
@@ -642,9 +641,9 @@ export default function SignInPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={loading}
                         className="
-        focus-visible:ring-teal-500
+        focus-visible:ring-black dark:focus-visible:ring-white
         focus-visible:border-0
-        border-teal-300 dark:border-teal-600
+        border-black dark:border-white
       "
                       />
                     ) : (
@@ -658,8 +657,8 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
             w-[90px]
-            border-teal-300 dark:border-teal-600
-            focus-visible:ring-teal-500
+            border-black dark:border-white
+            focus-visible:ring-black dark:focus-visible:ring-white
             focus-visible:border-0
             rounded-r-none
           "
@@ -689,9 +688,9 @@ export default function SignInPage() {
           flex-1
           -ml-px
           rounded-l-none
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
@@ -702,7 +701,7 @@ export default function SignInPage() {
                     <div className="grid gap-2">
                       <Label
                         htmlFor="otp"
-                        className="text-teal-800 dark:text-teal-200"
+                        className="text-black dark:text-white"
                       >
                         {t("auth.label_otp")}
                       </Label>
@@ -718,9 +717,9 @@ export default function SignInPage() {
                         }
                         disabled={loading}
                         className="
-        focus-visible:ring-teal-500
+        focus-visible:ring-black dark:focus-visible:ring-white
         focus-visible:border-0
-        border-teal-300 dark:border-teal-600
+        border-black dark:border-white
       "
                       />
 
@@ -812,7 +811,7 @@ export default function SignInPage() {
                         <div className="grid gap-2">
                           <Label
                             htmlFor="emailReg"
-                            className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
+                            className="flex items-center gap-2 text-black dark:text-white"
                           >
                             {t("auth.label_email")}
                           </Label>
@@ -824,9 +823,9 @@ export default function SignInPage() {
                             onChange={(e) => setEmailReg(e.target.value)}
                             disabled={loading}
                             className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                           />
                         </div>
@@ -853,7 +852,7 @@ export default function SignInPage() {
                   {otpServer && !otpVerified && !showSocialRegister && (
                     <>
                       <div className="grid gap-2">
-                        <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
                           {t("auth.label_email")}
                         </Label>
                         <Input
@@ -861,9 +860,9 @@ export default function SignInPage() {
                           value={emailReg}
                           disabled
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
@@ -871,7 +870,7 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label
                           htmlFor="otp"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
+                          className="flex items-center gap-2 text-black dark:text-white"
                         >
                           {t("auth.label_otp")}
                         </Label>
@@ -886,9 +885,9 @@ export default function SignInPage() {
                           }
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                         {otpErrors.otp && (
@@ -920,7 +919,7 @@ export default function SignInPage() {
                   {(otpVerified || showSocialRegister) && (
                     <>
                       <div className="grid gap-2">
-                        <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
                           {t("auth.label_email")}
                         </Label>
                         <Input
@@ -928,9 +927,9 @@ export default function SignInPage() {
                           value={emailReg}
                           disabled
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
@@ -938,9 +937,9 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label
                           htmlFor="name"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
+                          className="flex items-center gap-2 text-black dark:text-white"
                         >
-                          {t("auth.label_name")} *
+                          {t("auth.label_name")} <span className="text-red-600">*</span>
                         </Label>
                         <Input
                           id="name"
@@ -948,9 +947,9 @@ export default function SignInPage() {
                           onChange={(e) => setName(e.target.value)}
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                         {regErrors.name && (
@@ -961,8 +960,8 @@ export default function SignInPage() {
                       </div>
 
                       <div className="grid gap-2">
-                        <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
-                          {t("auth.label_gender")} *
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_gender")} <span className="text-red-600">*</span>
                         </Label>
                         <Select
                           value={gender}
@@ -972,9 +971,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
@@ -983,7 +982,7 @@ export default function SignInPage() {
 
                           <SelectContent
                             className="
-      border border-teal-500/20
+      border border-black/20 dark:border-white/20
       bg-background
       shadow-lg
     "
@@ -1007,8 +1006,8 @@ export default function SignInPage() {
                       </div>
 
                       <div className="grid gap-2">
-                        <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
-                          {t("auth.label_age_group")} *
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_age_group")} <span className="text-red-600">*</span>
                         </Label>
                         <Select
                           value={agegroup}
@@ -1018,9 +1017,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
@@ -1030,7 +1029,7 @@ export default function SignInPage() {
                           </SelectTrigger>
                           <SelectContent
                             className="
-      border border-teal-500/20
+      border border-black/20 dark:border-white/20
       bg-background
       shadow-lg
     "
@@ -1063,8 +1062,8 @@ export default function SignInPage() {
                       </div>
 
                       <div className="grid gap-2">
-                        <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
-                          {t("auth.label_country")} *
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_country")} <span className="text-red-600">*</span>
                         </Label>
                         <Select
                           value={country}
@@ -1074,9 +1073,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full overflow-hidden
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
@@ -1087,7 +1086,7 @@ export default function SignInPage() {
                           </SelectTrigger>
                           <SelectContent
                             className="
-      border border-teal-500/20
+      border border-black/20 dark:border-white/20
       bg-background
       shadow-lg
     "
@@ -1116,9 +1115,9 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label
                           htmlFor="nationality"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
+                          className="flex items-center gap-2 text-black dark:text-white"
                         >
-                          {t("auth.label_nationality")} *
+                          {t("auth.label_nationality")} <span className="text-red-600">*</span>
                         </Label>
                         <Select
                           value={nationality}
@@ -1128,9 +1127,9 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full overflow-hidden
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
@@ -1170,9 +1169,9 @@ export default function SignInPage() {
                       <div className="grid gap-2">
                         <Label
                           htmlFor="phoneNumber"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
+                          className="flex items-center gap-2 text-black dark:text-white"
                         >
-                          {t("auth.label_phone")} *
+                          {t("auth.label_phone")} <span className="text-red-600">*</span>
                         </Label>
                         <Input
                           id="phoneNumber"
@@ -1185,9 +1184,9 @@ export default function SignInPage() {
                           }
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                         {regErrors.phoneNumber && (

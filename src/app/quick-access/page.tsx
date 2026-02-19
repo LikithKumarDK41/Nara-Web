@@ -25,7 +25,7 @@ export default function QuickAccessPage() {
         <main className="min-h-screen">
             {/* ===== HERO SECTION ===== */}
             <section
-                className="mt-[5.4%] mb-4
+                className="mb-4
     w-full
     bg-gradient-to-br
     from-teal-600 via-cyan-600 to-emerald-700
@@ -70,6 +70,7 @@ export default function QuickAccessPage() {
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                     >
                         {t("quick_access_page.hero_title")}
