@@ -602,19 +602,11 @@ function ShortcutRow({
         const parsedLink = JSON.parse(shortcut.link);
         if (parsedLink.theme) dispatch(setActiveTheme(parsedLink.theme));
       }
-      const p = shortcut?.priority;
-      if (typeof p !== "number" || p < 4 || p > 9) return;
 
-      const routes: Record<number, string> = {
-        4: "/category/politics",
-        5: "/category/economy",
-        6: "/category/faith",
-        7: "/category/art",
-        8: "/category/technology",
-        9: "/category/nature",
-      };
-
-      if (routes[p]) router.push(routes[p]);
+      // ✅ Route to Explore Page with Category ID
+      if (shortcut._id) {
+        router.push(`/explore?category=${shortcut._id}`);
+      }
     } catch (err) {
       console.error("❌ Shortcut V2 Link Error:", err);
     }

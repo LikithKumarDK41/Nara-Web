@@ -19,6 +19,7 @@ import type { SearchFilter } from "@/lib/types/userGlobal.types";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { normalizeHTML } from "@/lib/utils";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 export default function SearchModal({
   open,
@@ -538,67 +539,12 @@ export default function SearchModal({
               <>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {pageItems.map((m) => (
-                    <div
+                    <MonumentCard
                       key={m._id}
+                      monument={m}
+                      t={t}
                       onClick={() => openMonumentModal(m._id)}
-                      className="group relative flex flex-col h-[520px] rounded-3xl overflow-hidden bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 dark:hover:shadow-teal-900/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer isolate"
-                    >
-                      <div className="relative h-[280px] w-full overflow-hidden flex-shrink-0">
-                        {m.image?.secure_url ? (
-                          <img
-                            src={m.image.secure_url}
-                            alt={m.title || m.name}
-                            className="block h-full w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
-                            <ImageIcon className="h-12 w-12 text-slate-400 dark:text-slate-600" />
-                          </div>
-                        )}
-                        <div className="absolute top-5 left-5 z-20">
-                          <div className="px-4 py-2 rounded-full bg-white/95 dark:bg-black/90 backdrop-blur-xl text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-2 shadow-lg border border-teal-200/50 dark:border-teal-500/30">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-3.5 w-3.5 ${i < (m.popularity ?? 0)
-                                  ? "fill-amber-400 text-amber-400"
-                                  : "text-gray-300 dark:text-gray-600"
-                                  }`}
-                              />
-                            ))}{" "}
-                          </div>
-                        </div>
-
-                        {/* Gradient overlays for better text readability */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-40 dark:opacity-70 transition-opacity duration-500" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-20 dark:group-hover:opacity-0 transition-opacity duration-500" />
-                      </div>
-                      <div className="relative flex-1 p-8 flex flex-col justify-between bg-gradient-to-br from-white to-slate-50/50 dark:from-[#15191f] dark:to-[#1a1f28]">
-                        <div className="space-y-3">
-                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
-                            {m.title || m.name}
-                          </h3>
-
-                          {m.content?.brief && (
-                            <p
-                              className="text-sm font-light text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed"
-                              dangerouslySetInnerHTML={{
-                                __html: normalizeHTML(m.content.brief),
-                              }}
-                            />
-                          )}
-                        </div>
-
-                        <div className="flex items-center justify-between pt-6 mt-auto border-t border-slate-200/60 dark:border-slate-700/60">
-                          <span className="text-xs font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-widest group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                            {t("actions.details")}
-                          </span>
-                          <div className="w-11 h-11 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#1a2029] flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-teal-600 group-hover:border-teal-500 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:shadow-teal-500/50">
-                            <ArrowRight className="w-5 h-5" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    />
                   ))}
                 </div>
 
