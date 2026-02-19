@@ -38,8 +38,8 @@ export default function HeaderLogout() {
           /* 🌞 Light mode */
           bg-white border border-slate-200 text-slate-900 hover:bg-slate-50
 
-          /* 🌙 Dark mode: Black Bg + White Icon */
-          dark:bg-black/80 dark:border-slate-800 dark:text-white hover:dark:bg-slate-950
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
         "
       >
         <LogOut className="h-5 w-5" />

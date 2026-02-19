@@ -37,11 +37,11 @@ export default function HeaderLogin() {
           text-slate-900
           hover:shadow-md
 
-          /* 🌙 Dark mode: Black Bg + White Icon */
-          dark:bg-black/80
-          dark:border-slate-800
-          dark:text-white
-          dark:hover:bg-slate-950
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800
+          dark:border-slate-700
+          dark:text-gray-100
+          dark:hover:bg-slate-700
         "
       >
         <LogIn className="h-5 w-5" />

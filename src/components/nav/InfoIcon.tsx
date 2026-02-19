@@ -18,7 +18,7 @@ export default function AppInfo() {
         bg-white border border-slate-200 text-slate-900 hover:shadow-md hover:bg-slate-50
 
         /* ⚫ Dark Mode */
-        dark:bg-black/80 dark:border-slate-800 dark:text-white dark:hover:bg-slate-900
+        dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
       "
     >
       <Notebook className="h-4 w-4" />
