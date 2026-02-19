@@ -123,6 +123,7 @@ export default function MonumentCard({
                             {t("Details") || "Details"}
                         </span>
                         <div className="flex-1 mx-4 h-px bg-slate-100 dark:bg-white/5 relative overflow-hidden">
+                            {/* <div className="absolute inset-0 bg-slate-900 dark:bg-white translate-x-0 md:-translate-x-full md:group-hover:translate-x-0 transition-transform duration-1000 ease-out" /> */}
                             <div className="absolute inset-0 bg-slate-900 dark:bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-out" />
                         </div>
                         <ArrowRight className="w-5 h-5 text-slate-900 dark:text-white transform transition-transform duration-500 ease-out group-hover:translate-x-1" />

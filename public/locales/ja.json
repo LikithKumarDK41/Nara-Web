@@ -798,6 +798,10 @@
   "nara_heritage": "奈良の遺産",
   "nara_heritage_theme": "奈良遺産テーマ",
   "explore_nara": "奈良を探索",
+  "footer_explore": "探索",
+  "guided_tours": "ガイドツアー",
+  "videos": "動画",
+  "my_list": "マイリスト",
   "cultural_heritage_collection": "文化遺産コレクション",
   "category_desc": "奈良の豊かな歴史、文化、自然遺産を紹介する厳選されたテーマをご覧ください",
   "themes": "テーマ",
@@ -849,5 +853,11 @@
     "hero_title": "クイックアクセス",
     "hero_subtitle": "インタラクティブマップ、検索ツール、パノラマストリートビューで、奈良の見どころを探索しましょう。"
   },
-  "tours_breadcrumb": "ツアー"
+  "tours_breadcrumb": "ツアー",
+  "information": "情報",
+  "privacy_policy": "プライバシーポリシー",
+  "terms_of_use": "利用規約",
+  "region_map":"地域/地図",
+  "search":"検索",
+  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ"
 }
