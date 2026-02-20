@@ -403,13 +403,13 @@ export default function AboutDetailPage() {
 
         {/* STORY CONTENT (Full Display) */}
         {(about?.content?.brief || about?.content?.extended) && (
-          <section className="space-y-8 mt-8">
+          <section className="space-y-4 mt-8">
             <div
               className="
   flex items-center gap-3 pb-4
   border-b
-  border-slate-200
-  dark:border-white/10
+  border-slate-400
+  dark:border-white/50
 "
             >
               <BookOpen className="w-5 h-5 text-teal-500" />
@@ -441,14 +441,14 @@ export default function AboutDetailPage() {
 
         {/* RELATED SPOTS (Editorial List Design) */}
         {resourceType === "monuments" && monuments.length > 0 && !loading && (
-          <section className="space-y-12 mt-8">
+          <section className="space-y-4 mt-8">
             <div
               className="
     flex items-center justify-between
     gap-3 pb-4
     border-b
-    border-slate-200
-    dark:border-white/10
+    border-slate-400
+    dark:border-white/50
   "
             >
               {/* Left: Title */}
@@ -546,12 +546,12 @@ export default function AboutDetailPage() {
           view === "subthemes" &&
           subthemes.length > 0 &&
           !loading && (
-            <section className="space-y-10 mt-8">
+            <section className="space-y-4 mt-8">
               {/* Header */}
               <div
                 className="
       flex items-center gap-3 pb-4
-      border-b border-slate-200 dark:border-white/10
+      border-b border-slate-400 dark:border-white/50
     "
               >
                 <Layers className="w-5 h-5 text-teal-500" />
@@ -677,14 +677,14 @@ export default function AboutDetailPage() {
 
         {/* ================= RELATED TOURS ================= */}
         {about?.relatedtours?.length > 0 && (
-          <section className="space-y-8 mt-8">
+          <section className="space-y-4 mt-8">
             {/* Header */}
             <div
               className="
   flex items-center gap-3 pb-4
   border-b
-  border-slate-200
-  dark:border-white/10
+  border-slate-400
+  dark:border-white/50
 "
             >
               <Route className="w-5 h-5 text-teal-600 dark:text-teal-400" />
