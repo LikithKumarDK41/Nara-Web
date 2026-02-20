@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import {
   Landmark,
@@ -58,6 +58,8 @@ export default function LibraryPage() {
     visitedMonuments: 1,
     visitedTours: 1,
   });
+
+  const resultsTopRef = useRef<HTMLDivElement>(null);
 
   const limit = 6;
 
@@ -235,7 +237,9 @@ export default function LibraryPage() {
   const handlePageChange = (p: number) => {
     const key = getPageKey();
     setPage((prev) => ({ ...prev, [key]: p }));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const currentPage = page[getPageKey()];
@@ -429,6 +433,9 @@ export default function LibraryPage() {
       </section>
 
       <div className="px-4 space-y-6">
+        {/* Scroll Anchor */}
+        <div ref={resultsTopRef} className="scroll-mt-24" />
+
         {/* BREADCRUMB */}
         <div className="mt-2 flex justify-start">
           <Breadcrumb

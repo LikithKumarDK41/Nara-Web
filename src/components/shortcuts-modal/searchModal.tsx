@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Search, X, Check, Star, ImageIcon, ArrowRight } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
@@ -42,6 +42,16 @@ export default function SearchModal({
   const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
     null,
   );
+
+  // 📐 Ref for scrolling to top of results on pagination
+  const resultsTopRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of results when page changes
+  useEffect(() => {
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [page]);
 
   /* -------------------- Initial Load -------------------- */
   useEffect(() => {
@@ -523,6 +533,9 @@ export default function SearchModal({
 
           {/* Monuments Grid */}
           <div className="mt-16 w-full max-w-7xl px-6 pb-20 relative z-0">
+            {/* Scroll Anchor */}
+            <div ref={resultsTopRef} className="scroll-mt-6" />
+
             {loading ? (
               <div className="flex justify-center items-center py-10">
                 <div
