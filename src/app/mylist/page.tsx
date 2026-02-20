@@ -555,6 +555,7 @@ function InnerTabs({
                     key={`mon-${item._id}-${idx}`}
                     monument={item}
                     t={t}
+                    idx={idx}
                     onClick={() => onOpenMonument(item._id)}
                     onDelete={() => {
                       if (isBookmarkTab) {
@@ -613,7 +614,7 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3 pt-6">
+    <div className="mt-6 mb-10 flex items-center justify-between gap-3 pt-6">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {t("pagination_left", { current: page, total: totalPages })}

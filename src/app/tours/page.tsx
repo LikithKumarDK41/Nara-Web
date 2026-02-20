@@ -332,7 +332,7 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="mt-10 mb-10 flex items-center justify-between gap-3">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {t("pagination_left", { current: page, total: totalPages })}

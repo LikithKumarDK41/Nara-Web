@@ -243,11 +243,12 @@ export default function RegionMapModal({
                   {regions.length > 0 && (
                     <>
                       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {currentData.map((r) => (
+                        {currentData.map((r, idx) => (
                           <MonumentCard
                             key={r._id}
                             monument={r}
                             t={t}
+                            idx={idx}
                             onClick={() => {
                               sessionStorage.setItem("returnToRegionModal", "true");
                               router.push(`/regions?id=${r._id}`);
@@ -392,7 +393,7 @@ function EmptyState({
 ========================================================= */
 function PageNavigator({ totalPages, page, onPageChange, t }: any) {
   return (
-    <div className="mt-4 flex items-center justify-between gap-3">
+    <div className="mt-10 mb-10 flex items-center justify-between gap-3">
       <div className="text-xs text-muted-foreground">
         {t("pagination_left", { current: page, total: totalPages })}
       </div>

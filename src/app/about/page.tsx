@@ -527,11 +527,12 @@ export default function AboutDetailPage() {
 
             {/* Editorial Grid */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {monuments.map((m) => (
+              {monuments.map((m, idx) => (
                 <MonumentCard
                   key={m._id}
                   monument={m}
                   t={t}
+                  idx={idx}
                   onClick={() => handleOpenMonument(m._id)}
                 />
               ))}

@@ -255,11 +255,12 @@ export default function RegionDetailsPage() {
         {filtered.length > 0 && (
           <>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {currentData.map((m) => (
+              {currentData.map((m, idx) => (
                 <MonumentCard
                   key={m._id}
                   monument={m}
                   t={t}
+                  idx={idx}
                   onClick={() => handleOpenMonument(m._id)}
                 />
               ))}
@@ -296,7 +297,7 @@ export default function RegionDetailsPage() {
 ========================================================= */
 function PageNavigator({ totalPages, page, onPageChange, t }: any) {
   return (
-    <div className="mb-6 flex items-center justify-between gap-3">
+    <div className="mt-10 mb-10 flex items-center justify-between gap-3">
       <div className="text-xs text-muted-foreground">
         {t("pagination_left", { current: page, total: totalPages })}
       </div>
