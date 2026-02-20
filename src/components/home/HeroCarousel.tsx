@@ -130,7 +130,7 @@ export default function HeroCarousel() {
                 {/* Content Overlay - Positioned over the image */}
                 <motion.div
                     style={{ y: y1, opacity }}
-                    className="absolute inset-x-0 bottom-0 h-full flex flex-col justify-end px-6 md:px-16 lg:px-24 z-20 pointer-events-none pb-48 md:pb-64"
+                    className="absolute inset-x-0 bottom-0 h-full flex flex-col justify-end px-6 md:px-16 lg:px-24 z-20 pointer-events-none pb-52 md:pb-64"
                 >
                     <div className="max-w-4xl w-full pointer-events-auto md:pr-20">
                         <AnimatePresence mode="wait">
@@ -166,7 +166,7 @@ export default function HeroCarousel() {
                                 </h1>
 
                                 {/* Description */}
-                                <p className="text-sm md:text-lg text-slate-200 max-w-xl leading-relaxed font-light drop-shadow-md hidden md:block">
+                                <p className="text-sm md:text-lg text-slate-200 max-w-xl leading-relaxed font-light drop-shadow-md">
                                     {t(currentSlide.descKey)}
                                 </p>
                             </motion.div>
