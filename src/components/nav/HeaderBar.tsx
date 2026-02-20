@@ -23,7 +23,6 @@ import { logout } from "@/lib/store/slices/authSlice";
 import HeaderLogout from "./Logout";
 import AppInfo from "./InfoIcon";
 import HeaderLogin from "./LoginIcon";
-import PWAInstallButton from "@/components/system/PWAInstallButton";
 
 export default function HeaderBar() {
   const { t, locale } = useLocale();
@@ -106,7 +105,6 @@ export default function HeaderBar() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <PWAInstallButton variant="header" />
               <LanguageToggle />
               <ThemeToggle />
               <AppInfo />
@@ -227,8 +225,6 @@ export default function HeaderBar() {
                     <span className="font-medium">{t("street_view") || "Street View"}</span>
                   </button>
 
-                  {/* PWA Install Button (Mobile Only) */}
-                  <PWAInstallButton />
 
                   {/* <div className="my-2 h-px bg-slate-100 dark:bg-slate-800/50" /> */}
 

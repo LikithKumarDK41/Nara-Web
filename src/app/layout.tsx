@@ -10,7 +10,6 @@ import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
 import Chatbot from "@/components/chatbot/Chatbot";
-import PWAInstallPrompt from "@/components/system/PWAInstallPrompt";
 
 export const metadata: Metadata = {
   // title: "Tourist",
@@ -132,7 +131,6 @@ export default function RootLayout({
           </LoaderProvider>
         </StoreProvider>
         <AppToaster />
-        <PWAInstallPrompt />
       </body>
     </html>
   );

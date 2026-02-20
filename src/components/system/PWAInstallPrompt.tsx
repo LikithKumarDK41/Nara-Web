@@ -21,11 +21,22 @@ export default function PWAInstallPrompt() {
     const [isStandalone, setIsStandalone] = useState(false);
 
     useEffect(() => {
-        // Check if app is already installed
-        if (window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone) {
+        // Check if app is currently running in standalone mode (already installed)
+        const checkStandalone = () => {
+            return window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone;
+        };
+
+        if (checkStandalone()) {
             setIsStandalone(true);
             return;
         }
+
+        // Catch the event when app is installed from elsewhere (e.g. browser menu)
+        const handleAppInstalled = () => {
+            setIsStandalone(true);
+        };
+
+        window.addEventListener("appinstalled", handleAppInstalled);
 
         // iOS detection
         const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
@@ -60,6 +71,7 @@ export default function PWAInstallPrompt() {
 
         return () => {
             window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+            window.removeEventListener("appinstalled", handleAppInstalled);
         };
     }, []);
 
@@ -76,6 +88,7 @@ export default function PWAInstallPrompt() {
             console.log("User accepted the PWA install prompt");
             setDeferredPrompt(null);
             setShowPrompt(false);
+            setIsStandalone(true);
         }
     };
 
@@ -110,12 +123,8 @@ export default function PWAInstallPrompt() {
                     </button>
 
                     <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                            {isIOS ? (
-                                <Apple className="w-6 h-6 text-primary" />
-                            ) : (
-                                <Download className="w-6 h-6 text-primary" />
-                            )}
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 overflow-hidden border border-border">
+                            <img src="/icon-512.png" alt="Logo" className="w-full h-full object-contain" />
                         </div>
 
                         <div className="flex-1 min-w-0">

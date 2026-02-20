@@ -14,26 +14,38 @@ export default function PWAInstallButton({ variant = "menu" }: PWAInstallButtonP
     const [isStandalone, setIsStandalone] = useState(false);
 
     useEffect(() => {
-        // Check if app is already installed
+        // Check if app is currently running in standalone mode
         if (window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone) {
             setIsStandalone(true);
             return;
         }
+
+        const handleAppInstalled = () => {
+            setIsStandalone(true);
+        };
 
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
             setDeferredPrompt(e);
         };
 
+        window.addEventListener("appinstalled", handleAppInstalled);
         window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-        return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+        return () => {
+            window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+            window.removeEventListener("appinstalled", handleAppInstalled);
+        };
     }, []);
 
     const handleInstallClick = async () => {
         if (!deferredPrompt) return;
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === "accepted") setDeferredPrompt(null);
+        if (outcome === "accepted") {
+            setDeferredPrompt(null);
+            setIsStandalone(true);
+        }
     };
 
     if (isStandalone || !deferredPrompt) return null;
