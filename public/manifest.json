@@ -3,18 +3,15 @@
     "short_name": "Nara Guide",
     "description": "Explore Nara's rich cultural heritage through interactive maps and guided tours.",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
-    "display_override": [
-        "window-controls-overlay",
-        "minimal-ui"
-    ],
     "background_color": "#0b0f14",
     "theme_color": "#0b0f14",
     "orientation": "portrait-primary",
     "categories": [
         "travel",
-        "education",
-        "culture"
+        "maps",
+        "navigation"
     ],
     "icons": [
         {
@@ -91,7 +88,14 @@
         }
     ],
     "prefer_related_applications": false,
-    "launch_handler": {
-        "client_mode": "navigate-existing"
+    "share_target": {
+        "action": "/share",
+        "method": "POST",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
     }
 }
