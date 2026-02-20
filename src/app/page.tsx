@@ -285,7 +285,7 @@ export default function ToursDashboardPage() {
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   <div className="space-y-2">
                     <div className="w-12 h-0.5 bg-teal-500/80 mb-2 transform origin-left group-hover:scale-x-150 transition-transform duration-700" />
-                    <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-white leading-tight tracking-tight drop-shadow-md">
+                    <h3 className="text-2xl md:text-3xl font-serif italic font-bold text-white leading-tight line-clamp-1  drop-shadow-md">
                       {item.title ?? ""}
                     </h3>
                   </div>

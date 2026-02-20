@@ -67,20 +67,6 @@ export default function MonumentCard({
                     </div>
                 )}
 
-                {/* Rating Badge */}
-                <div className="absolute top-5 left-5 z-20">
-                    <div className="px-3 py-1.5 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-md text-[10px] font-bold text-teal-700 dark:text-teal-400 flex items-center gap-1 shadow-sm border border-white/20 dark:border-white/10">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <Star
-                                key={i}
-                                className={`h-3 w-3 ${i < (m.popularity || 0)
-                                    ? "fill-amber-400 text-amber-400"
-                                    : "text-slate-300 dark:text-slate-600"
-                                    }`}
-                            />
-                        ))}
-                    </div>
-                </div>
 
                 {/* Ambient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -103,6 +89,19 @@ export default function MonumentCard({
                             }}
                         />
                     )}
+
+                    {/* Rating Stars - Clean Minimal Design */}
+                    <div className="flex items-center gap-1">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <Star
+                                key={i}
+                                className={`h-3 w-3 ${i < (m.popularity || 0)
+                                    ? "fill-amber-400 text-amber-400"
+                                    : "text-slate-200 dark:text-white/10"
+                                    }`}
+                            />
+                        ))}
+                    </div>
 
                     {/* Subtheme Chips */}
                     {m.subtheme && m.subtheme.length > 0 && (
