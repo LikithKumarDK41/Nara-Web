@@ -225,7 +225,7 @@ export default function ToursDashboardPage() {
           <div className="hidden md:flex absolute inset-y-0 left-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
             <button
               onClick={() => scrollMosaic("left")}
-              className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/mosaic:opacity-100 -translate-x-4 group-hover/mosaic:translate-x-0"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto"
               aria-label="Scroll Left"
             >
               <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
@@ -235,7 +235,7 @@ export default function ToursDashboardPage() {
           <div className="hidden md:flex absolute inset-y-0 right-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
             <button
               onClick={() => scrollMosaic("right")}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/mosaic:opacity-100 translate-x-4 group-hover/mosaic:translate-x-0"
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto"
               aria-label="Scroll Right"
             >
               <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
@@ -465,7 +465,7 @@ export default function ToursDashboardPage() {
               <div className="absolute inset-y-0 left-0 z-20 flex items-center px-4 md:px-8 pointer-events-none">
                 <button
                   onClick={() => scrollTours("left")}
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/carousel:opacity-100 -translate-x-4 group-hover/carousel:translate-x-0"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto"
                 >
                   <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
                 </button>
@@ -473,7 +473,7 @@ export default function ToursDashboardPage() {
               <div className="absolute inset-y-0 right-0 z-20 flex items-center px-4 md:px-8 pointer-events-none">
                 <button
                   onClick={() => scrollTours("right")}
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/carousel:opacity-100 translate-x-4 group-hover/carousel:translate-x-0"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto"
                 >
                   <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
                 </button>

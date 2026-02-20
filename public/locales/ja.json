@@ -874,5 +874,6 @@
   "hello": "こんにちは、",
   "login": "ログイン",
   "sign_out": "ログアウト",
-  "edit_profile": "プロフィール編集"
+  "edit_profile": "プロフィール編集",
+  "select_category": "カテゴリーを選択"
 }
