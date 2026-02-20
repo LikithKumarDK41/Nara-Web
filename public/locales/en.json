@@ -859,5 +859,9 @@
   "terms_of_use":"Terms of Service",
   "region_map":"Region/Map",
   "search":"Search",
-  "street_view":"Street View"
+  "street_view":"Street View",
+  "hello":"Hello, ",
+  "login":"Login",
+  "sign_out":"Sign out",
+  "edit_profile":"Edit Profile"
 }

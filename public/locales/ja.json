@@ -859,5 +859,9 @@
   "terms_of_use": "利用規約",
   "region_map":"地域/地図",
   "search":"検索",
-  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ"
+  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ",
+  "hello": "こんにちは、",
+  "login": "ログイン",
+  "sign_out": "ログアウト",
+  "edit_profile": "プロフィール編集"
 }
