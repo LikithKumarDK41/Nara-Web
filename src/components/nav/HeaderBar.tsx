@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, Search, Map, MapPinned, LogOut, Smartphone } from "lucide-react";
+import { Menu, X, Search, Map, MapPinned, LogOut, UserPen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import LanguageToggle from "@/components/theme/LanguageToggle";
