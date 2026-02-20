@@ -200,10 +200,11 @@ export default function HeroCarousel() {
                     </div>
 
                     {/* Arrow Controls */}
-                    <div className="flex items-center gap-3">
+                    <div className="hidden md:flex items-center gap-3">
+
                         <button
                             onClick={() => setIsPaused(!isPaused)}
-                            className="cursor-pointer p-3 mr-2 rounded-full border border-white/10 bg-black/20 hover:bg-white/10 transition-colors backdrop-blur-sm text-white"
+                            className="cursor-pointer p-3 ml-2 rounded-full border border-white/10 bg-black/20 hover:bg-white/10 transition-colors backdrop-blur-sm text-white"
                         >
                             {isPaused ? <Play className="w-4 h-4 text-teal-400" /> : <Pause className="w-4 h-4" />}
                         </button>
@@ -398,9 +399,18 @@ export default function HeroCarousel() {
                         <div key={idx} className={`h-1 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-8 bg-teal-400' : 'w-2 bg-white/30'}`} />
                     ))}
                 </div>
-                <button onClick={handleNext} className="p-2 bg-black/30 backdrop-blur-md rounded-full text-white border border-white/10">
-                    <ChevronRight className="w-5 h-5" />
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        onClick={handlePrev}
+                        className="cursor-pointer p-2 bg-black/30 backdrop-blur-md rounded-full text-white border border-white/10"                    >
+                        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                    </button>
+
+                    <button onClick={handleNext} className="cursor-pointer p-2 bg-black/30 backdrop-blur-md rounded-full text-white border border-white/10">
+
+                        <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                </div>
             </div>
 
         </div>
