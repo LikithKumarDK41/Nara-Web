@@ -48,6 +48,7 @@ import { useLocale } from "@/providers/LocaleProvider";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import TourCard from "@/components/tour/TourCard";
 import MonumentCard from "@/components/tour/MonumentCard";
+import { motion } from "framer-motion";
 
 type About = any;
 
@@ -564,103 +565,110 @@ export default function AboutDetailPage() {
               </div>
 
               {/* Grid */}
-              <div
-                className="
-      grid grid-cols-1
-      sm:grid-cols-2
-      lg:grid-cols-3
-      gap-5
-    "
-              >
-                {subthemes.map((s) => {
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {subthemes.map((s, idx) => {
                   const themeTitle = s.theme?.[0]?.title || s.theme?.[0]?.name;
 
                   return (
-                    <div
+                    <motion.div
                       key={s._id}
-                      className="
-              group relative
-              h-[150px]
-              rounded-xl overflow-hidden
-              cursor-pointer
-            "
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.8,
+                        delay: idx * 0.1,
+                        ease: [0.22, 1, 0.36, 1]
+                      }}
+                      whileHover={{ y: -8 }}
+                      className="group relative h-[200px] rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-slate-200/50 dark:border-white/5"
+                      onClick={() => handleExploreSubtheme(s._id)}
                     >
-                      {/* Image */}
+                      {/* Image with zoom effect */}
                       {s.image?.secure_url && (
                         <img
                           src={s.image.secure_url}
                           alt={s.title || s.name}
                           className="
-                  absolute inset-0
-                  h-full w-full object-cover
-                  transition-transform duration-500
-                  group-hover:scale-105
-                "
+                            absolute inset-0
+                            h-full w-full object-cover
+                            transition-transform duration-700
+                            group-hover:scale-110
+                          "
                         />
                       )}
 
-                      {/* Dark Overlay */}
-                      <div
-                        className="
-              absolute inset-0
-              bg-gradient-to-t
-              from-black/70 via-black/25 to-transparent
-            "
-                      />
+                      {/* Sophisticated Dark Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-teal-500/20 transition-opacity duration-500" />
 
-                      {/* 🏷 Theme Badge */}
+                      {/* Theme badge */}
                       {themeTitle && (
                         <div
                           className="font-serif italic
-                absolute top-3 left-3
-                px-2.5 py-1
-                rounded-full
-                text-[10px] font-semibold
-                bg-black/55 backdrop-blur-md
-                text-teal-300
-                border border-white/10
-              "
+                            absolute top-4 left-4
+                            px-3 py-1
+                            rounded-full
+                            text-[10px] font-semibold
+                            bg-black/40 backdrop-blur-md
+                            text-teal-300
+                            border border-white/10
+                            z-10
+                          "
                         >
                           {themeTitle}
                         </div>
                       )}
 
-                      {/* Bottom Content */}
+                      {/* Bottom content */}
                       <div
-                        className="font-serif italic
-              absolute inset-x-0 bottom-0
-              px-4 py-3
-              flex items-center gap-2 justify-between
-            "
+                        className="
+                          absolute inset-x-0 bottom-0
+                          p-5
+                          flex flex-col gap-2
+                          z-10
+                        "
                       >
-                        {/* Title */}
-                        <h3
-                          className="
-                text-sm font-semibold
-                text-white
-                leading-tight
-                line-clamp-2
-              "
-                        >
+                        <h3 className="font-serif italic text-lg md:text-xl font-bold text-white leading-tight line-clamp-1 drop-shadow-md">
                           {s.title || s.name}
                         </h3>
 
                         <div
-                          onClick={() => handleExploreSubtheme(s._id)}
                           className="
-    flex items-center gap-1
-    text-xs font-semibold
-    text-teal-300
-    opacity-90
-    group-hover:opacity-100
-    transition
-  "
+                            flex flex-col gap-1
+                            transition-all duration-500
+                          "
                         >
-                          <span>{t("explore")}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <div className="flex items-center gap-2 text-xs font-bold text-teal-300">
+                            <span>{t("explore")}</span>
+                            <motion.div
+                              animate={{ x: [0, 4, 0] }}
+                              transition={{
+                                repeat: Infinity,
+                                duration: 1.5,
+                                ease: "easeInOut"
+                              }}
+                            >
+                              <ArrowRight className="w-4 h-4" />
+                            </motion.div>
+                          </div>
+
+                          <div
+                            className="hidden md:block
+                              text-[10px] text-white/60 font-medium
+                              opacity-0 -translate-y-2
+                              group-hover:opacity-100 group-hover:translate-y-0
+                              transition-all duration-500 delay-100
+                            "
+                          >
+                            {t("click_to_discover_details")}
+                          </div>
                         </div>
                       </div>
-                    </div>
+
+                      {/* Bottom Decorative Line */}
+                      <div className="absolute bottom-0 left-0 h-1 w-0 bg-teal-500 transition-all duration-500 group-hover:w-full" />
+                    </motion.div>
                   );
                 })}
               </div>
