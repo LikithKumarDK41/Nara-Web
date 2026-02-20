@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, Search, Map, MapPinned, LogOut } from "lucide-react";
+import { Menu, X, Search, Map, MapPinned, LogOut, Smartphone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import LanguageToggle from "@/components/theme/LanguageToggle";
@@ -23,6 +23,7 @@ import { logout } from "@/lib/store/slices/authSlice";
 import HeaderLogout from "./Logout";
 import AppInfo from "./InfoIcon";
 import HeaderLogin from "./LoginIcon";
+import PWAInstallButton from "@/components/system/PWAInstallButton";
 
 export default function HeaderBar() {
   const { t, locale } = useLocale();
@@ -105,6 +106,7 @@ export default function HeaderBar() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
             <div className="flex items-center gap-2">
+              <PWAInstallButton variant="header" />
               <LanguageToggle />
               <ThemeToggle />
               <AppInfo />
@@ -224,6 +226,9 @@ export default function HeaderBar() {
                     <MapPinned className="h-5 w-5 shrink-0 group-hover:scale-110 transition-transform" />
                     <span className="font-medium">{t("street_view") || "Street View"}</span>
                   </button>
+
+                  {/* PWA Install Button (Mobile Only) */}
+                  <PWAInstallButton />
 
                   {/* <div className="my-2 h-px bg-slate-100 dark:bg-slate-800/50" /> */}
 
