@@ -29,8 +29,8 @@ export default function MonumentCard({
             className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#1e293b] dark:hover:bg-[#334155] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer"
             onClick={onClick}
         >
-            {/* 🖼️ Premium Inset Image Container */}
-            <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-50 dark:bg-zinc-900 shrink-0 border border-slate-50 dark:border-white/5">
+            {/* Inset Image Container */}
+            <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-100/50 dark:bg-slate-950/40 shrink-0 border border-slate-50 dark:border-white/5">
                 {m.image?.secure_url ? (
                     <img
                         src={m.image.secure_url}
@@ -39,7 +39,7 @@ export default function MonumentCard({
                     />
                 ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                        <ImageIcon className="h-10 w-10 text-slate-300 dark:text-zinc-700" />
+                        <ImageIcon className="h-10 w-10 text-slate-400 dark:text-slate-700" />
                     </div>
                 )}
 
