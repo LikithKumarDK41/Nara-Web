@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Search, X, Check, Star, ImageIcon, ArrowRight } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
@@ -35,6 +35,16 @@ export default function EmbeddedSearch() {
     const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
         null,
     );
+
+    // 📐 Ref for scrolling to top of results on pagination
+    const resultsTopRef = useRef<HTMLDivElement>(null);
+
+    // ✅ Auto-scroll to top of results when page changes
+    useEffect(() => {
+        if (resultsTopRef.current) {
+            resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, [page]);
 
     /* -------------------- Initial Load -------------------- */
     useEffect(() => {
@@ -462,6 +472,9 @@ export default function EmbeddedSearch() {
                     </div>
                 ) : shouldShowMonuments ? (
                     <>
+                        {/* Scroll Anchor */}
+                        <div ref={resultsTopRef} className="scroll-mt-6" />
+
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {pageItems.map((m, idx) => (
                                 <MonumentCard

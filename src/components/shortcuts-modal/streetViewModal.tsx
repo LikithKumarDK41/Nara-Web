@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   ImageIcon,
   ChevronLeft,
@@ -56,6 +56,16 @@ export default function StreetViewModal({
 
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+
+  // 📐 Ref for scrolling to top of results on pagination
+  const resultsTopRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of results when page changes
+  useEffect(() => {
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [page]);
   const limit = 6;
 
   const [open, setOpen] = useState(false);
@@ -333,6 +343,9 @@ export default function StreetViewModal({
               {/* ===== GRID ===== */}
               {filtered.length > 0 && (
                 <>
+                  {/* Scroll Anchor */}
+                  <div ref={resultsTopRef} className="scroll-mt-6" />
+
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {currentData.map((m, idx) => (
                       <MonumentCard

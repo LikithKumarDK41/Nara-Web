@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Search, X, Check, Star } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
@@ -42,6 +42,16 @@ export default function SearchModal({
   const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
     null
   );
+
+  // 📐 Ref for scrolling to top of results on pagination
+  const resultsTopRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of results when page changes
+  useEffect(() => {
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [page]);
 
   /* -------------------- Initial Load -------------------- */
   useEffect(() => {
@@ -444,11 +454,10 @@ export default function SearchModal({
                     <div
                       key={f._id}
                       onClick={() => toggleFilter(f._id)}
-                      className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-105 ${
-                        isActive
-                          ? "opacity-100"
-                          : "opacity-90 hover:opacity-100"
-                      }`}
+                      className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-105 ${isActive
+                        ? "opacity-100"
+                        : "opacity-90 hover:opacity-100"
+                        }`}
                     >
                       <div
                         className={`relative h-20 w-20 rounded-full flex items-center justify-center shadow-md transition-all
@@ -495,6 +504,9 @@ export default function SearchModal({
 
           {/* Monuments Grid */}
           <div className="mt-16 w-full max-w-7xl px-6 pb-20 relative z-0">
+            {/* Scroll Anchor */}
+            <div ref={resultsTopRef} className="scroll-mt-6" />
+
             {loading ? (
               <div className="flex justify-center items-center py-10">
                 <div
@@ -537,11 +549,10 @@ export default function SearchModal({
                             {Array.from({ length: 4 }).map((_, i) => (
                               <Star
                                 key={`star-${m._id}-${i}`}
-                                className={`h-3.5 w-3.5 ${
-                                  i < (m.popularity ?? 0)
-                                    ? "fill-amber-400 text-amber-400"
-                                    : "text-gray-300 dark:text-gray-600"
-                                }`}
+                                className={`h-3.5 w-3.5 ${i < (m.popularity ?? 0)
+                                  ? "fill-amber-400 text-amber-400"
+                                  : "text-gray-300 dark:text-gray-600"
+                                  }`}
                               />
                             ))}
                           </div>
@@ -647,10 +658,9 @@ function PageNavigator({
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
+                    : `
                         text-orange-600 dark:text-amber-400
                         hover:bg-orange-50 dark:hover:bg-orange-900/30
                       `

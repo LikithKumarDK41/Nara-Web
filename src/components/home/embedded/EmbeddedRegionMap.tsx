@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
     ImageIcon,
     ChevronLeft,
@@ -24,6 +24,16 @@ export default function EmbeddedRegionMap() {
     const [view, setView] = useState<"region" | "map">("region");
     const [regions, setRegions] = useState<any[]>([]);
     const [page, setPage] = useState(1);
+
+    // 📐 Ref for scrolling to top of results on pagination
+    const resultsTopRef = useRef<HTMLDivElement>(null);
+
+    // ✅ Auto-scroll to top of results when page changes
+    useEffect(() => {
+        if (resultsTopRef.current) {
+            resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, [page]);
 
     const limit = 6;
     const total = regions.length;
@@ -99,6 +109,9 @@ export default function EmbeddedRegionMap() {
 
                     {regions.length > 0 && (
                         <>
+                            {/* Scroll Anchor */}
+                            <div ref={resultsTopRef} className="scroll-mt-6" />
+
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {pageItems.map((r, idx) => (
                                     <MonumentCard

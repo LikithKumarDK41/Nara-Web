@@ -341,7 +341,7 @@ function ExplorePageContent() {
                                                 <button
                                                     key={cat._id}
                                                     onClick={() => handleCategoryClick(cat)}
-                                                    className="relative flex-shrink-0 group/btn focus:outline-none"
+                                                    className="cursor-pointer relative flex-shrink-0 group/btn focus:outline-none"
                                                 >
                                                     <div className={`
                                                         relative z-10 flex items-center gap-3 px-6 py-2.5 rounded-full 

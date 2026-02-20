@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { ImageIcon, Search, ArrowUpDown, ArrowRight } from "lucide-react";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -46,7 +46,17 @@ export default function ToursPage() {
   const [perPage, setPerPage] = useState(6);
   const [page, setPage] = useState(1);
 
+  // 📐 Ref for scrolling to top of results on pagination
+  const resultsTopRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => setPage(1), [query, perPage, sortOrder]);
+
+  // ✅ Auto-scroll to top of results when page changes
+  useEffect(() => {
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [page]);
 
   /* -------------------- Fetch Tours -------------------- */
   useEffect(() => {
@@ -190,6 +200,9 @@ export default function ToursPage() {
 
       {/* ===== Toolbar (Search + Sort) ===== */}
       <div className="px-4 space-y-6">
+        {/* Scroll Anchor */}
+        <div ref={resultsTopRef} className="scroll-mt-24" />
+
         <ToursToolbar
           query={query}
           setQuery={setQuery}
