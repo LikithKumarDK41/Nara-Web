@@ -874,5 +874,6 @@
   "hello":"Hello, ",
   "login":"Login",
   "sign_out":"Sign out",
-  "edit_profile":"Edit Profile"
+  "edit_profile":"Edit Profile",
+  "select_category":"Select Category"
 }
