@@ -203,20 +203,20 @@ export default function HeroCarousel() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setIsPaused(!isPaused)}
-                            className="p-3 mr-2 rounded-full border border-white/10 bg-black/20 hover:bg-white/10 transition-colors backdrop-blur-sm text-white"
+                            className="cursor-pointer p-3 mr-2 rounded-full border border-white/10 bg-black/20 hover:bg-white/10 transition-colors backdrop-blur-sm text-white"
                         >
                             {isPaused ? <Play className="w-4 h-4 text-teal-400" /> : <Pause className="w-4 h-4" />}
                         </button>
 
                         <button
                             onClick={handlePrev}
-                            className="p-3 rounded-full border border-white/10 bg-black/20 hover:bg-teal-500 hover:border-teal-500 transition-all backdrop-blur-sm text-white group"
+                            className="cursor-pointer p-3 rounded-full border border-white/10 bg-black/20 hover:bg-teal-500 hover:border-teal-500 transition-all backdrop-blur-sm text-white group"
                         >
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </button>
                         <button
                             onClick={handleNext}
-                            className="p-3 rounded-full border border-white/10 bg-black/20 hover:bg-teal-500 hover:border-teal-500 transition-all backdrop-blur-sm text-white group"
+                            className="cursor-pointer p-3 rounded-full border border-white/10 bg-black/20 hover:bg-teal-500 hover:border-teal-500 transition-all backdrop-blur-sm text-white group"
                         >
                             <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                         </button>
@@ -225,7 +225,7 @@ export default function HeroCarousel() {
             </div>
 
             {/* ================= SIDEBAR AREA (30% Width) ================= */}
-            <div className="hidden md:flex absolute right-0 top-0 bottom-0 w-[30%] z-10 flex-col justify-center items-center py-12 px-6 lg:px-10 border-l border-slate-200 dark:border-white/5 overflow-visible transition-all duration-500">
+            <div className="hidden md:flex absolute right-0 top-0 bottom-0 w-[30%] z-10 flex-col justify-center items-center py-12 md:px-2 lg:px-10 border-l border-slate-200 dark:border-white/5 overflow-visible transition-all duration-500">
 
                 {/* Extended Background & Decorations (Masking the image slant) */}
                 <div className="absolute inset-y-0 right-0 w-[140%] bg-white dark:bg-slate-950 -z-10 transition-colors duration-500 md:[clip-path:polygon(28%_0,100%_0,100%_100%,0%_100%)]">
@@ -258,7 +258,7 @@ export default function HeroCarousel() {
                 <div className="relative z-10 flex flex-col items-center text-center space-y-8 w-full max-w-full">
 
                     {/* Animated Kofun Emblem */}
-                    <div className="relative w-40 h-40 lg:w-52 lg:h-52 flex items-center justify-center">
+                    <div className="relative w-40 h-40 md:w-32 md:h-32 lg:w-52 lg:h-52 flex items-center justify-center">
                         <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
@@ -279,7 +279,7 @@ export default function HeroCarousel() {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1, delay: 0.5 }}
-                            className="relative w-28 h-28 lg:w-36 lg:h-36 flex items-center justify-center"
+                            className="relative w-28 h-28 md:w-24 md:h-24 lg:w-36 lg:h-36 flex items-center justify-center"
                         >
                             <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_20px_rgba(13,148,136,0.6)]">
                                 <defs>
@@ -319,12 +319,12 @@ export default function HeroCarousel() {
                                 className="space-y-4 w-full"
                             >
                                 <div className="space-y-1 w-full flex flex-col items-center">
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-slate-900 dark:text-white tracking-[0.05em] leading-[1.1] uppercase w-full">
+                                    <h2 className="text-3xl md:text-2xl lg:text-5xl font-serif font-bold text-slate-900 dark:text-white tracking-[0.05em] leading-[1.1] uppercase w-full">
                                         {(SIDEBAR_TITLE_MAP[currentSlide.titleKey] || { en: "NARA" }).en}
                                     </h2>
                                     <div className="flex items-center gap-2 w-full mt-1">
                                         <div className="h-px flex-1 bg-teal-500/20" />
-                                        <h3 className="text-lg md:text-xl font-serif text-teal-600 dark:text-teal-500 tracking-[0.2em] font-medium whitespace-nowrap px-1">
+                                        <h3 className="text-lg md:text-lg lg:text-xl font-serif text-teal-600 dark:text-teal-500 tracking-[0.2em] font-medium whitespace-nowrap px-1">
                                             {(SIDEBAR_TITLE_MAP[currentSlide.titleKey] || { ja: "奈良" }).ja}
                                         </h3>
                                         <div className="h-px flex-1 bg-teal-500/20" />

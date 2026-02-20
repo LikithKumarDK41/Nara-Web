@@ -163,6 +163,28 @@ export default function SignInPage() {
     setOtp("");
   }, [activeTab]);
 
+  /* ------------------- THEME CHECK ------------------- */
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    // initial check
+    const checkTheme = () => {
+      const isDarkClass = document.documentElement.classList.contains("dark");
+      setIsDark(isDarkClass);
+    };
+    checkTheme();
+
+    // listen for custom event from ThemeToggle
+    window.addEventListener("theme-changed", checkTheme);
+    // also listen for system prefer-color-scheme just in case OS changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", checkTheme);
+
+    return () => {
+      window.removeEventListener("theme-changed", checkTheme);
+      window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", checkTheme);
+    };
+  }, []);
+
   /* ------------------- VALIDATION ------------------- */
 
   function validateIdentifier(): boolean {
@@ -552,7 +574,7 @@ export default function SignInPage() {
                 border border-white/10
               "
               >
-                <BrandLogo imgSize={60} scrolled={true} isFooter={true} />
+                <BrandLogo imgSize={60} scrolled={true} isFooter={isDark} />
               </div>
 
               <p
@@ -1292,6 +1314,6 @@ export default function SignInPage() {
         </Card>
       </div>
       <div id="recaptcha-container"></div>
-    </main>
+    </main >
   );
 }

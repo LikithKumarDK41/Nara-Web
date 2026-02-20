@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search, Map, MapPinned, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import LanguageToggle from "@/components/theme/LanguageToggle";
@@ -12,6 +12,9 @@ import BrandLogo from "@/components/nav/BrandLogo";
 
 import UserProfileDropdown from "./UserProfileDropdown";
 import ProfileModal from "./ProfileModal";
+import SearchModal from "@/components/shortcuts-modal/searchModal";
+import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
+import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
 
 import { MOBILE_NAV_ITEMS, NavItem } from "./routes";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -28,6 +31,9 @@ export default function HeaderBar() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [streetViewOpen, setStreetViewOpen] = useState(false);
+  const [regionMapOpen, setRegionMapOpen] = useState(false);
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
   const [scrolled, setScrolled] = useState(false);
 
@@ -129,7 +135,7 @@ export default function HeaderBar() {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className={`h-5 w-5 ${scrolled ? "text-slate-900 dark:text-white" : "text-white"}`} />
+                    <X className="h-5 w-5 text-slate-900 dark:text-white" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -139,7 +145,7 @@ export default function HeaderBar() {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className={`h-5 w-5 ${scrolled ? "text-slate-900 dark:text-white" : "text-white"}`} />
+                    <Menu className="h-5 w-5 text-slate-900 dark:text-white" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -167,16 +173,20 @@ export default function HeaderBar() {
               className="fixed top-0 right-0 h-full w-[300px] bg-white dark:bg-slate-950 z-[200] shadow-2xl lg:hidden flex flex-col border-l border-slate-200 dark:border-slate-800"
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
-                <span className="text-lg font-bold">Menu</span>
+                <span className="text-lg font-bold truncate max-w-[200px] text-slate-800 dark:text-slate-100">
+                  {`${t("explore_nara")} 🦌`}
+                </span>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="cursor-pointer p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto py-6 px-4 space-y-6">
+              <div
+                className="flex-1 overflow-y-auto py-6 px-4 space-y-6 scrollbar-hide"
+              >
                 <div className="grid grid-cols-3 gap-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-2xl border border-slate-100 dark:border-slate-800">
                   <div className="flex justify-center"><LanguageToggle /></div>
                   <div className="flex justify-center"><ThemeToggle /></div>
@@ -184,6 +194,39 @@ export default function HeaderBar() {
                 </div>
 
                 <div className="space-y-1">
+                  {/* New Explore Items */}
+                  <button
+                    onClick={() => {
+                      setRegionMapOpen(true);
+                    }}
+                    className="cursor-pointer w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white transition-all group"
+                  >
+                    <Map className="h-5 w-5 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">{t("region_map") || "Region Map"}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSearchOpen(true);
+                    }}
+                    className="cursor-pointer w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white transition-all group"
+                  >
+                    <Search className="h-5 w-5 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">{t("search") || "Search"}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setStreetViewOpen(true);
+                    }}
+                    className="cursor-pointer w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white transition-all group"
+                  >
+                    <MapPinned className="h-5 w-5 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium">{t("street_view") || "Street View"}</span>
+                  </button>
+
+                  {/* <div className="my-2 h-px bg-slate-100 dark:bg-slate-800/50" /> */}
+
                   {MOBILE_NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
                     if (item.type === "action") {
@@ -225,36 +268,71 @@ export default function HeaderBar() {
                     );
                   })}
                 </div>
-              </div>
 
-              <div className="p-6 border-t border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50">
-                {isLoggedIn ? (
-                  <div className="flex items-center gap-4">
-                    <UserProfileDropdown onViewProfile={() => setProfileOpen(true)} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold truncate text-slate-900 dark:text-white">
-                        {authData.user.name}
-                      </p>
-                      <button
-                        onClick={() => dispatch(logout())}
-                        className="text-xs text-red-500 font-medium hover:underline"
-                      >
-                        Sign out
-                      </button>
+                {/* Profile / Login Section (Moved inside scrollable area) */}
+                <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800/50">
+                  {isLoggedIn ? (
+                    <div
+                      onClick={() => {
+                        setProfileOpen(true);
+                        // Removed setMobileOpen(false) to keep menu open
+                      }}
+                      className="cursor-pointer flex items-center gap-4 w-full text-left group hover:bg-white dark:hover:bg-slate-800 p-2 -ml-2 rounded-xl transition-all cursor-pointer"
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setProfileOpen(true);
+                          // Removed setMobileOpen(false)
+                        }
+                      }}
+                    >
+                      <div className="pointer-events-none">
+                        <UserProfileDropdown onViewProfile={() => { }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold truncate text-slate-900 dark:text-white">
+                          {authData.user.name}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 group-hover:text-teal-500 transition-colors">
+                          {t("edit_profile")}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-full">
-                    <HeaderLogin />
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-full">
+                      <HeaderLogin isMobile />
+                    </div>
+                  )}
+                  {isLoggedIn && (
+                    <button
+                      onClick={() => {
+                        dispatch(logout());
+                        setMobileOpen(false);
+                      }}
+                      className="cursor-pointer mt-4 w-full flex items-center justify-center gap-2 text-xs text-red-500 font-medium py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>{t("sign_out")}</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence >
 
       <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <StreetViewModal
+        openModal={streetViewOpen}
+        onClose={() => setStreetViewOpen(false)}
+      />
+      <RegionMapModal
+        openMapModal={regionMapOpen}
+        onCloseMapModal={() => setRegionMapOpen(false)}
+      />
 
       {/* Spacer for fixed header on non-home pages */}
       {!isHome && <div className="h-[73px]" />}

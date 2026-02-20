@@ -55,7 +55,7 @@ export default function UserProfileDropdown({
 
       {/* TOOLTIP */}
       <div
-        className="
+        className="hidden lg:block
           pointer-events-none
           absolute left-1/2 top-full mt-2
           -translate-x-1/2

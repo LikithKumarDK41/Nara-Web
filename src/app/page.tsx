@@ -201,7 +201,7 @@ export default function ToursDashboardPage() {
             <div className="flex items-center justify-center gap-4 mb-3">
               <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
               <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
-                {t("home.heritage") || "Heritage"}
+                {t("home.heritage")}
               </span>
               <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
             </div>
@@ -209,7 +209,7 @@ export default function ToursDashboardPage() {
               {t("home.about_nara") || "Discovery Nara"}
             </h2>
             <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4">
-              Journey through the layers of Japan&apos;s ancient capital
+              {t("home.legacy_layers")}
             </p>
           </motion.div>
 
@@ -296,7 +296,7 @@ export default function ToursDashboardPage() {
                       {stripHTML(item.content?.brief)}
                     </p>
                     <div className="flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] drop-shadow-md">
-                      Explore Foundation
+                      {t("home.explore_foundation")}
                       <div className="w-8 h-px bg-white/50 group-hover:w-12 transition-all duration-500" />
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -321,7 +321,7 @@ export default function ToursDashboardPage() {
           <div className="flex items-center justify-center gap-4 mb-3">
             <div className="w-8 h-px bg-slate-900/10 dark:bg-white/10" />
             <span className="text-[10px] font-black text-teal-600/80 dark:text-teal-400/60 uppercase tracking-[0.5em]">
-              {t("home.portal") || "Portal"}
+              {t("home.portal")}
             </span>
             <div className="w-8 h-px bg-slate-900/10 dark:bg-white/10" />
           </div>
@@ -329,7 +329,7 @@ export default function ToursDashboardPage() {
             {t("home.quick_access") || "Quick Access"}
           </h2>
           <p className="text-[10px] md:text-xs font-light text-slate-600 dark:text-white/30 tracking-[0.2em] uppercase mt-2">
-            Seamlessly navigate through Nara&apos;s digital heritage
+            {t("home.navigate_heritage")}
           </p>
         </motion.div>
 
@@ -378,7 +378,7 @@ export default function ToursDashboardPage() {
               <div className="flex items-center justify-center gap-3 mb-3">
                 <div className="w-8 h-px bg-teal-500/30 dark:bg-teal-400/20" />
                 <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
-                  {t("home.explore") || "Explore"}
+                  {t("home.explore")}
                 </span>
                 <div className="w-8 h-px bg-teal-500/30 dark:bg-teal-400/20" />
               </div>
@@ -386,7 +386,7 @@ export default function ToursDashboardPage() {
                 {t("home.explore_categories") || "Cultural Categories"}
               </h2>
               <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4">
-                Discover the diverse dimensions of Nara&apos;s heritage
+                {t("home.diverse_heritage")}
               </p>
             </motion.div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-full bg-teal-400/[0.04] dark:bg-teal-500/[0.01] blur-[100px] pointer-events-none" />
@@ -427,7 +427,7 @@ export default function ToursDashboardPage() {
                 <div className="flex items-center justify-center gap-4 mb-3">
                   <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
                   <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.5em]">
-                    {t("home.curated_tours") || "Experience"}
+                    {t("home.curated_tours")}
                   </span>
                   <div className="w-12 h-px bg-teal-500/30 dark:bg-teal-400/20" />
                 </div>
@@ -437,7 +437,7 @@ export default function ToursDashboardPage() {
                 </h2>
 
                 <p className="text-[11px] md:text-sm font-light text-slate-600 dark:text-white/40 tracking-[0.25em] uppercase mt-4 mb-8">
-                  Artfully curated journeys through the heart of ancient Japan
+                  {t("home.curated_journeys")}
                 </p>
 
                 <Link

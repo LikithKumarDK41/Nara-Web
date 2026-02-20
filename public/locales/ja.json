@@ -110,7 +110,9 @@
       "instagram": "インスタグラム",
       "linkedin": "リンクトイン"
     },
-    "copyright": "© {year} 一般財団法人 奈良遺跡文化財保存活性化財団"
+    "copyright": "© {year} 一般財団法人 奈良遺跡文化財保存活性化財団",
+    "connect": "お問い合わせ",
+    "quote": "古代日本の響きを、ひとつの遺跡から守り継ぐ。奈良の魂を巡る旅。"
   },
   "tours": {
     "liveTours": "ツアーのスポットをめぐって、訪問を記録すると、スタンプラリーになります。",
@@ -731,6 +733,15 @@
     "explore_link": "詳細を見る",
     "explore_subtitle": "厳選されたテーマや史跡コレクションを通じて、奈良の豊かな文化遺産を発見しましょう。",
     "open": "開く",
+    "heritage": "文化遺産",
+    "portal": "ポータル",
+    "explore": "探訪",
+    "curated_tours": "厳選された旅",
+    "legacy_layers": "日本の古都の幾重もの歴史を旅する",
+    "explore_foundation": "礎（いしずえ）を探求する",
+    "navigate_heritage": "奈良のデジタル遺産を自在に巡る",
+    "diverse_heritage": "奈良の遺産の多様な魅力を発見",
+    "curated_journeys": "日本の原点を巡る、巧みにキュレーションされた旅",
     "hero": {
       "slides": [
         {
@@ -859,5 +870,9 @@
   "terms_of_use": "利用規約",
   "region_map":"地域/地図",
   "search":"検索",
-  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ"
+  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ",
+  "hello": "こんにちは、",
+  "login": "ログイン",
+  "sign_out": "ログアウト",
+  "edit_profile": "プロフィール編集"
 }
