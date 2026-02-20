@@ -222,7 +222,7 @@ export default function ToursDashboardPage() {
       {abouts.length > 0 && (
         <section className="w-full relative bg-transparent border-b border-slate-200 dark:border-white/5 scroll-smooth group/mosaic transition-colors duration-500">
           {/* Navigation Arrows */}
-          <div className="absolute inset-y-0 left-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
+          <div className="hidden md:flex absolute inset-y-0 left-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
             <button
               onClick={() => scrollMosaic("left")}
               className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/mosaic:opacity-100 -translate-x-4 group-hover/mosaic:translate-x-0"
@@ -232,7 +232,7 @@ export default function ToursDashboardPage() {
             </button>
           </div>
 
-          <div className="absolute inset-y-0 right-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
+          <div className="hidden md:flex absolute inset-y-0 right-0 z-50 flex items-center px-4 md:px-8 pointer-events-none">
             <button
               onClick={() => scrollMosaic("right")}
               className="absolute right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition-all duration-300 active:scale-95 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl pointer-events-auto opacity-0 group-hover/mosaic:opacity-100 translate-x-4 group-hover/mosaic:translate-x-0"
@@ -244,7 +244,7 @@ export default function ToursDashboardPage() {
 
           <div
             ref={scrollRef}
-            className="flex flex-col md:flex-row w-full md:h-[400px] overflow-x-auto scrollbar-hide snap-x snap-mandatory px-[10%]"
+            className="flex flex-col md:flex-row w-full md:h-[400px] overflow-x-auto scrollbar-hide snap-x snap-mandatory px-0 md:px-[10%]"
           >
             {abouts.map((item, idx) => (
               <motion.div
@@ -343,7 +343,7 @@ export default function ToursDashboardPage() {
           <section className="w-full px-4 pb-8">
             <div
               className="
-    grid grid-cols-3 gap-x-3 gap-y-6 sm:gap-4
+    grid grid-cols-3 sm:grid-cols-3 gap-x-3 gap-y-6 sm:gap-4
     md:flex md:flex-nowrap md:gap-5
     justify-center items-center
     max-w-4xl mx-auto
@@ -397,7 +397,7 @@ export default function ToursDashboardPage() {
         {!globalLoading && sectionTwo.length > 0 && (
           <section className="pb-8">
             <div className="px-2 tracking-tight">
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-6">
+              <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 md:gap-x-3 md:gap-y-6">
                 <ShortcutRow
                   items={sectionTwo}
                   variant="secondary"
@@ -480,7 +480,7 @@ export default function ToursDashboardPage() {
               </div>
               <div
                 ref={toursScrollRef}
-                className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide snap-x px-[10%] pt-4 pb-12 transition-all"
+                className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide snap-x px-4 md:px-[10%] pt-4 pb-12 transition-all"
               >
                 {tours
                   .filter((tour) => tour.featured === true)
@@ -615,6 +615,7 @@ function ShortcutRow({
                 dark:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.5)]
                 hover:shadow-[0_25px_50px_-15px_rgba(20,184,166,0.2)]
                 transition-all duration-500 overflow-hidden
+                px-2
               "
             >
               {/* Inner Glow Polish */}
@@ -645,7 +646,7 @@ function ShortcutRow({
                 )}
               </div>
 
-              <span className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white transition-colors">
+              <span className="text-[9px] w-full text-center truncate md:text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white transition-colors">
                 {item.title}
               </span>
 
@@ -663,7 +664,7 @@ function ShortcutRow({
             onClick={() => handleShortcutLink2(item)}
             className="
               group relative cursor-pointer
-              flex items-center gap-4 px-5 py-5
+              flex flex-col sm:flex-row items-center sm:gap-4 px-2 py-3 sm:px-5 sm:py-5
               bg-[#fcfdfe] dark:bg-[#1e293b]
               hover:bg-white dark:hover:bg-[#334155]
               border border-teal-500/30 dark:border-teal-400/20
@@ -672,7 +673,9 @@ function ShortcutRow({
               shadow-[0_8px_20px_-10px_rgba(0,0,0,0.12),0_2px_8px_-2px_rgba(0,0,0,0.06)]
               hover:shadow-[0_15px_40px_-12px_rgba(20,184,166,0.2)]
               rounded-2xl
-              w-full h-auto min-h-[75px]
+              w-full h-auto min-h-[90px] sm:min-h-[75px]
+              justify-center sm:justify-start
+              text-center sm:text-left
               overflow-hidden
             "
           >
@@ -684,18 +687,19 @@ function ShortcutRow({
               style={{ backgroundImage: `radial-gradient(circle, currentColor 1px, transparent 1px)`, backgroundSize: '12px 12px' }} />
 
             <div className="
-              w-10 h-10 flex-shrink-0 
+              w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 
               flex items-center justify-center 
               bg-white dark:bg-slate-800/50
               border border-slate-200/50 dark:border-white/5 
               shadow-sm rounded-xl
               group-hover:scale-110 group-hover:shadow-teal-500/10 transition-all duration-300
+              mb-1 sm:mb-0
             ">
               {item.icon?.secure_url ? (
                 <img
                   src={item.icon.secure_url}
                   alt={item.title}
-                  className="w-6 h-6 object-contain"
+                  className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
                   style={{
                     filter: isDark
                       ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
@@ -707,16 +711,16 @@ function ShortcutRow({
               )}
             </div>
 
-            <div className="flex flex-col">
-              <span className="text-[10px] uppercase font-black tracking-widest text-teal-600/60 dark:text-teal-400/50 mb-0.5 transition-colors">
+            <div className="flex flex-col w-full overflow-hidden">
+              <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-widest text-teal-600/60 dark:text-teal-400/50 mb-0.5 transition-colors">
                 {t("home.explore") || "Explore"}
               </span>
-              <span className="text-sm font-bold text-slate-900 dark:text-white transition-colors">
+              <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white transition-colors truncate w-full">
                 {item.title}
               </span>
             </div>
 
-            <div className="ml-auto opacity-100 translate-x-0 transition-all duration-500 text-teal-500 dark:text-teal-400 font-serif italic text-lg">
+            <div className="hidden sm:block ml-auto opacity-100 translate-x-0 transition-all duration-500 text-teal-500 dark:text-teal-400 font-serif italic text-lg">
               →
             </div>
           </motion.div>

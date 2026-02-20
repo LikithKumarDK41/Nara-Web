@@ -849,5 +849,15 @@
     "hero_title": "Quick Access",
     "hero_subtitle": "Explore Nara's highlights through interactive maps, search tools, and panoramic street views."
   },
-  "tours_breadcrumb": "Tours"
+  "tours_breadcrumb": "Tours",
+  "footer_explore":"Explore",
+  "guided_tours":"Guided Tours",
+  "videos":"Videos",
+  "my_list":"My List",
+  "information":"Information",
+  "privacy_policy":"Privacy Policy",
+  "terms_of_use":"Terms of Service",
+  "region_map":"Region/Map",
+  "search":"Search",
+  "street_view":"Street View"
 }
