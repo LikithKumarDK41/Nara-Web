@@ -135,7 +135,7 @@ export default function HeaderBar() {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className={`h-5 w-5 ${scrolled ? "text-slate-900 dark:text-white" : "text-white"}`} />
+                    <X className="h-5 w-5 text-slate-900 dark:text-white" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -145,7 +145,7 @@ export default function HeaderBar() {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className={`h-5 w-5 ${scrolled ? "text-slate-900 dark:text-white" : "text-white"}`} />
+                    <Menu className="h-5 w-5 text-slate-900 dark:text-white" />
                   </motion.div>
                 )}
               </AnimatePresence>
