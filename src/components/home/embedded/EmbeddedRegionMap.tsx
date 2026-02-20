@@ -100,11 +100,12 @@ export default function EmbeddedRegionMap() {
                     {regions.length > 0 && (
                         <>
                             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                {pageItems.map((r) => (
+                                {pageItems.map((r, idx) => (
                                     <MonumentCard
                                         key={r._id}
                                         monument={{ ...r, name: r.title }} // Adapter for Region to Monument
                                         t={t}
+                                        idx={idx}
                                         onClick={() => router.push(`/regions?id=${r._id}`)}
                                     />
                                 ))}

@@ -175,11 +175,12 @@ export default function EmbeddedStreetView() {
             {filtered.length > 0 && (
                 <>
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {currentData.map((m) => (
+                        {currentData.map((m, idx) => (
                             <MonumentCard
                                 key={m._id}
                                 monument={m}
                                 t={t}
+                                idx={idx}
                                 onClick={() => {
                                     // Custom behavior for street view: open URL instead of modal
                                     const loc = (m as any)?.avlocation;

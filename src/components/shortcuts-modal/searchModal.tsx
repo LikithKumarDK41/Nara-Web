@@ -538,11 +538,12 @@ export default function SearchModal({
             ) : shouldShowMonuments ? (
               <>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {pageItems.map((m) => (
+                  {pageItems.map((m, idx) => (
                     <MonumentCard
                       key={m._id}
                       monument={m}
                       t={t}
+                      idx={idx}
                       onClick={() => openMonumentModal(m._id)}
                     />
                   ))}
@@ -592,7 +593,7 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-8">
+    <div className="flex items-center justify-between gap-3 pt-10">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {t("pagination_left", { current: page, total: totalPages })}

@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MonumentSort } from "@/lib/types/userTour.types";
 import { useLocale } from "@/providers/LocaleProvider";
+import { motion } from "framer-motion";
 
 interface CategoryContentProps {
     themeId: string | null;
@@ -358,61 +359,65 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                     </div>}
 
                     {/* Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {subthemes.map((s) => {
-                            //   const themeTitle = s.theme?.[0]?.title || s.theme?.[0]?.name;
-
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {subthemes.map((s, idx) => {
                             const themeTitle = s.theme
                                 ?.map((tt: any) => tt.title || tt.name)
                                 .filter(Boolean)
                                 .join(", ");
 
                             return (
-                                <div
+                                <motion.div
                                     key={s._id}
-                                    className="cursor-pointer
-              group relative
-              h-[150px]
-              rounded-xl overflow-hidden
-            " onClick={async (e) => {
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{
+                                        duration: 0.8,
+                                        delay: idx * 0.1,
+                                        ease: [0.22, 1, 0.36, 1]
+                                    }}
+                                    whileHover={{ y: -8 }}
+                                    className="group relative h-[200px] rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-slate-200/50 dark:border-white/5"
+                                    onClick={async (e) => {
                                         e.stopPropagation();
-                                        // Update URL to active subtheme
                                         const params = new URLSearchParams(searchParams.toString());
                                         params.set("subtheme", s._id);
-                                        // Clear any monument param just in case
                                         params.delete("monument");
                                         router.push(`${pathname}?${params.toString()}`, { scroll: false });
                                     }}
                                 >
-                                    {/* Image */}
+                                    {/* Image with zoom effect */}
                                     {s.image?.secure_url && (
                                         <img
                                             src={s.image.secure_url}
                                             alt={s.title || s.name}
                                             className="
-                  absolute inset-0
-                  h-full w-full object-cover
-                  transition-transform duration-500
-                  group-hover:scale-105
-                "
+                                                absolute inset-0
+                                                h-full w-full object-cover
+                                                transition-transform duration-700
+                                                group-hover:scale-110
+                                            "
                                         />
                                     )}
 
-                                    {/* Dark overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                                    {/* Sophisticated Dark Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-teal-500/20 transition-opacity duration-500" />
 
                                     {/* Theme badge */}
                                     {themeTitle && (
                                         <div
                                             className="font-serif italic
-                absolute top-3 left-3
-                px-2.5 py-1
-                rounded-full
-                text-[10px] font-semibold
-                bg-black/55 backdrop-blur-md
-                text-teal-300
-                border border-white/10
-              "
+                                                absolute top-4 left-4
+                                                px-3 py-1
+                                                rounded-full
+                                                text-[10px] font-semibold
+                                                bg-black/40 backdrop-blur-md
+                                                text-teal-300
+                                                border border-white/10
+                                                z-10
+                                            "
                                         >
                                             {themeTitle}
                                         </div>
@@ -420,42 +425,53 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
 
                                     {/* Bottom content */}
                                     <div
-                                        className="font-serif italic
-              absolute inset-x-0 bottom-0
-              px-4 py-3
-              flex items-center gap-2 justify-between
-            "
+                                        className="
+                                            absolute inset-x-0 bottom-0
+                                            p-5
+                                            flex flex-col gap-2
+                                            z-10
+                                        "
                                     >
-                                        {/* Title */}
-                                        <h3 className="font-serif italic
- text-sm font-semibold text-white leading-tight line-clamp-2">
+                                        <h3 className="font-serif italic text-lg md:text-xl font-bold text-white leading-tight line-clamp-1 drop-shadow-md">
                                             {s.title || s.name}
                                         </h3>
 
-                                        {/* ✅ Explore button ONLY */}
-                                        <button
-                                            onClick={async (e) => {
-                                                e.stopPropagation();
-                                                const params = new URLSearchParams(searchParams.toString());
-                                                params.set("subtheme", s._id);
-                                                params.delete("monument");
-                                                router.push(`${pathname}?${params.toString()}`, { scroll: false });
-                                            }}
+                                        <div
                                             className="
-                  flex items-center gap-1
-                  text-xs font-semibold
-                  text-teal-300
-                  opacity-90
-                  group-hover:opacity-100
-                  transition
-                  cursor-pointer
-                "
+                                                flex flex-col gap-1
+                                                transition-all duration-500
+                                            "
                                         >
-                                            <span>{t("explore")}</span>
-                                            <ArrowRight className="w-3.5 h-3.5" />
-                                        </button>
+                                            <div className="flex items-center gap-2 text-xs font-bold text-teal-300">
+                                                <span>{t("explore")}</span>
+                                                <motion.div
+                                                    animate={{ x: [0, 4, 0] }}
+                                                    transition={{
+                                                        repeat: Infinity,
+                                                        duration: 1.5,
+                                                        ease: "easeInOut"
+                                                    }}
+                                                >
+                                                    <ArrowRight className="w-4 h-4" />
+                                                </motion.div>
+                                            </div>
+
+                                            <div
+                                                className="hidden md:block
+                                                    text-[10px] text-white/60 font-medium
+                                                    opacity-0 -translate-y-2
+                                                    group-hover:opacity-100 group-hover:translate-y-0
+                                                    transition-all duration-500 delay-100
+                                                "
+                                            >
+                                                {t("click_to_discover_details")}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+
+                                    {/* Bottom Decorative Line */}
+                                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-teal-500 transition-all duration-500 group-hover:w-full" />
+                                </motion.div>
                             );
                         })}
                     </div>
@@ -521,7 +537,12 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                     </div>
 
                     {/* Content - Text Only */}
-                    <div className="pt-2">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="pt-2"
+                    >
                         {/* Title */}
                         <h1
                             className="font-serif italic
@@ -560,7 +581,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                                 {t("no_desc_available")}
                             </p>
                         )}
-                    </div>
+                    </motion.div>
                 </section>
             )}
 
@@ -610,11 +631,12 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
 
                     {/* Editorial Grid */}
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {monuments.map((m) => (
+                        {monuments.map((m, idx) => (
                             <MonumentCard
                                 key={m._id}
                                 monument={m}
                                 t={t}
+                                idx={idx}
                                 onClick={() => handleOpenMonument(m._id)}
                             />
                         ))}

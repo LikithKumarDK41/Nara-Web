@@ -463,11 +463,12 @@ export default function EmbeddedSearch() {
                 ) : shouldShowMonuments ? (
                     <>
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {pageItems.map((m) => (
+                            {pageItems.map((m, idx) => (
                                 <MonumentCard
                                     key={m._id}
                                     monument={m}
                                     t={t}
+                                    idx={idx}
                                     onClick={() => openMonumentModal(m._id)}
                                 />
                             ))}
