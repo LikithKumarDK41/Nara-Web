@@ -6,7 +6,6 @@ import { useLocale } from "@/providers/LocaleProvider";
 import BrandLogo from "./BrandLogo";
 import {
   Instagram,
-  Twitter,
   Facebook,
   Youtube,
   Mail,
@@ -75,10 +74,10 @@ export default function FooterBar() {
         </div>
 
         <div className="relative w-full px-4 md:px-8 z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-16 mb-10">
 
             {/* ================= COLUMN 1: BRANDING ================= */}
-            <div className="space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <div className="lg:col-span-3 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
               <div className="inline-block transform -translate-x-3">
                 <BrandLogo scrolled={true} isFooter={true} />
               </div>
@@ -91,8 +90,10 @@ export default function FooterBar() {
                   <Link href="#" className="p-2 text-white hover:text-[#E1306C] transition-all hover:scale-110">
                     <Instagram className="w-5 h-5" />
                   </Link>
-                  <Link href="#" className="p-2 text-white hover:text-[#1DA1F2] transition-all hover:scale-110">
-                    <Twitter className="w-5 h-5" />
+                  <Link href="#" className="p-2 text-white hover:bg-white hover:text-black rounded-md transition-all hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
                   </Link>
                   <Link href="#" className="p-2 text-white hover:text-[#1877F2] transition-all hover:scale-110">
                     <Facebook className="w-5 h-5" />
@@ -105,8 +106,10 @@ export default function FooterBar() {
             </div>
 
             {/* ================= COLUMN 2: EXPLORE ================= */}
-            <div className="space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white">{t("footer_explore")}</h4>
+            <div className="lg:col-span-2 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white relative pb-3 after:absolute after:bottom-0 after:left-1/2 after:lg:left-0 after:-translate-x-1/2 after:lg:translate-x-0 after:w-12 after:h-[2px] after:bg-gradient-to-r after:from-teal-400 after:to-emerald-400 after:rounded-full">
+                {t("footer_explore")}
+              </h4>
               <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
                 {exploreLinks.map((link) => (
                   <li key={link.label}>
@@ -134,8 +137,10 @@ export default function FooterBar() {
             </div>
 
             {/* ================= COLUMN 3: SERVICES ================= */}
-            <div className="space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white">{t("information")}</h4>
+            <div className="lg:col-span-2 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white relative pb-3 after:absolute after:bottom-0 after:left-1/2 after:lg:left-0 after:-translate-x-1/2 after:lg:translate-x-0 after:w-12 after:h-[2px] after:bg-gradient-to-r after:from-teal-400 after:to-emerald-400 after:rounded-full">
+                {t("information")}
+              </h4>
               <ul className="space-y-4 w-full flex flex-col items-center lg:items-start">
                 {infoLinks.map((link) => (
                   <li key={link.label}>
@@ -151,8 +156,10 @@ export default function FooterBar() {
             </div>
 
             {/* ================= COLUMN 4: CONTACT ================= */}
-            <div className="space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white">{t("footer.connect")}</h4>
+            <div className="lg:col-span-3 space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <h4 className="text-sm font-black uppercase tracking-[0.3em] text-white relative pb-3 after:absolute after:bottom-0 after:left-1/2 after:lg:left-0 after:-translate-x-1/2 after:lg:translate-x-0 after:w-12 after:h-[2px] after:bg-gradient-to-r after:from-teal-400 after:to-emerald-400 after:rounded-full">
+                {t("footer.connect")}
+              </h4>
               <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
                 <div className="flex items-start gap-4 group cursor-pointer text-white hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
                   <MapPin className="w-5 h-5 shrink-0 text-white group-hover:text-white transition-colors mt-1 lg:mt-0" />
