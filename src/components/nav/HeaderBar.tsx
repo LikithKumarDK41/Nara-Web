@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, Search, Map, MapPinned, LogOut } from "lucide-react";
+import { Menu, X, Search, Map, MapPinned, LogOut, UserPen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import LanguageToggle from "@/components/theme/LanguageToggle";
@@ -174,7 +174,7 @@ export default function HeaderBar() {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
                 <span className="text-lg font-bold truncate max-w-[200px] text-slate-800 dark:text-slate-100">
-                  {`${t("explore_nara")} 🦌`}
+                  {`${t("explore_nara")}`}
                 </span>
                 <button
                   onClick={() => setMobileOpen(false)}
@@ -273,30 +273,22 @@ export default function HeaderBar() {
                 <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800/50">
                   {isLoggedIn ? (
                     <div
-                      onClick={() => {
-                        setProfileOpen(true);
-                        // Removed setMobileOpen(false) to keep menu open
-                      }}
-                      className="cursor-pointer flex items-center gap-4 w-full text-left group hover:bg-white dark:hover:bg-slate-800 p-2 -ml-2 rounded-xl transition-all cursor-pointer"
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          setProfileOpen(true);
-                          // Removed setMobileOpen(false)
-                        }
-                      }}
+                      onClick={() => setProfileOpen(true)}
+                      className="cursor-pointer flex items-center gap-3 w-full p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 transition-all hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-md group"
                     >
                       <div className="pointer-events-none">
                         <UserProfileDropdown onViewProfile={() => { }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate text-slate-900 dark:text-white">
+                        <p className="text-sm font-bold truncate text-slate-900 dark:text-white">
                           {authData.user.name}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 group-hover:text-teal-500 transition-colors">
-                          {t("edit_profile")}
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate opacity-80">
+                          {authData.user.email}
                         </p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-white dark:bg-slate-900 text-slate-400 group-hover:text-teal-500 group-hover:bg-teal-50 dark:group-hover:bg-teal-900/30 transition-all border border-slate-100 dark:border-slate-800 shadow-sm">
+                        <UserPen className="h-3.5 w-3.5" />
                       </div>
                     </div>
                   ) : (
