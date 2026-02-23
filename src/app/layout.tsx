@@ -13,7 +13,7 @@ import Chatbot from "@/components/chatbot/Chatbot";
 import PWAInstaller from "@/components/system/PWAInstaller";
 
 export const metadata: Metadata = {
-  // title: "Tourist",
+  applicationName: "Nara Heritage Guide",
   manifest: "/manifest.json",
   metadataBase: new URL("https://naraiseki.nichi.in"),
   title: "Nara Heritage Guide - Tourist App",
@@ -28,6 +28,15 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Nara Heritage Guide",
+    startupImage: [
+      {
+        url: "/home-banner.png",
+        media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
+      },
+    ],
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 export const viewport: Viewport = { themeColor: "#0b0f14" };
