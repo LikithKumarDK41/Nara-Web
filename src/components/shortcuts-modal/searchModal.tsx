@@ -534,7 +534,7 @@ export default function SearchModal({
           {/* Monuments Grid */}
           <div className="mt-16 w-full max-w-7xl px-6 pb-20 relative z-0">
             {/* Scroll Anchor */}
-            <div ref={resultsTopRef} className="scroll-mt-6" />
+            <div ref={resultsTopRef} className="scroll-mt-16" />
 
             {loading ? (
               <div className="flex justify-center items-center py-10">

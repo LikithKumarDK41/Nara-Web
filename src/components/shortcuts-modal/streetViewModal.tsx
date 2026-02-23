@@ -344,7 +344,7 @@ export default function StreetViewModal({
               {filtered.length > 0 && (
                 <>
                   {/* Scroll Anchor */}
-                  <div ref={resultsTopRef} className="scroll-mt-6" />
+                  <div ref={resultsTopRef} className="scroll-mt-16" />
 
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {currentData.map((m, idx) => (
