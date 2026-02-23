@@ -40,6 +40,11 @@ const blueprintItems = [
     desc: "blueprint_home_desc",
     children: [
       {
+        icon: <Info className="w-5 h-5" />,
+        title: "blueprint_about_kofun_title",
+        desc: "blueprint_about_kofun_desc",
+      },
+      {
         icon: <Layers className="w-5 h-5" />,
         title: "blueprint_home_main_categories",
         desc: "blueprint_home_main_categories_desc",
@@ -61,11 +66,6 @@ const blueprintItems = [
           "blueprint_home_more_options_point_5",
           "blueprint_home_more_options_point_6",
         ],
-      },
-      {
-        icon: <Info className="w-5 h-5" />,
-        title: "blueprint_about_kofun_title",
-        desc: "blueprint_about_kofun_desc",
       },
       {
         icon: <List className="w-5 h-5" />,
