@@ -1,40 +1,59 @@
 import type { NextConfig } from "next";
+// @ts-ignore
+import withPWAInit from "next-pwa";
 
 const nextConfig: NextConfig = {
-  // output: "export",            // enables static export (next build -> out/)
-  // Optional, nice URLs with trailing slash on static hosts (S3, GitHub Pages, etc.)
   trailingSlash: true,
-  // If you ever use next/image, add:
   images: { unoptimized: true },
   async rewrites() {
     return [
-      // Proxy v1
       {
         source: "/api/v1/:path*",
         destination: "https://naraiseki.nichi.in/api/v1/:path*",
-        // destination: "https://api-v2-gose.naraiseki.org/api/v1/:path*",
-        // destination: "https://api.gose.nichi.in/api/v1/:path*",
-        // destination: "http://192.168.0.29:3000/api/v1/:path*",
-        // destination: "https://api-gose.naraiseki.org/api/v1/:path*",
       },
-      // Proxy v2
       {
         source: "/api/v2/:path*",
         destination: "https://naraiseki.nichi.in/api/v2/:path*",
-        // destination: "https://api-v2-gose.naraiseki.org/api/v2/:path*",
-        // destination: "https://api.gose.nichi.in/api/v2/:path*",
-        // destination: "http://192.168.0.29:3000/api/v2/:path*",
-        // destination: "https://api-gose.naraiseki.org/api/v2/:path*",
       },
     ];
   },
 };
 
-const withPWA = require("next-pwa")({
+const withPWA = withPWAInit({
   dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: false,
+  register: false, // We'll manually register the service worker
+  skipWaiting: false,
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/naraiseki\.nichi\.in\/api\/.*/i,
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "tourist-app-api",
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/.*\.mapbox\.com\/.*/i,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "mapbox-cache",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        },
+      },
+    },
+    {
+      urlPattern: /\/_next\/static\/.*/i,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "next-static",
+      },
+    },
+  ],
 });
 
 export default withPWA(nextConfig);

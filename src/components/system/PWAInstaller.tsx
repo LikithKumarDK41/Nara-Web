@@ -6,14 +6,16 @@ export default function PWAInstaller() {
   const [, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
-    // Register service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js", { scope: "/" });
+    // Manually register service worker since 'register: false' in next.config.ts
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then((reg) => {
+        console.log("PWA Service Worker registered:", reg.scope);
+      });
     }
 
     // Handle PWA install prompt
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
+    const handleBeforeInstallPrompt = (e: any) => {
+      // Don't prevent default! We want the browser's native install UI (address bar icon)
       setDeferredPrompt(e);
     };
 
