@@ -415,7 +415,7 @@ export default function ProfileModal({
                 </SelectTrigger>
 
                 <SelectContent
-                  className="
+                  className="z-[10000]
                     border border-black/20 dark:border-white/20
                     bg-background
                     shadow-lg
@@ -460,7 +460,7 @@ export default function ProfileModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
-                  className="
+                  className="z-[10000]
                  border border-black/20 dark:border-white/20
                  bg-background
                  shadow-lg
@@ -514,7 +514,7 @@ export default function ProfileModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
-                  className="
+                  className="z-[10000]
                  border border-black/20 dark:border-white/20
                  bg-background
                  shadow-lg
