@@ -116,7 +116,9 @@ export default function SignInPage() {
 
   function resetLocalForm() {
     try {
-      window.localStorage.clear();
+      // Specifically clear auth related data and Redux persistence but preserve theme/locale
+      localStorage.removeItem("auth_user");
+      localStorage.removeItem("persist:root");
       window.sessionStorage.clear();
     } catch { }
 
@@ -138,7 +140,8 @@ export default function SignInPage() {
     if (hydrated || pendingAccount) return;
 
     try {
-      window.localStorage.clear();
+      localStorage.removeItem("auth_user");
+      localStorage.removeItem("persist:root");
       window.sessionStorage.clear();
     } catch { }
 
