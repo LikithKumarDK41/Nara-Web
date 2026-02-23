@@ -47,12 +47,12 @@ export default function FooterBar() {
     { label: t("region_map"), onClick: () => setRegionMapOpen(true) },
     { label: t("search"), onClick: () => setSearchOpen(true) },
     { label: t("street_view"), onClick: () => setStreetViewOpen(true) },
-    { href: "/tours", label: t("guided_tours") },
     {
       href: `https://naraiseki.nichi.in/public-videos/?lang=${locale}&theme=${theme}`,
       label: t("videos"),
       external: true
     },
+    { href: "/tours", label: t("guided_tours") },
     { href: "/mylist", label: t("my_list") },
   ];
 

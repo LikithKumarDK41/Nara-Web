@@ -25,8 +25,6 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const MOBILE_NAV_ITEMS: NavItem[] = [
-  { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
-  { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
   {
     type: "link",
     href: "https://naraiseki.nichi.in/public-videos/",
@@ -34,6 +32,8 @@ export const MOBILE_NAV_ITEMS: NavItem[] = [
     icon: VideoIcon,
     isVideo: true, // ✅ explicit
   },
+  { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
+  { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
 ];
 
 /** active matcher only for links */
