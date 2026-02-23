@@ -32,7 +32,7 @@ export default function BrandLogo({
         className="
           relative flex items-center justify-center
           h-12 w-12 rounded-2xl
-          bg-white dark:bg-white/10
+          bg-white dark:bg-white
           border border-slate-200 dark:border-white/10
           shadow-md transition-all duration-300
           group-hover:shadow-lg group-hover:scale-105
