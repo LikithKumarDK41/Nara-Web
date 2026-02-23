@@ -3,18 +3,15 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 import {
-    selectNav,
     resetAll as resetNav,
-    setStatus,
 } from "@/lib/store/slices/navSlice";
 import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
 import { clearTourDetail } from "@/lib/store/slices/touristSlice";
 import { useLocale } from "@/providers/LocaleProvider";
 
-import { Button } from "@/components/ui/button";
+
 import MapboxTourMapHistory from "@/components/map/MapBoxTourMapHistory";
 import ScreenshotButtons from "@/components/tour/ScreenshotButtons";
 import type { Tour, TourPoint } from "@/lib/types/userTour.types";
@@ -29,7 +26,7 @@ export default function FinishPage() {
     const visitId = params.get("visitId") ?? "";
     const auth = useAppSelector((s) => s.auth);
 
-    const [isResetting, setIsResetting] = useState(false);
+
     const [mapReady, setMapReady] = useState(false);
     const mapInstanceRef = useRef<any>(null);
 
@@ -45,24 +42,28 @@ export default function FinishPage() {
         return () => window.removeEventListener("popstate", handler);
     }, []);
 
+    /* ---------- THEME SYNC FOR NEW TAB ---------- */
+    useEffect(() => {
+        const storedTheme = localStorage.getItem("theme-mode") || "light";
+        const root = document.documentElement;
+        root.setAttribute("data-theme", storedTheme);
+        if (storedTheme === "dark") {
+            root.classList.add("dark");
+        } else {
+            root.classList.remove("dark");
+        }
+    }, []);
+
     const resetAllData = () => {
         dispatch(resetNav());
         dispatch(resetGeofence());
         dispatch(clearTourDetail());
     };
 
-    /* ---------- BACK TO TOURS ---------- */
-    const handleBackToTours = () => {
-        setIsResetting(true);
-        dispatch(setStatus("idle"));
-        resetAllData();
-        router.replace("/tours");
-    };
-
     /* ---------- LOADER WHILE LOADING ---------- */
     if (!tourId || !visitId) {
         return (
-            <div className="fixed inset-0 z-[100] bg-white dark:bg-black flex items-center justify-center">
+            <div className="fixed inset-0 z-[100] bg-background flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin h-12 w-12 rounded-full border-b-2 border-emerald-500 mx-auto mb-4" />
                 </div>
@@ -72,25 +73,25 @@ export default function FinishPage() {
 
     /* ---------- UI START ---------- */
     const tourImage = tourData?.image?.secure_url;
-    const finalTour = tourData;
+
 
     return (
-        <div className="fixed inset-0 z-[100] bg-white dark:bg-black overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-[100] bg-background overflow-hidden flex flex-col">
             {/* Scrollable */}
             <div className="flex-1 overflow-y-auto">
                 {/* CAPTURABLE SECTION: Hero + Map */}
                 <div id="tour-screenshot-section">
                     {/* HERO */}
-                    <div className="relative bg-gradient-to-b from-gray-100 via-white to-white dark:from-black dark:via-black dark:to-black">
+                    <div className="relative bg-gradient-to-b from-slate-100 via-background to-background dark:from-slate-900 dark:via-background dark:to-background">
                         {tourImage ? (
                             <div className="absolute inset-0">
                                 <Image
                                     src={tourImage}
-                                    alt={finalTour?.title ?? "Tour"}
+                                    alt={tourData?.title ?? "Tour"}
                                     fill
                                     className="object-cover opacity-80 dark:opacity-90"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/70 to-white dark:from-black/60 dark:via-black/70 dark:to-black" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-background/70 to-background dark:from-black/60 dark:via-background/70 dark:to-background" />
                             </div>
                         ) : (
                             <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800"></div>
@@ -100,7 +101,7 @@ export default function FinishPage() {
                             <h1 className="text-5xl font-black mb-2">🎉</h1>
                             <h2 className="font-serif italic text-3xl font-black">{t("tour_completed")}!</h2>
                             <p className="font-serif italic text-lg text-emerald-700 dark:text-emerald-300">
-                                {finalTour?.title ?? ""}
+                                {tourData?.title ?? ""}
                             </p>
 
                             <div
@@ -126,32 +127,31 @@ export default function FinishPage() {
                     </div>
 
                     {/* MAP SECTION */}
-                    <div className="px-6 pb-6 bg-white dark:bg-black">
+                    <div className="px-6 pb-6 bg-background">
                         {/* TOUR DETAILS */}
-                        {finalTour && (
+                        {tourData && (
                             <div
                                 className="mb-6 p-5 rounded-2xl shadow-lg border
-              bg-white border-gray-300 
-              dark:bg-black dark:border-white/10"
+                bg-card border-border"
                             >
                                 <h2 className="font-serif italic text-3xl font-extrabold text-black dark:text-white mb-2">
-                                    {finalTour.title}
+                                    {tourData.title}
                                 </h2>
 
-                                {finalTour.content?.brief && (
+                                {tourData.content?.brief && (
                                     <p
                                         className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3 whitespace-pre-wrap"
                                         dangerouslySetInnerHTML={{
-                                            __html: finalTour.content.brief,
+                                            __html: tourData.content.brief,
                                         }}
                                     />
                                 )}
 
-                                {finalTour.content?.extended && (
+                                {tourData.content?.extended && (
                                     <div
                                         className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-wrap"
                                         dangerouslySetInnerHTML={{
-                                            __html: finalTour.content.extended,
+                                            __html: tourData.content.extended,
                                         }}
                                     />
                                 )}
@@ -185,25 +185,16 @@ export default function FinishPage() {
             </div>
 
             {/* FOOTER BUTTONS */}
-            <div className="p-6 space-y-3 bg-gradient-to-t from-gray-100 to-transparent dark:from-black dark:to-transparent">
+            <div className="p-6 space-y-3 bg-gradient-to-t from-background to-transparent">
                 {/* Screenshot Buttons */}
                 <ScreenshotButtons
                     elementId="tour-screenshot-section"
-                    filename={`${(finalTour?.title ?? "tour").replaceAll(/\s+/g, "_")}_tour.png`}
+                    filename={`${(tourData?.title ?? "tour").replaceAll(/\s+/g, "_")}_tour.png`}
                     isMapReady={mapReady}
                     mapInstance={mapInstanceRef.current}
                 />
 
-                {/* Back to Tours Button */}
-                {/* <Button
-          onClick={handleBackToTours}
-          disabled={isResetting}
-          className="cursor-pointer w-full py-5 rounded-xl text-lg
-            border-2 bg-gray-100 text-black border-gray-400 hover:bg-gray-200
-            dark:bg-white/10 dark:text-white dark:border-gray-600 dark:hover:bg-white/20"
-        >
-          <ArrowLeft className="mr-2" /> {t("back_to_tours")}
-        </Button> */}
+
             </div>
         </div>
     );
