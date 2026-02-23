@@ -670,7 +670,7 @@ export default function MapTimelineRight({
                           <div className="flex justify-between items-start gap-4 mb-2">
                             <h3
                               onClick={() => handleOpen(p._id)}
-                              className="font-serif italic cursor-pointer text-2xl font-black tracking-tight text-gray-900 dark:text-white transition-colors duration-300 hover:text-orange-500"
+                              className="font-serif italic cursor-pointer text-2xl font-black tracking-tight text-gray-900 dark:text-white transition-colors duration-300 hover:text-teal-500"
                             >
                               {m?.title ?? m?.name ?? p.name}
                             </h3>
