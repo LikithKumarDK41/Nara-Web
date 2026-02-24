@@ -439,19 +439,6 @@ export interface MonumentsEnvelope {
   results?: Monument[];
 }
 
-function extractMonuments(data: MonumentsEnvelope): Monument[] {
-  if (Array.isArray(data)) return data;
-
-  if (data?.monuments?.results && Array.isArray(data.monuments.results)) {
-    return data.monuments.results;
-  }
-
-  if (Array.isArray(data?.results)) {
-    return data.results;
-  }
-
-  return [];
-}
 
 /* ===== Generic Fetch By Link ===== */
 

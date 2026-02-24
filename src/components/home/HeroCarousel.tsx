@@ -59,7 +59,7 @@ const SIDEBAR_TITLE_MAP: Record<string, { en: string; ja: string }> = {
 };
 
 export default function HeroCarousel() {
-    const { t, locale } = useLocale();
+    const { t } = useLocale();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);

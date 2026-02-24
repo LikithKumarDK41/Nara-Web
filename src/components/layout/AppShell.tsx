@@ -7,7 +7,6 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import HeaderBar from '@/components/nav/HeaderBar';
 import FooterBar from '@/components/nav/FooterBar';
 import SearchModal from '@/components/nav/SearchModal';
-import FloatingToolbar from '@/components/nav/FloatingToolbar';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

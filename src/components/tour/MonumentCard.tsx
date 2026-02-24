@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ImageIcon, Trash2, ArrowRight, Star, ScanEye } from "lucide-react";
+import Image from "next/image";
 import { normalizeHTML } from "@/lib/utils";
 import type { Monument } from "@/lib/types/userTour.types";
 
@@ -32,9 +33,10 @@ export default function MonumentCard({
             {/* Inset Image Container */}
             <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-100/50 dark:bg-slate-950/40 shrink-0 border border-slate-50 dark:border-white/5">
                 {m.image?.secure_url ? (
-                    <img
+                    <Image
                         src={m.image.secure_url}
-                        alt={m.title || m.name}
+                        alt={m.title || m.name || "Monument Image"}
+                        fill
                         className="block h-full w-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-110"
                     />
                 ) : (

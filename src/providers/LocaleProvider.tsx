@@ -78,7 +78,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(l);
     try {
       localStorage.setItem(LOCALE_STORAGE_KEY, l);
-    } catch {}
+    } catch { }
     const t = await loadLocaleJson(l);
     setTranslations(t || {});
   };

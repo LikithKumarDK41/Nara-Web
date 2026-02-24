@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo, useRef } from "react";
-import { Search, X, Check, Star, ImageIcon, ArrowRight } from "lucide-react";
+import { Search, X, Check } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import { Button } from "@/components/ui/button";
@@ -262,7 +262,6 @@ export default function SearchModal({
 
   /* -------------------- Sorting -------------------- */
   const sortedMonuments = useMemo(() => {
-    // return sortGlobalByPopularityThenName(monuments);
     return monuments;
   }, [monuments]);
 

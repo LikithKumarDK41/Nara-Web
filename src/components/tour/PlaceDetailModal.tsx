@@ -281,7 +281,7 @@ export function FullscreenMap({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [loadingCategory, setLoadingCategory] = useState(false);
   const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
-  const { t, locale } = useLocale();
+  const { t } = useLocale();
   const [selectedCoords, setSelectedCoords] = useState<[number, number] | null>(
     null,
   );

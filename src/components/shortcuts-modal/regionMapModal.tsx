@@ -7,7 +7,6 @@ import {
   ImageIcon,
   ChevronLeft,
   ChevronRight,
-  ArrowRight,
 } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
@@ -263,6 +262,7 @@ export default function RegionMapModal({
                             t={t}
                             idx={idx}
                             onClick={() => {
+                              onCloseMapModal();
                               sessionStorage.setItem("returnToRegionModal", "true");
                               router.push(`/regions?id=${r._id}`);
                             }}

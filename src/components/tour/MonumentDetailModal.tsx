@@ -33,13 +33,11 @@ import {
 import { useLocale } from "@/providers/LocaleProvider";
 import { useRef, useEffect, useState } from "react";
 import {
-  apiFetchEventsByMonument,
   apiFetchBookmarkByRef,
   apiRemoveBookmark,
   apiCreateBookmark,
 } from "@/services/userGlobalservice";
 import { motion, AnimatePresence } from "framer-motion";
-import type { EventItem } from "@/lib/types/userGlobal.types";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
 import { selectNav } from "@/lib/store/slices/navSlice";
@@ -70,7 +68,6 @@ export default function MonumentDetailModal({
   const { t } = useLocale();
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [events, setEvents] = useState<EventItem[]>([]);
   const { show, hide } = useGlobalLoader();
   const nav = useAppSelector(selectNav);
   const auth = useAppSelector((s) => s.auth);
@@ -142,20 +139,10 @@ export default function MonumentDetailModal({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [viewerOpen, activeIndex, isSingleImage]);
+  }, [viewerOpen, isSingleImage, nextImage, prevImage]);
 
   useEffect(() => {
-    if (details?._id) {
-      (async () => {
-        try {
-          const data = await apiFetchEventsByMonument(details._id);
-
-          setEvents(data);
-        } catch (err) {
-          console.error("Failed to load events:", err);
-        }
-      })();
-    }
+    // If we need to fetch events, we can do it here, but they are currently unused in UI.
   }, [details]);
 
   // Scroll to top whenever new monument details are loaded
@@ -230,7 +217,7 @@ export default function MonumentDetailModal({
     return () => {
       stop = true;
     };
-  }, [details?._id, userId]);
+  }, [details?._id, userId, auth.data?.user?._id]);
 
   const handleBookmarkToggle = async () => {
     if (!userId || !details?._id) {
@@ -320,7 +307,6 @@ export default function MonumentDetailModal({
     };
   }, [cameraOpen, cameraFacing]);
 
-  const [isNearby, setIsNearby] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   function openStreetViewFromApi(loc: [number, number]) {
@@ -354,7 +340,7 @@ export default function MonumentDetailModal({
     };
   }
 
-  const { lat, lng } = normalizeCoords(details?.avlocation);
+  normalizeCoords(details?.avlocation);
 
   const hasAnyDetails =
     safeText(details?.era) ||
@@ -616,7 +602,6 @@ export default function MonumentDetailModal({
                                 distance <=
                                 (details.georadius ? details.georadius : 150);
 
-                              setIsNearby(nearby);
                               if (!nearby) {
                                 toast.error(t("move_closer_to_monument"));
                                 hide();
@@ -757,7 +742,6 @@ export default function MonumentDetailModal({
                               const nearby =
                                 distance <=
                                 (details.georadius ? details.georadius : 150);
-                              setIsNearby(nearby);
                               if (!nearby) {
                                 toast.error(t("move_closer_to_monument"));
                                 hide();

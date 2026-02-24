@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, X, RefreshCw } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
-import { ChatOptions } from "./ChatOptions";
 import api from "@/lib/api";
 import { useLocale } from "@/providers/LocaleProvider";
 
@@ -23,17 +22,6 @@ interface ChatWindowProps {
   onClose: () => void;
 }
 
-const INITIAL_OPTIONS = [
-  { label: "Search Routes", value: "search_routes" },
-  { label: "Transit Options", value: "transit_options" },
-  { label: "Transit Stations", value: "transit_stations" },
-  { label: "Using Paid Trains", value: "paid_trains" },
-];
-
-const SEARCH_OPTIONS = [
-  { label: "Search Routes", value: "search_routes" },
-  { label: "Start Again", value: "start_again" },
-];
 
 export function ChatWindow({ onClose }: ChatWindowProps) {
   const { t } = useLocale();
@@ -376,7 +364,7 @@ export function ChatWindow({ onClose }: ChatWindowProps) {
       const newHistory = [...optionHistory];
 
       // Remove current state
-      const currentState = newHistory.pop();
+      newHistory.pop();
 
       // Get previous state
       const previousState = newHistory.pop();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import MapboxTourMapFinish from "@/components/map/MapboxTourMapFinish";
 import ScreenshotButtons from "@/components/tour/ScreenshotButtons";
 import type { Tour, TourPoint } from "@/lib/types/userTour.types";
-import { normalizeHTML } from "@/lib/utils";
 
 export default function FinishPage() {
   const params = useSearchParams();

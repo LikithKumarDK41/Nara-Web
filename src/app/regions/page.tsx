@@ -7,7 +7,6 @@ import {
   ChevronRight,
   Landmark,
   ArrowUpDown,
-  ArrowRight,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
@@ -30,8 +29,6 @@ import {
   apiFetchMonumentSorts,
 } from "@/services/userTourService";
 import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
-import { Star } from "lucide-react";
-import { normalizeHTML } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import MonumentCard from "@/components/tour/MonumentCard";
 
@@ -111,10 +108,7 @@ export default function RegionDetailsPage() {
   const filtered = useMemo(() => {
     const list = monuments;
 
-    // ⭐ ONLY when popular sort selected
-    // if (selectedSort === "-popularity") {
-    //   list = sortByPopularityThenName(list);
-    // }
+
 
     if (!query.trim()) return list;
 

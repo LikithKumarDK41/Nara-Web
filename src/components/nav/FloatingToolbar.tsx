@@ -13,10 +13,10 @@ import { useAppSelector } from "@/lib/store/hook";
 /* =======================================================================
   FLOATING TOOLBAR
 ======================================================================= */
-export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => void }) {
+export default function FloatingToolbar() {
     const { t, locale } = useLocale();
-      const authData = useAppSelector((s) => s.auth.data);
-      const isLoggedIn = !!authData?.user;
+    const authData = useAppSelector((s) => s.auth.data);
+    const isLoggedIn = !!authData?.user;
 
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
@@ -55,7 +55,7 @@ export default function FloatingToolbar({ onOpenSearch }: { onOpenSearch: () => 
         fixed right-6
         z-[30]
         flex flex-col items-end gap-4
-        pointer-events-none ${isLoggedIn ? 'bottom-30' :'bottom-14'}
+        pointer-events-none ${isLoggedIn ? 'bottom-30' : 'bottom-14'}
       `}
         >
             <DiamondButton

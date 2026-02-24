@@ -3,8 +3,6 @@
 import { useEffect, useState, Suspense, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import HeroCarousel from "@/components/home/HeroCarousel";
-import HomeTabs from "@/components/home/HomeTabs";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import CategoryContent from "@/components/category/CategoryContent";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hook";
@@ -28,7 +26,7 @@ function ExplorePageContent() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const { show, hide } = useGlobalLoader();
+    useGlobalLoader();
     const shortcuts = useAppSelector(selectShortcuts);
     const globalLoading = useAppSelector(selectGlobalLoading);
 
@@ -220,7 +218,6 @@ function ExplorePageContent() {
                     </p>
                 </div>
             </section>
-            {/* <HomeTabs activeTab="categories" /> */}
 
             <div className="mx-auto w-full px-4 space-y-6 pb-6">
                 <div className="min-h-[200px] animate-in fade-in slide-in-from-bottom-4 duration-500">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Download, Share2, Copy } from "lucide-react";
+import { Download, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
@@ -34,7 +34,6 @@ export default function ScreenshotButtons({
   shareText = "complete_desc",
   isMapReady = true,
   mapInstance,
-  translationKeys = {},
 }: ScreenshotButtonsProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -112,32 +111,6 @@ export default function ScreenshotButtons({
     }
   };
 
-  const handleCopy = async () => {
-    if (!isMapReady) {
-      toast.error(t("map_loading"));
-      return;
-    }
-    setIsLoading(true);
-    try {
-      // Wait for map canvas to fully render
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      let mapCanvasDataUrl: string | undefined;
-      if (mapInstance && typeof mapInstance.getCanvas === "function") {
-        try {
-          mapCanvasDataUrl = mapInstance.getCanvas().toDataURL("image/png");
-          toast.success(t("copied_to_clipboard"));
-        } catch (e) {
-          toast.error(t("failed_to_copy"));
-          console.warn("Could not get map canvas data URL:", e);
-        }
-      }
-      await copyScreenshotToClipboard(elementId, mapCanvasDataUrl);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="flex gap-3 w-full">

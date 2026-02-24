@@ -226,7 +226,6 @@ export default function HeaderBar() {
                   </button>
 
 
-                  {/* <div className="my-2 h-px bg-slate-100 dark:bg-slate-800/50" /> */}
 
                   {MOBILE_NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
