@@ -4,7 +4,6 @@ import {
   apiSyncUserTourStatus,
   apiGetUserTourPoints,
   SyncPayload,
-  UserTourSyncResponse,
   UserTourPointResponse,
 } from "@/services/userNavService";
 

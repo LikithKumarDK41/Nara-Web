@@ -16,13 +16,11 @@ import {
     ArrowRight,
     Layers,
     MapPin,
-    Star,
     BookOpen,
     ArrowUpDown,
     ImageIcon,
 } from "lucide-react";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
-import { normalizeHTML } from "@/lib/utils";
 import MonumentCard from "@/components/tour/MonumentCard";
 import {
     DropdownMenu,
@@ -50,7 +48,6 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
     const currentMonumentId = searchParams.get("monument");
 
     const [subthemes, setSubthemes] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
     const [themeInfo, setThemeInfo] = useState<any | null>(null);
     const { t, locale } = useLocale();
 
@@ -128,7 +125,6 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
             }
 
             try {
-                setLoading(true);
                 show();
 
                 const data = await apiFetchSubthemesWithQuery({
@@ -149,7 +145,6 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
                 console.error("Failed to load subthemes:", err);
                 if (mounted) setSubthemes([]);
             } finally {
-                if (mounted) setLoading(false);
                 hide();
             }
         };
@@ -228,7 +223,7 @@ export default function CategoryContent({ themeId, hideHero = false }: CategoryC
         return () => {
             mounted = false;
         };
-    }, [selectedSort, activeSubtheme, view, locale]);
+    }, [selectedSort, activeSubtheme, view, locale, show, hide]);
 
     const handleOpenMonument = (monumentId: string) => {
         const params = new URLSearchParams(searchParams.toString());

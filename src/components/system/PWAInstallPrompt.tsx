@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, X, Smartphone, Monitor, ChevronRight, Apple } from "lucide-react";
+import { X, Smartphone, Monitor, ChevronRight, Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -85,7 +85,7 @@ export default function PWAInstallPrompt() {
         const { outcome } = await deferredPrompt.userChoice;
 
         if (outcome === "accepted") {
-            console.log("User accepted the PWA install prompt");
+            console.warn("User accepted the PWA install prompt");
             setDeferredPrompt(null);
             setShowPrompt(false);
             setIsStandalone(true);

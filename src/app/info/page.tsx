@@ -24,14 +24,6 @@ import {
   MousePointerClick
 } from "lucide-react";
 
-// Lucide Icon Mapping
-const itemIcons: Record<string, React.ReactNode> = {
-  blueprint_home: <Home className="w-8 h-8" />,
-  blueprint_tours: <Map className="w-8 h-8" />,
-
-  // Child Icons (Generic fallbacks if needed)
-  default: <Info className="w-5 h-5" />
-};
 
 const blueprintItems = [
   {

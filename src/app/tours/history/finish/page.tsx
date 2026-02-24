@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
+import { useAppDispatch } from "@/lib/store/hook";
 import {
     resetAll as resetNav,
 } from "@/lib/store/slices/navSlice";
@@ -11,20 +11,17 @@ import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
 import { clearTourDetail } from "@/lib/store/slices/touristSlice";
 import { useLocale } from "@/providers/LocaleProvider";
 
-
 import MapboxTourMapHistory from "@/components/map/MapBoxTourMapHistory";
 import ScreenshotButtons from "@/components/tour/ScreenshotButtons";
-import type { Tour, TourPoint } from "@/lib/types/userTour.types";
+import type { Tour } from "@/lib/types/userTour.types";
 
 export default function FinishPage() {
     const params = useSearchParams();
-    const router = useRouter();
     const dispatch = useAppDispatch();
     const { t } = useLocale();
 
     const tourId = params.get("tourId") ?? "";
     const visitId = params.get("visitId") ?? "";
-    const auth = useAppSelector((s) => s.auth);
 
 
     const [mapReady, setMapReady] = useState(false);

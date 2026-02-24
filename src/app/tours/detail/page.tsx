@@ -74,10 +74,6 @@ export default function TourDetailsClientPage() {
      BOOKMARK CHECK
   ---------------------------- */
   useEffect(() => {
-    /*------
-  Before auth changes
-  ----------*/
-    // if (!id || !userId) return;
 
     /*------
   After auth changes
@@ -249,16 +245,6 @@ export default function TourDetailsClientPage() {
   /* ----------------------------
      Loader visibility
   ---------------------------- */
-  /*------
-  Before auth changes
-  ----------*/
-  // useEffect(() => {
-  //   if (!bookmarkCheckLoading && tour) hide();
-  //   else show();
-  // }, [bookmarkCheckLoading, tour, show, hide]);
-  /*------
-  After auth changes
-  ----------*/
   useEffect(() => {
     // 🔑 If user is NOT logged in, ignore bookmark loading
     if (!userId) {

@@ -8,7 +8,6 @@ import {
   Landmark,
   ArrowUpDown,
   X,
-  ArrowRight,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
@@ -30,8 +29,6 @@ import {
   apiFetchMonumentSorts,
 } from "@/services/userTourService";
 import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
-import { Star } from "lucide-react";
-import { normalizeHTML } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import MonumentCard from "@/components/tour/MonumentCard";
 
@@ -131,10 +128,7 @@ export default function StreetViewModal({
   const filtered = useMemo(() => {
     const list = monuments;
 
-    // ⭐ ONLY when popular sort selected
-    // if (selectedSort === "-popularity") {
-    //   list = sortByPopularityThenName(list);
-    // }
+
 
     if (!query.trim()) return list;
 
@@ -149,19 +143,6 @@ export default function StreetViewModal({
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const currentData = filtered.slice((page - 1) * limit, page * limit);
 
-  /* -------------------- Detail Modal -------------------- */
-  const handleOpenMonument = async (id: string) => {
-    setModalLoading(true);
-    try {
-      const data = await apiFetchMonumentDetails(id);
-      setSelectedMonument(data);
-      setOpen(true);
-    } catch (err) {
-      console.error("Failed to fetch monument details:", err);
-    } finally {
-      setModalLoading(false);
-    }
-  };
 
   const handleOpenAnother = async (id: string) => {
     setModalLoading(true);

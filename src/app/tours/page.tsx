@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect, useRef } from "react";
-import { ImageIcon, Search, ArrowUpDown, ArrowRight } from "lucide-react";
+import { Search, ArrowUpDown } from "lucide-react";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { apiFetchToursVersionTwo } from "@/services/userTourService";
 import type { Tour } from "@/lib/types/userTour.types";
-import { normalizeHTML } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import TourCard from "@/components/tour/TourCard";
 

@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState, useRef } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import {
   Landmark,
   Bookmark,
   CheckCircle2,
   Compass,
-  ArrowRight,
-  ImageIcon,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -50,7 +47,6 @@ export default function LibraryPage() {
 
   const [bookmarks, setBookmarks] = useState<any[]>([]);
   const [visits, setVisits] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState({
     bookmarkedMonuments: 1,
@@ -71,7 +67,7 @@ export default function LibraryPage() {
         FETCH BOOKMARKS
      ============================ */
   const loadBookmarks = async () => {
-    setLoading(true);
+    show();
     try {
       const res = await apiGetUserBookmarks();
 
@@ -91,7 +87,7 @@ export default function LibraryPage() {
     } catch (err) {
       console.error("Failed to fetch bookmarks:", err);
     } finally {
-      setLoading(false);
+      hide();
     }
   };
 
@@ -103,6 +99,7 @@ export default function LibraryPage() {
         FETCH VISIT HISTORY
      ============================ */
   const loadVisits = async () => {
+    show();
     try {
       const res = await apiGetVisitHistoryByUser();
 
@@ -121,8 +118,10 @@ export default function LibraryPage() {
       ];
 
       setVisits(combined);
-    } catch (err) {
-      console.error("Failed to fetch visit histories:", err);
+    } catch {
+      console.error("Failed to fetch visit histories");
+    } finally {
+      hide();
     }
   };
 
@@ -224,7 +223,7 @@ export default function LibraryPage() {
   /* ============================
         PAGINATION
      ============================ */
-  const getPageKey = () => {
+  const getPageKey = useCallback(() => {
     if (topTab === "bookmarks" && innerTab === "monuments")
       return "bookmarkedMonuments";
     if (topTab === "bookmarks" && innerTab === "tours")
@@ -232,7 +231,7 @@ export default function LibraryPage() {
     if (topTab === "visited" && innerTab === "monuments")
       return "visitedMonuments";
     return "visitedTours";
-  };
+  }, [topTab, innerTab]);
 
   const handlePageChange = (p: number) => {
     const key = getPageKey();
@@ -272,7 +271,7 @@ export default function LibraryPage() {
     if (currentPageVal > totalPagesVal) {
       setPage((prev) => ({ ...prev, [key]: totalPagesVal }));
     }
-  }, [dataList.length, limit, topTab, innerTab, page]);
+  }, [dataList.length, limit, page, getPageKey]);
 
   /* ============================
         MONUMENT DETAILS

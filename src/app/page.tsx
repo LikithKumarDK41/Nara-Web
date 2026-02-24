@@ -31,7 +31,6 @@ import SearchModal from "@/components/shortcuts-modal/searchModal";
 import StreetViewModal from "@/components/shortcuts-modal/streetViewModal";
 import RegionMapModal from "@/components/shortcuts-modal/regionMapModal";
 
-import HomeTabs from "@/components/home/HomeTabs";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import TourCard from "@/components/tour/TourCard";
 
@@ -182,9 +181,6 @@ export default function ToursDashboardPage() {
     <div className="flex flex-col w-full min-h-screen">
       {/* ================= HERO CAROUSEL ================= */}
       <HeroCarousel />
-
-      {/* ================= TAB NAVIGATION ================= */}
-      {/* <HomeTabs /> Removed per user request */}
 
       {/* ================= DISCOVERY SECTION HEADER ================= */}
       {abouts.length > 0 && (

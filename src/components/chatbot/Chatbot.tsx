@@ -29,28 +29,6 @@ export default function Chatbot() {
         )}
       </AnimatePresence>
 
-      {/* <motion.button
-  onClick={() => setIsOpen(!isOpen)}
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  className={`cursor-pointer fixed bottom-14 right-6 h-11 w-11 
-    bg-gradient-to-r from-orange-500 to-pink-500 
-    hover:from-orange-600 hover:to-pink-600 
-    text-white shadow-lg hover:shadow-xl transition-shadow 
-    z-50 flex items-center justify-center
-    rotate-45 rounded-lg
-    ${isOpen ? "hidden sm:flex" : "flex"}`}
-  aria-label={isOpen ? "Close chat" : "Open chat"}
->
-  <span className="-rotate-45 flex items-center justify-center">
-    {isOpen ? (
-      <X className="h-5 w-5 text-white" />
-    ) : (
-      <MessageCircle className="h-5 w-5 text-white" />
-    )}
-  </span>
-</motion.button> */}
-
       {isLoggedIn && (
         <DiamondButton
           label={isOpen ? t("close_chat") : t("open_chat")}

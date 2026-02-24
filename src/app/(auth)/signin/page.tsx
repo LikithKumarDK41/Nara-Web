@@ -42,7 +42,6 @@ import {
   auth,
   loginWithGoogle,
   loginWithFacebook,
-  verifyPhoneOtp,
   sendPhoneOtp,
 } from "@/lib/firebase";
 
@@ -75,7 +74,6 @@ export default function SignInPage() {
   const sp = useSearchParams();
   const next = sp.get("next") || "/";
 
-  const [localFirebaseUid, setLocalFirebaseUid] = React.useState<string>("");
 
   const [showSocialRegister, setShowSocialRegister] = React.useState(false);
   const [socialProvider, setSocialProvider] = React.useState<
@@ -297,7 +295,7 @@ export default function SignInPage() {
             await sendPhoneOtp(phoneE164);
             dispatch(setOtpMode("phone"));
             toast.success(t("auth.toast_otp_sent"));
-          } catch (err) {
+          } catch {
             toast.error(t("auth.toast_otp_failed"));
           }
           return;
@@ -309,7 +307,7 @@ export default function SignInPage() {
 
           try {
             toast.error(t("auth.toast_login_failed"));
-          } catch (err) {
+          } catch {
             toast.error(t("auth.error_otp_invalid"));
           }
           return;
@@ -424,7 +422,6 @@ export default function SignInPage() {
       const displayName = user?.displayName || "";
       const phoneFromSocial = user?.phoneNumber || "";
 
-      setLocalFirebaseUid(uid);
 
       if (!emailFromSocial) {
         toast.error(t("auth.toast_social_email_missing"));
@@ -496,7 +493,6 @@ export default function SignInPage() {
       const displayName = user?.displayName || "";
       const phoneFromSocial = user?.phoneNumber || "";
 
-      setLocalFirebaseUid(uid);
 
       if (!emailFromSocial) {
         toast.error(t("auth.toast_social_email_missing"));

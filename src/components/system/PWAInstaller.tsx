@@ -9,7 +9,7 @@ export default function PWAInstaller() {
     // Manually register service worker since 'register: false' in next.config.ts
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then((reg) => {
-        console.log("PWA Service Worker registered:", reg.scope);
+        console.warn("PWA Service Worker registered:", reg.scope);
       });
     }
 

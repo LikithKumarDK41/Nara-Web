@@ -9,7 +9,6 @@ import GlobalCheckinToasts from "@/components/nav/GlobalCheckinToasts";
 import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
-import Chatbot from "@/components/chatbot/Chatbot";
 import PWAInstaller from "@/components/system/PWAInstaller";
 
 export const metadata: Metadata = {
@@ -135,7 +134,6 @@ export default function RootLayout({
 
               <GeoWatcher />
               <GlobalCheckinToasts />
-              {/* <Chatbot /> */}
             </LocaleProvider>
           </LoaderProvider>
         </StoreProvider>
