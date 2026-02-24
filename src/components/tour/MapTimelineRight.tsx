@@ -374,7 +374,7 @@ export default function MapTimelineRight({
                           />
                         </div>
                       )}
-                      <div className="group relative rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-sm overflow-hidden transition-all hover:shadow-md">
+                      <div className="group relative rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-sm overflow-hidden transition-all hover:shadow-md">
                         {/* Image Thumbnail */}
                         <div
                           className="relative h-40 w-full cursor-pointer overflow-hidden"
@@ -409,7 +409,7 @@ export default function MapTimelineRight({
                         </div>
 
                         {/* Card Body: Brief + Action */}
-                        <div className="p-4 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 border-t">
+                        <div className="p-4 bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 border-t">
                           {/* Brief Description */}
                           {m?.content?.brief && (
                             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed">
@@ -630,7 +630,7 @@ export default function MapTimelineRight({
                     hasStart={hasStart}
                   />
 
-                  <article className="relative col-start-2 w-full group rounded-3xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-md text-gray-900 dark:text-white shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-orange-500/10 border border-white/50 dark:border-gray-800/50">
+                  <article className="relative col-start-2 w-full group rounded-3xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-md text-gray-900 dark:text-white shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-orange-500/10 border border-white/50 dark:border-gray-800/50">
                     {/* For above div parent above the relative rounded-xl removed 'overflow-hidden' classname for 'stamp' related if issue in please add 'overflow-hidden' */}
                     {p.stamp && Object.keys(p.stamp).length > 0 && (
                       <div className="absolute top-0 right-4 translate-x-1/2 -translate-y-1/2 z-[10] pointer-events-none">
@@ -682,7 +682,7 @@ export default function MapTimelineRight({
                               <span>{m.region.title}</span>
                             </div>
                           )}
-                          <div className="h-px w-12 bg-teal-200 dark:bg-teal-800 mb-4" />
+                          <div className="h-px w-12 bg-teal-500 dark:bg-teal-300 mt-2 mb-4" />
 
                           {(m?.content?.brief || m?.content?.extended) && (
                             <div className="text-sm text-gray-600 dark:text-gray-400 space-y-3 leading-relaxed">
