@@ -187,7 +187,7 @@ export default function PrivacyPolicyPage() {
 
           {/* RIGHT: CONTENT */}
           <main className="lg:col-span-12 space-y-8">
-            <div className="bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden backdrop-blur-sm">
+            <div className="bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden backdrop-blur-sm">
 
               {SECTIONS.map((section) => (
                 <React.Fragment key={section.id}>

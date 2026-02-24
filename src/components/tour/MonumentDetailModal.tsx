@@ -1106,7 +1106,7 @@ export default function MonumentDetailModal({
                         <div
                           key={m._id}
                           onClick={() => onOpenAnother(m._id)}
-                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
                             {m.image?.secure_url ? (
@@ -1180,7 +1180,7 @@ export default function MonumentDetailModal({
                               }}
                               className={`
   group relative flex flex-col h-full overflow-hidden rounded-2xl
-  bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md transition-all border
+  bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md transition-all border
   ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
    ${!(localTourId !== tour._id)
                                   ? "cursor-pointer hover:shadow-xl"
@@ -1261,7 +1261,7 @@ export default function MonumentDetailModal({
                         <div
                           key={srv._id || srv.name}
                           onClick={() => openPlaceDetails(srv)}
-                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           {/* IMAGE */}
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">

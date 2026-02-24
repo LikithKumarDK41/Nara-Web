@@ -281,7 +281,7 @@ Sumitomo Life Minatomachi MT Building 2F, 1-18-4 Minamihorie, Nishi-ku, Osaka Ci
 
           {/* RIGHT: CONTENT */}
           <main className="lg:col-span-12 space-y-8">
-            <div className="bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden backdrop-blur-sm">
+            <div className="bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden backdrop-blur-sm">
 
               {/* Decorative background subtle blobs */}
               {/* <div className="absolute -top-20 -right-20 w-64 h-64 bg-teal-50 dark:bg-teal-900/10 rounded-full blur-3xl pointer-events-none" /> */}
