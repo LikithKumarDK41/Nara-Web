@@ -35,11 +35,11 @@ export default function UserProfileDropdown({
           text-slate-900
           hover:shadow-md
 
-          /* 🌙 Dark mode: Black Bg + White Icon */
-          dark:bg-black/80
-          dark:border-slate-800
-          dark:text-white
-          dark:hover:bg-slate-950
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800
+          dark:border-slate-700
+          dark:text-gray-100
+          dark:hover:bg-slate-700
         "
       >
         {avatar ? (
@@ -49,13 +49,13 @@ export default function UserProfileDropdown({
             className="h-full w-full rounded-full object-cover"
           />
         ) : (
-          <User className="h-4 w-4 text-slate-700 dark:text-slate-300" />
+          <User className="h-4 w-4" />
         )}
       </button>
 
       {/* TOOLTIP */}
       <div
-        className="
+        className="hidden lg:block
           pointer-events-none
           absolute left-1/2 top-full mt-2
           -translate-x-1/2

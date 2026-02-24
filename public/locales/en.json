@@ -110,7 +110,9 @@
       "instagram": "Instagram",
       "linkedin": "LinkedIn"
     },
-    "copyright": "© {year} Nara Kofun & Heritage Foundation. All rights reserved."
+    "copyright": "© {year} Nara Kofun & Heritage Foundation. All rights reserved.",
+    "connect": "Connect",
+    "quote": "Preserving the echoes of ancient Japan, one monument at a time. Journey through the soul of Nara."
   },
   "tours": {
     "liveTours": "Visit the tour spots and record your visits to collect stamps, turning it into a stamp rally experience.",
@@ -731,6 +733,15 @@
     "explore_link": "Explore Link",
     "explore_subtitle": "Discover Nara's rich cultural heritage through our curated collection of themes and monuments.",
     "open": "Open",
+    "heritage": "Heritage",
+    "portal": "Portal",
+    "explore": "Explore",
+    "curated_tours": "Curated Tours",
+    "legacy_layers": "Journey through the layers of Japan's ancient capital",
+    "explore_foundation": "Explore Foundation",
+    "navigate_heritage": "Seamlessly navigate through Nara's digital heritage",
+    "diverse_heritage": "Discover the diverse dimensions of Nara's heritage",
+    "curated_journeys": "Artfully curated journeys through the heart of ancient Japan",
     "hero": {
       "slides": [
         {
@@ -784,6 +795,7 @@
   "completed": "Completed",
   "related_themes": "Related themes",
   "explore": "Explore",
+  "click_to_discover_details": "Click to discover details & spots",
   "theme_overview": "Theme Overview",
   "no_desc_available": "No description available",
   "related_spots": "Related spots",
@@ -849,5 +861,20 @@
     "hero_title": "Quick Access",
     "hero_subtitle": "Explore Nara's highlights through interactive maps, search tools, and panoramic street views."
   },
-  "tours_breadcrumb": "Tours"
+  "tours_breadcrumb": "Tours",
+  "footer_explore":"Explore",
+  "guided_tours":"Guided Tours",
+  "videos":"Videos",
+  "my_list":"My List",
+  "information":"Information",
+  "privacy_policy":"Privacy Policy",
+  "terms_of_use":"Terms of Service",
+  "region_map":"Region/Map",
+  "search":"Search",
+  "street_view":"Street View",
+  "hello":"Hello, ",
+  "login":"Login",
+  "sign_out":"Sign out",
+  "edit_profile":"Edit Profile",
+  "select_category":"Select Category"
 }

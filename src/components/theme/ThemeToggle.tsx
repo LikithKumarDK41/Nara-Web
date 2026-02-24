@@ -45,7 +45,7 @@ export default function ThemeToggle() {
         bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 hover:shadow-md
 
         /* ⚫ Dark Mode */
-        dark:bg-black/80 dark:border-slate-800 dark:text-white dark:hover:bg-slate-900
+        dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
       "
     >
       <div className="relative w-4 h-4">

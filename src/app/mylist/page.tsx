@@ -1,17 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import {
   Landmark,
   Bookmark,
   CheckCircle2,
   Compass,
-  ImageIcon,
-  Trash2,
-  PlayCircle,
-  CheckCircle,
   ArrowRight,
+  ImageIcon,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocale } from "@/providers/LocaleProvider";
@@ -34,6 +31,8 @@ import { selectNav, resetAll as resetNav } from "@/lib/store/slices/navSlice";
 import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
 import { clearTourDetail } from "@/lib/store/slices/touristSlice";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import TourCard from "@/components/tour/TourCard";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 /* MAIN PAGE */
 export default function LibraryPage() {
@@ -59,6 +58,8 @@ export default function LibraryPage() {
     visitedMonuments: 1,
     visitedTours: 1,
   });
+
+  const resultsTopRef = useRef<HTMLDivElement>(null);
 
   const limit = 6;
 
@@ -148,7 +149,7 @@ export default function LibraryPage() {
           bookmarkId: b.bookmarkId,
           _id: b.monument._id,
           name: b.monument.title,
-          image: b.monument.image?.secure_url || b.monument.image?.url,
+          image: b.monument.image, // Pass full image object
           description: cleanText(b.monument.content?.brief || ""),
         })),
     [bookmarks],
@@ -162,7 +163,7 @@ export default function LibraryPage() {
           bookmarkId: b.bookmarkId,
           _id: b.tour._id,
           title: b.tour.title,
-          image: b.tour.image?.secure_url || b.tour.image?.url,
+          image: b.tour.image, // Pass full image object
           description: cleanText(b.tour.content?.brief || ""),
         })),
     [bookmarks],
@@ -176,7 +177,7 @@ export default function LibraryPage() {
           visitId: v.visitId,
           _id: v.monument._id,
           name: v.monument.title,
-          image: v.monument.image?.secure_url || v.monument.image?.url,
+          image: v.monument.image, // Pass full image object
           description: cleanText(v.monument.content?.brief || ""),
         })),
     [visits],
@@ -190,7 +191,7 @@ export default function LibraryPage() {
           visitId: v.visitId,
           _id: v.tour._id,
           title: v.tour.title,
-          image: v.tour.image?.secure_url || v.tour.image?.url,
+          image: v.tour.image, // Pass full image object
           description: cleanText(v.tour.content?.brief || ""),
           status: v.status,
         })),
@@ -236,7 +237,9 @@ export default function LibraryPage() {
   const handlePageChange = (p: number) => {
     const key = getPageKey();
     setPage((prev) => ({ ...prev, [key]: p }));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (resultsTopRef.current) {
+      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const currentPage = page[getPageKey()];
@@ -430,6 +433,9 @@ export default function LibraryPage() {
       </section>
 
       <div className="px-4 space-y-6">
+        {/* Scroll Anchor */}
+        <div ref={resultsTopRef} className="scroll-mt-24" />
+
         {/* BREADCRUMB */}
         <div className="mt-2 flex justify-start">
           <Breadcrumb
@@ -554,20 +560,32 @@ function InnerTabs({
                 isMonument ? (
                   <MonumentCard
                     key={`mon-${item._id}-${idx}`}
-                    m={item}
-                    onOpen={onOpenMonument}
-                    onDeleteBookmark={onDeleteBookmark}
-                    onDeleteVisit={onDeleteVisit}
-                    isBookmarkTab={isBookmarkTab}
+                    monument={item}
+                    t={t}
+                    idx={idx}
+                    onClick={() => onOpenMonument(item._id)}
+                    onDelete={() => {
+                      if (isBookmarkTab) {
+                        onDeleteBookmark(item.bookmarkId);
+                      } else {
+                        onDeleteVisit(item.visitId);
+                      }
+                    }}
                   />
                 ) : (
                   <TourCard
                     key={`tour-${item._id}-${idx}`}
-                    t={item}
-                    onDeleteBookmark={onDeleteBookmark}
-                    onDeleteVisit={onDeleteVisit}
-                    isBookmarkTab={isBookmarkTab}
-                    onDeleteUserTour={onDeleteUserTour}
+                    tour={item}
+                    t={t}
+                    idx={idx}
+                    showStatus={true}
+                    onDelete={() => {
+                      if (isBookmarkTab) {
+                        onDeleteBookmark(item.bookmarkId);
+                      } else {
+                        onDeleteUserTour(item.visitId);
+                      }
+                    }}
                   />
                 ),
               )}
@@ -586,207 +604,7 @@ function InnerTabs({
   );
 }
 
-/* ============================================
-        MONUMENT CARD WITH DELETE ICON
-   ============================================ */
-function MonumentCard({
-  m,
-  onOpen,
-  onDeleteBookmark,
-  onDeleteVisit,
-  isBookmarkTab,
-}: any) {
-  const { t } = useLocale();
 
-  return (
-    <div
-      className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#0a0a0a] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer"
-      onClick={() => onOpen(m._id)}
-    >
-      {/* 🖼️ Premium Inset Image Container */}
-      <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-50 dark:bg-zinc-900 shrink-0 border border-slate-50 dark:border-white/5">
-        {m.image ? (
-          <img
-            src={m.image}
-            alt={m.name}
-            className="block h-full w-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-110"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <ImageIcon className="h-10 w-10 text-slate-300 dark:text-zinc-700" />
-          </div>
-        )}
-
-        {/* DELETE BUTTON - Top Right */}
-        <button
-          className="cursor-pointer absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-md text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm border border-white/20"
-          onClick={(e) => {
-            e.stopPropagation();
-            isBookmarkTab
-              ? onDeleteBookmark(m.bookmarkId)
-              : onDeleteVisit(m.visitId);
-          }}
-          title={t("delete") || "Delete"}
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-
-        {/* Ambient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
-
-      {/* ✍️ Content Area */}
-      <div className="flex-1 px-8 py-9 flex flex-col min-h-0 bg-transparent">
-        <div className="flex-1 space-y-4">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 font-serif italic tracking-tight leading-tight">
-            {m.name}
-          </h3>
-
-          {m.description && (
-            <p className="text-sm text-slate-500 dark:text-white/40 line-clamp-3 leading-relaxed font-light">
-              {m.description}
-            </p>
-          )}
-        </div>
-
-        {/* Architectural Full-Width Action */}
-        <div className="mt-8 pt-7 border-t border-slate-50 dark:border-white/5">
-          <div className="flex items-center justify-between group/link">
-            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.25em] transition-colors duration-300">
-              {t("Details")}
-            </span>
-            <div className="flex-1 mx-4 h-px bg-slate-100 dark:bg-white/5 relative overflow-hidden">
-              <div className="absolute inset-0 bg-slate-900 dark:bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-out" />
-            </div>
-            <ArrowRight className="w-5 h-5 text-slate-900 dark:text-white transform transition-transform duration-500 ease-out group-hover:translate-x-1" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ============================================
-        TOUR CARD WITH DELETE ICON
-   ============================================ */
-function TourCard({
-  t: tour,
-  onDeleteBookmark,
-  onDeleteVisit,
-  isBookmarkTab,
-  onDeleteUserTour,
-}: any) {
-  const { t: tr } = useLocale();
-
-  return (
-    <div className="group relative flex flex-col h-full p-3 rounded-[3rem] bg-white dark:bg-[#0a0a0a] border border-slate-100 dark:border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-700 cursor-pointer">
-      {/* 🖼️ Premium Inset Image Container */}
-      <div className="relative h-[280px] w-full rounded-[2.2rem] overflow-hidden bg-slate-50 dark:bg-zinc-900 shrink-0 border border-slate-50 dark:border-white/5">
-        {/* Main Image */}
-        {tour.image ? (
-          <img
-            src={tour.image}
-            alt={tour.title}
-            className="block h-full w-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-110"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <ImageIcon className="h-10 w-10 text-slate-300 dark:text-zinc-700" />
-          </div>
-        )}
-
-        {/* DELETE BUTTON */}
-        <button
-          className="cursor-pointer absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-md text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm border border-white/20"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (isBookmarkTab) {
-              onDeleteBookmark(tour.bookmarkId);
-            } else {
-              onDeleteUserTour(tour.visitId);
-            }
-          }}
-          title={tr("delete") || "Delete"}
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-
-        {/* STATUS OVERLAYS */}
-        {(tour.status === "pause" || tour.status === "start") && (
-          <div className="absolute top-4 left-4 z-20">
-            <div className="flex items-center gap-2 rounded-full bg-black/70 backdrop-blur-md px-3 py-1.5 text-white shadow-lg border border-white/10">
-              <PlayCircle className="h-4 w-4 text-emerald-400" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">
-                {tr("in_progress")}
-              </span>
-            </div>
-          </div>
-        )}
-        {tour.status === "end" && (
-          <div className="absolute top-4 left-4 z-20">
-            <div className="flex items-center gap-2 rounded-full bg-emerald-600/90 backdrop-blur-md px-3 py-1.5 text-white shadow-lg border border-white/10">
-              <CheckCircle className="h-4 w-4" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">
-                {tr("completed")}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Ambient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
-
-      {/* ✍️ Content Area */}
-      <div className="flex-1 px-8 py-9 flex flex-col min-h-0 bg-transparent">
-        <div className="flex-1 space-y-4">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white line-clamp-2 font-serif italic tracking-tight leading-tight">
-            {tour.title}
-          </h3>
-
-          {tour.description && (
-            <p className="text-sm text-slate-500 dark:text-white/40 line-clamp-3 leading-relaxed font-light">
-              {tour.description}
-            </p>
-          )}
-        </div>
-
-        {/* Action Bar */}
-        <div className="mt-8 pt-7 border-t border-slate-50 dark:border-white/5 space-y-4">
-          {/* Default Action */}
-          <Link
-            href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}
-            className="flex items-center justify-between group/link w-full"
-          >
-            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.25em] transition-colors duration-300">
-              {tr("Details")}
-            </span>
-            <div className="flex-1 mx-4 h-px bg-slate-100 dark:bg-white/5 relative overflow-hidden">
-              <div className="absolute inset-0 bg-slate-900 dark:bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-out" />
-            </div>
-            <ArrowRight className="w-5 h-5 text-slate-900 dark:text-white transform transition-transform duration-500 ease-out group-hover:translate-x-1" />
-          </Link>
-
-          {/* Secondary Action: History (If Completed) */}
-          {tour.status === "end" && !isBookmarkTab && (
-            <div className="flex justify-end">
-              <Link
-                target="_blank"
-                href={`/tours/history/finish?visitId=${encodeURIComponent(
-                  tour.visitId,
-                )}&tourId=${encodeURIComponent(tour._id)}`}
-                className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400 hover:text-teal-500 transition-colors"
-              >
-                <span>{tr("buttons.history") || "History"}</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* ============================================
         PAGINATION
@@ -803,7 +621,7 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3 pt-6">
+    <div className="mt-6 mb-10 flex items-center justify-between gap-3 pt-6">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {t("pagination_left", { current: page, total: totalPages })}

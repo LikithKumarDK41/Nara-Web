@@ -264,11 +264,11 @@ export default function ProfileModal({
     <>
       <Dialog open={open} onOpenChange={onClose}>
         {open && (
-          <div className="fixed inset-0 z-[40] bg-black/60 backdrop-blur-sm" />
+          <div className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm" />
         )}
         <DialogContent
           showCloseButton={false}
-          className="z-50 w-screen md:w-[70%] lg:w-[50%] h-[90vh] md:h-[100vh] bg-background p-0 !max-w-full overflow-hidden"
+          className="z-[9999] w-screen md:w-[70%] lg:w-[50%] h-[90vh] md:h-[100vh] bg-background p-0 !max-w-full overflow-hidden"
         >
           <DialogHeader className="flex items-center border-b bg-background py-4 px-8 relative">
             <DialogTitle>{t("profile.editProfile")}</DialogTitle>
@@ -415,7 +415,7 @@ export default function ProfileModal({
                 </SelectTrigger>
 
                 <SelectContent
-                  className="
+                  className="z-[10000]
                     border border-black/20 dark:border-white/20
                     bg-background
                     shadow-lg
@@ -460,7 +460,7 @@ export default function ProfileModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
-                  className="
+                  className="z-[10000]
                  border border-black/20 dark:border-white/20
                  bg-background
                  shadow-lg
@@ -514,7 +514,7 @@ export default function ProfileModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent
-                  className="
+                  className="z-[10000]
                  border border-black/20 dark:border-white/20
                  bg-background
                  shadow-lg

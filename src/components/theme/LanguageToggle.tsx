@@ -37,8 +37,8 @@ export default function LanguageToggle() {
         /* ⚪ Light Mode: White Bg + Black Icon */
         bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 hover:shadow-md
 
-        /* ⚫ Dark Mode: Black Bg + White Icon */
-        dark:bg-black/80 dark:border-slate-800 dark:text-white dark:hover:bg-slate-900
+        /* ⚫ Dark Mode: Slate Bg + White Icon */
+        dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
       "
     >
       {/* 🌐 Icon */}

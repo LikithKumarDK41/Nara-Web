@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LogIn } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 
-export default function HeaderLogin() {
+export default function HeaderLogin({ isMobile }: { isMobile?: boolean }) {
   const router = useRouter();
   const { t } = useLocale();
   const pathname = usePathname();
@@ -19,6 +19,25 @@ export default function HeaderLogin() {
 
   function handleLogin() {
     router.push(`/signin?next=${encodeURIComponent(nextUrl)}`);
+  }
+
+  if (isMobile) {
+    return (
+      <button
+        onClick={handleLogin}
+        className="cursor-pointer
+          w-full flex items-center justify-center gap-2
+          px-4 py-3.5 rounded-xl
+          bg-teal-500 text-white
+          hover:bg-teal-600
+          dark:bg-teal-600 dark:hover:bg-teal-500
+          transition-all font-medium shadow-sm
+        "
+      >
+        <LogIn className="h-5 w-5" />
+        <span>{t("actions.login") || "Log in / Sign up"}</span>
+      </button>
+    );
   }
 
   return (
@@ -37,11 +56,11 @@ export default function HeaderLogin() {
           text-slate-900
           hover:shadow-md
 
-          /* 🌙 Dark mode: Black Bg + White Icon */
-          dark:bg-black/80
-          dark:border-slate-800
-          dark:text-white
-          dark:hover:bg-slate-950
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800
+          dark:border-slate-700
+          dark:text-gray-100
+          dark:hover:bg-slate-700
         "
       >
         <LogIn className="h-5 w-5" />

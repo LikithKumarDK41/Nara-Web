@@ -32,7 +32,7 @@ export default function BrandLogo({
         className="
           relative flex items-center justify-center
           h-12 w-12 rounded-2xl
-          bg-white dark:bg-white/10
+          bg-white dark:bg-white
           border border-slate-200 dark:border-white/10
           shadow-md transition-all duration-300
           group-hover:shadow-lg group-hover:scale-105
@@ -64,7 +64,7 @@ export default function BrandLogo({
           <span
             className={`
               text-[16px] font-black tracking-tight text-left transition-colors duration-300
-              ${isFooter ? "text-slate-900 dark:text-white" : (scrolled ? "text-slate-900" : "text-white")}
+              ${isFooter ? "text-white" : (scrolled ? "text-slate-900" : "text-white")}
             `}
           >
             奈良遺跡めぐり
@@ -74,7 +74,7 @@ export default function BrandLogo({
           <span
             className={`
               text-[9px] font-black tracking-[0.1em] uppercase text-left transition-colors duration-300
-              ${isFooter ? "text-slate-500 dark:text-white/50" : (scrolled ? "text-slate-500" : "text-slate-200")}
+              ${isFooter ? "text-white/60" : (scrolled ? "text-slate-500" : "text-slate-200")}
             `}
           >
             {label}

@@ -7,8 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-serif: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", ui-sans-serif, system-ui, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -609,59 +610,21 @@ html.dark .map-toggle-btn .check-badge {
   border-color: #1f2937;
 }
 
-/* ========================================================================
-   GLOBAL 3D TOPOGRAPHIC WAVE LANDSCAPE
-   A massive, 3D-oriented plane of flowing curves (Topography/Silk).
-   Creates an elegant, fluid "River of Time" effect.
-   ======================================================================== */
-body::before {
-  content: "";
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  z-index: -1;
-  pointer-events: none;
 
-  /* 
-    3D Topographic Curves
-    Large, sweeping sine waves to simulate terrain or flowing silk.
-    INCREASED VISIBILITY: Thicker strokes (2.5px) and higher opacity.
-  */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 50' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 25 Q50 50 100 25 T200 25' fill='none' stroke='%230f766e' stroke-width='2.5' opacity='0.7'/%3E%3Cpath d='M0 15 Q50 40 100 15 T200 15' fill='none' stroke='%230f766e' stroke-width='2.5' opacity='0.6'/%3E%3Cpath d='M0 35 Q50 60 100 35 T200 35' fill='none' stroke='%230f766e' stroke-width='2.5' opacity='0.6'/%3E%3C/svg%3E");
 
-  background-size: 100px 100px;
-  background-repeat: repeat;
-
-  /* Deep 3D Perspective Tilt for the "Flowing down" look */
-  transform: perspective(100vh) rotateX(60deg) rotateZ(-10deg) scale(1.5);
-  transform-style: preserve-3d;
-
-  /* High visibility */
-  opacity: 0.4;
-
-  /* Vignette Mask */
-  mask-image: radial-gradient(circle closest-side, black 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(circle closest-side, black 40%, transparent 100%);
-}
-
-/* Dark Mode: Brighter/Thicker Teal Waves */
-.dark body::before {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 50' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 25 Q50 50 100 25 T200 25' fill='none' stroke='%232dd4bf' stroke-width='2.5' opacity='0.7'/%3E%3Cpath d='M0 15 Q50 40 100 15 T200 15' fill='none' stroke='%232dd4bf' stroke-width='2.5' opacity='0.6'/%3E%3Cpath d='M0 35 Q50 60 100 35 T200 35' fill='none' stroke='%232dd4bf' stroke-width='2.5' opacity='0.6'/%3E%3C/svg%3E");
-  opacity: 0.25;
-}
 
 /* ========================================================================
-   GLOBAL BACKGROUND COLOR (Light Mode Override)
-   Adds a warm "Washi Paper" gradient for a sophisticated heritage feel.
+   GLOBAL BACKGROUND COLOR (Brand Sync)
+   Uses sophisticated Teal gradients to align with the Nara Logo.
    ======================================================================== */
-@media (prefers-color-scheme: light) {
+body {
+  /* Deep Mist Teal foundation (Darker for maximum card pop) */
+  background: linear-gradient(135deg, #e0f2f1 0%, #ccfbf1 40%, #cbd5e1 100%);
+  background-attachment: fixed;
+}
 
-  :root[data-theme="light"] body,
-  body:not(.dark) {
-    /* Warm Heritage Gradient: Cream to Warm Grey */
-    background: linear-gradient(135deg, #fdfbf7 0%, #e2e8f0 100%);
-    background-attachment: fixed;
-  }
+.dark body {
+  /* Deep Midnight Teal (Dark) */
+  background: radial-gradient(circle at top right, #042f2e 0%, #020617 100%);
+  background-attachment: fixed;
 }

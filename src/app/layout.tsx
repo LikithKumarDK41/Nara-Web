@@ -10,9 +10,10 @@ import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
 import Chatbot from "@/components/chatbot/Chatbot";
+import PWAInstaller from "@/components/system/PWAInstaller";
 
 export const metadata: Metadata = {
-  // title: "Tourist",
+  applicationName: "Nara Heritage Guide",
   manifest: "/manifest.json",
   metadataBase: new URL("https://naraiseki.nichi.in"),
   title: "Nara Heritage Guide - Tourist App",
@@ -27,6 +28,15 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Nara Heritage Guide",
+    startupImage: [
+      {
+        url: "/home-banner.png",
+        media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
+      },
+    ],
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 export const viewport: Viewport = { themeColor: "#0b0f14" };
@@ -41,7 +51,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -61,7 +70,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-background text-foreground font-['Outfit',sans-serif] antialiased scroll-smooth selection:bg-teal-500/30">
+      <body className="bg-background text-foreground font-sans antialiased scroll-smooth selection:bg-teal-500/30">
 
         {/* theme bootstrap script (unchanged) */}
         <script
@@ -131,6 +140,7 @@ export default function RootLayout({
           </LoaderProvider>
         </StoreProvider>
         <AppToaster />
+        <PWAInstaller />
       </body>
     </html>
   );

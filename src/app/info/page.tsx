@@ -40,6 +40,11 @@ const blueprintItems = [
     desc: "blueprint_home_desc",
     children: [
       {
+        icon: <Info className="w-5 h-5" />,
+        title: "blueprint_about_kofun_title",
+        desc: "blueprint_about_kofun_desc",
+      },
+      {
         icon: <Layers className="w-5 h-5" />,
         title: "blueprint_home_main_categories",
         desc: "blueprint_home_main_categories_desc",
@@ -61,11 +66,6 @@ const blueprintItems = [
           "blueprint_home_more_options_point_5",
           "blueprint_home_more_options_point_6",
         ],
-      },
-      {
-        icon: <Info className="w-5 h-5" />,
-        title: "blueprint_about_kofun_title",
-        desc: "blueprint_about_kofun_desc",
       },
       {
         icon: <List className="w-5 h-5" />,
@@ -256,7 +256,7 @@ export default function BlueprintPage() {
                     group relative overflow-hidden rounded-3xl p-8 border transition-all duration-300
                     ${item.title === "blueprint_tours" && highlightTours
                         ? "border-teal-400 ring-2 ring-teal-400/50 bg-teal-50 dark:bg-teal-900/10"
-                        : "bg-white dark:bg-[#15191f] border-slate-200/80 dark:border-slate-700/60 shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-1"
+                        : "bg-white dark:bg-[#1e293b] border-slate-200/80 dark:border-slate-700/60 shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-1"
                       }
                 `}
                   >
@@ -282,14 +282,14 @@ export default function BlueprintPage() {
                         {t(item.title)}
                       </h3>
 
-                      <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+                      <p className="text-slate-500 dark:text-slate-300 mb-8 leading-relaxed">
                         {t(item.desc)}
                       </p>
 
                       {item.children && (
                         <div className="mt-8 space-y-8 relative">
                           {/* Connecting Line - properly centered under icons (w-10 = 40px, center 20px, line 2px -> left-[19px]) */}
-                          <div className="absolute left-[19px] top-4 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700/50" />
+                          <div className="absolute left-[19px] top-4 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700" />
 
                           {item.children.map((child, idx) => (
                             <div key={idx} className="relative flex gap-5 group/child">
@@ -315,13 +315,13 @@ export default function BlueprintPage() {
                                 >
                                   {t(child.title)}
                                 </p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                <p className="text-sm text-slate-500 dark:text-slate-300 mt-1">
                                   {t(child.desc)}
                                 </p>
                                 {child.points && (
                                   <ul className="mt-3 space-y-2">
                                     {child.points.map((p, i) => (
-                                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
                                         <div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 flex-shrink-0" />
                                         <span>{t(p)}</span>
                                       </li>
@@ -345,7 +345,7 @@ export default function BlueprintPage() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="max-w-4xl mx-auto"
               >
-                <div className="bg-white dark:bg-[#15191f] border border-red-100 dark:border-red-900/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-red-100/20 dark:shadow-none relative overflow-hidden">
+                <div className="bg-white dark:bg-[#1e293b] border border-red-100 dark:border-red-900/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-red-100/20 dark:shadow-none relative overflow-hidden">
                   {/* Decorative Alert Icon BG */}
                   <AlertTriangle className="absolute -top-10 -right-10 w-64 h-64 text-red-50 dark:text-red-900/10 opacity-50" />
 
@@ -361,7 +361,7 @@ export default function BlueprintPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
                     {appLimitations.map((item, index) => (
-                      <div key={index} className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md transition-all duration-300">
+                      <div key={index} className="flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-white/20 hover:bg-slate-50 dark:hover:bg-[#334155] hover:shadow-md transition-all duration-300">
                         <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0 border border-red-200 dark:border-red-800/50">
                           {item.icon}
                         </div>
@@ -369,7 +369,7 @@ export default function BlueprintPage() {
                           <h4 className="font-bold text-slate-800 dark:text-slate-100 mb-1">
                             {t(item.title)}
                           </h4>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                          <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">
                             {t(item.desc)}
                           </p>
                         </div>

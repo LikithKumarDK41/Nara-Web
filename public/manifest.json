@@ -1,13 +1,25 @@
 {
     "name": "Nara Heritage Guide",
     "short_name": "Nara Guide",
-    "description": "Tourist information and heritage guide for Nara.",
+    "id": "/",
+    "description": "Explore Nara's rich cultural heritage through interactive maps and guided tours.",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#0b0f14",
     "theme_color": "#0b0f14",
-    "orientation": "portrait",
+    "orientation": "portrait-primary",
+    "categories": [
+        "travel",
+        "maps",
+        "navigation"
+    ],
     "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
+        },
         {
             "src": "/icon.png",
             "sizes": "192x192",
@@ -19,6 +31,12 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
+        },
+        {
+            "src": "/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "shortcuts": [
@@ -29,9 +47,8 @@
             "url": "/",
             "icons": [
                 {
-                    "src": "/icon.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
                 }
             ]
         },
@@ -42,9 +59,8 @@
             "url": "/tours",
             "icons": [
                 {
-                    "src": "/icon.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
                 }
             ]
         },
@@ -55,39 +71,37 @@
             "url": "/map",
             "icons": [
                 {
-                    "src": "/icon.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                }
-            ]
-        },
-        {
-            "name": "My List",
-            "short_name": "My List",
-            "description": "View your saved monuments",
-            "url": "/mylist",
-            "icons": [
-                {
-                    "src": "/icon.png",
-                    "sizes": "192x192",
-                    "type": "image/png"
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
                 }
             ]
         }
     ],
     "screenshots": [
         {
-            "src": "/icon.png",
-            "sizes": "540x720",
-            "type": "image/png",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "/icon.png",
+            "src": "/hero/nara-banner.png",
             "sizes": "1280x720",
             "type": "image/png",
-            "form_factor": "wide"
+            "form_factor": "wide",
+            "label": "Heritage Exploration"
+        },
+        {
+            "src": "/naraiseki/1.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Monument Details"
         }
     ],
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "share_target": {
+        "action": "/share",
+        "method": "POST",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
 }
