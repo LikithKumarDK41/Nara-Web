@@ -474,7 +474,7 @@ export default function ToursDashboardPage() {
               </div>
               <div
                 ref={toursScrollRef}
-                className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide snap-x px-4 md:px-[10%] pt-4 pb-12 transition-all"
+                className="flex gap-8 overflow-x-auto overflow-y-hidden scrollbar-hide snap-x px-4 md:px-[4%] pt-4 pb-12 transition-all"
               >
                 {tours
                   .filter((tour) => tour.featured === true)
