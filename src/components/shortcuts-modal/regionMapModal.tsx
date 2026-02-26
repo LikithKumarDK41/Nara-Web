@@ -30,13 +30,13 @@ export default function RegionMapModal({
   const [regions, setRegions] = useState<any[]>([]);
   const [page, setPage] = useState(1);
 
-  // 📐 Ref for scrolling to top of results on pagination
-  const resultsTopRef = useRef<HTMLDivElement>(null);
+  // 📐 Ref for scrolling the modal container to top on pagination
+  const modalScrollRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Auto-scroll to top of results when page changes
+  // ✅ Auto-scroll to top of modal when page changes
   useEffect(() => {
-    if (resultsTopRef.current) {
-      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [page]);
 
@@ -106,6 +106,7 @@ export default function RegionMapModal({
       <AnimatePresence>
         {openMapModal && (
           <motion.div
+            ref={modalScrollRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -252,7 +253,7 @@ export default function RegionMapModal({
                   {regions.length > 0 && (
                     <>
                       {/* Scroll Anchor */}
-                      <div ref={resultsTopRef} className="scroll-mt-6" />
+
 
                       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {currentData.map((r, idx) => (

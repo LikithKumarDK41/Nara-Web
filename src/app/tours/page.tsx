@@ -45,16 +45,9 @@ export default function ToursPage() {
   const [perPage, setPerPage] = useState(6);
   const [page, setPage] = useState(1);
 
-  // 📐 Ref for scrolling to top of results on pagination
-  const resultsTopRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => setPage(1), [query, perPage, sortOrder]);
-
-  // ✅ Auto-scroll to top of results when page changes
+  // ✅ Auto-scroll to top of window when page changes
   useEffect(() => {
-    if (resultsTopRef.current) {
-      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
   /* -------------------- Fetch Tours -------------------- */
@@ -200,7 +193,7 @@ export default function ToursPage() {
       {/* ===== Toolbar (Search + Sort) ===== */}
       <div className="px-4 space-y-6">
         {/* Scroll Anchor */}
-        <div ref={resultsTopRef} className="scroll-mt-100" />
+
 
         <ToursToolbar
           query={query}

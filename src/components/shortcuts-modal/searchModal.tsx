@@ -43,13 +43,13 @@ export default function SearchModal({
     null,
   );
 
-  // 📐 Ref for scrolling to top of results on pagination
-  const resultsTopRef = useRef<HTMLDivElement>(null);
+  // 📐 Ref for scrolling the modal container to top on pagination
+  const modalScrollRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Auto-scroll to top of results when page changes
+  // ✅ Auto-scroll to top of modal when page changes
   useEffect(() => {
-    if (resultsTopRef.current) {
-      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [page]);
 
@@ -302,6 +302,7 @@ export default function SearchModal({
     <AnimatePresence>
       {open && (
         <motion.div
+          ref={modalScrollRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -533,7 +534,7 @@ export default function SearchModal({
           {/* Monuments Grid */}
           <div className="mt-16 w-full max-w-7xl px-6 pb-20 relative z-0">
             {/* Scroll Anchor */}
-            <div ref={resultsTopRef} className="scroll-mt-16" />
+
 
             {loading ? (
               <div className="flex justify-center items-center py-10">
