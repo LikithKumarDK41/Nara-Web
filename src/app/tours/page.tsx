@@ -200,7 +200,7 @@ export default function ToursPage() {
       {/* ===== Toolbar (Search + Sort) ===== */}
       <div className="px-4 space-y-6">
         {/* Scroll Anchor */}
-        <div ref={resultsTopRef} className="scroll-mt-24" />
+        <div ref={resultsTopRef} className="scroll-mt-100" />
 
         <ToursToolbar
           query={query}

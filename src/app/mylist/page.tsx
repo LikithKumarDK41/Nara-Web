@@ -433,7 +433,7 @@ export default function LibraryPage() {
 
       <div className="px-4 space-y-6">
         {/* Scroll Anchor */}
-        <div ref={resultsTopRef} className="scroll-mt-24" />
+        <div ref={resultsTopRef} className="scroll-mt-100" />
 
         {/* BREADCRUMB */}
         <div className="mt-2 flex justify-start">
