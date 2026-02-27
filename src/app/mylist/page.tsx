@@ -55,7 +55,7 @@ export default function LibraryPage() {
     visitedTours: 1,
   });
 
-  const resultsTopRef = useRef<HTMLDivElement>(null);
+
 
   const limit = 6;
 
@@ -236,9 +236,7 @@ export default function LibraryPage() {
   const handlePageChange = (p: number) => {
     const key = getPageKey();
     setPage((prev) => ({ ...prev, [key]: p }));
-    if (resultsTopRef.current) {
-      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const currentPage = page[getPageKey()];
@@ -433,7 +431,7 @@ export default function LibraryPage() {
 
       <div className="px-4 space-y-6">
         {/* Scroll Anchor */}
-        <div ref={resultsTopRef} className="scroll-mt-24" />
+
 
         {/* BREADCRUMB */}
         <div className="mt-2 flex justify-start">

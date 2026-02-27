@@ -49,14 +49,9 @@ export default function RegionDetailsPage() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 
-  // 📐 Ref for scrolling to top of results on pagination
-  const resultsTopRef = useRef<HTMLDivElement>(null);
-
-  // ✅ Auto-scroll to top of results when page changes
+  // ✅ Auto-scroll to top of window when page changes
   useEffect(() => {
-    if (resultsTopRef.current) {
-      resultsTopRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
   const limit = 6;
 
@@ -237,7 +232,6 @@ export default function RegionDetailsPage() {
 
       <div className="px-4 space-y-6">
         {/* Scroll Anchor */}
-        <div ref={resultsTopRef} className="scroll-mt-24" />
 
         {/* ===== SEARCH + FILTER BAR ===== */}
         <MonumentsToolbar
