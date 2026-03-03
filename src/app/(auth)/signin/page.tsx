@@ -341,6 +341,7 @@ export default function SignInPage() {
         dispatch(resetOtpState());
         setOtp("");
         setEmail("");
+        return;
       }
       toast.error(t("auth.toast_register_failed"));
       return;
