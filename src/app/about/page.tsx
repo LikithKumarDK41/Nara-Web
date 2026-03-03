@@ -80,8 +80,10 @@ export default function AboutDetailPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [selectedMonument, setSelectedMonument] = useState<any | null>(null);
-  const [selectedSort, setSelectedSort] = useState<string | null>(null);
-  const [sortOptions, setSortOptions] = useState<MonumentSort[]>([]);
+
+  // Featured sort
+  // const [selectedSort, setSelectedSort] = useState<string | null>(null);
+  // const [sortOptions, setSortOptions] = useState<MonumentSort[]>([]);
 
   /* ================= FETCH DATA ================= */
   useEffect(() => {
@@ -142,7 +144,7 @@ export default function AboutDetailPage() {
           const data = await apiFetchByLink<Monument>(
             "monuments",
             filter,
-            "-popularity",
+            // "-popularity",
           );
           if (!cancelled) {
             setMonuments(data);
@@ -244,6 +246,8 @@ export default function AboutDetailPage() {
     setSelectedMonument(null);
   }, []);
 
+  // Featured sort
+  /*
   useEffect(() => {
     let mounted = true;
 
@@ -255,12 +259,12 @@ export default function AboutDetailPage() {
         if (!mounted || !sorts?.length) return;
 
         // pick highest-priority default
-        const defaultSort = "-popularity";
+        const defaultSort = "-featured";
 
         setSelectedSort(defaultSort);
       } catch (e) {
         console.error("Failed to load default sort", e);
-        setSelectedSort("-popularity"); // safe fallback
+        setSelectedSort("-featured"); // safe fallback
       }
     };
 
@@ -269,6 +273,7 @@ export default function AboutDetailPage() {
       mounted = false;
     };
   }, []);
+  */
 
   useEffect(() => {
     if (resourceType !== "monuments") return;
@@ -287,7 +292,7 @@ export default function AboutDetailPage() {
     let cancelled = false;
 
     const fetchMonuments = async () => {
-      const backendSort = selectedSort ?? "-popularity";
+      // const backendSort = selectedSort ?? "-featured";
 
       try {
         show();
@@ -295,7 +300,7 @@ export default function AboutDetailPage() {
         const data = await apiFetchByLink<Monument>(
           "monuments",
           filter,
-          backendSort,
+          // backendSort,
         );
 
         if (!cancelled) {
@@ -314,7 +319,7 @@ export default function AboutDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [selectedSort, activeSubtheme, resourceType, parsedLink]);
+  }, [activeSubtheme, resourceType, parsedLink]); // removed selectedSort
 
   return (
     <div className="text-slate-100 min-h-screen">
@@ -463,6 +468,8 @@ export default function AboutDetailPage() {
                 </h2>
               </div>
               <div className="flex justify-end items-center gap-3">
+                {/* Featured sort */}
+                {/* 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button
@@ -487,7 +494,6 @@ export default function AboutDetailPage() {
                           : ""
                           }`}
                       >
-                        {/* optional icon */}
                         {so.icon?.secure_url ? (
                           <img
                             src={so.icon.secure_url}
@@ -498,12 +504,12 @@ export default function AboutDetailPage() {
                           <ImageIcon className="h-4 w-4" />
                         )}
 
-                        {/* label from backend */}
                         <span>{so.title || so.name}</span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+                */}
 
                 {/* Right: Back */}
                 {view === "monuments" && (
