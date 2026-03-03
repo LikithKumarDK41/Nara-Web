@@ -628,3 +628,21 @@ body {
   background: radial-gradient(circle at top right, #042f2e 0%, #020617 100%);
   background-attachment: fixed;
 }
+
+/* =========================================
+   RICH TEXT CONTENT (for detail modals)
+   ========================================= */
+.rich-text-content a {
+  color: #0d9488 !important; /* teal-600 */
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
+.dark .rich-text-content a {
+  color: #2dd4bf !important; /* teal-400 */
+}
+
+.rich-text-content a:hover {
+  opacity: 0.8 !important;
+}
