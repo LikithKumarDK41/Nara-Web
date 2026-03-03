@@ -161,16 +161,19 @@ export default function FooterBar() {
                 {t("footer.connect")}
               </h4>
               <div className="space-y-6 w-full flex flex-col items-center lg:items-start">
-                <div className="flex items-center gap-4 group cursor-pointer text-white hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <div className="flex items-center gap-4 group text-white hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
                   <MapPin className="w-5 h-5 shrink-0 text-white group-hover:text-white transition-colors mt-1 lg:mt-0" />
                   <span className="text-base leading-relaxed">
-                    1-6-25 Mamigaoka, Kashiba-shi,<br />Nara 639-0223 Japan
+                    {t("footer.address")}
                   </span>
                 </div>
-                <div className="flex items-center gap-4 group cursor-pointer text-white hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start">
+                <a
+                  href="mailto:foundation@nara-heritage.jp"
+                  className="flex items-center gap-4 group cursor-pointer text-white hover:text-white transition-colors p-3 rounded-2xl hover:bg-white/10 transition-all w-full max-w-xs justify-center lg:justify-start"
+                >
                   <Mail className="w-5 h-5 shrink-0 text-white group-hover:text-white transition-colors" />
                   <span className="text-base">foundation@nara-heritage.jp</span>
-                </div>
+                </a>
               </div>
             </div>
 
