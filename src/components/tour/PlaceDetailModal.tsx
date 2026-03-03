@@ -78,27 +78,6 @@ export default function PlaceDetailModal({
   const contentRef = useRef<HTMLDivElement>(null);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
 
-  const handleContentClick = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const anchor = target.closest("a");
-    if (!anchor) return;
-
-    const href = anchor.getAttribute("href");
-    if (!href) return;
-
-    if (href.startsWith("monumentId:")) {
-      e.preventDefault();
-      const id = href.replace("monumentId:", "");
-      if (onOpenAnother) {
-        onOpenAnother(id);
-      }
-    } else if (href.startsWith("tourId:")) {
-      e.preventDefault();
-      const id = href.replace("tourId:", "");
-      router.push(`/tours/detail?id=${id}`);
-    }
-  };
-
   const safeText = (v: any) =>
     !v ? "" : typeof v === "string" ? v : v.title || v.name || "";
 
@@ -247,7 +226,6 @@ export default function PlaceDetailModal({
                     <section className="rich-text-content max-w-none text-sm text-muted-foreground space-y-3 whitespace-pre-wrap">
                       {details.content?.brief && (
                         <div
-                          onClick={handleContentClick}
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(details.content.brief),
                           }}
@@ -255,7 +233,6 @@ export default function PlaceDetailModal({
                       )}
                       {details.content?.extended && (
                         <div
-                          onClick={handleContentClick}
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(details.content.extended),
                           }}
