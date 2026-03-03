@@ -152,27 +152,6 @@ export default function MonumentDetailModal({
     }
   }, [details]);
 
-  const handleContentClick = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const anchor = target.closest("a");
-    if (!anchor) return;
-
-    const href = anchor.getAttribute("href");
-    if (!href) return;
-
-    if (href.startsWith("monumentId:")) {
-      e.preventDefault();
-      const id = href.replace("monumentId:", "");
-      if (onOpenAnother) {
-        onOpenAnother(id);
-      }
-    } else if (href.startsWith("tourId:")) {
-      e.preventDefault();
-      const id = href.replace("tourId:", "");
-      router.push(`/tours/detail?id=${id}`);
-    }
-  };
-
   const safeText = (v: any): string => {
     if (!v) return "";
     if (typeof v === "string") return v;
@@ -816,7 +795,6 @@ export default function MonumentDetailModal({
                   <section className="rich-text-content max-w-none text-sm leading-relaxed text-muted-foreground space-y-3 whitespace-pre-wrap">
                     {details.content?.brief && (
                       <div
-                        onClick={handleContentClick}
                         dangerouslySetInnerHTML={{
                           __html: normalizeHTML(details.content.brief),
                         }}
@@ -824,7 +802,6 @@ export default function MonumentDetailModal({
                     )}
                     {details.content?.extended && (
                       <div
-                        onClick={handleContentClick}
                         dangerouslySetInnerHTML={{
                           __html: normalizeHTML(details.content.extended),
                         }}
@@ -932,7 +909,6 @@ export default function MonumentDetailModal({
                     <div className="rich-text-content text-sm text-muted-foreground whitespace-pre-wrap">
                       {details.region.content?.brief && (
                         <div
-                          onClick={handleContentClick}
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(details.region.content.brief),
                           }}
@@ -942,7 +918,6 @@ export default function MonumentDetailModal({
                       {details.region.content?.extended && (
                         <div
                           className="mt-2"
-                          onClick={handleContentClick}
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(
                               details.region.content.extended,
