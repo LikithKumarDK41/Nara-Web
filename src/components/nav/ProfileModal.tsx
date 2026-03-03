@@ -603,7 +603,7 @@ export default function ProfileModal({
       </Dialog>
 
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md z-[9999]  bg-red-50 dark:bg-black">
           <DialogHeader>
             <DialogTitle className="text-red-600">
               {t("profile.confirmDeleteTitle")}
