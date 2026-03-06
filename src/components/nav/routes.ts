@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
-import { List, BookmarkCheck, FileLock2, VideoIcon, Map, Search } from "lucide-react";
+import { List, BookmarkCheck, VideoIcon } from "lucide-react";
 
 /** Discriminated union: link items vs. action items */
 export type NavLinkItem = {
@@ -20,25 +20,20 @@ export type NavActionItem = {
 export type NavItem = NavLinkItem | NavActionItem;
 
 export const NAV_ITEMS: NavItem[] = [
-  // { type: "link", href: "/", labelKey: "nav.home", icon: Home },
   { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
   { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
 ];
 
 export const MOBILE_NAV_ITEMS: NavItem[] = [
-  { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
-  { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
-  { type: "link", href: "/map", labelKey: "nav.map", icon: Map },
-  { type: "action", action: "search", labelKey: "nav.search", icon: Search },
   {
     type: "link",
-    href: "https://api-v2-gose.naraiseki.org/public-videos/",
-    // href: "https://api.gose.nichi.in/public-videos/",
+    href: "https://naraiseki.nichi.in/public-videos/",
     labelKey: "nav.videos",
     icon: VideoIcon,
     isVideo: true, // ✅ explicit
   },
-  // { type: "link", href: "/privacy-policy", labelKey: "nav.privacy_policy", icon: FileLock2 },
+  { type: "link", href: "/tours", labelKey: "nav.tours", icon: List },
+  { type: "link", href: "/mylist", labelKey: "nav.myList", icon: BookmarkCheck },
 ];
 
 /** active matcher only for links */

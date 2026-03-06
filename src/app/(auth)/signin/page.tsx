@@ -1,19 +1,30 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Mail, Facebook, ArrowLeftRight } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hook';
+import * as React from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Mail, Facebook } from "lucide-react";
+import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import BrandLogo from "@/components/nav/BrandLogo";
 import LanguageToggle from "@/components/theme/LanguageToggle";
 import {
@@ -25,43 +36,49 @@ import {
   setOtpMode,
   fetchCountries,
   resetOtpState,
-} from '@/lib/store/slices/authSlice';
+} from "@/lib/store/slices/authSlice";
 import type { AccountType, Country } from "@/lib/types/userAuth.types";
-import { auth, loginWithGoogle, loginWithFacebook, verifyPhoneOtp, sendPhoneOtp } from '@/lib/firebase';
+import {
+  auth,
+  loginWithGoogle,
+  loginWithFacebook,
+  sendPhoneOtp,
+} from "@/lib/firebase";
 
 /* ⭐ Translation Hook */
 import { useLocale } from "@/providers/LocaleProvider";
 
-type OtpMode = 'login' | 'register';
 type FieldErrors = Record<string, string>;
 
 /** Infer country code from phone */
 function inferCountryFromE164(e164: string, list: Country[]): string | null {
-  if (!e164?.startsWith('+')) return null;
-  const digits = e164.replace(/\D/g, '');
-  const sorted = [...list].filter(c => c.dial_code).sort((a, b) => b.dial_code.length - a.dial_code.length);
+  if (!e164?.startsWith("+")) return null;
+  const digits = e164.replace(/\D/g, "");
+  const sorted = [...list]
+    .filter((c) => c.dial_code)
+    .sort((a, b) => b.dial_code.length - a.dial_code.length);
   for (const c of sorted) {
-    if (digits.startsWith(c.dial_code.replace(/\D/g, ''))) return c.code || null;
+    if (digits.startsWith(c.dial_code.replace(/\D/g, "")))
+      return c.code || null;
   }
   return null;
 }
 
 export default function SignInPage() {
   const { t } = useLocale(); // ⭐ Translation hook
-  const [profileImage, setProfileImage] = React.useState<File | null>(null);
-  const [profilePreview, setProfilePreview] = React.useState<string>("");
-  const [loginType, setLoginType] = React.useState<'email' | 'phone'>('email');
-  const [countryCode, setCountryCode] = React.useState('+91');
+  const [loginType, setLoginType] = React.useState<"email" | "phone">("email");
+  const [countryCode, setCountryCode] = React.useState("+91");
 
   const dispatch = useAppDispatch();
   const router = useRouter();
   const sp = useSearchParams();
-  const next = sp.get('next') || '/';
+  const next = sp.get("next") || "/";
 
-  const [localFirebaseUid, setLocalFirebaseUid] = React.useState<string>('');
 
   const [showSocialRegister, setShowSocialRegister] = React.useState(false);
-  const [socialProvider, setSocialProvider] = React.useState<'google' | 'facebook' | null>(null);
+  const [socialProvider, setSocialProvider] = React.useState<
+    "google" | "facebook" | null
+  >(null);
 
   const otpVerifiedState = useAppSelector((s) => s.auth.otpVerified);
   const otpServer = useAppSelector((s) => s.auth.otpServer);
@@ -69,53 +86,48 @@ export default function SignInPage() {
   const otpVerified = otpVerifiedState;
   const [hydrated, setHydrated] = React.useState(false);
 
-  const [activeTab, setActiveTab] = React.useState<'login' | 'register'>('login');
+  const [activeTab, setActiveTab] = React.useState<"login" | "register">(
+    "login",
+  );
 
-  const {
-    loading,
-    otpMode,
-    pendingAccount,
-    pendingEmailid,
-    pendingFirebaseUid,
-    countries,
-    countriesLoading,
-  } = useAppSelector((s) => s.auth);
+  const { loading, pendingAccount, countries, countriesLoading } =
+    useAppSelector((s) => s.auth);
 
-  const [email, setEmail] = React.useState('');
-  const [otp, setOtp] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [name, setName] = React.useState('');
-  const [gender, setGender] = React.useState('');
-  const [agegroup, setAgegroup] = React.useState('');
-  const [country, setCountry] = React.useState('');
-  const [nationality, setNationality] = React.useState('');
-  const [emailReg, setEmailReg] = React.useState('');
+  const [email, setEmail] = React.useState("");
+  const [otp, setOtp] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [gender, setGender] = React.useState("");
+  const [agegroup, setAgegroup] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [nationality, setNationality] = React.useState("");
+  const [emailReg, setEmailReg] = React.useState("");
 
   const [idErrors, setIdErrors] = React.useState<FieldErrors>({});
   const [otpErrors, setOtpErrors] = React.useState<FieldErrors>({});
   const [regErrors, setRegErrors] = React.useState<FieldErrors>({});
 
-  const effectiveEmail = pendingEmailid || email.trim();
-
   function accountLabel(): AccountType {
     if (pendingAccount) return pendingAccount;
-    return 'Email_OTP';
+    return "Email_OTP";
   }
 
   function resetLocalForm() {
     try {
-      window.localStorage.clear();
+      // Specifically clear auth related data and Redux persistence but preserve theme/locale
+      localStorage.removeItem("auth_user");
+      localStorage.removeItem("persist:root");
       window.sessionStorage.clear();
     } catch { }
 
-    setEmailReg('');
-    setOtp('');
-    setName('');
-    setGender('');
-    setAgegroup('');
-    setCountry('');
-    setNationality('');
-    setPhoneNumber('');
+    setEmailReg("");
+    setOtp("");
+    setName("");
+    setGender("");
+    setAgegroup("");
+    setCountry("");
+    setNationality("");
+    setPhoneNumber("");
     setRegErrors({});
     setOtpErrors({});
     setShowSocialRegister(false);
@@ -126,7 +138,8 @@ export default function SignInPage() {
     if (hydrated || pendingAccount) return;
 
     try {
-      window.localStorage.clear();
+      localStorage.removeItem("auth_user");
+      localStorage.removeItem("persist:root");
       window.sessionStorage.clear();
     } catch { }
 
@@ -148,8 +161,30 @@ export default function SignInPage() {
 
   React.useEffect(() => {
     dispatch(resetOtpState());
-    setOtp('');
+    setOtp("");
   }, [activeTab]);
+
+  /* ------------------- THEME CHECK ------------------- */
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    // initial check
+    const checkTheme = () => {
+      const isDarkClass = document.documentElement.classList.contains("dark");
+      setIsDark(isDarkClass);
+    };
+    checkTheme();
+
+    // listen for custom event from ThemeToggle
+    window.addEventListener("theme-changed", checkTheme);
+    // also listen for system prefer-color-scheme just in case OS changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", checkTheme);
+
+    return () => {
+      window.removeEventListener("theme-changed", checkTheme);
+      window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", checkTheme);
+    };
+  }, []);
 
   /* ------------------- VALIDATION ------------------- */
 
@@ -178,15 +213,17 @@ export default function SignInPage() {
     if (!gender.trim()) errs.gender = t("auth.error_gender_required");
     if (!agegroup.trim()) errs.agegroup = t("auth.error_age_required");
     if (!country.trim()) errs.country = t("auth.error_country_required");
-    if (!nationality.trim()) errs.nationality = t("auth.error_nationality_required");
+    if (!nationality.trim())
+      errs.nationality = t("auth.error_nationality_required");
 
     if (!emailReg.trim()) errs.emailReg = t("auth.error_email_required");
     else if (!/^\S+@\S+\.\S+$/.test(emailReg.trim()))
       errs.emailReg = t("auth.error_email_invalid");
 
-    const digits = phoneNumber.replace(/\D/g, '');
+    const digits = phoneNumber.replace(/\D/g, "");
     if (!digits) errs.phoneNumber = t("auth.error_phone_required");
-    else if (digits.length < 6) errs.phoneNumber = t("auth.error_phone_invalid");
+    else if (digits.length < 6)
+      errs.phoneNumber = t("auth.error_phone_invalid");
 
     setRegErrors(errs);
     return Object.keys(errs).length === 0;
@@ -198,19 +235,17 @@ export default function SignInPage() {
     e.preventDefault();
 
     /* ---------- LOGIN ---------- */
-    if (activeTab === 'login') {
-
+    if (activeTab === "login") {
       /* ================= EMAIL LOGIN ================= */
-      if (loginType === 'email') {
-
+      if (loginType === "email") {
         // STEP 1: Send OTP
         if (!otpServer) {
           if (!validateIdentifier()) return;
 
-          dispatch(setOtpMode('email'));
+          dispatch(setOtpMode("email"));
 
           const otpAction = await dispatch(
-            sendEmailOtp({ emailid: email.trim() })
+            sendEmailOtp({ emailid: email.trim() }),
           );
 
           if (sendEmailOtp.fulfilled.match(otpAction)) {
@@ -226,15 +261,11 @@ export default function SignInPage() {
           if (!validateOtp()) return;
 
           const verifyAction = await dispatch(
-            verifyOtp({ mode: 'email', target: email.trim(), otp })
+            verifyOtp({ mode: "email", target: email.trim(), otp }),
           );
 
           if (verifyOtp.fulfilled.match(verifyAction)) {
-            // toast.success(t("auth.toast_otp_verified"));
-
-            const signAction = await dispatch(
-              signin({ email: email.trim() })
-            );
+            const signAction = await dispatch(signin({ email: email.trim() }));
 
             if (signin.fulfilled.match(signAction)) {
               toast.success(t("auth.toast_login_success"));
@@ -250,8 +281,7 @@ export default function SignInPage() {
       }
 
       /* ================= PHONE LOGIN (FIREBASE) ================= */
-      if (loginType === 'phone') {
-
+      if (loginType === "phone") {
         const phoneE164 = buildPhoneE164(countryCode, phoneNumber);
 
         // STEP 1: Send SMS OTP
@@ -263,9 +293,9 @@ export default function SignInPage() {
 
           try {
             await sendPhoneOtp(phoneE164);
-            dispatch(setOtpMode('phone'));
+            dispatch(setOtpMode("phone"));
             toast.success(t("auth.toast_otp_sent"));
-          } catch (err) {
+          } catch {
             toast.error(t("auth.toast_otp_failed"));
           }
           return;
@@ -276,30 +306,14 @@ export default function SignInPage() {
           if (!validateOtp()) return;
 
           try {
-            const result = await verifyPhoneOtp(otp);
-            const firebaseUser = result.user;
-
-            // 🔐 Send verified data to backend
-            // const signAction = await dispatch(
-            //   signin({
-            //     firebaseUserId: firebaseUser.uid,
-            //   })
-            // );
-
-            // if (signin.fulfilled.match(signAction)) {
-            //   toast.success(t("auth.toast_login_success"));
-            //   return router.replace(next);
-            // }
-
             toast.error(t("auth.toast_login_failed"));
-          } catch (err) {
+          } catch {
             toast.error(t("auth.error_otp_invalid"));
           }
           return;
         }
       }
     }
-
 
     /* ---------- REGISTER (SOCIAL) ---------- */
     if (showSocialRegister) {
@@ -320,11 +334,14 @@ export default function SignInPage() {
 
       const regAction = await dispatch(registerNewUser(payload));
 
-
-
       if (registerNewUser.fulfilled.match(regAction)) {
         toast.success(t("auth.toast_register_success"));
-        return router.replace(next);
+        setShowSocialRegister(false);
+        setActiveTab("login"); // SWITCH TAB
+        dispatch(resetOtpState());
+        setOtp("");
+        setEmail("");
+        return;
       }
       toast.error(t("auth.toast_register_failed"));
       return;
@@ -333,7 +350,9 @@ export default function SignInPage() {
     /* ---------- NORMAL EMAIL REGISTER (OTP FLOW) ---------- */
 
     if (!otpServer) {
-      const otpAction = await dispatch(sendEmailOtp({ emailid: emailReg.trim() }));
+      const otpAction = await dispatch(
+        sendEmailOtp({ emailid: emailReg.trim() }),
+      );
 
       if (sendEmailOtp.fulfilled.match(otpAction)) {
         toast.success(t("auth.toast_otp_sent"));
@@ -347,7 +366,7 @@ export default function SignInPage() {
       if (!validateOtp()) return;
 
       const action = await dispatch(
-        verifyOtp({ mode: 'email', target: emailReg.trim(), otp: otp.trim() })
+        verifyOtp({ mode: "email", target: emailReg.trim(), otp: otp.trim() }),
       );
 
       if (verifyOtp.fulfilled.match(action)) {
@@ -363,7 +382,7 @@ export default function SignInPage() {
       if (!validateRegister()) return;
 
       const payload = {
-        state: 'active' as const,
+        state: "active" as const,
         email: emailReg.trim(),
         account: accountLabel(),
         name: name.trim(),
@@ -371,15 +390,18 @@ export default function SignInPage() {
         agegroup: agegroup.trim(),
         country: country.trim(),
         nationality: nationality.trim(),
-        phoneNumber: String(phoneNumber.replace(/\D/g, '')) || "",
-        firebaseUserId: '',
+        phoneNumber: String(phoneNumber.replace(/\D/g, "")) || "",
+        firebaseUserId: "",
       };
 
       const regAction = await dispatch(registerNewUser(payload));
 
       if (registerNewUser.fulfilled.match(regAction)) {
         toast.success(t("auth.toast_register_success"));
-        router.replace(next);
+        setActiveTab("login"); // SWITCH TAB
+        dispatch(resetOtpState()); // optional but recommended
+        setOtp("");
+        setEmail("");
       } else {
         toast.error(t("auth.toast_register_failed"));
       }
@@ -388,20 +410,19 @@ export default function SignInPage() {
 
   /* ----------------------- SOCIAL LOGIN ----------------------- */
 
-  async function handleSocial(provider: 'google' | 'facebook') {
+  async function handleSocial(provider: "google" | "facebook") {
     try {
-      const account = provider === 'google' ? 'Google' : 'Facebook';
+      const account = provider === "google" ? "Google" : "Facebook";
 
-      if (provider === 'google') await loginWithGoogle();
+      if (provider === "google") await loginWithGoogle();
       else await loginWithFacebook();
 
       const user = auth.currentUser;
-      const emailFromSocial = user?.email || '';
-      const uid = user?.uid || '';
-      const displayName = user?.displayName || '';
-      const phoneFromSocial = user?.phoneNumber || '';
+      const emailFromSocial = user?.email || "";
+      const uid = user?.uid || "";
+      const displayName = user?.displayName || "";
+      const phoneFromSocial = user?.phoneNumber || "";
 
-      setLocalFirebaseUid(uid);
 
       if (!emailFromSocial) {
         toast.error(t("auth.toast_social_email_missing"));
@@ -421,15 +442,15 @@ export default function SignInPage() {
       const errPayload = signAction?.payload;
       const isNewUser =
         !signAction ||
-        errPayload === 'ERROR_INVALID_USER' ||
-        (typeof errPayload === 'string' && errPayload.includes('401'));
+        errPayload === "ERROR_INVALID_USER" ||
+        (typeof errPayload === "string" && errPayload.includes("401"));
 
       if (isNewUser) {
         if (displayName) setName(displayName);
         setEmailReg(emailFromSocial);
 
         if (phoneFromSocial) {
-          setPhoneNumber(phoneFromSocial.replace(/\D/g, ''));
+          setPhoneNumber(phoneFromSocial.replace(/\D/g, ""));
           const inferred = inferCountryFromE164(phoneFromSocial, countries);
           if (inferred) setCountry(inferred);
         }
@@ -439,12 +460,12 @@ export default function SignInPage() {
             account: account as AccountType,
             emailid: emailFromSocial,
             firebaseUserId: uid,
-          })
+          }),
         );
 
         setSocialProvider(provider);
         setShowSocialRegister(true);
-        setActiveTab('register');
+        setActiveTab("register");
         dispatch(setOtpMode(null));
         dispatch(resetOtpState());
 
@@ -460,20 +481,19 @@ export default function SignInPage() {
 
   /* ------------------- SOCIAL REGISTER ------------------- */
 
-  async function handleSocialRegister(provider: 'google' | 'facebook') {
+  async function handleSocialRegister(provider: "google" | "facebook") {
     try {
-      const account = provider === 'google' ? 'Google' : 'Facebook';
+      const account = provider === "google" ? "Google" : "Facebook";
 
-      if (provider === 'google') await loginWithGoogle();
+      if (provider === "google") await loginWithGoogle();
       else await loginWithFacebook();
 
       const user = auth.currentUser;
-      const emailFromSocial = user?.email || '';
-      const uid = user?.uid || '';
-      const displayName = user?.displayName || '';
-      const phoneFromSocial = user?.phoneNumber || '';
+      const emailFromSocial = user?.email || "";
+      const uid = user?.uid || "";
+      const displayName = user?.displayName || "";
+      const phoneFromSocial = user?.phoneNumber || "";
 
-      setLocalFirebaseUid(uid);
 
       if (!emailFromSocial) {
         toast.error(t("auth.toast_social_email_missing"));
@@ -484,7 +504,7 @@ export default function SignInPage() {
       setEmailReg(emailFromSocial);
 
       if (phoneFromSocial) {
-        setPhoneNumber(phoneFromSocial.replace(/\D/g, ''));
+        setPhoneNumber(phoneFromSocial.replace(/\D/g, ""));
         const inferred = inferCountryFromE164(phoneFromSocial, countries);
         if (inferred) setCountry(inferred);
       }
@@ -494,10 +514,10 @@ export default function SignInPage() {
           account: account as AccountType,
           emailid: emailFromSocial,
           firebaseUserId: uid,
-        })
+        }),
       );
 
-      setActiveTab('register');
+      setActiveTab("register");
       setSocialProvider(provider);
       setShowSocialRegister(true);
       dispatch(setOtpMode(null));
@@ -507,12 +527,6 @@ export default function SignInPage() {
     } catch {
       toast.error(t("auth.toast_login_failed"));
     }
-  }
-
-  function toggleLoginType() {
-    setLoginType((prev) => (prev === 'email' ? 'phone' : 'email'));
-    setOtp('');
-    dispatch(resetOtpState());
   }
 
   const uniqueDialCodes = React.useMemo(() => {
@@ -528,8 +542,8 @@ export default function SignInPage() {
   }, [countries]);
 
   function buildPhoneE164(countryCode: string, phone: string) {
-    const cleanCode = countryCode.replace(/\D/g, '');
-    const cleanPhone = phone.replace(/\D/g, '').replace(/^0+/, '');
+    const cleanCode = countryCode.replace(/\D/g, "");
+    const cleanPhone = phone.replace(/\D/g, "").replace(/^0+/, "");
     return `+${cleanCode}${cleanPhone}`;
   }
 
@@ -546,25 +560,25 @@ export default function SignInPage() {
     shadow-xl
   "
         >
-
           <CardHeader className="relative space-y-6 text-center">
-
             {/* 🌐 Locale Switcher — Top Right */}
             <div className="absolute top-[-18px] right-1 z-10">
               <LanguageToggle />
             </div>
 
             <div className="flex flex-col items-center space-y-4">
-              <div className="
+              <div
+                className="
                 p-3
                 rounded-3xl
-                shadow-[0_4px_16px_rgba(0,0,0,0.4)]
                 border border-white/10
-              ">
-                <BrandLogo imgSize={60} />
+              "
+              >
+                <BrandLogo imgSize={60} scrolled={true} isFooter={isDark} />
               </div>
 
-              <p className="text-lg font-semibold
+              <p
+                className="text-lg font-semibold
                 bg-gradient-to-r
       from-teal-400
       via-teal-500
@@ -577,10 +591,9 @@ export default function SignInPage() {
           </CardHeader>
 
           <CardContent>
-
             <Tabs
               value={activeTab}
-              onValueChange={(val) => setActiveTab(val as 'login' | 'register')}
+              onValueChange={(val) => setActiveTab(val as "login" | "register")}
               className="w-full"
             >
               <TabsList
@@ -630,35 +643,18 @@ export default function SignInPage() {
               {/* ---------- LOGIN TAB ---------- */}
               <TabsContent value="login">
                 <form className="grid gap-4" onSubmit={onSubmit} noValidate>
-
                   <div className="grid gap-2">
                     {/* Label + Swap */}
-                    <Label className="flex items-center justify-between text-teal-800 dark:text-teal-200">
+                    <Label className="flex items-center justify-between text-black dark:text-white">
                       <span>
-                        {loginType === 'email'
+                        {loginType === "email"
                           ? t("auth.label_email")
                           : t("auth.label_phone")}
                       </span>
-
-                      {/* <button
-                        type="button"
-                        onClick={toggleLoginType}
-                        className="
-    flex items-center gap-1.5 text-xs font-medium
-    text-amber-600 hover:text-amber-700
-    dark:text-amber-300 dark:hover:text-amber-200
-    transition-colors
-  "
-                      >
-                        <ArrowLeftRight className="h-3.5 w-3.5" />
-                        {loginType === 'email'
-                          ? t("auth.switch_to_phone")
-                          : t("auth.switch_to_email")}
-                      </button> */}
                     </Label>
 
                     {/* INPUT AREA */}
-                    {loginType === 'email' ? (
+                    {loginType === "email" ? (
                       /* ================= EMAIL INPUT ================= */
                       <Input
                         type="email"
@@ -667,21 +663,24 @@ export default function SignInPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         disabled={loading}
                         className="
-        focus-visible:ring-teal-500
+        focus-visible:ring-black dark:focus-visible:ring-white
         focus-visible:border-0
-        border-teal-300 dark:border-teal-600
+        border-black dark:border-white
       "
                       />
                     ) : (
                       /* ================= PHONE INPUT ================= */
                       <div className="flex items-center gap-1">
                         {/* Country Code */}
-                        <Select value={countryCode} onValueChange={setCountryCode}>
+                        <Select
+                          value={countryCode}
+                          onValueChange={setCountryCode}
+                        >
                           <SelectTrigger
                             className="
             w-[90px]
-            border-teal-300 dark:border-teal-600
-            focus-visible:ring-teal-500
+            border-black dark:border-white
+            focus-visible:ring-black dark:focus-visible:ring-white
             focus-visible:border-0
             rounded-r-none
           "
@@ -691,10 +690,7 @@ export default function SignInPage() {
 
                           <SelectContent>
                             {uniqueDialCodes.map((c) => (
-                              <SelectItem
-                                key={c.dial_code}
-                                value={c.dial_code}
-                              >
+                              <SelectItem key={c.dial_code} value={c.dial_code}>
                                 {c.dial_code}
                               </SelectItem>
                             ))}
@@ -707,59 +703,27 @@ export default function SignInPage() {
                           placeholder={t("auth.placeholder_phone")}
                           value={phoneNumber}
                           onChange={(e) =>
-                            setPhoneNumber(e.target.value.replace(/\D/g, ''))
+                            setPhoneNumber(e.target.value.replace(/\D/g, ""))
                           }
                           disabled={loading}
                           className="
           flex-1
           -ml-px
           rounded-l-none
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
                     )}
                   </div>
 
-                  {/* Email */}
-                  {/* <div className="grid gap-2">
-                    <Label
-                      htmlFor="email"
-                      className="flex items-center gap-2 text-amber-800 dark:text-amber-200"
-                    >
-                      {t("auth.label_email")}
-                    </Label>
-
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t("auth.placeholder_email")}
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (idErrors.email) setIdErrors((p) => ({ ...p, email: '' }));
-                      }}
-                      onBlur={validateIdentifier}
-                      disabled={loading}
-                      className="
-          focus-visible:ring-amber-500
-          focus-visible:border-0
-          border-amber-300 dark:border-amber-600
-        "
-                    />
-
-                    {idErrors.email && (
-                      <p className="text-xs text-red-600">{idErrors.email}</p>
-                    )}
-                  </div> */}
-
                   {otpServer && !otpVerified && (
                     <div className="grid gap-2">
                       <Label
                         htmlFor="otp"
-                        className="text-teal-800 dark:text-teal-200"
+                        className="text-black dark:text-white"
                       >
                         {t("auth.label_otp")}
                       </Label>
@@ -770,12 +734,14 @@ export default function SignInPage() {
                         inputMode="numeric"
                         placeholder={t("auth.placeholder_otp")}
                         value={otp}
-                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                        onChange={(e) =>
+                          setOtp(e.target.value.replace(/\D/g, ""))
+                        }
                         disabled={loading}
                         className="
-        focus-visible:ring-teal-500
+        focus-visible:ring-black dark:focus-visible:ring-white
         focus-visible:border-0
-        border-teal-300 dark:border-teal-600
+        border-black dark:border-white
       "
                       />
 
@@ -784,7 +750,6 @@ export default function SignInPage() {
                       )}
                     </div>
                   )}
-
 
                   {/* Login Button */}
                   <Button
@@ -829,7 +794,7 @@ export default function SignInPage() {
           text-teal-800 dark:text-teal-200
         "
                       type="button"
-                      onClick={() => handleSocial('google')}
+                      onClick={() => handleSocial("google")}
                       disabled={loading}
                     >
                       <Mail className="mr-2 size-5" />
@@ -846,100 +811,117 @@ export default function SignInPage() {
           text-teal-800 dark:text-teal-200
         "
                       type="button"
-                      onClick={() => handleSocial('facebook')}
-                      // disabled={loading}
+                      onClick={() => handleSocial("facebook")}
                       disabled={true}
                     >
                       <Facebook className="mr-2 size-5" />
                       {t("auth.btn_continue_facebook")}
                     </Button>
                   </div>
-
                 </form>
               </TabsContent>
 
               {/* ---------- REGISTER TAB ---------- */}
               <TabsContent value="register">
                 <form className="grid gap-4" onSubmit={onSubmit} noValidate>
-
                   {/* STEP 1 – Email before OTP */}
-                  {!otpServer && !otpVerified && !socialPrefilled && !showSocialRegister && (
-                    <>
-                      <div className="grid gap-2">
-                        <Label htmlFor="emailReg"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-                        >
-                          {t("auth.label_email")}
-                        </Label>
-                        <Input
-                          id="emailReg"
-                          type="email"
-                          placeholder={t("auth.placeholder_email")}
-                          value={emailReg}
-                          onChange={(e) => setEmailReg(e.target.value)}
+                  {!otpServer &&
+                    !otpVerified &&
+                    !socialPrefilled &&
+                    !showSocialRegister && (
+                      <>
+                        <div className="grid gap-2">
+                          <Label
+                            htmlFor="emailReg"
+                            className="flex items-center gap-2 text-black dark:text-white"
+                          >
+                            {t("auth.label_email")}
+                          </Label>
+                          <Input
+                            id="emailReg"
+                            type="email"
+                            placeholder={t("auth.placeholder_email")}
+                            value={emailReg}
+                            onChange={(e) => setEmailReg(e.target.value)}
+                            disabled={loading}
+                            className="
+          focus-visible:ring-black dark:focus-visible:ring-white
+          focus-visible:border-0
+          border-black dark:border-white
+        "
+                          />
+                        </div>
+
+                        <Button
+                          type="submit"
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
-          focus-visible:border-0
-          border-teal-300 dark:border-teal-600
-        "
-                        />
-                      </div>
-
-                      <Button type="submit" disabled={loading} className="
         w-full cursor-pointer
         bg-gradient-to-r
         from-teal-400 via-teal-500 to-teal-600
         text-white
         hover:opacity-95
       "
-
-                      >
-                        {loading ? t("auth.please_wait") : t("auth.btn_send_otp")}
-                      </Button>
-                    </>
-                  )}
+                        >
+                          {loading
+                            ? t("auth.please_wait")
+                            : t("auth.btn_send_otp")}
+                        </Button>
+                      </>
+                    )}
 
                   {/* STEP 2 – OTP */}
                   {otpServer && !otpVerified && !showSocialRegister && (
                     <>
                       <div className="grid gap-2">
-                        <Label
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-                        >{t("auth.label_email")}</Label>
-                        <Input type="email" value={emailReg} disabled
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_email")}
+                        </Label>
+                        <Input
+                          type="email"
+                          value={emailReg}
+                          disabled
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
 
                       <div className="grid gap-2">
-                        <Label htmlFor="otp"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-                        >{t("auth.label_otp")}</Label>
+                        <Label
+                          htmlFor="otp"
+                          className="flex items-center gap-2 text-black dark:text-white"
+                        >
+                          {t("auth.label_otp")}
+                        </Label>
                         <Input
                           id="otp"
                           type="text"
                           inputMode="numeric"
                           placeholder={t("auth.placeholder_otp")}
                           value={otp}
-                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                          onChange={(e) =>
+                            setOtp(e.target.value.replace(/\D/g, ""))
+                          }
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                         {otpErrors.otp && (
-                          <p className="text-xs text-red-600">{otpErrors.otp}</p>
+                          <p className="text-xs text-red-600">
+                            {otpErrors.otp}
+                          </p>
                         )}
                       </div>
 
-                      <Button type="submit" disabled={loading}
+                      <Button
+                        type="submit"
+                        disabled={loading}
                         className="
         w-full cursor-pointer
         bg-gradient-to-r
@@ -948,7 +930,9 @@ export default function SignInPage() {
         hover:opacity-95
       "
                       >
-                        {loading ? t("auth.please_wait") : t("auth.btn_verify_otp")}
+                        {loading
+                          ? t("auth.please_wait")
+                          : t("auth.btn_verify_otp")}
                       </Button>
                     </>
                   )}
@@ -957,43 +941,50 @@ export default function SignInPage() {
                   {(otpVerified || showSocialRegister) && (
                     <>
                       <div className="grid gap-2">
-                        <Label
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_email")}</Label>
-                        <Input type="email" value={emailReg} disabled
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_email")}
+                        </Label>
+                        <Input
+                          type="email"
+                          value={emailReg}
+                          disabled
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
                       </div>
 
                       <div className="grid gap-2">
-                        <Label htmlFor="name"
-
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-                        >{t("auth.label_name")} *</Label>
+                        <Label
+                          htmlFor="name"
+                          className="flex items-center gap-2 text-black dark:text-white"
+                        >
+                          {t("auth.label_name")} <span className="text-red-600">*</span>
+                        </Label>
                         <Input
                           id="name"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
-                        {regErrors.name && <p className="text-xs text-red-600">{regErrors.name}</p>}
+                        {regErrors.name && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.name}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid gap-2">
-                        <Label
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_gender")} *</Label>
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_gender")} <span className="text-red-600">*</span>
+                        </Label>
                         <Select
                           value={gender}
                           onValueChange={(v) => setGender(v)}
@@ -1002,35 +993,44 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
-                            <SelectValue placeholder={t('auth.label_gender')} />
+                            <SelectValue placeholder={t("auth.label_gender")} />
                           </SelectTrigger>
 
                           <SelectContent
                             className="
-      border border-teal-500/20
+      border border-black/20 dark:border-white/20
       bg-background
       shadow-lg
     "
                           >
-                            <SelectItem value="male">{t('auth.gender_male')}</SelectItem>
-                            <SelectItem value="female">{t('auth.gender_female')}</SelectItem>
-                            <SelectItem value="other">{t('auth.gender_other')}</SelectItem>
+                            <SelectItem value="male">
+                              {t("auth.gender_male")}
+                            </SelectItem>
+                            <SelectItem value="female">
+                              {t("auth.gender_female")}
+                            </SelectItem>
+                            <SelectItem value="other">
+                              {t("auth.gender_other")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
-                        {regErrors.gender && <p className="text-xs text-red-600">{regErrors.gender}</p>}
+                        {regErrors.gender && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.gender}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid gap-2">
-                        <Label
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_age_group")} *</Label>
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_age_group")} <span className="text-red-600">*</span>
+                        </Label>
                         <Select
                           value={agegroup}
                           onValueChange={(v) => setAgegroup(v)}
@@ -1039,37 +1039,54 @@ export default function SignInPage() {
                           <SelectTrigger
                             className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
-                            <SelectValue placeholder={t("auth.label_age_group")} />
+                            <SelectValue
+                              placeholder={t("auth.label_age_group")}
+                            />
                           </SelectTrigger>
                           <SelectContent
                             className="
-      border border-teal-500/20
+      border border-black/20 dark:border-white/20
       bg-background
       shadow-lg
     "
                           >
-                            <SelectItem value="10s">{t("auth.age_10s")}</SelectItem>
-                            <SelectItem value="20s">{t("auth.age_20s")}</SelectItem>
-                            <SelectItem value="30s">{t("auth.age_30s")}</SelectItem>
-                            <SelectItem value="40s">{t("auth.age_40s")}</SelectItem>
-                            <SelectItem value="50s">{t("auth.age_50s")}</SelectItem>
-                            <SelectItem value="60s">{t("auth.age_60s")}</SelectItem>
+                            <SelectItem value="10s">
+                              {t("auth.age_10s")}
+                            </SelectItem>
+                            <SelectItem value="20s">
+                              {t("auth.age_20s")}
+                            </SelectItem>
+                            <SelectItem value="30s">
+                              {t("auth.age_30s")}
+                            </SelectItem>
+                            <SelectItem value="40s">
+                              {t("auth.age_40s")}
+                            </SelectItem>
+                            <SelectItem value="50s">
+                              {t("auth.age_50s")}
+                            </SelectItem>
+                            <SelectItem value="60s">
+                              {t("auth.age_60s")}
+                            </SelectItem>
                           </SelectContent>
                         </Select>
-                        {regErrors.agegroup && <p className="text-xs text-red-600">{regErrors.agegroup}</p>}
+                        {regErrors.agegroup && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.agegroup}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid gap-2">
-                        <Label
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_country")} *</Label>
+                        <Label className="flex items-center gap-2 text-black dark:text-white">
+                          {t("auth.label_country")} <span className="text-red-600">*</span>
+                        </Label>
                         <Select
                           value={country}
                           onValueChange={setCountry}
@@ -1077,14 +1094,71 @@ export default function SignInPage() {
                         >
                           <SelectTrigger
                             className="
-      w-full
-      border-teal-300 dark:border-teal-600
+      w-full overflow-hidden
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                           >
-                            <SelectValue placeholder={t("auth.label_country")} />
+                            <SelectValue
+                              className="block w-full truncate"
+                              placeholder={t("auth.label_country")}
+                            />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="
+      border border-black/20 dark:border-white/20
+      bg-background
+      shadow-lg
+    "
+                          >
+                            {countries.map((c) => (
+                              <SelectItem key={c.code} value={c.code}>
+                                <div className="flex w-full items-center justify-between gap-2">
+                                  <span className="truncate max-w-[220px]">
+                                    {c.name}
+                                  </span>
+                                  <span className="shrink-0 text-muted-foreground">
+                                    ({c.code})
+                                  </span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {regErrors.country && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.country}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="grid gap-2">
+                        <Label
+                          htmlFor="nationality"
+                          className="flex items-center gap-2 text-black dark:text-white"
+                        >
+                          {t("auth.label_nationality")} <span className="text-red-600">*</span>
+                        </Label>
+                        <Select
+                          value={nationality}
+                          onValueChange={setNationality}
+                          disabled={loading || countriesLoading}
+                        >
+                          <SelectTrigger
+                            className="
+      w-full overflow-hidden
+      border-black dark:border-white
+      focus:ring-0
+      focus-visible:ring-black dark:focus-visible:ring-white
+      focus-visible:border-0
+    "
+                          >
+                            <SelectValue
+                              className="block w-full truncate"
+                              placeholder={t("auth.label_nationality")}
+                            />
                           </SelectTrigger>
                           <SelectContent
                             className="
@@ -1095,56 +1169,58 @@ export default function SignInPage() {
                           >
                             {countries.map((c) => (
                               <SelectItem key={c.code} value={c.code}>
-                                {c.name} ({c.code})
+                                <div className="flex w-full items-center justify-between gap-2">
+                                  <span className="truncate max-w-[220px]">
+                                    {c.name}
+                                  </span>
+                                  <span className="shrink-0 text-muted-foreground">
+                                    ({c.code})
+                                  </span>
+                                </div>
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
-                        {regErrors.country && <p className="text-xs text-red-600">{regErrors.country}</p>}
+                        {regErrors.nationality && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.nationality}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid gap-2">
-                        <Label htmlFor="nationality"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_nationality")} *</Label>
-                        <Input
-                          id="nationality"
-                          value={nationality}
-                          onChange={(e) => setNationality(e.target.value)}
-                          disabled={loading}
-                          className="
-          focus-visible:ring-teal-500
-          focus-visible:border-0
-          border-teal-300 dark:border-teal-600
-        "
-                        />
-                        {regErrors.nationality && <p className="text-xs text-red-600">{regErrors.nationality}</p>}
-                      </div>
-
-                      <div className="grid gap-2">
-                        <Label htmlFor="phoneNumber"
-                          className="flex items-center gap-2 text-teal-800 dark:text-teal-200"
-
-                        >{t("auth.label_phone")} *</Label>
+                        <Label
+                          htmlFor="phoneNumber"
+                          className="flex items-center gap-2 text-black dark:text-white"
+                        >
+                          {t("auth.label_phone")} <span className="text-red-600">*</span>
+                        </Label>
                         <Input
                           id="phoneNumber"
                           type="tel"
                           inputMode="numeric"
                           placeholder={t("auth.placeholder_phone")}
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                          onChange={(e) =>
+                            setPhoneNumber(e.target.value.replace(/\D/g, ""))
+                          }
                           disabled={loading}
                           className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
                         />
-                        {regErrors.phoneNumber && <p className="text-xs text-red-600">{regErrors.phoneNumber}</p>}
+                        {regErrors.phoneNumber && (
+                          <p className="text-xs text-red-600">
+                            {regErrors.phoneNumber}
+                          </p>
+                        )}
                       </div>
 
-                      <Button type="submit" disabled={loading}
+                      <Button
+                        type="submit"
+                        disabled={loading}
                         className="
         w-full cursor-pointer
         bg-gradient-to-r
@@ -1153,7 +1229,9 @@ export default function SignInPage() {
         hover:opacity-95
       "
                       >
-                        {loading ? t("auth.please_wait") : t("auth.btn_register")}
+                        {loading
+                          ? t("auth.please_wait")
+                          : t("auth.btn_register")}
                       </Button>
                     </>
                   )}
@@ -1179,10 +1257,11 @@ export default function SignInPage() {
           text-teal-800 dark:text-teal-200
         "
                           type="button"
-                          onClick={() => handleSocialRegister('google')}
+                          onClick={() => handleSocialRegister("google")}
                           disabled={loading}
                         >
-                          <Mail className="mr-2 size-5" /> {t("auth.btn_continue_google")}
+                          <Mail className="mr-2 size-5" />{" "}
+                          {t("auth.btn_continue_google")}
                         </Button>
                         <Button
                           variant="outline"
@@ -1194,11 +1273,11 @@ export default function SignInPage() {
           text-teal-800 dark:text-teal-200
         "
                           type="button"
-                          onClick={() => handleSocialRegister('facebook')}
-                          // disabled={loading}
+                          onClick={() => handleSocialRegister("facebook")}
                           disabled={true}
                         >
-                          <Facebook className="mr-2 size-5" /> {t("auth.btn_continue_facebook")}
+                          <Facebook className="mr-2 size-5" />{" "}
+                          {t("auth.btn_continue_facebook")}
                         </Button>
                       </div>
                     </>
@@ -1215,7 +1294,7 @@ export default function SignInPage() {
   "
           >
             <p>
-              {t("auth.label_terms_text")}{' '}
+              {t("auth.label_terms_text")}{" "}
               <Link
                 href="/privacy-policy"
                 className="
@@ -1232,10 +1311,9 @@ export default function SignInPage() {
               </Link>
             </p>
           </CardFooter>
-
         </Card>
       </div>
       <div id="recaptcha-container"></div>
-    </main>
+    </main >
   );
 }

@@ -9,6 +9,7 @@ import { useLocale } from "@/providers/LocaleProvider";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
 
 import { Button } from "@/components/ui/button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import MapboxTourMap from "@/components/map/MapboxTourMap";
 import TimelineRight from "@/components/tour/TimelineRight";
 
@@ -49,6 +50,7 @@ export default function TourDetailsClientPage() {
 
   // ⭐ nav slice (for current running usertour)
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
 
   // ⭐ Local tour state (for this details page)
   const [tour, setTour] = useState<any>(null);
@@ -72,10 +74,6 @@ export default function TourDetailsClientPage() {
      BOOKMARK CHECK
   ---------------------------- */
   useEffect(() => {
-    /*------
-  Before auth changes
-  ----------*/
-    // if (!id || !userId) return;
 
     /*------
   After auth changes
@@ -91,7 +89,7 @@ export default function TourDetailsClientPage() {
 
     (async () => {
       try {
-        const res = await apiFetchBookmarkByRef();
+        const res = await apiFetchBookmarkByRef(auth.data?.user?._id);
         if (cancelled) return;
 
         let bookmark: BookmarkItem | null = null;
@@ -247,16 +245,6 @@ export default function TourDetailsClientPage() {
   /* ----------------------------
      Loader visibility
   ---------------------------- */
-  /*------
-  Before auth changes
-  ----------*/
-  // useEffect(() => {
-  //   if (!bookmarkCheckLoading && tour) hide();
-  //   else show();
-  // }, [bookmarkCheckLoading, tour, show, hide]);
-  /*------
-  After auth changes
-  ----------*/
   useEffect(() => {
     // 🔑 If user is NOT logged in, ignore bookmark loading
     if (!userId) {
@@ -400,7 +388,7 @@ export default function TourDetailsClientPage() {
 
       <div className="space-y-12">
         {/* ===== Banner ===== */}
-        <section className="relative rounded-2xl overflow-hidden shadow-md">
+        <section className="relative overflow-hidden shadow-md">
           {/* Banner Image */}
           <div className="relative h-[420px] sm:h-[480px] w-full">
             {tour.image?.secure_url ? (
@@ -431,7 +419,7 @@ export default function TourDetailsClientPage() {
           >
             {bookmarked ? (
               <BookmarkCheck
-                className="
+                className="cursor-pointer
         h-8 w-8
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
@@ -439,7 +427,7 @@ export default function TourDetailsClientPage() {
               />
             ) : (
               <Bookmark
-                className="
+                className="cursor-pointer
         h-8 w-8
         text-white/90
         hover:text-teal-300
@@ -451,7 +439,7 @@ export default function TourDetailsClientPage() {
 
           {/* Title + Subtitle */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
-            <h1 className="text-4xl sm:text-5xl font-bold drop-shadow-lg">
+            <h1 className="font-serif italic text-4xl sm:text-5xl font-bold drop-shadow-lg">
               {tour.title}
             </h1>
             {tour.content?.brief && (
@@ -504,7 +492,8 @@ export default function TourDetailsClientPage() {
               <div className="flex flex-wrap justify-center gap-12 mb-10">
                 {[
                   {
-                    value: tour.tourpoints?.length ?? 0,
+                    // value: tour.tourpoints?.length ?? 0,
+                    value: tour.tourpoints?.filter((p: any) => p.pointtype !== "lunch").length ?? 0,
                     label: t("tourDetails.stops"),
                   },
                   { value: tour.duration, label: t("tourDetails.duration") },
@@ -570,42 +559,51 @@ export default function TourDetailsClientPage() {
             </div>
           </div>
         </section>
-
-
-        {/* ===== Map Section ===== */}
-        {tour.tourpoints?.length ? (
-          <section className="space-y-4">
-            <h2 className="text-lg font-semibold">{t("tourDetails.map")}</h2>
-            <Suspense
-              fallback={
-                <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
-              }
-            >
-              <MapboxTourMap tour={tour} profile="walking" />
-            </Suspense>
-          </section>
-        ) : (
-          <div className="space-y-4">
-            <div className="h-6 w-1/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
-          </div>
-        )}
-
-        {/* ===== Timeline Section ===== */}
-        {tour.tourpoints?.length && (
-          <section id="timeline" className="space-y-4">
-            <h2 className="text-lg font-semibold">
-              {t("tourDetails.timeline")}
-            </h2>
-            <br />
-            <TimelineRight
-              tourpoints={tour.tourpoints}
-              tour_id={id}
-              customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
-                text-white font-semibold shadow-md hover:shadow-xl transition-all"
+        {/* BREADCRUMB */}
+        <div className="px-4 space-y-6">
+          <div className="px-1 -mt-10">
+            <Breadcrumb
+              items={[
+                { label: t("tours_breadcrumb") || "Tours", href: "/tours" },
+                { label: tour.title }
+              ]}
             />
-          </section>
-        )}
+          </div>
+
+          {/* ===== Map Section ===== */}
+          {tour.tourpoints?.length ? (
+            <section className="-mt-2 space-y-4">
+              <h2 className="font-serif italic text-lg font-semibold">{t("tourDetails.map")}</h2>
+              <Suspense
+                fallback={
+                  <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
+                }
+              >
+                <MapboxTourMap tour={tour} profile="walking" />
+              </Suspense>
+            </section>
+          ) : (
+            <div className="-mt-2 space-y-4">
+              <div className="h-6 w-1/4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-[420px] rounded-lg border animate-pulse bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
+            </div>
+          )}
+
+          {/* ===== Timeline Section ===== */}
+          {tour.tourpoints?.length && (
+            <section id="timeline" className="space-y-4 mb-6">
+              <h2 className="font-serif italic text-lg font-semibold">
+                {t("tourDetails.timeline")}
+              </h2>
+              <br />
+              <TimelineRight
+                tourpoints={tour.tourpoints}
+                customStyle="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90
+                text-white font-semibold shadow-md hover:shadow-xl transition-all"
+              />
+            </section>
+          )}
+        </div>
       </div>
     </>
   );

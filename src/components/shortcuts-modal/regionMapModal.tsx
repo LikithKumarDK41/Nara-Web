@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ImageIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  X,
+  ImageIcon,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import RegionMap from "../map/regionMap";
 import { apiFetchRegions } from "@/services/userGlobalservice";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 export default function RegionMapModal({
   openMapModal,
@@ -18,10 +24,21 @@ export default function RegionMapModal({
   onCloseMapModal: () => void;
 }) {
   const { t } = useLocale();
+  const router = useRouter();
 
   const [view, setView] = useState<"region" | "map">("region");
   const [regions, setRegions] = useState<any[]>([]);
   const [page, setPage] = useState(1);
+
+  // 📐 Ref for scrolling the modal container to top on pagination
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of modal when page changes
+  useEffect(() => {
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [page]);
 
   const limit = 6;
   const total = regions.length;
@@ -89,6 +106,7 @@ export default function RegionMapModal({
       <AnimatePresence>
         {openMapModal && (
           <motion.div
+            ref={modalScrollRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -129,16 +147,15 @@ export default function RegionMapModal({
             >
               {/* ===== Toggle ===== */}
               <div className="mt-6 flex justify-center">
-                <div className="inline-flex gap-2 rounded-2xl p-1.5 bg-white/60 dark:bg-white/10 backdrop-blur border">
+                <div className="inline-grid grid-cols-2 gap-2 rounded-2xl p-1.5 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60 backdrop-blur border">
                   {["region", "map"].map((v) => (
                     <button
                       key={v}
                       onClick={() => setView(v as any)}
-                      className={`cursor-pointer px-6 py-3 rounded-xl font-semibold transition-all ${
-                        view === v
-                          ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
-                          : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
-                      }`}
+                      className={`cursor-pointer truncate px-6 py-3 rounded-xl font-semibold transition-all text-center ${view === v
+                        ? "bg-gradient-to-r from-teal-500 to-teal-500 text-white shadow"
+                        : "text-slate-600 dark:text-white hover:bg-teal-500 hover:text-white"
+                        }`}
                     >
                       {v === "region" ? t("region_title") : t("map_title")}
                     </button>
@@ -182,7 +199,7 @@ export default function RegionMapModal({
                       <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
                         <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
                         <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-                          Nara Heritage
+                          {t("nara_heritage")}
                         </span>
                       </div>
 
@@ -195,6 +212,7 @@ export default function RegionMapModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                       >
                         {t("region_title")}
@@ -234,9 +252,22 @@ export default function RegionMapModal({
 
                   {regions.length > 0 && (
                     <>
-                      <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                        {currentData.map((r) => (
-                          <RegionCard key={r._id} r={r} />
+                      {/* Scroll Anchor */}
+
+
+                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {currentData.map((r, idx) => (
+                          <MonumentCard
+                            key={r._id}
+                            monument={r}
+                            t={t}
+                            idx={idx}
+                            onClick={() => {
+                              onCloseMapModal();
+                              sessionStorage.setItem("returnToRegionModal", "true");
+                              router.push(`/regions?id=${r._id}`);
+                            }}
+                          />
                         ))}
                       </div>
 
@@ -287,7 +318,7 @@ export default function RegionMapModal({
                       <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
                         <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
                         <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-                          Nara Heritage
+                          {t("nara_heritage")}
                         </span>
                       </div>
 
@@ -300,6 +331,7 @@ export default function RegionMapModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                       >
                         {t("map_title")}
@@ -341,55 +373,7 @@ export default function RegionMapModal({
   );
 }
 
-function RegionCard({ r }: { r: any }) {
-  const { t } = useLocale();
-  const router = useRouter();
-  return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all">
-      {/* IMAGE */}
-      <div className="relative h-48 w-full overflow-hidden">
-        {r.image?.secure_url ? (
-          <img
-            src={r.image.secure_url}
-            alt={r.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-          />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
-          </div>
-        )}
-      </div>
 
-      {/* CONTENT */}
-      <div className="flex flex-1 flex-col justify-between p-4">
-        <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
-            {r.title}
-          </h3>
-
-          {r.content?.brief && (
-            <p
-              className="mt-1 line-clamp-2 text-xs text-muted-foreground"
-              dangerouslySetInnerHTML={{ __html: r.content.brief }}
-            />
-          )}
-        </div>
-
-        <button
-          className="mt-3 cursor-pointer rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-          onClick={() => {
-            router.push(`/regions/?id=${r._id}`);
-            // const url = `/regions/?id=${r._id}`;
-            // window.open(url);
-          }}
-        >
-          {t("tourDetails.viewDetails")}
-        </button>
-      </div>
-    </div>
-  );
-}
 
 /* =========================================================
    🪶 Empty State
@@ -423,7 +407,7 @@ function EmptyState({
 ========================================================= */
 function PageNavigator({ totalPages, page, onPageChange, t }: any) {
   return (
-    <div className="mt-4 flex items-center justify-between gap-3">
+    <div className="mt-10 mb-10 flex items-center justify-between gap-3">
       <div className="text-xs text-muted-foreground">
         {t("pagination_left", { current: page, total: totalPages })}
       </div>
@@ -456,10 +440,9 @@ function PageNavigator({ totalPages, page, onPageChange, t }: any) {
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                    : `
                         text-teal-600 dark:text-teal-400
                         hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `

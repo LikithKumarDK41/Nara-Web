@@ -36,13 +36,13 @@ export default function HeaderLogout() {
           backdrop-blur-md transition cursor-pointer
 
           /* 🌞 Light mode */
-          bg-white/80 border border-black/10 text-red-500 hover:bg-black/5
+          bg-white border border-slate-200 text-slate-900 hover:bg-slate-50
 
-          /* 🌙 Dark mode */
-          dark:bg-black/20 dark:border-white/20 dark:text-red-500 hover:dark:bg-white/10
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
         "
       >
-        <LogOut className="h-5 w-5 text-red-500" />
+        <LogOut className="h-5 w-5" />
       </button>
     </div>
   );

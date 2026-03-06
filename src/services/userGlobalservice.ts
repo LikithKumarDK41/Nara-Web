@@ -1,7 +1,16 @@
 // src/lib/services/userGlobalservice.ts
 import api from "@/lib/api";
 
-import type { Shortcut, About, EventItem, PlaceItem, ThemeItem, SubthemeItem, SearchFilter, SearchSuggestion } from "@/lib/types/userGlobal.types";
+import type {
+  Shortcut,
+  About,
+  EventItem,
+  PlaceItem,
+  ThemeItem,
+  SubthemeItem,
+  SearchFilter,
+  SearchSuggestion,
+} from "@/lib/types/userGlobal.types";
 
 import type { Monument } from "@/lib/types/userTour.types";
 
@@ -19,7 +28,10 @@ function parseAxiosError(err: any, fallback: string) {
 function extractShortcuts(data: ShortcutsEnvelope): Shortcut[] {
   if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("shortcuts" in (data as any) && Array.isArray((data as any).shortcuts?.results)) {
+  if (
+    "shortcuts" in (data as any) &&
+    Array.isArray((data as any).shortcuts?.results)
+  ) {
     return (data as any).shortcuts.results as Shortcut[];
   }
   if ("results" in (data as any) && Array.isArray((data as any).results)) {
@@ -47,7 +59,10 @@ export type AboutsEnvelope =
 function extractAbouts(data: AboutsEnvelope): About[] {
   if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("abouts" in (data as any) && Array.isArray((data as any).abouts?.results)) {
+  if (
+    "abouts" in (data as any) &&
+    Array.isArray((data as any).abouts?.results)
+  ) {
     return (data as any).abouts.results as About[];
   }
   if ("results" in (data as any) && Array.isArray((data as any).results)) {
@@ -75,7 +90,10 @@ export type EventsEnvelope =
 function extractEvents(data: EventsEnvelope): EventItem[] {
   if (!data || typeof data !== "object") return [];
   if (Array.isArray(data)) return data;
-  if ("events" in (data as any) && Array.isArray((data as any).events?.results)) {
+  if (
+    "events" in (data as any) &&
+    Array.isArray((data as any).events?.results)
+  ) {
     return (data as any).events.results as EventItem[];
   }
   if ("results" in (data as any) && Array.isArray((data as any).results)) {
@@ -93,10 +111,14 @@ export async function apiFetchEvents(): Promise<EventItem[]> {
   }
 }
 
-export async function apiFetchEventsByMonument(monumentId: string): Promise<EventItem[]> {
+export async function apiFetchEventsByMonument(
+  monumentId: string,
+): Promise<EventItem[]> {
   try {
     // Build encoded filter query
-    const filter = encodeURIComponent(JSON.stringify({ relatedmonument: monumentId }));
+    const filter = encodeURIComponent(
+      JSON.stringify({ relatedmonument: monumentId }),
+    );
     const url = `/v1/events?filter=${filter}`;
 
     const { data } = await api.get<EventsEnvelope>(url);
@@ -237,7 +259,7 @@ export interface BookmarkResponse {
 }
 
 export async function apiCreateBookmark(
-  payload: BookmarkPayload
+  payload: BookmarkPayload,
 ): Promise<BookmarkResponse> {
   try {
     const { data } = await api.post<BookmarkResponse>("/v1/bookmarks", payload);
@@ -260,9 +282,12 @@ export async function apiRemoveBookmark(refId: string): Promise<void> {
   }
 }
 
-export async function apiFetchBookmarkByRef(): Promise<{ _id?: string } | null> {
+export async function apiFetchBookmarkByRef(
+  userId: string
+): Promise<{ _id?: string } | null> {
   try {
-    const { data } = await api.get(`/v1/bookmarks`);
+    const filter = encodeURIComponent(JSON.stringify({ user: userId }));
+    const { data } = await api.get(`/v1/bookmarks?filter=${filter}`);
     const result = Array.isArray(data?.results) ? data.results[0] : data;
     return result || null;
   } catch {
@@ -283,7 +308,10 @@ export interface SearchFiltersEnvelope {
 function extractSearchFilters(data: any): SearchFilter[] {
   if (Array.isArray(data)) return data;
 
-  if (data?.searchfilters?.results && Array.isArray(data.searchfilters.results)) {
+  if (
+    data?.searchfilters?.results &&
+    Array.isArray(data.searchfilters.results)
+  ) {
     return data.searchfilters.results;
   }
 
@@ -314,14 +342,14 @@ function extractSearchSuggestions(data: any): SearchSuggestion[] {
 }
 
 export async function apiFetchSearchSuggestionsAdv(
-  keyword: string
+  keyword: string,
 ): Promise<SearchSuggestion[]> {
   if (!keyword || !keyword.trim()) return [];
 
   try {
     const encodedKeyword = encodeURIComponent(keyword.trim());
     const { data } = await api.get<SearchSuggestionsEnvelope>(
-      `/v1/searchsuggestionsadv?keyword=${encodedKeyword}`
+      `/v1/searchsuggestionsadv?keyword=${encodedKeyword}`,
     );
     return extractSearchSuggestions(data);
   } catch (err: any) {
@@ -335,7 +363,7 @@ export interface FreeTextSearchResponse {
 }
 
 export async function apiFetchFreeTextSearch(
-  keyword: string
+  keyword: string,
 ): Promise<FreeTextSearchResponse> {
   if (!keyword || !keyword.trim()) {
     return { monuments: [], regions: [] };
@@ -344,7 +372,7 @@ export async function apiFetchFreeTextSearch(
   try {
     const encodedKeyword = encodeURIComponent(keyword.trim());
     const { data } = await api.get<FreeTextSearchResponse>(
-      `/v1/freetextsearch?keyword=${encodedKeyword}`
+      `/v1/freetextsearch?keyword=${encodedKeyword}`,
     );
     return {
       monuments: Array.isArray(data.monuments) ? data.monuments : [],
@@ -368,7 +396,7 @@ export interface UserProfileUpdatePayload {
 
 export async function apiUpdateUserProfile(
   userId: string,
-  payload: UserProfileUpdatePayload
+  payload: UserProfileUpdatePayload,
 ) {
   try {
     const { data } = await api.patch(`/v1/userprofiles/${userId}`, payload);
@@ -411,31 +439,31 @@ export interface MonumentsEnvelope {
   results?: Monument[];
 }
 
-function extractMonuments(data: MonumentsEnvelope): Monument[] {
-  if (Array.isArray(data)) return data;
-
-  if (data?.monuments?.results && Array.isArray(data.monuments.results)) {
-    return data.monuments.results;
-  }
-
-  if (Array.isArray(data?.results)) {
-    return data.results;
-  }
-
-  return [];
-}
 
 /* ===== Generic Fetch By Link ===== */
 
 export async function apiFetchByLink<T = any>(
   resource: string,
-  filter?: Record<string, any>
+  filter?: Record<string, any>,
+  sort?: string
 ): Promise<T[]> {
   try {
     let url = `/v1/${resource}`;
+    const params: string[] = [];
 
     if (filter) {
-      url += `?filter=${encodeURIComponent(JSON.stringify(filter))}`;
+      params.push(
+        `filter=${encodeURIComponent(JSON.stringify(filter))}`
+      );
+    }
+
+    if (sort) {
+      // IMPORTANT: send raw string, no JSON.stringify
+      params.push(`sort=${encodeURIComponent(sort)}`);
+    }
+
+    if (params.length > 0) {
+      url += `?${params.join("&")}`;
     }
 
     const { data } = await api.get<any>(url);
@@ -449,13 +477,9 @@ export async function apiFetchByLink<T = any>(
 
     return [];
   } catch (err: any) {
-    throw new Error(
-      parseAxiosError(err, `Failed to load ${resource}`)
-    );
+    throw new Error(parseAxiosError(err, `Failed to load ${resource}`));
   }
 }
-
-
 
 export interface RegionImage {
   public_id: string;
@@ -503,9 +527,7 @@ export interface RegionListResponse {
 
 export async function apiFetchRegions(): Promise<RegionListResponse> {
   try {
-    const { data } = await api.get<RegionListResponse>(
-      "/v1/regions"
-    );
+    const { data } = await api.get<RegionListResponse>("/v1/regions");
 
     return {
       regions: {
@@ -520,24 +542,30 @@ export async function apiFetchRegions(): Promise<RegionListResponse> {
   }
 }
 
-export async function apiFetchRegionDetails(
-  regionId: string,
-  sort?: string,
-) {
+export async function apiFetchRegionDetails({
+  regionId,
+  sort,
+}: {
+  regionId: string;
+  sort: string;
+}): Promise<Monument[]> {
   try {
-    const params = new URLSearchParams();
+    // Manually construct raw query
+    const filter = JSON.stringify({ region: regionId });
 
-    if (sort) {
-      params.append("sort", sort);
-    }
+    // Final URL (unencoded like Postman)
+    const url = `/v1/monuments?filter=${filter}&sort=${sort}`;
 
-    const url = `/v1/regions/${regionId}${
-      params.toString() ? `?${params.toString()}` : ""
-    }`;
+    // Call API
+    const { data } = await api.get<{
+      monuments: { total: number; results: Monument[] };
+    }>(url);
 
-    const res = await api.get(url);
-    return res.data.region;
+    // Return clean result
+    return data?.monuments?.results ?? [];
   } catch (err: any) {
-    throw new Error(parseAxiosError(err, "Failed to fetch region details"));
+    throw new Error(
+      parseAxiosError(err, "Failed to load monuments with query"),
+    );
   }
 }

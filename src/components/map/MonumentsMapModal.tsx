@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { X, MapPin, ArrowLeft } from "lucide-react";
+import { X, ArrowLeft } from "lucide-react";
 import MonumentsMap from "@/components/map/MonumentsMap";
 
 export default function MonumentMapModal({ open, onClose, monument,showMonument, showAttraction }: any) {

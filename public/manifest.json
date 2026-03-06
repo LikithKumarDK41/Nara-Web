@@ -1,22 +1,107 @@
 {
-    "name": "Nara Heritage & Gose City Guide",
-    "short_name": "Gose Guide",
-    "description": "Tourist information and heritage guide for Gose City and Nara.",
+    "name": "Nara Heritage Guide",
+    "short_name": "Nara Guide",
+    "id": "/",
+    "description": "Explore Nara's rich cultural heritage through interactive maps and guided tours.",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#0b0f14",
     "theme_color": "#0b0f14",
-    "orientation": "portrait",
+    "orientation": "portrait-primary",
+    "categories": [
+        "travel",
+        "maps",
+        "navigation"
+    ],
     "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
+        },
         {
             "src": "/icon.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "/icon.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
-    ]
+    ],
+    "shortcuts": [
+        {
+            "name": "Explore Monuments",
+            "short_name": "Monuments",
+            "description": "Browse all monuments and heritage sites",
+            "url": "/",
+            "icons": [
+                {
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Guided Tours",
+            "short_name": "Tours",
+            "description": "Explore guided heritage tours",
+            "url": "/tours",
+            "icons": [
+                {
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Interactive Map",
+            "short_name": "Map",
+            "description": "View monuments on interactive map",
+            "url": "/map",
+            "icons": [
+                {
+                    "src": "/icon-512.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/hero/nara-banner.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Heritage Exploration"
+        },
+        {
+            "src": "/naraiseki/1.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Monument Details"
+        }
+    ],
+    "prefer_related_applications": false,
+    "share_target": {
+        "action": "/share",
+        "method": "POST",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
 }

@@ -31,15 +31,15 @@ export default function UserProfileDropdown({
 
           /* 🌞 Light mode */
           bg-white
-          border border-teal-400/40
-          text-teal-600
-          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
+          border border-slate-200
+          text-slate-900
+          hover:shadow-md
 
-          /* 🌙 Dark mode */
-          dark:bg-black/80
-          dark:border-teal-400/40
-          dark:text-teal-300
-          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+          /* 🌙 Dark mode: Slate Bg + White Icon */
+          dark:bg-slate-800
+          dark:border-slate-700
+          dark:text-gray-100
+          dark:hover:bg-slate-700
         "
       >
         {avatar ? (
@@ -49,13 +49,13 @@ export default function UserProfileDropdown({
             className="h-full w-full rounded-full object-cover"
           />
         ) : (
-          <User className="h-4 w-4 text-teal-600 dark:text-teal-300" />
+          <User className="h-4 w-4" />
         )}
       </button>
 
       {/* TOOLTIP */}
       <div
-        className="
+        className="hidden lg:block
           pointer-events-none
           absolute left-1/2 top-full mt-2
           -translate-x-1/2
@@ -70,7 +70,7 @@ export default function UserProfileDropdown({
           whitespace-nowrap
         "
       >
-        <div className="font-semibold text-teal-700 dark:text-teal-300">{userName}</div>
+        <div className="font-semibold text-slate-900 dark:text-white">{userName}</div>
         <div className="text-[11px] text-gray-900 dark:text-gray-300">{userEmail}</div>
       </div>
     </div>

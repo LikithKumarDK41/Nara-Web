@@ -1,7 +1,7 @@
 # 🏙️ GOSE City Tour  
 ### Next.js + Geolocation-Based City Tour Application
 
-This project powers the **GOSE City Tour** experience, providing real‑time navigation, geofencing, stamping, and tour guidance using the browser’s Geolocation API.
+This project powers the **GOSE City Tour** experience, providing real‑time navigation, geofencing, stamping, and tour guidance using the browser's Geolocation API.
 
 ---
 

@@ -91,17 +91,17 @@ export default function GlobalCheckinToasts() {
 
        /* 🌞 Light mode */
           bg-white
-          border border-orange-400/40
-          hover:shadow-[0_0_10px_rgba(251,146,60,0.35)]
+          border border-teal-400/40
+          hover:shadow-[0_0_10px_rgba(45,212,191,0.35)]
 
           /* 🌙 Dark mode */
           dark:bg-black/80
-          dark:border-orange-400/40
-          dark:hover:shadow-[0_0_12px_rgba(251,146,60,0.55)]
+          dark:border-teal-400/40
+          dark:hover:shadow-[0_0_12px_rgba(45,212,191,0.55)]
     "
             >
               {/* Title */}
-              <h3 className="font-semibold text-lg mb-3 break-words text-amber-800 dark:text-amber-200">
+              <h3 className="font-semibold text-lg mb-3 break-words text-teal-800 dark:text-teal-200">
                 {nearText}: {item.name}
               </h3>
 
@@ -110,7 +110,7 @@ export default function GlobalCheckinToasts() {
                 <div
                   className="
           text-sm mb-4 leading-relaxed
-          text-amber-900/80 dark:text-amber-200/80
+          text-teal-900/80 dark:text-teal-200/80
           prose dark:prose-invert whitespace-pre-wrap
         "
                   dangerouslySetInnerHTML={{
@@ -118,13 +118,13 @@ export default function GlobalCheckinToasts() {
                   }}
                 />
               ) : (
-                <p className="text-sm mb-4 text-amber-700/70 dark:text-amber-300/70">
+                <p className="text-sm mb-4 text-teal-700/70 dark:text-teal-300/70">
                   {reachedText}
                 </p>
               )}
 
               {/* Coordinates */}
-              <div className="text-xs mb-4 space-y-1 text-left text-amber-700/70 dark:text-amber-300/70">
+              <div className="text-xs mb-4 space-y-1 text-left text-teal-700/70 dark:text-teal-300/70">
                 <p>
                   <strong>{latText}:</strong> {item.lat?.toFixed(6) ?? "—"}
                 </p>
@@ -142,9 +142,9 @@ export default function GlobalCheckinToasts() {
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="
-          text-amber-700 hover:text-amber-800
-          dark:text-amber-300 dark:hover:text-amber-200
+                  className="cursor-pointer
+          text-teal-700 hover:text-teal-800
+          dark:text-teal-300 dark:hover:text-teal-200
         "
                   onClick={() => {
                     toast.dismiss(t);
@@ -159,9 +159,9 @@ export default function GlobalCheckinToasts() {
                 {/* CHECK-IN BUTTON */}
                 <Button
                   size="sm"
-                  className="
+                  className="cursor-pointer
           bg-gradient-to-r
-          from-amber-400 via-amber-500 to-amber-600
+          from-teal-400 via-teal-500 to-teal-600
           text-white
           hover:opacity-95
           shadow-md
@@ -217,7 +217,7 @@ export default function GlobalCheckinToasts() {
                             fetchUserTourPoints({ tourId, usertourId })
                           ).unwrap();
                         }
-                      } catch {}
+                      } catch { }
 
                       dispatch(confirm(item.id));
                       dispatch(markShown(item.id));

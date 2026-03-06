@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { Search, X, Check, Star } from "lucide-react";
+import { useEffect, useState, useMemo, useRef } from "react";
+import { Search, X, Check } from "lucide-react";
 
 import { useLocale } from "@/providers/LocaleProvider";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,8 @@ import type { Monument } from "@/lib/types/userTour.types";
 import type { SearchFilter } from "@/lib/types/userGlobal.types";
 import MonumentDetailModal from "@/components/tour/MonumentDetailModal";
 import { motion, AnimatePresence } from "framer-motion";
-import { sortGlobalByPopularityThenName } from "@/lib/globalMonumentSort";
 import { normalizeHTML } from "@/lib/utils";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 export default function SearchModal({
   open,
@@ -42,6 +42,16 @@ export default function SearchModal({
   const [selectedMonument, setSelectedMonument] = useState<Monument | null>(
     null,
   );
+
+  // 📐 Ref for scrolling the modal container to top on pagination
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of modal when page changes
+  useEffect(() => {
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [page]);
 
   /* -------------------- Initial Load -------------------- */
   useEffect(() => {
@@ -252,7 +262,7 @@ export default function SearchModal({
 
   /* -------------------- Sorting -------------------- */
   const sortedMonuments = useMemo(() => {
-    return sortGlobalByPopularityThenName(monuments);
+    return monuments;
   }, [monuments]);
 
   /* -------------------- Pagination -------------------- */
@@ -266,11 +276,33 @@ export default function SearchModal({
 
   const shouldShowMonuments = pageItems.length > 0;
 
+  // Current mode light or dark to make icon image color change based on that
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+
+    // initial
+    setIsDark(html.classList.contains("dark"));
+
+    const observer = new MutationObserver(() => {
+      setIsDark(html.classList.contains("dark"));
+    });
+
+    observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   /* -------------------- Render -------------------- */
   return (
     <AnimatePresence>
       {open && (
         <motion.div
+          ref={modalScrollRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -399,7 +431,7 @@ export default function SearchModal({
                         <span className="font-medium">{keyword}</span>{" "}
                         <span className="text-gray-500">@</span>{" "}
                         <span className="text-teal-600 dark:text-teal-400 font-medium">
-                          All
+                          {t("all")}
                         </span>
                       </div>
 
@@ -446,11 +478,10 @@ export default function SearchModal({
                     <div
                       key={f._id}
                       onClick={() => toggleFilter(f._id)}
-                      className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-105 ${
-                        isActive
-                          ? "opacity-100"
-                          : "opacity-90 hover:opacity-100"
-                      }`}
+                      className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-105 ${isActive
+                        ? "opacity-100"
+                        : "opacity-90 hover:opacity-100"
+                        }`}
                     >
                       <div
                         className={`relative h-20 w-20 rounded-full flex items-center justify-center shadow-md transition-all
@@ -473,8 +504,9 @@ export default function SearchModal({
                               alt={f.title}
                               className="h-7 w-7 object-contain"
                               style={{
-                                filter:
-                                  "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)",
+                                filter: isDark
+                                  ? "brightness(0) saturate(100%) invert(81%) sepia(31%) saturate(545%) hue-rotate(124deg) brightness(98%) contrast(92%)"
+                                  : "brightness(0) saturate(100%) invert(70%) sepia(40%) saturate(700%) hue-rotate(124deg) brightness(80%) contrast(115%)",
                               }}
                             />
                           ) : (
@@ -501,6 +533,9 @@ export default function SearchModal({
 
           {/* Monuments Grid */}
           <div className="mt-16 w-full max-w-7xl px-6 pb-20 relative z-0">
+            {/* Scroll Anchor */}
+
+
             {loading ? (
               <div className="flex justify-center items-center py-10">
                 <div
@@ -515,59 +550,15 @@ export default function SearchModal({
               </div>
             ) : shouldShowMonuments ? (
               <>
-                <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                  {pageItems.map((m) => (
-                    <div
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {pageItems.map((m, idx) => (
+                    <MonumentCard
                       key={m._id}
-                      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border border-orange-400/10"
-                    >
-                      <div className="relative h-48 w-full overflow-hidden">
-                        {m.image?.secure_url ? (
-                          <img
-                            src={m.image.secure_url}
-                            alt={m.title || m.name}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                          />
-                        ) : (
-                          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-                            <Search className="h-8 w-8" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4 flex flex-col justify-between flex-1">
-                        <div>
-                          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
-                            {m.title || m.name}
-                          </h3>
-                          <div className="mt-2 flex items-center gap-0.5">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                              <Star
-                                key={`star-${m._id}-${i}`}
-                                className={`h-3.5 w-3.5 ${
-                                  i < (m.popularity ?? 0)
-                                    ? "fill-amber-400 text-amber-400"
-                                    : "text-gray-300 dark:text-gray-600"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          {m.content?.brief && (
-                            <p
-                              className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 whitespace-pre-wrap"
-                              dangerouslySetInnerHTML={{
-                                __html: normalizeHTML(m.content.brief),
-                              }}
-                            />
-                          )}
-                        </div>
-                        <Button
-                          onClick={() => openMonumentModal(m._id)}
-                          className="cursor-pointer mt-3 h-9 rounded-lg bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90 transition-all"
-                        >
-                          {t("actions.details")}
-                        </Button>
-                      </div>
-                    </div>
+                      monument={m}
+                      t={t}
+                      idx={idx}
+                      onClick={() => openMonumentModal(m._id)}
+                    />
                   ))}
                 </div>
 
@@ -615,10 +606,10 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-8">
+    <div className="flex items-center justify-between gap-3 pt-10">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        ページ {page} / {totalPages}
+        {t("pagination_left", { current: page, total: totalPages })}
       </div>
 
       <div className="flex items-center gap-1">
@@ -652,10 +643,9 @@ function PageNavigator({
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                    : `
                         text-teal-600 dark:text-teal-400
                         hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `

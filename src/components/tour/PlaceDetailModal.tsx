@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +15,11 @@ import {
   MapPin,
   X,
   ArrowLeft,
-  Info,
   ImageIcon,
   Navigation,
+  Maximize2,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { createPortal } from "react-dom";
@@ -60,15 +62,18 @@ export default function PlaceDetailModal({
   onClose,
   loading,
   details,
+  onOpenAnother,
   customStyle,
 }: {
   open: boolean;
   onClose: () => void;
   loading: boolean;
   details: any;
+  onOpenAnother?: (id: string) => void;
   customStyle?: string;
 }) {
   const { t } = useLocale();
+  const router = useRouter();
   const [showMap, setShowMap] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
@@ -104,7 +109,7 @@ export default function PlaceDetailModal({
           {/* === Header === */}
           <DialogHeader className="flex items-center justify-center border-b bg-background py-4 px-8 relative">
             <DialogTitle
-              className="
+              className="font-serif italic
     text-xl font-semibold 
     px-12 
     whitespace-nowrap 
@@ -139,52 +144,61 @@ export default function PlaceDetailModal({
                 <>
                   {/* Image */}
                   {details.image?.secure_url && (
-                    <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
+                    <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border group">
                       <Image
                         src={details.image.secure_url}
                         alt={safeText(details.title)}
                         fill
                         onClick={() => setMainViewerOpen(true)}
-                        className="cursor-pointer object-cover hover:scale-105 transition-transform"
+                        className="cursor-pointer object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                    </div>
-                  )}
-
-                  {mainViewerOpen && details.image?.secure_url && (
-                    <div
-                      className="h-[100%] fixed inset-0 z-[9999] bg-black/90"
-                      onClick={() => setMainViewerOpen(false)}
-                    >
-                      {/* CLOSE BUTTON */}
-                      <button
-                        onClick={() => setMainViewerOpen(false)}
-                        className="cursor-pointer absolute top-4 right-4 z-20 text-white bg-black p-2 rounded-full hover:bg-black/40 dark:hover:bg-white/10 transition"
-                      >
-                        <X className="h-6 w-6" />
-                      </button>
-
-                      {/* IMAGE CENTER */}
-                      <div
-                        className="flex items-center justify-center"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="relative w-screen h-screen">
-                          <Image
-                            src={details.image.secure_url}
-                            alt={safeText(details.title)}
-                            fill
-                            priority
-                            className="object-contain"
-                          />
+                      {/* Hover Icon Overlay */}
+                      <div className="absolute inset-0 bg-black/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
+                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 scale-100 md:scale-90 md:group-hover:scale-100 transition-transform duration-300">
+                          <Maximize2 size={20} />
                         </div>
                       </div>
                     </div>
                   )}
 
+                  <AnimatePresence>
+                    {mainViewerOpen && details.image?.secure_url && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="h-[100%] fixed inset-0 z-[9999] bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-8"
+                        onClick={() => setMainViewerOpen(false)}
+                      >
+                        {/* CLOSE BUTTON */}
+                        <button
+                          onClick={() => setMainViewerOpen(false)}
+                          className="cursor-pointer absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
+                        >
+                          <X size={32} />
+                        </button>
+
+                        <motion.div
+                          initial={{ scale: 0.9, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.9, opacity: 0 }}
+                          className="relative max-w-7xl max-h-[85vh] w-auto h-auto outline-none flex flex-col items-center"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <img
+                            src={details.image.secure_url}
+                            alt={safeText(details.title)}
+                            className="max-w-full max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
+                          />
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   {!details.image?.secure_url && (
                     <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
                       <div className="flex justify-center items-center h-full bg-gray-200 dark:bg-gray-700 rounded-t-2xl">
-                        <ImageIcon className="h-8 w-8 text-gray-500 dark:text-gray-300" />
+                        <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                       </div>
                     </div>
                   )}
@@ -197,10 +211,9 @@ export default function PlaceDetailModal({
                     {details.category?.title && (
                       <p className="mt-2 text-sm flex items-center gap-2 text-muted-foreground">
                         <Badge
-                          className={`${
-                            customStyle ||
+                          className={`${customStyle ||
                             "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
-                          }`}
+                            }`}
                         >
                           {details.category.title || ""}
                         </Badge>
@@ -210,10 +223,9 @@ export default function PlaceDetailModal({
 
                   {/* Content */}
                   {(details.content?.brief || details.content?.extended) && (
-                    <section className="prose max-w-none text-sm text-muted-foreground dark:prose-invert space-y-3 whitespace-pre-wrap">
+                    <section className="rich-text-content max-w-none text-sm text-muted-foreground space-y-3 whitespace-pre-wrap">
                       {details.content?.brief && (
                         <div
-                          className=""
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(details.content.brief),
                           }}
@@ -221,7 +233,6 @@ export default function PlaceDetailModal({
                       )}
                       {details.content?.extended && (
                         <div
-                          className=""
                           dangerouslySetInnerHTML={{
                             __html: normalizeHTML(details.content.extended),
                           }}
@@ -239,10 +250,9 @@ export default function PlaceDetailModal({
             <Button
               size="lg"
               onClick={() => setShowMap(true)}
-              className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${
-                customStyle ||
+              className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${customStyle ||
                 "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
-              }`}
+                }`}
             >
               <MapPin className="h-5 w-5" />
               {t("view_on_map")}
@@ -273,7 +283,7 @@ export function FullscreenMap({
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [loadingCategory, setLoadingCategory] = useState(false);
   const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
-  const { t, locale } = useLocale();
+  const { t } = useLocale();
   const [selectedCoords, setSelectedCoords] = useState<[number, number] | null>(
     null,
   );

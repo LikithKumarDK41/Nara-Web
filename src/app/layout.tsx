@@ -9,19 +9,33 @@ import GlobalCheckinToasts from "@/components/nav/GlobalCheckinToasts";
 import { LocaleProvider } from "@/providers/LocaleProvider";
 import AuthGuard from "@/components/system/AuthGuard";
 import AppToaster from "@/components/system/AppToaster";
+import PWAInstaller from "@/components/system/PWAInstaller";
 
 export const metadata: Metadata = {
-  // title: "Tourist",
+  applicationName: "Nara Heritage Guide",
+  manifest: "/manifest.json",
+  metadataBase: new URL("https://naraiseki.nichi.in"),
+  title: "Nara Heritage Guide - Tourist App",
+  description: "Explore Nara's cultural heritage with our interactive tourist guide app. Discover monuments, tours, and heritage sites.",
+  keywords: ["tourism", "Nara", "heritage", "travel", "map", "guide", "Japan", "monuments", "history"],
   icons: {
     icon: "/icon.png",         // Main favicon (PNG preferred)
     shortcut: "/favicon.ico",  // Backup ICO file
     apple: "/icon.png",        // Apple Touch Icon
   },
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Gose Guide",
+    title: "Nara Heritage Guide",
+    startupImage: [
+      {
+        url: "/home-banner.png",
+        media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
+      },
+    ],
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 export const viewport: Viewport = { themeColor: "#0b0f14" };
@@ -36,7 +50,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -56,7 +69,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-background text-foreground font-['Outfit',sans-serif] antialiased scroll-smooth selection:bg-teal-500/30">
+      <body className="bg-background text-foreground font-sans antialiased scroll-smooth selection:bg-teal-500/30">
 
         {/* theme bootstrap script (unchanged) */}
         <script
@@ -69,8 +82,8 @@ export default function RootLayout({
 
             const META = {
               ja: {
-                title: '御所市観光ナビ',
-                description: '御所市の観光情報とスタンプラリー',
+                title: '奈良遺跡めぐり',
+                description: '奈良市の観光情報とスタンプラリー',
               },
               en: {
                 title: 'Nara Kofun & Heritage Foundation',
@@ -125,6 +138,7 @@ export default function RootLayout({
           </LoaderProvider>
         </StoreProvider>
         <AppToaster />
+        <PWAInstaller />
       </body>
     </html>
   );

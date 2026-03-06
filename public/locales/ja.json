@@ -89,7 +89,11 @@
   "stops": "{count, plural, one {# 箇所} other {# 箇所}}",
   "buttons": {
     "details": "詳細",
-    "navigate": "ナビゲート"
+    "navigate": "ナビゲート",
+    "resume_tour": "ツアーを再開",
+    "view_route": "ルートを確認",
+    "certificate": "認定証",
+    "history": "履歴"
   },
   "empty": {
     "title": "利用可能なツアーがありません",
@@ -106,7 +110,10 @@
       "instagram": "インスタグラム",
       "linkedin": "リンクトイン"
     },
-    "copyright": "© {year} 一般財団法人 奈良遺跡文化財保存活性化財団"
+    "copyright": "© {year} 一般財団法人 奈良遺跡文化財保存活性化財団",
+    "connect": "お問い合わせ",
+    "address": "〒639-0223 奈良県香芝市真美ケ丘1-6-25",
+    "quote": "古代日本の響きを、ひとつの遺跡から守り継ぐ。奈良の魂を巡る旅。"
   },
   "tours": {
     "liveTours": "ツアーのスポットをめぐって、訪問を記録すると、スタンプラリーになります。",
@@ -528,6 +535,10 @@
   "you_collected": "あなたは",
   "out_of": "／",
   "checkpoints": "チェックポイントを回収しました",
+  "result": "結果",
+  "keep_going": "進み続けよう！",
+  "tour_status": "ツアーステータス",
+  "back_to_list": "リストに戻る",
   "travel_time": "移動時間",
   "tour_description": "ツアー説明",
   "completed_points": "達成したポイント",
@@ -606,15 +617,19 @@
   "blueprint_home_desc": "ツアーやクイック操作を確認できます。",
   "blueprint_home_main_categories": "ええやん！御所",
   "blueprint_home_main_categories_desc": "アプリの主要な入口です。各カテゴリーを選択すると都市探索に関する専用画面が開きます。",
-  "blueprint_home_main_categories_point_1": "観光マップ → インタラクティブなマップ画面",
-  "blueprint_home_main_categories_point_2": "観光スポット → スポット一覧 → スポット詳細",
-  "blueprint_home_main_categories_point_3": "御所市について → 市の情報ページ",
+  "blueprint_home_main_categories_point_1": "地域・マップ → 地域別またはインタラクティブマップで奈良を探索",
+  "blueprint_home_main_categories_point_2": "検索 → 遺跡・観光スポット・文化財を探す",
+  "blueprint_home_main_categories_point_3": "ストリートビュー → 没入型ストリートビューで奈良の歴史ある街並みを体験",
   "blueprint_home_more_options": "サービス情報",
-  "blueprint_home_more_options_desc": "メインカテゴリーと同じナビゲーション構成を持つ補助的なコンテンツです。",
-  "blueprint_home_more_options_point_1": "イベント・祭り → イベント一覧 → イベント詳細",
-  "blueprint_home_more_options_point_2": "グルメ商品 → 商品一覧",
-  "blueprint_home_more_options_point_3": "施設案内 → 施設情報",
-  "blueprint_home_more_options_point_4": "市のPR・会議 → 情報ページ",
+  "blueprint_home_more_options_desc": "メインカテゴリと同じナビゲーションの流れに沿った、補助的なコンテンツセクションです。",
+  "blueprint_home_more_options_point_1": "政治 → 行政・統治・公共政策に関する情報",
+  "blueprint_home_more_options_point_2": "経済 → 地域産業・商業・経済活動の紹介",
+  "blueprint_home_more_options_point_3": "信仰 → 神社仏閣・宗教信仰・精神文化",
+  "blueprint_home_more_options_point_4": "芸術 → 伝統芸術・工芸・文化表現",
+  "blueprint_home_more_options_point_5": "技術 → イノベーション・科学・先端技術",
+  "blueprint_home_more_options_point_6": "自然 → 自然景観・環境・生態系",
+  "blueprint_about_kofun_title": "奈良の古墳と文化遺産について",
+  "blueprint_about_kofun_desc": "奈良には、日本最古級の古墳や歴史的文化遺産が数多く残されています。",
   "blueprint_home_global_search": "検索",
   "blueprint_home_global_search_desc": "ツアー、スポット、イベント、記事など、すべてのコンテンツを検索できます。",
   "blueprint_home_video": "動画",
@@ -717,28 +732,43 @@
     "about_nara": "奈良の古墳・遺跡について",
     "guide_tour": "古墳・遺跡ツアー",
     "explore_link": "詳細を見る",
+    "explore_subtitle": "厳選されたテーマや史跡コレクションを通じて、奈良の豊かな文化遺産を発見しましょう。",
     "open": "開く",
+    "heritage": "文化遺産",
+    "portal": "ポータル",
+    "explore": "探訪",
+    "curated_tours": "厳選された旅",
+    "legacy_layers": "日本の古都の幾重もの歴史を旅する",
+    "explore_foundation": "礎（いしずえ）を探求する",
+    "navigate_heritage": "奈良のデジタル遺産を自在に巡る",
+    "diverse_heritage": "奈良の遺産の多様な魅力を発見",
+    "curated_journeys": "日本の原点を巡る、巧みにキュレーションされた旅",
     "hero": {
       "slides": [
         {
-          "title": "御所市",
-          "subtitle": "日本の心のふるさとを体験",
-          "description": "天皇ゆかりの道を歩き、日本文化発祥の地を巡る。"
+          "title": "奈良県",
+          "subtitle": "日本文明発祥の地",
+          "description": "悠久の歴史に育まれた日本の原点。寺院や神聖な景観、今も息づく歴史を体感してください。"
         },
         {
-          "title": "聖なる峰",
-          "subtitle": "金剛山・葛城山",
-          "description": "天と地をつなぐ息をのむような絶景と祈りの道。"
+          "title": "神聖なる起源",
+          "subtitle": "吉野山・三輪山／大神神社",
+          "description": "先史時代から信仰を集めてきた霊山で、日本最古の神道の精神に触れる特別な体験。"
         },
         {
-          "title": "隠れた名所",
-          "subtitle": "寺社仏閣・古い街並み",
-          "description": "人混みを離れ、歴史ある御所のありのままの美しさを探索。"
+          "title": "世界遺産",
+          "subtitle": "寺院・神社・古代の都",
+          "description": "日本の精神文化と歴史の礎を築いた、数々のユネスコ世界遺産を巡ります。"
         },
         {
-          "title": "地元の味",
-          "subtitle": "伝統薬・郷土料理",
-          "description": "薬草の豊かな伝統と本場の郷土料理を味わう。"
+          "title": "伝統と味わい",
+          "subtitle": "工芸と奈良の食文化",
+          "description": "長い年月に育まれた伝統工芸と、奥深い奈良の味覚をお楽しみください。"
+        },
+        {
+          "title": "古都の響き",
+          "subtitle": "寺院と息づく精神",
+          "description": "悠久の時が蓄積された静かな空間で、古の知恵と歴史の重みを感じてください。"
         }
       ]
     },
@@ -759,5 +789,93 @@
   "region_title": "地域でフィルター",
   "region_desc": "史跡を特定の地域でフィルターできます",
   "no_regions": "利用可能な地域がありません",
-  "no_regions_desc": "現在、利用可能な地域がありません"
+  "no_regions_desc": "現在、利用可能な地域がありません",
+  "region_desc_title": "この地域の注目スポット",
+  "region_desc_subtitle": "この地域にある史跡を探索しましょう",
+  "in_progress": "進行中",
+  "completed": "完了",
+  "related_themes": "関連テーマ",
+  "explore": "探索する",
+  "click_to_discover_details": "クリックして詳細とスポットを見る",
+  "theme_overview": "テーマ概要",
+  "no_desc_available": "説明はありません",
+  "related_spots": "関連スポット",
+  "back": "戻る",
+  "no_monuments_found_": "スポットが見つかりませんでした。",
+  "discover_details": "詳細を見る",
+  "click_anywhere_to_close": "クリックで閉じる",
+  "about": "について",
+  "recommended_experiences": "おすすめの体験",
+  "see_details": "詳しく見る",
+  "termsOfUse": "利用規約／サービス規約",
+  "nara_heritage": "奈良の遺産",
+  "nara_heritage_theme": "奈良遺産テーマ",
+  "explore_nara": "奈良を探索",
+  "footer_explore": "探索",
+  "guided_tours": "ガイドツアー",
+  "videos": "動画",
+  "my_list": "マイリスト",
+  "cultural_heritage_collection": "文化遺産コレクション",
+  "category_desc": "奈良の豊かな歴史、文化、自然遺産を紹介する厳選されたテーマをご覧ください",
+  "themes": "テーマ",
+  "discovery": "発見",
+  "curated": "厳選",
+  "collection": "コレクション",
+  "chatbot": {
+    "title": "交通ガイド",
+    "welcome": "奈良古墳 交通ガイドへようこそ。\n奈良の古墳へのアクセスをご案内します。\n\n以下から質問を選んでください。",
+    "options": {
+      "search_routes": "ルート検索",
+      "transit_options": "乗車・乗換方法",
+      "transit_stations": "乗換駅",
+      "paid_trains": "有料特急の利用",
+      "start_again": "最初に戻る",
+      "back": "戻る"
+    },
+    "help_text": {
+      "search_routes": "ルート検索ですね。\n以下より条件を設定して検索してください。",
+      "paid_trains": "近鉄特急の情報は以下をクリックしてください。",
+      "click_to_visit": "{label} を開くには以下をクリックしてください。",
+      "previous_options": "前の選択肢に戻ります："
+    },
+    "input_placeholder": "メッセージを入力...",
+    "thinking": "処理中...",
+    "reset_chat": "チャットをリセット",
+    "error_api": "申し訳ありません。ガイドボットに接続できませんでした。もう一度お試しください。",
+    "error_invalid": "無効な応答形式です"
+  },
+  "open_chat": "チャットを開く",
+  "close_chat": "チャットを閉じる",
+  "check_out_my_tour": "私のツアーを見てください！",
+  "map_loading": "地図を読み込み中です。しばらくお待ちください...",
+  "download_success": "ダウンロードが完了しました",
+  "download_failed": "ダウンロードに失敗しました",
+  "failed_to_share": "共有に失敗しました",
+  "download": "ダウンロード",
+  "loading_share": "読み込み中...",
+  "share": "共有",
+  "complete_desc": "この素晴らしいツアーを完了しました！",
+  "copied_to_clipboard": "クリップボードにコピーしました",
+  "copy": "コピー",
+  "failed_to_copy": "コピーに失敗しました",
+  "captured_nara_monument": "奈良の史跡で撮影しました",
+  "captured_at": "で撮影しました",
+  "monument_": "史跡",
+  "nara_visit": "奈良訪問",
+  "quick_access_page": {
+    "hero_title": "クイックアクセス",
+    "hero_subtitle": "インタラクティブマップ、検索ツール、パノラマストリートビューで、奈良の見どころを探索しましょう。"
+  },
+  "tours_breadcrumb": "ツアー",
+  "information": "情報",
+  "privacy_policy": "プライバシーポリシー",
+  "terms_of_use": "利用規約",
+  "region_map":"地域/地図",
+  "search":"検索",
+  "street_view":"ｽﾄﾘｰﾄﾋﾞｭｰ",
+  "hello": "こんにちは、",
+  "login": "ログイン",
+  "sign_out": "ログアウト",
+  "edit_profile": "プロフィール編集",
+  "select_category": "カテゴリーを選択"
 }

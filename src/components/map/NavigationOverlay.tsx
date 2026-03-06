@@ -126,7 +126,7 @@ export default function NavigationOverlay({
 
   const detail = useAppSelector((s) => s.tourist.detail);
   const dispatch = useAppDispatch();
-  const { locale, t } = useLocale();
+  const { t } = useLocale();
 
   // Prefer Redux-stored tourpoints from nav slice
   const reduxTourPoints = useAppSelector(selectUserTourPoints);

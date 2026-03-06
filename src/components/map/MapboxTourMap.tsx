@@ -207,7 +207,7 @@ export default function MapboxTourMap({
 
         const startPos = normalizeLngLat(
           (startPoint?.monument as any)?.location ??
-            (startPoint as any)?.location
+          (startPoint as any)?.location
         );
         const endPos = normalizeLngLat(
           (endPoint?.monument as any)?.location ?? (endPoint as any)?.location
@@ -310,13 +310,12 @@ export default function MapboxTourMap({
               ${img ? `<div class="tour-popup__media">${img}</div>` : ""}
               <div class="tour-popup__body">
                 <div class="tour-popup__title">${escapeText(titleLabel)}</div>
-                ${
-                  chips.length
-                    ? `<div class="tour-popup__chips">${chips
-                        .map((c) => `<span class="tour-chip">${c}</span>`)
-                        .join("")}</div>`
-                    : ""
-                }
+                ${chips.length
+              ? `<div class="tour-popup__chips">${chips
+                .map((c) => `<span class="tour-chip">${c}</span>`)
+                .join("")}</div>`
+              : ""
+            }
                 <div class="tour-popup__brief">${brief}</div>
               </div>
             </div>
@@ -432,7 +431,7 @@ export default function MapboxTourMap({
           removeRouteLayers(map);
           map.remove();
         }
-      } catch {}
+      } catch { }
       mapRef.current = null;
     };
   }, [tour, profile, locale]);
@@ -473,7 +472,7 @@ export default function MapboxTourMap({
           </div>
           {showImage && (
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+              className="fixed inset-0 z-9999 flex items-center justify-center bg-black/90 backdrop-blur-sm"
               onClick={() => setShowImage(false)}
             >
               <button

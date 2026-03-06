@@ -1,22 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import {
   Landmark,
   Bookmark,
   CheckCircle2,
   Compass,
-  ImageIcon,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Trash2
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocale } from "@/providers/LocaleProvider";
 import type { AppDispatch } from "@/lib/store";
 import { fetchMonumentDetails } from "@/lib/store/slices/touristSlice";
+import { useGlobalLoader } from "@/providers/LoaderProvider";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -28,21 +23,30 @@ import {
   apiDeleteVisitHistory,
 } from "@/services/myListService";
 import { apiDeleteUserTour } from "@/services/userTourService";
+import { useAppSelector } from "@/lib/store/hook";
+import { selectNav, resetAll as resetNav } from "@/lib/store/slices/navSlice";
+import { resetAll as resetGeofence } from "@/lib/store/slices/geofenceSlice";
+import { clearTourDetail } from "@/lib/store/slices/touristSlice";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import TourCard from "@/components/tour/TourCard";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 /* MAIN PAGE */
 export default function LibraryPage() {
   const { t } = useLocale();
   const dispatch = useDispatch<AppDispatch>();
+  const nav = useAppSelector(selectNav);
+  const usertour = nav.usertour;
 
-  const monumentDetail = useSelector((s: any) => s.tourist.monumentDetail);
   const loadingState = useSelector((s: any) => s.tourist.loading);
+
+  const { show, hide } = useGlobalLoader();
 
   const [topTab, setTopTab] = useState<"bookmarks" | "visited">("bookmarks");
   const [innerTab, setInnerTab] = useState<"monuments" | "tours">("monuments");
 
   const [bookmarks, setBookmarks] = useState<any[]>([]);
   const [visits, setVisits] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState({
     bookmarkedMonuments: 1,
@@ -50,6 +54,8 @@ export default function LibraryPage() {
     visitedMonuments: 1,
     visitedTours: 1,
   });
+
+
 
   const limit = 6;
 
@@ -61,7 +67,7 @@ export default function LibraryPage() {
         FETCH BOOKMARKS
      ============================ */
   const loadBookmarks = async () => {
-    setLoading(true);
+    show();
     try {
       const res = await apiGetUserBookmarks();
 
@@ -81,7 +87,7 @@ export default function LibraryPage() {
     } catch (err) {
       console.error("Failed to fetch bookmarks:", err);
     } finally {
-      setLoading(false);
+      hide();
     }
   };
 
@@ -93,6 +99,7 @@ export default function LibraryPage() {
         FETCH VISIT HISTORY
      ============================ */
   const loadVisits = async () => {
+    show();
     try {
       const res = await apiGetVisitHistoryByUser();
 
@@ -106,12 +113,15 @@ export default function LibraryPage() {
           visitId: t._id,
           historytype: "tour",
           tour: t.tour,
+          status: t.status,
         })),
       ];
 
       setVisits(combined);
-    } catch (err) {
-      console.error("Failed to fetch visit histories:", err);
+    } catch {
+      console.error("Failed to fetch visit histories");
+    } finally {
+      hide();
     }
   };
 
@@ -138,10 +148,10 @@ export default function LibraryPage() {
           bookmarkId: b.bookmarkId,
           _id: b.monument._id,
           name: b.monument.title,
-          image: b.monument.image?.secure_url || b.monument.image?.url,
+          image: b.monument.image, // Pass full image object
           description: cleanText(b.monument.content?.brief || ""),
         })),
-    [bookmarks]
+    [bookmarks],
   );
 
   const bookmarkedTours = useMemo(
@@ -152,10 +162,10 @@ export default function LibraryPage() {
           bookmarkId: b.bookmarkId,
           _id: b.tour._id,
           title: b.tour.title,
-          image: b.tour.image?.secure_url || b.tour.image?.url,
+          image: b.tour.image, // Pass full image object
           description: cleanText(b.tour.content?.brief || ""),
         })),
-    [bookmarks]
+    [bookmarks],
   );
 
   const visitedMonuments = useMemo(
@@ -166,10 +176,10 @@ export default function LibraryPage() {
           visitId: v.visitId,
           _id: v.monument._id,
           name: v.monument.title,
-          image: v.monument.image?.secure_url || v.monument.image?.url,
+          image: v.monument.image, // Pass full image object
           description: cleanText(v.monument.content?.brief || ""),
         })),
-    [visits]
+    [visits],
   );
 
   const visitedTours = useMemo(
@@ -180,29 +190,40 @@ export default function LibraryPage() {
           visitId: v.visitId,
           _id: v.tour._id,
           title: v.tour.title,
-          image: v.tour.image?.secure_url || v.tour.image?.url,
+          image: v.tour.image, // Pass full image object
           description: cleanText(v.tour.content?.brief || ""),
+          status: v.status,
         })),
-    [visits]
+    [visits],
   );
 
   /* ============================
         DELETE HANDLERS
      ============================ */
   const deleteBookmark = async (bookmarkId: string) => {
-    await apiDeleteBookmark(bookmarkId);
-    loadBookmarks(); // refresh
+    try {
+      show();
+      await apiDeleteBookmark(bookmarkId);
+      await loadBookmarks(); // refresh
+    } finally {
+      hide();
+    }
   };
 
   const deleteVisit = async (visitId: string) => {
-    await apiDeleteVisitHistory(visitId);
-    loadVisits(); // refresh
+    try {
+      show();
+      await apiDeleteVisitHistory(visitId);
+      await loadVisits(); // refresh
+    } finally {
+      hide();
+    }
   };
 
   /* ============================
         PAGINATION
      ============================ */
-  const getPageKey = () => {
+  const getPageKey = useCallback(() => {
     if (topTab === "bookmarks" && innerTab === "monuments")
       return "bookmarkedMonuments";
     if (topTab === "bookmarks" && innerTab === "tours")
@@ -210,7 +231,7 @@ export default function LibraryPage() {
     if (topTab === "visited" && innerTab === "monuments")
       return "visitedMonuments";
     return "visitedTours";
-  };
+  }, [topTab, innerTab]);
 
   const handlePageChange = (p: number) => {
     const key = getPageKey();
@@ -233,8 +254,22 @@ export default function LibraryPage() {
 
   const currentData = dataList.slice(
     (currentPage - 1) * limit,
-    currentPage * limit
+    currentPage * limit,
   );
+
+  /**
+ * PAGINATION AUTO-ADJUST:
+ * If an item is deleted and the current page becomes empty, jump back.
+ */
+  useEffect(() => {
+    const key = getPageKey();
+    const currentPageVal = page[key];
+    const totalPagesVal = Math.ceil(dataList.length / limit) || 1;
+
+    if (currentPageVal > totalPagesVal) {
+      setPage((prev) => ({ ...prev, [key]: totalPagesVal }));
+    }
+  }, [dataList.length, limit, page, getPageKey]);
 
   /* ============================
         MONUMENT DETAILS
@@ -270,7 +305,7 @@ export default function LibraryPage() {
       const v = await apiGetVisitHistoryByUser();
 
       const monumentBookmarks = (b.monuments || []).map((m: any) => ({
-        bookmarkId: m._id,     // keep bookmark id
+        bookmarkId: m._id, // keep bookmark id
         marktype: "monument",
         monument: m.monument,
       }));
@@ -303,70 +338,157 @@ export default function LibraryPage() {
   };
 
   const deleteUserTour = async (visitId: string) => {
-    await apiDeleteUserTour(visitId);
-    loadVisits(); // refresh only visit history list
+    try {
+      show();
+      await apiDeleteUserTour(visitId);
+      if (usertour && usertour._id === visitId) {
+        dispatch(resetNav());
+        dispatch(resetGeofence());
+        dispatch(clearTourDetail());
+      }
+      await loadVisits(); // refresh only visit history list
+    } finally {
+      hide();
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* HERO BANNER */}
-      <section className="relative w-full mx-auto bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="max-w-5xl mx-auto py-3 md:py-16 px-6 text-center">
-          <h1 className="text-2xl md:text-5xl font-extrabold tracking-wide mb-3 drop-shadow-md">
+      <section
+        className="mb-4
+    w-full
+    bg-gradient-to-br
+    from-teal-600 via-cyan-600 to-emerald-700
+    dark:from-[#0a1f2e] dark:via-[#1a3a4a] dark:to-[#2d5a6f]
+    px-6 sm:px-10 md:px-16 lg:px-20
+    py-4 md:py-6 lg:py-8
+    relative
+    overflow-hidden
+  "
+      >
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-300/10 blur-[140px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/4" />
+
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 opacity-5 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        />
+
+        {/* Content */}
+        <div className="max-w-6xl mx-auto relative z-10 text-center">
+          {/* Overline */}
+          <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
+            <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
+            <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
+              {t("nara_heritage")}
+            </span>
+          </div>
+
+          {/* Main title - Enhanced typography */}
+          <h1
+            className="
+        text-xl sm:text-2xl md:text-3xl lg:text-4xl
+        font-black
+        text-white
+        tracking-tight
+        leading-[1.1]
+        mt-2 mb-2
+        drop-shadow-lg
+        font-serif italic
+      "
+          >
             {t("personal_library")}
           </h1>
-          <p className="text-sm md:text-xl font-medium opacity-90">
+
+          {/* Decorative accent line */}
+          <div className="flex items-center justify-center gap-3 my-2">
+            <div className="h-0.5 w-8 bg-gradient-to-r from-teal-300 to-cyan-300 rounded-full" />
+            <span className="text-white/60 text-xs font-medium">✦</span>
+            <div className="h-0.5 w-8 bg-gradient-to-l from-teal-300 to-cyan-300 rounded-full" />
+          </div>
+
+          {/* Subtitle with stats */}
+          <p
+            className="
+        text-xs sm:text-sm md:text-base
+        text-white/80
+        max-w-3xl mx-auto
+        leading-relaxed
+        font-light
+      "
+          >
             {t("personal_library_subtitle")}
           </p>
         </div>
       </section>
 
-      {/* MAIN TABS */}
-      <Tabs
-        value={topTab}
-        onValueChange={(v) => setTopTab(v as any)}
-        className="space-y-6"
-      >
-        <TabsList className="grid w-full grid-cols-2 rounded-full bg-muted/70 p-1 shadow ring-1 ring-border">
-          <TabsTrigger value="bookmarks" className="cursor-pointer">
-            <Bookmark className="mr-2 h-4 w-4" /> {t("Bookmarks")}
-          </TabsTrigger>
-          <TabsTrigger value="visited" className="cursor-pointer">
-            <CheckCircle2 className="mr-2 h-4 w-4" /> {t("Visited")}
-          </TabsTrigger>
-        </TabsList>
+      <div className="px-4 space-y-6">
+        {/* Scroll Anchor */}
 
-        <TabsContent value={topTab}>
-          <InnerTabs
-            key={`${topTab}-${innerTab}`}
-            value={innerTab}
-            onChange={setInnerTab}
-            data={currentData}
-            totalPages={totalPages}
-            page={currentPage}
-            onPageChange={handlePageChange}
-            t={t}
-            onOpenMonument={handleOpenMonument}
-            onDeleteBookmark={deleteBookmark}
-            onDeleteVisit={deleteVisit}
-            onDeleteUserTour={deleteUserTour}
-            isBookmarkTab={topTab === "bookmarks"}
+
+        {/* BREADCRUMB */}
+        <div className="mt-2 flex justify-start">
+          <Breadcrumb
+            items={[
+              { label: t("personal_library") || "My List" },
+            ]}
           />
-        </TabsContent>
-      </Tabs>
+        </div>
 
-      {selectedMonument && (
-        <MonumentDetailModal
-          open={open}
-          onClose={async () => {
-            setOpen(false);
-            await refreshAll();   // 🔥 reload list on modal close
-          }}
-          loading={modalLoading || loadingState}
-          details={selectedMonument}
-          onOpenAnother={handleOpenAnother}
-        />
-      )}
+        {/* MAIN TABS */}
+        <Tabs
+          value={topTab}
+          onValueChange={(v) => setTopTab(v as any)}
+          className="space-y-6"
+        >
+          <TabsList className="grid w-full grid-cols-2 rounded-full bg-muted/70 p-1 shadow ring-1 ring-border">
+            <TabsTrigger value="bookmarks" className="cursor-pointer">
+              <Bookmark className="mr-2 h-4 w-4" /> {t("Bookmarks")}
+            </TabsTrigger>
+            <TabsTrigger value="visited" className="cursor-pointer">
+              <CheckCircle2 className="mr-2 h-4 w-4" /> {t("Visited")}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value={topTab}>
+            <InnerTabs
+              key={`${topTab}-${innerTab}`}
+              value={innerTab}
+              onChange={setInnerTab}
+              data={currentData}
+              totalPages={totalPages}
+              page={currentPage}
+              onPageChange={handlePageChange}
+              t={t}
+              onOpenMonument={handleOpenMonument}
+              onDeleteBookmark={deleteBookmark}
+              onDeleteVisit={deleteVisit}
+              onDeleteUserTour={deleteUserTour}
+              isBookmarkTab={topTab === "bookmarks"}
+            />
+          </TabsContent>
+        </Tabs>
+
+        {selectedMonument && (
+          <MonumentDetailModal
+            open={open}
+            onClose={async () => {
+              setOpen(false);
+              await refreshAll(); // 🔥 reload list on modal close
+            }}
+            loading={modalLoading || loadingState}
+            details={selectedMonument}
+            onOpenAnother={handleOpenAnother}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -386,7 +508,7 @@ function InnerTabs({
   onDeleteBookmark,
   onDeleteVisit,
   isBookmarkTab,
-  onDeleteUserTour
+  onDeleteUserTour,
 }: any) {
   const hasData = data.length > 0;
   const isMonument = value === "monuments";
@@ -435,22 +557,34 @@ function InnerTabs({
                 isMonument ? (
                   <MonumentCard
                     key={`mon-${item._id}-${idx}`}
-                    m={item}
-                    onOpen={onOpenMonument}
-                    onDeleteBookmark={onDeleteBookmark}
-                    onDeleteVisit={onDeleteVisit}
-                    isBookmarkTab={isBookmarkTab}
+                    monument={item}
+                    t={t}
+                    idx={idx}
+                    onClick={() => onOpenMonument(item._id)}
+                    onDelete={() => {
+                      if (isBookmarkTab) {
+                        onDeleteBookmark(item.bookmarkId);
+                      } else {
+                        onDeleteVisit(item.visitId);
+                      }
+                    }}
                   />
                 ) : (
                   <TourCard
                     key={`tour-${item._id}-${idx}`}
-                    t={item}
-                    onDeleteBookmark={onDeleteBookmark}
-                    onDeleteVisit={onDeleteVisit}
-                    isBookmarkTab={isBookmarkTab}
-                    onDeleteUserTour={onDeleteUserTour}
+                    tour={item}
+                    t={t}
+                    idx={idx}
+                    showStatus={true}
+                    onDelete={() => {
+                      if (isBookmarkTab) {
+                        onDeleteBookmark(item.bookmarkId);
+                      } else {
+                        onDeleteUserTour(item.visitId);
+                      }
+                    }}
                   />
-                )
+                ),
               )}
             </div>
 
@@ -467,137 +601,7 @@ function InnerTabs({
   );
 }
 
-/* ============================================
-        MONUMENT CARD WITH DELETE ICON
-   ============================================ */
-function MonumentCard({
-  m,
-  onOpen,
-  onDeleteBookmark,
-  onDeleteVisit,
-  isBookmarkTab,
-}: any) {
-  const { t } = useLocale();
 
-  return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl border">
-      {/* DELETE BUTTON */}
-      <button
-        className="cursor-pointer absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow hover:bg-red-600 z-20"
-        onClick={() =>
-          isBookmarkTab
-            ? onDeleteBookmark(m.bookmarkId)
-            : onDeleteVisit(m.visitId)
-        }
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
-
-      {/* IMAGE */}
-      <div className="relative h-48 w-full overflow-hidden">
-        {m.image ? (
-          <img
-            src={m.image}
-            alt={m.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-          />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col justify-between p-4">
-        <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-amber-700 dark:text-amber-300">
-            {m.name}
-          </h3>
-          {m.description && (
-            <p className="mt-1 line-clamp-3 text-xs text-muted-foreground">
-              {m.description}
-            </p>
-          )}
-        </div>
-
-        <Button
-          className="cursor-pointer mt-3 h-9 rounded-lg bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white hover:opacity-90"
-          onClick={() => onOpen(m._id)}
-        >
-          {t("Details")}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-/* ============================================
-        TOUR CARD WITH DELETE ICON
-   ============================================ */
-function TourCard({
-  t: tour,
-  onDeleteBookmark,
-  onDeleteVisit,
-  isBookmarkTab,
-  onDeleteUserTour
-}: any) {
-  const { t: tr } = useLocale();
-
-  return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl border">
-      {/* DELETE BUTTON */}
-      <button
-        className="cursor-pointer absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow hover:bg-red-600 z-20"
-        onClick={() => {
-          if (isBookmarkTab) {
-            onDeleteBookmark(tour.bookmarkId);
-          } else {
-            onDeleteUserTour(tour.visitId);   // ✅ FIXED
-          }
-        }}
-
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
-
-      <div className="relative h-48 w-full overflow-hidden">
-        {tour.image ? (
-          <img
-            src={tour.image}
-            alt={tour.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-          />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
-        <div>
-          <h3 className="line-clamp-1 text-base font-semibold text-amber-700 dark:text-amber-300">
-            {tour.title}
-          </h3>
-          {tour.description && (
-            <p className="mt-1 line-clamp-3 text-xs text-muted-foreground">
-              {tour.description}
-            </p>
-          )}
-        </div>
-
-        <Button
-          asChild
-          className="cursor-pointer h-9 rounded-lg bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white hover:opacity-90"
-        >
-          <Link href={`/tours/detail?id=${encodeURIComponent(tour._id)}`}>
-            {tr("Details")}
-          </Link>
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 /* ============================================
         PAGINATION
@@ -614,10 +618,10 @@ function PageNavigator({
   t: any;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 pt-6">
+    <div className="mt-6 mb-10 flex items-center justify-between gap-3 pt-6">
       {/* PAGE INFO */}
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        ページ {page} / {totalPages}
+        {t("pagination_left", { current: page, total: totalPages })}
       </div>
 
       <div className="flex items-center gap-1">
@@ -627,8 +631,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page <= 1}
@@ -652,17 +656,17 @@ function PageNavigator({
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
                   ${n === page
-                    ? "bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow-sm"
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
                     : `
-                        text-orange-600 dark:text-amber-400
-                        hover:bg-orange-50 dark:hover:bg-orange-900/30
+                        text-teal-600 dark:text-teal-400
+                        hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `
                   }
                 `}
               >
                 {n}
               </button>
-            )
+            ),
           )}
         </div>
 
@@ -672,8 +676,8 @@ function PageNavigator({
           size="sm"
           className="
             cursor-pointer h-8
-            text-orange-600 dark:text-amber-400
-            hover:bg-orange-50 dark:hover:bg-orange-900/30
+            text-teal-600 dark:text-teal-400
+            hover:bg-teal-50 dark:hover:bg-teal-900/30
           "
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page >= totalPages}
@@ -688,7 +692,7 @@ function PageNavigator({
 function rangeAround(
   current: number,
   total: number,
-  radius: number
+  radius: number,
 ): (number | "…")[] {
   const out: (number | "…")[] = [];
   const start = Math.max(1, current - radius);
@@ -705,11 +709,10 @@ function rangeAround(
   return out;
 }
 
-
 function EmptyState({ icon, title, subtitle }: any) {
   return (
     <div className="grid place-items-center rounded-3xl border bg-gradient-to-br from-sky-50 to-cyan-100 dark:from-gray-900/50 dark:to-gray-800/50 p-10 text-center shadow-inner">
-      <div className="mb-3 grid h-14 w-14 place-items-center rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white shadow">
+      <div className="mb-3 grid h-14 w-14 place-items-center rounded-full bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow">
         {icon}
       </div>
       <div className="text-base font-semibold text-gray-800 dark:text-white">

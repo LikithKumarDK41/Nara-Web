@@ -21,7 +21,6 @@ import {
   Globe,
   Info,
   X,
-  CalendarDays,
   BookmarkCheck,
   Bookmark,
   ChevronLeft,
@@ -29,21 +28,21 @@ import {
   MapPinned,
   Camera,
   SwitchCamera,
+  Maximize2,
 } from "lucide-react";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useRef, useEffect, useState } from "react";
 import {
-  apiFetchEventsByMonument,
   apiFetchBookmarkByRef,
   apiRemoveBookmark,
   apiCreateBookmark,
 } from "@/services/userGlobalservice";
-import type { EventItem } from "@/lib/types/userGlobal.types";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useAppSelector } from "@/lib/store/hook";
 import { selectNav } from "@/lib/store/slices/navSlice";
 import MonumentMapModal from "../map/MonumentsMapModal";
-import { normalizeHTML, stripHTML, getDistanceInMeters } from "@/lib/utils";
+import { getDistanceInMeters, normalizeHTML, stripHTML } from "@/lib/utils";
 import { useGlobalLoader } from "@/providers/LoaderProvider";
 import PlaceDetailModal from "./PlaceDetailModal";
 
@@ -69,9 +68,9 @@ export default function MonumentDetailModal({
   const { t } = useLocale();
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [events, setEvents] = useState<EventItem[]>([]);
   const { show, hide } = useGlobalLoader();
   const nav = useAppSelector(selectNav);
+  const auth = useAppSelector((s) => s.auth);
   const customStyleDefault =
     "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 hover:opacity-90 text-white font-semibold shadow-md hover:shadow-xl transition-all";
 
@@ -92,7 +91,6 @@ export default function MonumentDetailModal({
   const [viewerOpen, setViewerOpen] = useState(false);
   const [mainViewerOpen, setMainViewerOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
   const isMobile =
     typeof window !== "undefined" &&
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -127,26 +125,24 @@ export default function MonumentDetailModal({
     setActiveIndex((i) => (i === details.gallery.length - 1 ? 0 : i + 1));
   };
 
-  function sanitizeHTML(input: string): string {
-    if (!input) return "";
-    return input
-      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "")
-      .replace(/<!--[\s\S]*?-->/g, "");
-  }
+  // Keyboard navigation for gallery viewer
+  useEffect(() => {
+    if (!viewerOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        prevImage();
+      } else if (e.key === "ArrowRight") {
+        nextImage();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [viewerOpen, isSingleImage, nextImage, prevImage]);
 
   useEffect(() => {
-    if (details?._id) {
-      (async () => {
-        try {
-          const data = await apiFetchEventsByMonument(details._id);
-
-          setEvents(data);
-        } catch (err) {
-          console.error("Failed to load events:", err);
-        }
-      })();
-    }
+    // If we need to fetch events, we can do it here, but they are currently unused in UI.
   }, [details]);
 
   // Scroll to top whenever new monument details are loaded
@@ -169,7 +165,6 @@ export default function MonumentDetailModal({
   };
 
   const plainAddress = stripHTML(details?.access);
-  const plainCredit = stripHTML(details?.imagecredit);
   interface BookmarkItem {
     _id: string;
     marktype: string;
@@ -185,7 +180,7 @@ export default function MonumentDetailModal({
 
     (async () => {
       try {
-        const res = (await apiFetchBookmarkByRef()) as any;
+        const res = (await apiFetchBookmarkByRef(auth.data?.user?._id)) as any;
         if (stop) return;
 
         let bookmark: BookmarkItem | null = null;
@@ -222,7 +217,7 @@ export default function MonumentDetailModal({
     return () => {
       stop = true;
     };
-  }, [details?._id, userId]);
+  }, [details?._id, userId, auth.data?.user?._id]);
 
   const handleBookmarkToggle = async () => {
     if (!userId || !details?._id) {
@@ -269,22 +264,6 @@ export default function MonumentDetailModal({
     }
   };
 
-  function normalizeEmptyParagraphs(html: string) {
-    if (!html) return html;
-
-    return (
-      html
-        // <p></p> or <p>   </p>
-        .replace(/<p>\s*<\/p>/gi, "<br/>")
-
-        // <p>&nbsp;</p>
-        .replace(/<p>(&nbsp;|\s)*<\/p>/gi, "<br/>")
-
-        // <p><br></p> or <p><br/></p>
-        .replace(/<p>\s*<br\s*\/?>\s*<\/p>/gi, "<br/>")
-    );
-  }
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -328,7 +307,6 @@ export default function MonumentDetailModal({
     };
   }, [cameraOpen, cameraFacing]);
 
-  const [isNearby, setIsNearby] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   function openStreetViewFromApi(loc: [number, number]) {
@@ -362,7 +340,7 @@ export default function MonumentDetailModal({
     };
   }
 
-  const { lat, lng } = normalizeCoords(details?.avlocation);
+  normalizeCoords(details?.avlocation);
 
   const hasAnyDetails =
     safeText(details?.era) ||
@@ -428,7 +406,7 @@ export default function MonumentDetailModal({
     if (!capturedImage) return;
 
     const blob = await (await fetch(capturedImage)).blob();
-    const file = new File([blob], "gose-visit.png", {
+    const file = new File([blob], "nara-visit.png", {
       type: "image/png",
     });
 
@@ -440,8 +418,8 @@ export default function MonumentDetailModal({
       navigator.canShare({ files: [file] })
     ) {
       await navigator.share({
-        title: "Gose Visit",
-        text: "Captured at Gose monument",
+        title: t("nara_visit"),
+        text: t("captured_at") + (details.title || details.name) + t("monument_"),
         files: [file],
       });
       return;
@@ -454,7 +432,7 @@ export default function MonumentDetailModal({
   function downloadImageFallback(dataUrl: string) {
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = "gose-visit.png";
+    a.download = "nara-visit.png";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -494,7 +472,7 @@ export default function MonumentDetailModal({
         {/* ---------------- Header ---------------- */}
         <DialogHeader className="flex items-center border-b bg-background py-4 px-8 relative">
           <DialogTitle
-            className="
+            className="font-serif italic
     text-xl font-semibold 
     px-12 
     whitespace-nowrap 
@@ -532,14 +510,21 @@ export default function MonumentDetailModal({
               <>
                 {/* 🖼 Main Image */}
                 {details.image?.secure_url && (
-                  <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
+                  <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border group">
                     <Image
                       src={details.image.secure_url}
                       alt={safeText(details.title)}
                       fill
                       onClick={() => setMainViewerOpen(true)}
-                      className="cursor-pointer object-cover transition-transform hover:scale-105"
+                      className="cursor-pointer object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+
+                    {/* Hover Icon Overlay */}
+                    <div className="absolute inset-0 bg-black/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 scale-100 md:scale-90 md:group-hover:scale-100 transition-transform duration-300">
+                        <Maximize2 size={20} />
+                      </div>
+                    </div>
                     {/* 🔖 Bookmark Button */}
                     <button
                       onClick={handleBookmarkToggle}
@@ -557,7 +542,7 @@ export default function MonumentDetailModal({
                     >
                       {isBookmarked ? (
                         <BookmarkCheck
-                          className="
+                          className="cursor-pointer
         h-8 w-8
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
@@ -566,7 +551,7 @@ export default function MonumentDetailModal({
                       ) : (
                         <Bookmark
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-white/90
         hover:text-teal-300
         transition-colors
@@ -617,7 +602,6 @@ export default function MonumentDetailModal({
                                 distance <=
                                 (details.georadius ? details.georadius : 150);
 
-                              setIsNearby(nearby);
                               if (!nearby) {
                                 toast.error(t("move_closer_to_monument"));
                                 hide();
@@ -652,41 +636,44 @@ export default function MonumentDetailModal({
                   </div>
                 )}
 
-                {mainViewerOpen && details.image?.secure_url && (
-                  <div
-                    className="h-[100%] fixed inset-0 z-[9999] bg-black/90"
-                    onClick={() => setMainViewerOpen(false)}
-                  >
-                    {/* CLOSE BUTTON */}
-                    <button
+                <AnimatePresence>
+                  {mainViewerOpen && details.image?.secure_url && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="h-[100%] fixed inset-0 z-[9999] bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-8"
                       onClick={() => setMainViewerOpen(false)}
-                      className="cursor-pointer absolute top-4 right-4 z-20 text-white bg-black p-2 rounded-full hover:bg-black/40 dark:hover:bg-white/10 transition"
                     >
-                      <X className="h-6 w-6" />
-                    </button>
+                      {/* CLOSE BUTTON */}
+                      <button
+                        onClick={() => setMainViewerOpen(false)}
+                        className="cursor-pointer absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
+                      >
+                        <X size={32} />
+                      </button>
 
-                    {/* IMAGE CENTER */}
-                    <div
-                      className="flex items-center justify-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="relative w-screen h-screen">
-                        <Image
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="relative max-w-7xl max-h-[90vh] w-auto h-auto outline-none flex flex-col items-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
                           src={details.image.secure_url}
                           alt={safeText(details.title)}
-                          fill
-                          priority
-                          className="object-contain"
+                          className="max-w-full max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
                         />
-                      </div>
-                    </div>
-                  </div>
-                )}
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {!details.image?.secure_url && (
                   <div className="relative h-[420px] w-full overflow-hidden rounded-xl shadow-md ring-1 ring-border">
                     <div className="flex justify-center items-center h-full bg-gray-200 dark:bg-gray-700 rounded-t-2xl">
-                      <ImageIcon className="h-8 w-8 text-gray-500 dark:text-gray-300" />
+                      <ImageIcon className="h-8 w-8 text-slate-400 dark:text-slate-600" />
                     </div>
 
                     <button
@@ -697,7 +684,7 @@ export default function MonumentDetailModal({
                       {isBookmarked ? (
                         <BookmarkCheck
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-teal-400
         drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]
       "
@@ -705,7 +692,7 @@ export default function MonumentDetailModal({
                       ) : (
                         <Bookmark
                           className="
-        h-8 w-8
+        h-8 w-8 cursor-pointer
         text-white/90
         hover:text-teal-300
         transition-colors
@@ -755,7 +742,6 @@ export default function MonumentDetailModal({
                               const nearby =
                                 distance <=
                                 (details.georadius ? details.georadius : 150);
-                              setIsNearby(nearby);
                               if (!nearby) {
                                 toast.error(t("move_closer_to_monument"));
                                 hide();
@@ -792,7 +778,7 @@ export default function MonumentDetailModal({
 
                 {/* 🏛 Title + Region */}
                 <section>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                  <h2 className="font-serif italic text-2xl font-bold tracking-tight text-foreground">
                     {safeText(details.title || details.name)}
                   </h2>
                   {details.region &&
@@ -806,7 +792,7 @@ export default function MonumentDetailModal({
 
                 {/* 📖 Content */}
                 {(details.content?.brief || details.content?.extended) && (
-                  <section className="prose max-w-none text-sm leading-relaxed text-muted-foreground space-y-3 dark:prose-invert whitespace-pre-wrap">
+                  <section className="rich-text-content max-w-none text-sm leading-relaxed text-muted-foreground space-y-3 whitespace-pre-wrap">
                     {details.content?.brief && (
                       <div
                         dangerouslySetInnerHTML={{
@@ -829,9 +815,8 @@ export default function MonumentDetailModal({
                   <section className="flex flex-wrap gap-2">
                     {safeText(details?.era) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.era")}:{" "}
                         {details.era}
@@ -839,9 +824,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.year) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.year")}:{" "}
                         {details.year}
@@ -849,9 +833,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.size) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.size")}:{" "}
                         {details.size}
@@ -859,9 +842,8 @@ export default function MonumentDetailModal({
                     )}
                     {safeText(details?.mtype) && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.type")}:{" "}
                         {details.mtype}
@@ -869,27 +851,24 @@ export default function MonumentDetailModal({
                     )}
                     {details?.featured && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.featured")}
                       </Badge>
                     )}
                     {details?.rare && (
                       <Badge
-                        className={`whitespace-normal break-words${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.rare")}
                       </Badge>
                     )}
                     {details?.popularity && details?.popularity !== "0" && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.popularity")}:{" "}
                         {details.popularity}
@@ -897,9 +876,8 @@ export default function MonumentDetailModal({
                     )}
                     {details?.priority && (
                       <Badge
-                        className={`whitespace-normal break-words ${
-                          customStyle || customStyleDefault
-                        }`}
+                        className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                          }`}
                       >
                         {t("shortcut.tourist_attraction_details.priority")}:{" "}
                         {details.priority}
@@ -911,7 +889,7 @@ export default function MonumentDetailModal({
                 {/* 🏠 Address */}
                 {plainAddress && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-1">
                       <Layers className="h-4 w-4 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.address")}
                     </h3>
@@ -924,11 +902,11 @@ export default function MonumentDetailModal({
                 {/* 🌍 Region Info */}
                 {details.region.content && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-2">
                       <Globe className="h-4 w-4 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.region_info")}
                     </h3>
-                    <div className="text-sm text-muted-foreground whitespace-pre-wrap">
+                    <div className="rich-text-content text-sm text-muted-foreground whitespace-pre-wrap">
                       {details.region.content?.brief && (
                         <div
                           dangerouslySetInnerHTML={{
@@ -952,9 +930,9 @@ export default function MonumentDetailModal({
                 )}
 
                 {/* 📷 Image Credit */}
-                {details?.imagecredit && (
+                {details?.imagecredit && details.imagecredit.replace(/<[^>]*>/g, "").trim() !== "" && (
                   <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
+                    <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-1">
                       <Info className="h-4 w-4 text-gray-500" />
                       {t("shortcut.tourist_attraction_details.image_credit")}
                     </h3>
@@ -975,140 +953,133 @@ export default function MonumentDetailModal({
                 {/* 🏷 Theme / Subtheme */}
                 {(details?.theme?.length > 0 ||
                   details?.subtheme?.length > 0) && (
-                  <section>
-                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-2">
-                      <Star className="h-4 w-4 text-gray-500" />{" "}
-                      {t("shortcut.tourist_attraction_details.classification")}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {details.theme?.map((th: any, i: number) => (
-                        <Badge
-                          key={th._id || `theme-${i}`}
-                          className={`whitespace-normal break-words ${
-                            customStyle || customStyleDefault
-                          }`}
-                        >
-                          {safeText(th.title || th.name)}
-                        </Badge>
-                      ))}
-                      {details.subtheme?.map((sth: any, i: number) => (
-                        <Badge
-                          key={sth._id || `subtheme-${i}`}
-                          className={`whitespace-normal break-words ${
-                            customStyle || customStyleDefault
-                          }`}
-                        >
-                          {safeText(sth.title || sth.name)}
-                        </Badge>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                    <section>
+                      <h3 className="font-serif italic text-lg font-semibold flex items-center gap-2 mb-2">
+                        <Star className="h-4 w-4 text-gray-500" />{" "}
+                        {t("shortcut.tourist_attraction_details.classification")}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {details.theme?.map((th: any, i: number) => (
+                          <Badge
+                            key={th._id || `theme-${i}`}
+                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                              }`}
+                          >
+                            {safeText(th.title || th.name)}
+                          </Badge>
+                        ))}
+                        {details.subtheme?.map((sth: any, i: number) => (
+                          <Badge
+                            key={sth._id || `subtheme-${i}`}
+                            className={`whitespace-normal break-words ${customStyle || customStyleDefault
+                              }`}
+                          >
+                            {safeText(sth.title || sth.name)}
+                          </Badge>
+                        ))}
+                      </div>
+                    </section>
+                  )}
 
                 {/* 🖼 Gallery */}
                 {!!details.gallery?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <ImageIcon className="h-5 w-5 text-gray-500" />
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                      <ImageIcon className="h-5 w-5 text-slate-400 dark:text-slate-600" />
                       {t("shortcut.tourist_attraction_details.gallery")}
                     </h3>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                       {details.gallery.map((img: any, i: number) =>
                         img.secure_url ? (
-                          <button
+                          <div
                             key={img.secure_url || `gallery-${i}`}
                             onClick={() => openViewer(i)}
-                            className="cursor-pointer relative h-40 overflow-hidden rounded-md shadow-sm focus:outline-none"
+                            className="cursor-pointer group relative h-40 overflow-hidden rounded-xl shadow-md ring-1 ring-border"
                           >
                             <Image
                               src={img.secure_url}
                               alt=""
                               fill
-                              className="object-cover hover:scale-105 transition-transform"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                          </button>
+                            {/* Hover Icon Overlay */}
+                            <div className="absolute inset-0 bg-black/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
+                              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 scale-100 md:scale-90 md:group-hover:scale-100 transition-transform duration-300">
+                                <Maximize2 size={18} />
+                              </div>
+                            </div>
+                          </div>
                         ) : null,
                       )}
                     </div>
                   </section>
                 )}
 
-                {viewerOpen && (
-                  <div
-                    className="h-[100%] fixed inset-0 z-[9999] bg-black/90"
-                    onClick={closeViewer}
-                  >
-                    {/* CLOSE BUTTON */}
-                    <button
+                <AnimatePresence>
+                  {viewerOpen && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="h-[100%] fixed inset-0 z-[9999] bg-black/90 backdrop-blur-lg flex items-center justify-center p-4 md:p-8"
                       onClick={closeViewer}
-                      className="cursor-pointer absolute top-4 right-4 z-20 text-white bg-black p-2 rounded-full hover:bg-black/40 dark:hover:bg-white/10 transition"
                     >
-                      <X className="h-6 w-6" />
-                    </button>
+                      {/* CLOSE BUTTON */}
+                      <button
+                        onClick={closeViewer}
+                        className="cursor-pointer absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
+                      >
+                        <X size={32} />
+                      </button>
 
-                    {/* PREVIOUS */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevImage();
-                      }}
-                      disabled={isSingleImage}
-                      className={`
-    absolute left-4 top-1/2 -translate-y-1/2 z-20
-    p-2 md:p-3 rounded-full transition-all duration-200
-    ${
-      isSingleImage
-        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-    }
-  `}
-                    >
-                      <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
-                    </button>
+                      {/* PREVIOUS */}
+                      {!isSingleImage && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage();
+                          }}
+                          className="cursor-pointer absolute left-6 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
+                        >
+                          <ChevronLeft className="h-8 w-8" />
+                        </button>
+                      )}
 
-                    {/* IMAGE CENTER */}
-                    <div
-                      className="flex items-center justify-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="relative w-screen h-screen">
-                        <Image
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="relative max-w-7xl max-h-[90vh] w-auto h-auto outline-none flex flex-col items-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
                           src={details.gallery[activeIndex].secure_url}
                           alt=""
-                          fill
-                          priority
-                          className="object-contain rounded-xl shadow-2xl"
+                          className="max-w-full max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
                         />
-                      </div>
-                    </div>
+                      </motion.div>
 
-                    {/* NEXT */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextImage();
-                      }}
-                      disabled={isSingleImage}
-                      className={`
-    absolute right-4 top-1/2 -translate-y-1/2 z-20
-    p-2 md:p-3 rounded-full transition-all duration-200
-    ${
-      isSingleImage
-        ? "cursor-not-allowed opacity-30 bg-black/50 text-white"
-        : "cursor-pointer text-white dark:text-black bg-black/50 dark:bg-white/60 hover:bg-black/70 dark:hover:bg-white/80"
-    }
-  `}
-                    >
-                      <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
-                    </button>
-                  </div>
-                )}
+                      {/* NEXT */}
+                      {!isSingleImage && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage();
+                          }}
+                          className="cursor-pointer absolute right-6 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
+                        >
+                          <ChevronRight className="h-8 w-8" />
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* 🏛 Nearby Monuments */}
                 {!!details.nearbymonuments?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Landmark className="h-5 w-5 text-gray-500" />{" "}
                       {t(
                         "shortcut.tourist_attraction_details.nearby_monuments",
@@ -1118,7 +1089,8 @@ export default function MonumentDetailModal({
                       {details.nearbymonuments.map((m: any) => (
                         <div
                           key={m._id}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          onClick={() => onOpenAnother(m._id)}
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
                             {m.image?.secure_url ? (
@@ -1128,12 +1100,12 @@ export default function MonumentDetailModal({
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                               />
                             ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                              <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                             )}
                           </div>
 
                           <div className="flex flex-col flex-1 justify-between p-4">
-                            <h4 className="text-sm font-semibold text-foreground">
+                            <h4 className="font-serif italic text-sm font-semibold text-foreground">
                               {safeText(m.title)}
                             </h4>
 
@@ -1150,10 +1122,8 @@ export default function MonumentDetailModal({
 
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-3 ${
-                                customStyle || customStyleDefault
-                              }`}
-                              onClick={() => onOpenAnother(m._id)}
+                              className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1167,77 +1137,98 @@ export default function MonumentDetailModal({
                 {/* 🧭 Related Tours */}
                 {!!details.relatedtours?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <Route className="h-5 w-5 text-gray-500" />{" "}
-                      {t("shortcut.tourist_attraction_details.related_tours")}
-                    </h3>
-                    <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                      {details.relatedtours
-                        .filter(
-                          (tour: any) =>
-                            !(localTourId && localTourId === tour._id),
-                        )
-                        .map((tour: any) => (
-                          <div
-                            key={tour._id}
-                            className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
-                          >
-                            {/* IMAGE */}
-                            <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                              {tour.image?.secure_url ? (
-                                <img
-                                  src={tour.image.secure_url}
-                                  alt={safeText(tour.title)}
-                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                                />
-                              ) : (
-                                <ImageIcon className="h-9 w-8 text-muted-foreground" />
-                              )}
-                            </div>
-
-                            {/* CONTENT + BUTTON */}
-                            <div className="flex flex-col flex-1 justify-between p-4">
-                              {/* Text Section (auto-height) */}
-                              <div className="flex-1">
-                                <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                  {safeText(tour.title)}
-                                </h3>
-
-                                {tour.content?.brief && (
-                                  <p
-                                    className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                    dangerouslySetInnerHTML={{
-                                      __html: normalizeHTML(tour.content.brief),
-                                    }}
+                    {details.relatedtours.filter(
+                      (tour: any) => !(localTourId && localTourId === tour._id),
+                    ).length > 0 && (
+                        <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                          <Route className="h-5 w-5 text-gray-500" />{" "}
+                          {t("shortcut.tourist_attraction_details.related_tours")}
+                        </h3>
+                      )}
+                    <div>
+                      <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+                        {details.relatedtours
+                          .filter(
+                            (tour: any) =>
+                              !(localTourId && localTourId === tour._id),
+                          )
+                          .map((tour: any) => (
+                            <div
+                              key={tour._id}
+                              onClick={() => {
+                                if (!(localTourId !== tour._id)) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                } else if (!localTourId) {
+                                  router.push(`/tours/detail/?id=${tour._id}`);
+                                }
+                              }}
+                              className={`
+  group relative flex flex-col h-full overflow-hidden rounded-2xl
+  bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md transition-all border
+  ${!localTourId ? "cursor-pointer hover:shadow-xl" : "cursor-not-allowed"}
+   ${!(localTourId !== tour._id)
+                                  ? "cursor-pointer hover:shadow-xl"
+                                  : "cursor-not-allowed"
+                                }
+`}
+                            >
+                              {/* IMAGE */}
+                              <div className="h-48 w-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                {tour.image?.secure_url ? (
+                                  <img
+                                    src={tour.image.secure_url}
+                                    alt={safeText(tour.title)}
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                                   />
-                                )}
-
-                                {/* If no content, keep height consistent */}
-                                {!tour.content?.brief && (
-                                  <div className="h-5"></div>
+                                ) : (
+                                  <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                                 )}
                               </div>
 
-                              {/* BUTTON ALWAYS AT BOTTOM */}
-                              <Button
-                                size="sm"
-                                className={`cursor-pointer w-full rounded-full mt-3 ${
-                                  customStyle || customStyleDefault
-                                }`}
-                                onClick={() =>
-                                  router.push(`/tours/detail/?id=${tour._id}`)
-                                }
-                                disabled={
-                                  localTourId ? localTourId !== tour._id : false
-                                }
-                              >
-                                {t(
-                                  "shortcut.tourist_attraction_details.go_tour",
-                                )}
-                              </Button>
+                              {/* CONTENT + BUTTON */}
+                              <div className="flex flex-col flex-1 justify-between p-4">
+                                {/* Text Section (auto-height) */}
+                                <div className="flex-1">
+                                  <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                                    {safeText(tour.title)}
+                                  </h3>
+
+                                  {tour.content?.brief && (
+                                    <p
+                                      className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
+                                      dangerouslySetInnerHTML={{
+                                        __html: normalizeHTML(
+                                          tour.content.brief,
+                                        ),
+                                      }}
+                                    />
+                                  )}
+
+                                  {/* If no content, keep height consistent */}
+                                  {!tour.content?.brief && (
+                                    <div className="h-5"></div>
+                                  )}
+                                </div>
+
+                                {/* BUTTON ALWAYS AT BOTTOM */}
+                                <Button
+                                  size="sm"
+                                  className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                    } group-hover:opacity-90`}
+                                  disabled={
+                                    localTourId
+                                      ? localTourId !== tour._id
+                                      : false
+                                  }
+                                >
+                                  {t(
+                                    "shortcut.tourist_attraction_details.go_tour",
+                                  )}
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                      </div>
                     </div>
                   </section>
                 )}
@@ -1245,7 +1236,7 @@ export default function MonumentDetailModal({
                 {/* 🏬 Nearby Services */}
                 {!!details.nearbyservices?.length && (
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
+                    <h3 className="font-serif italic mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
                       <Store className="h-5 w-5 text-gray-500" />{" "}
                       {t("shortcut.tourist_attraction_details.nearby_services")}
                     </h3>
@@ -1253,7 +1244,8 @@ export default function MonumentDetailModal({
                       {details.nearbyservices.map((srv: any) => (
                         <div
                           key={srv._id || srv.name}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
+                          onClick={() => openPlaceDetails(srv)}
+                          className="cursor-pointer group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] border border-slate-200/80 dark:border-slate-700/60 shadow-md hover:shadow-xl transition-all border"
                         >
                           {/* IMAGE */}
                           <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
@@ -1264,20 +1256,20 @@ export default function MonumentDetailModal({
                                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                               />
                             ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
+                              <ImageIcon className="h-9 w-8 text-slate-400 dark:text-slate-600" />
                             )}
                           </div>
                           <div className="flex flex-col flex-1 justify-between p-4">
                             <div className="flex-1">
-                              <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                {safeText(srv.name)}
+                              <h3 className="font-serif italic line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
+                                {safeText(srv.title || srv.name)}
                               </h3>
                               {srv.category && (
                                 <p className="text-xs text-muted-foreground">
                                   {t(
                                     "shortcut.tourist_attraction_details.category",
                                   )}
-                                  : {safeText(srv.category.name)}
+                                  : {safeText(srv.category.title || srv.category.name)}
                                 </p>
                               )}
                               {/* If no content, keep height consistent */}
@@ -1286,81 +1278,8 @@ export default function MonumentDetailModal({
                             {/* ✅ DETAILS BUTTON */}
                             <Button
                               size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-3 ${
-                                customStyle || customStyleDefault
-                              }`}
-                              onClick={() => openPlaceDetails(srv)}
-                            >
-                              {t("tourDetails.viewDetails")}
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-                {/* 📅 Events linked to this Monument */}
-                {!!events.length && (
-                  <section>
-                    <h3 className="mb-3 flex items-center gap-2 font-semibold text-lg text-foreground">
-                      <CalendarDays className="h-5 w-5 text-gray-500" />
-                      {t("event_header")}
-                    </h3>
-
-                    <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                      {events.map((ev, i) => (
-                        <div
-                          key={ev._id || `event-${i}`}
-                          className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all border"
-                        >
-                          {/* 🖼 Image */}
-                          <div className="h-48 w-full overflow-hidden bg-muted flex items-center justify-center">
-                            {ev.image?.secure_url ? (
-                              <img
-                                src={ev.image.secure_url}
-                                alt={safeText(ev.title)}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                              />
-                            ) : (
-                              <ImageIcon className="h-9 w-8 text-muted-foreground" />
-                            )}
-                          </div>
-
-                          {/* 📄 Event Info */}
-                          <div className="flex flex-col flex-1 justify-between p-4">
-                            <div className="flex-1">
-                              <h3 className="line-clamp-1 text-base font-semibold text-sm font-semibold text-foreground">
-                                {safeText(ev.title)}
-                              </h3>
-
-                              {/* {ev.displaydate && (
-              <p className="text-xs text-muted-foreground">
-                <CalendarDays className="inline h-3 w-3 mr-1 text-gray-500" />
-                {ev.displaydate}
-              </p>
-            )} */}
-
-                              {ev.description && (
-                                <p
-                                  className="text-xs text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap"
-                                  dangerouslySetInnerHTML={{
-                                    __html: normalizeHTML(ev.description),
-                                  }}
-                                />
-                              )}
-
-                              {/* If no content, keep height consistent */}
-                              {!ev.description && <div className="h-5"></div>}
-                            </div>
-
-                            <Button
-                              size="sm"
-                              className={`cursor-pointer w-full rounded-full mt-2 ${
-                                customStyle || customStyleDefault
-                              }`}
-                              onClick={() => {
-                                router.push(`/shortcuts/events/?id=${ev._id}`);
-                              }}
+                              className={`cursor-pointer w-full rounded-full mt-3 ${customStyle || customStyleDefault
+                                } group-hover:opacity-90`}
                             >
                               {t("tourDetails.viewDetails")}
                             </Button>
@@ -1380,21 +1299,13 @@ export default function MonumentDetailModal({
           <Button
             size="lg"
             onClick={() => setMapOpen(true)}
-            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${
-              customStyle || customStyleDefault
-            }`}
+            className={`cursor-pointer w-full rounded-full flex items-center justify-center gap-2 ${customStyle || customStyleDefault
+              }`}
           >
             <MapPin className="h-5 w-5" />
             {t("view_map")}
           </Button>
         </div>
-        {/* <button
-            onClick={() => setMapOpen(true)}
-            className="absolute top-4 left-4 bg-white/70 dark:bg-black/50 px-3 py-2 rounded-full shadow flex items-center gap-2 z-50"
-          >
-            <MapPin className="h-4 w-4" />
-            View on Map
-          </button> */}
 
         {details && (
           <MonumentMapModal
@@ -1422,12 +1333,6 @@ export default function MonumentDetailModal({
               autoPlay
               playsInline
               muted
-              // className="absolute inset-0 w-full h-full object-cover"
-              //             className={`absolute inset-0 w-full h-full object-cover
-              //   ${cameraFacing === "user" ? "scale-x-[-1]" : ""}
-
-              // `}
-
               className={`absolute inset-0 w-full h-full object-cover
     ${isMobile && cameraFacing === "user" ? "scale-x-[-1]" : ""}
     ${!isMobile && cameraFacing != "user" ? "scale-x-[-1]" : ""}
@@ -1437,7 +1342,7 @@ export default function MonumentDetailModal({
             {/* GOSE LOGO */}
             <img
               src="/nara_logo.png"
-              alt="Gose"
+              alt="Nara"
               className="absolute w-32 opacity-80"
             />
 
@@ -1456,9 +1361,8 @@ export default function MonumentDetailModal({
                   prev === "environment" ? "user" : "environment",
                 )
               }
-              className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${
-                isMobile ? "" : "hidden"
-              }`}
+              className={`cursor-pointer absolute top-4 left-4 z-[10000] bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition ${isMobile ? "" : "hidden"
+                }`}
               aria-label="Switch camera"
             >
               <SwitchCamera className="h-6 w-6" />
@@ -1473,7 +1377,7 @@ export default function MonumentDetailModal({
             {/* Close */}
             <button
               onClick={() => setPreviewOpen(false)}
-              className="absolute top-4 right-4 text-white bg-black/60 p-2 rounded-full"
+              className="cursor-pointer absolute top-4 right-4 text-white bg-black/60 p-2 rounded-full"
             >
               <X />
             </button>
@@ -1500,6 +1404,7 @@ export default function MonumentDetailModal({
             onClose={() => setPlaceOpen(false)}
             loading={placeLoading}
             details={activePlace}
+            onOpenAnother={onOpenAnother}
             customStyle={customStyleDefault}
           />
         )}

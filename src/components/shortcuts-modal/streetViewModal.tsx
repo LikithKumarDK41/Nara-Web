@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   ImageIcon,
   ChevronLeft,
@@ -29,10 +29,8 @@ import {
   apiFetchMonumentSorts,
 } from "@/services/userTourService";
 import type { Monument, MonumentSort } from "@/lib/types/userTour.types";
-import { Star } from "lucide-react";
-import { sortByPopularityThenName } from "@/lib/monumentSort";
-import { normalizeHTML } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import MonumentCard from "@/components/tour/MonumentCard";
 
 /* =========================================================
    🏛️ Monuments Page
@@ -55,6 +53,16 @@ export default function StreetViewModal({
 
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+
+  // 📐 Ref for scrolling the modal container to top on pagination
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+
+  // ✅ Auto-scroll to top of modal when page changes
+  useEffect(() => {
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [page]);
   const limit = 6;
 
   const [open, setOpen] = useState(false);
@@ -85,7 +93,7 @@ export default function StreetViewModal({
         const backendSort =
           selectedSort === "-popularity"
             ? "-popularity"
-            : (selectedSort ?? undefined);
+            : (selectedSort ?? "-popularity");
 
         const data = await apiFetchAllMonumentsWithQuery({
           //   filter: selectedFilter
@@ -118,12 +126,9 @@ export default function StreetViewModal({
   }, [query, selectedFilter, selectedSort, openModal]);
 
   const filtered = useMemo(() => {
-    let list = monuments;
+    const list = monuments;
 
-    // ⭐ ONLY when popular sort selected
-    if (selectedSort === "-popularity") {
-      list = sortByPopularityThenName(list);
-    }
+
 
     if (!query.trim()) return list;
 
@@ -138,19 +143,6 @@ export default function StreetViewModal({
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const currentData = filtered.slice((page - 1) * limit, page * limit);
 
-  /* -------------------- Detail Modal -------------------- */
-  const handleOpenMonument = async (id: string) => {
-    setModalLoading(true);
-    try {
-      const data = await apiFetchMonumentDetails(id);
-      setSelectedMonument(data);
-      setOpen(true);
-    } catch (err) {
-      console.error("Failed to fetch monument details:", err);
-    } finally {
-      setModalLoading(false);
-    }
-  };
 
   const handleOpenAnother = async (id: string) => {
     setModalLoading(true);
@@ -163,6 +155,26 @@ export default function StreetViewModal({
       setModalLoading(false);
     }
   };
+
+  function openStreetViewFromApi(loc: [number, number]) {
+    if (!loc) return;
+    const [lng, lat] = loc;
+
+    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+
+    let url = "";
+
+    if (isIOS) {
+      // 🍎 Apple Maps (Look Around if available)
+      url = `https://maps.apple.com/?ll=${lat},${lng}&q=${lat},${lng}`;
+    } else {
+      // 🌍 Google Street View
+      url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+    }
+
+    window.open(url, "_blank");
+  }
 
   /* =========================================================
             Render
@@ -177,6 +189,7 @@ export default function StreetViewModal({
       <AnimatePresence>
         {openModal && (
           <motion.div
+            ref={modalScrollRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -248,7 +261,7 @@ export default function StreetViewModal({
                   <div className="mb-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur-md">
                     <div className="w-1.5 h-1.5 rounded-full bg-teal-300 animate-pulse" />
                     <span className="text-[10px] sm:text-xs font-semibold text-white/80 tracking-wider uppercase">
-                      Nara Heritage
+                      {t("nara_heritage")}
                     </span>
                   </div>
 
@@ -262,6 +275,7 @@ export default function StreetViewModal({
         leading-[1.1]
         mt-2 mb-2
         drop-shadow-lg
+        font-serif italic
       "
                   >
                     {t("street_view_title")}
@@ -311,12 +325,17 @@ export default function StreetViewModal({
               {/* ===== GRID ===== */}
               {filtered.length > 0 && (
                 <>
-                  <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
-                    {currentData.map((m) => (
+                  {/* Scroll Anchor */}
+
+
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {currentData.map((m, idx) => (
                       <MonumentCard
                         key={m._id}
-                        m={m}
-                        onOpen={() => handleOpenMonument(m._id)}
+                        monument={m}
+                        t={t}
+                        idx={idx}
+                        onClick={() => openStreetViewFromApi((m as any)?.avlocation)}
                       />
                     ))}
                   </div>
@@ -348,133 +367,14 @@ export default function StreetViewModal({
   );
 }
 
-/* =========================================================
-   📦 Monument Card
-========================================================= */
-function MonumentCard({ m, onOpen }: { m: Monument; onOpen: () => void }) {
-  const { t } = useLocale();
 
-  const activeThemeId = useSelector((state: any) => state.global.activeThemeId);
-
-  // normalize
-  const subthemes = m.subtheme ?? [];
-
-  // only matching subthemes
-  const matchedSubthemes = activeThemeId
-    ? subthemes.filter(
-        (st) => Array.isArray(st.theme) && st.theme.includes(activeThemeId),
-      )
-    : subthemes;
-
-  const popularity: number = m.popularity ?? 0;
-
-  function openStreetViewFromApi(loc: [number, number]) {
-    const [lng, lat] = loc;
-
-    const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
-    const isIOS = /iPad|iPhone|iPod/.test(ua);
-
-    let url = "";
-
-    if (isIOS) {
-      // 🍎 Apple Maps (Look Around if available)
-      url = `https://maps.apple.com/?ll=${lat},${lng}&q=${lat},${lng}`;
-    } else {
-      // 🌍 Google Street View
-      url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
-    }
-
-    window.open(url, "_blank");
-  }
-
-  return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-900/40 shadow-md hover:shadow-xl transition-all">
-      {/* IMAGE */}
-      <div className="relative h-48 w-full overflow-hidden">
-        {m.image?.secure_url ? (
-          <img
-            src={m.image.secure_url}
-            alt={m.title || m.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-          />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-muted text-muted-foreground">
-            <ImageIcon className="h-8 w-8" />
-          </div>
-        )}
-      </div>
-
-      {/* CONTENT */}
-      <div className="flex flex-1 flex-col justify-between p-4">
-        <div>
-          {/* TITLE */}
-          <h3 className="line-clamp-1 text-base font-semibold text-teal-700 dark:text-teal-300">
-            {m.title || m.name}
-          </h3>
-
-          {/* BRIEF */}
-          {m.content?.brief && (
-            <p
-              className="mt-1 line-clamp-2 text-xs text-muted-foreground whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{
-                __html: normalizeHTML(m.content.brief),
-              }}
-            />
-          )}
-
-          <div className="mt-2 flex items-center gap-0.5">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Star
-                key={i}
-                className={`h-3.5 w-3.5 ${
-                  i < popularity
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-gray-300 dark:text-gray-600"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* ✅ ONLY MATCHING SUBTHEME CHIPS */}
-          {matchedSubthemes.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
-              {matchedSubthemes.map((s) => (
-                <span
-                  key={s._id}
-                  className="
-                    rounded-full px-2.5 py-0.5 text-[11px] font-medium
-                    bg-teal-100 text-teal-800
-                    dark:bg-teal-900/40 dark:text-teal-300
-                  "
-                >
-                  {s.title}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* BUTTON */}
-        <Button
-          className="mt-3 cursor-pointer bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white hover:opacity-90"
-          onClick={(e) => {
-            e.stopPropagation();
-            openStreetViewFromApi((m as any)?.avlocation);
-          }}
-        >
-          {t("open_street_view")}
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 /* =========================================================
    🧭 Pagination
 ========================================================= */
 function PageNavigator({ totalPages, page, onPageChange, t }: any) {
   return (
-    <div className="mt-4 flex items-center justify-between gap-3">
+    <div className="mt-10 mb-10 flex items-center justify-between gap-3">
       <div className="text-xs text-muted-foreground">
         {t("pagination_left", { current: page, total: totalPages })}
       </div>
@@ -507,10 +407,9 @@ function PageNavigator({ totalPages, page, onPageChange, t }: any) {
                 key={`page-${n}-${i}`}
                 onClick={() => onPageChange(n)}
                 className={`cursor-pointer h-8 min-w-8 rounded-md px-2 text-sm transition-all
-                  ${
-                    n === page
-                      ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
-                      : `
+                  ${n === page
+                    ? "bg-gradient-to-r from-teal-500 via-teal-500 to-teal-500 text-white shadow-sm"
+                    : `
                         text-teal-600 dark:text-teal-400
                         hover:bg-teal-50 dark:hover:bg-teal-900/30
                       `
@@ -650,7 +549,7 @@ function MonumentsToolbar({
             <ArrowUpDown className="h-8 w-8" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#15191f] border border-slate-200/80 dark:border-slate-700/60">
           <DropdownMenuLabel>{t("sort")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {loadingSorts ? (
@@ -660,11 +559,10 @@ function MonumentsToolbar({
               <DropdownMenuItem
                 key={s._id}
                 onClick={() => onSortSelect(s.link || s.name || "")}
-                className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${
-                  selectedSort == s.link
-                    ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
-                    : ""
-                }`}
+                className={`cursor-pointer text-black dark:text-white  flex items-center gap-2 ${selectedSort == s.link
+                  ? "bg-gray-100 dark:bg-neutral-800 font-semibold"
+                  : ""
+                  }`}
               >
                 {s.icon?.secure_url ? (
                   <img
@@ -673,7 +571,7 @@ function MonumentsToolbar({
                     className="h-4 w-4 rounded-sm object-contain"
                   />
                 ) : (
-                  <ImageIcon className="h-4 w-4 " />
+                  <ImageIcon className="h-4 w-4" />
                 )}
                 <span>{s.title || s.name}</span>
               </DropdownMenuItem>

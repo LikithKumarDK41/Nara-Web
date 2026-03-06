@@ -47,7 +47,7 @@ export default function ProfileModal({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { data, loading, countries, countriesLoading } = useAppSelector(
-    (s) => s.auth
+    (s) => s.auth,
   );
 
   const user = data?.user || null;
@@ -70,6 +70,34 @@ export default function ProfileModal({
   const [preview, setPreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const getCountryCode = (value: any, countries: any[]) => {
+    if (!value || !countries?.length) return "";
+
+    // Case 1: Already an object { name, code }
+    if (typeof value === "object") {
+      return value.code || "";
+    }
+
+    // Case 2: Already a valid country code
+    const byCode = countries.find((c) => c.code === value);
+    if (byCode) return byCode.code;
+
+    // Case 3: Match by country name (string only)
+    if (typeof value === "string") {
+      const byName = countries.find(
+        (c) => c.name.toLowerCase() === value.toLowerCase(),
+      );
+      return byName?.code || "";
+    }
+
+    return "";
+  };
+
+  const getCountryLabel = (code: string) => {
+    const c = countries?.find((c: any) => c.code === code);
+    return c ? `${c.name} (${c.code})` : "";
+  };
 
   // ------------------------------------
   // PREFILL FORM WHEN MODAL OPENS
@@ -94,20 +122,16 @@ export default function ProfileModal({
       "60-70": "60s",
     };
 
-    const userCountry =
-      typeof user.country === "string" ? user.country : user.country?.name;
-
-    const matchedCountry = countries.find(
-      (c) => c.name.toLowerCase() === userCountry?.toLowerCase()
-    );
+    const userCountryCode = getCountryCode(user.country, countries);
+    const userNationalityCode = getCountryCode(user.nationality, countries);
 
     setForm({
       name: user?.name || "",
       email: user?.email || "",
       gender: genderMap[user?.gender] || user?.gender || "",
       agegroup: ageGroupMap[user?.agegroup] || user?.agegroup || "",
-      country: matchedCountry ? matchedCountry.code : "",
-      nationality: user?.nationality || "",
+      country: userCountryCode || "",
+      nationality: userNationalityCode || "",
       phoneNumber: user?.phoneNumber || "",
     });
 
@@ -181,7 +205,7 @@ export default function ProfileModal({
           uploadProfileImage({
             userId: user._id,
             file: imageFile,
-          })
+          }),
         ).unwrap();
       }
 
@@ -190,7 +214,7 @@ export default function ProfileModal({
         updateUserProfile({
           id: user._id,
           payload: form,
-        })
+        }),
       ).unwrap();
 
       toast.success(t("profile.success"));
@@ -240,11 +264,11 @@ export default function ProfileModal({
     <>
       <Dialog open={open} onOpenChange={onClose}>
         {open && (
-          <div className="fixed inset-0 z-[40] bg-black/60 backdrop-blur-sm" />
+          <div className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm" />
         )}
         <DialogContent
           showCloseButton={false}
-          className="z-50 w-screen md:w-[70%] lg:w-[50%] h-[90vh] md:h-[100vh] bg-background p-0 !max-w-full overflow-hidden"
+          className="z-[9999] w-screen md:w-[70%] lg:w-[50%] h-[90vh] md:h-[100vh] bg-background p-0 !max-w-full overflow-hidden"
         >
           <DialogHeader className="flex items-center border-b bg-background py-4 px-8 relative">
             <DialogTitle>{t("profile.editProfile")}</DialogTitle>
@@ -266,18 +290,18 @@ export default function ProfileModal({
                 {preview && (
                   <img
                     src={preview}
-                    className="w-32 h-32 rounded-full object-cover border border-teal-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105"
+                    className="w-32 h-32 rounded-full object-cover border border-black dark:border-white shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105"
                   />
                 )}
 
                 {!preview && (
-                  <div className="w-32 h-32 rounded-full object-cover border border-teal-600 shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105" />
+                  <div className="w-32 h-32 rounded-full object-cover border border-black dark:border-white shadow-md transition-all duration-300 group-hover:brightness-110 group-hover:scale-105" />
                 )}
                 <label
                   htmlFor="profileImage"
                   className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 
              text-white flex items-center justify-center text-xs cursor-pointer shadow-sm 
-             border border-teal-600 transition-all duration-200"
+             border border-white/50 dark:border-white/50 transition-all duration-200"
                 >
                   <Pencil className="w-4 h-4" />
                 </label>
@@ -294,7 +318,7 @@ export default function ProfileModal({
 
             {/* EMAIL */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.email")}
               </Label>
               <Input
@@ -302,16 +326,16 @@ export default function ProfileModal({
                 value={form.email}
                 disabled
                 className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
               />
             </div>
 
             {/* NAME */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.name")} *
               </Label>
               <Input
@@ -320,16 +344,16 @@ export default function ProfileModal({
                 onChange={handleChange}
                 disabled={loading}
                 className="
-          focus-visible:ring-teal-500
+          focus-visible:ring-black dark:focus-visible:ring-white
           focus-visible:border-0
-          border-teal-300 dark:border-teal-600
+          border-black dark:border-white
         "
               />
             </div>
 
             {/* GENDER */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.gender")} *
               </Label>
               <Select
@@ -340,17 +364,17 @@ export default function ProfileModal({
                 <SelectTrigger
                   className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                 >
                   <SelectValue placeholder={t("profile.selectGender")} />
                 </SelectTrigger>
                 <SelectContent
-                  className="
-                    border border-teal-500/20
+                  className="z-[10000]
+                    border border-black/20 dark:border-white/20
                     bg-background
                     shadow-lg
                   "
@@ -370,7 +394,7 @@ export default function ProfileModal({
 
             {/* AGE GROUP */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.agegroup")} *
               </Label>
               <Select
@@ -381,9 +405,9 @@ export default function ProfileModal({
                 <SelectTrigger
                   className="
       w-full
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                 >
@@ -391,8 +415,8 @@ export default function ProfileModal({
                 </SelectTrigger>
 
                 <SelectContent
-                  className="
-                    border border-teal-500/20
+                  className="z-[10000]
+                    border border-black/20 dark:border-white/20
                     bg-background
                     shadow-lg
                   "
@@ -408,8 +432,9 @@ export default function ProfileModal({
             </div>
 
             {/* COUNTRY */}
+            {/* COUNTRY */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.country")} *
               </Label>
               <Select
@@ -419,25 +444,36 @@ export default function ProfileModal({
               >
                 <SelectTrigger
                   className="
-      w-full
-      border-teal-300 dark:border-teal-600
+      w-full overflow-hidden
+      border-black dark:border-white
       focus:ring-0
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
     "
                 >
-                  <SelectValue placeholder={t("profile.selectCountry")} />
+                  <SelectValue>
+                    <span className="block w-full truncate">
+                      {form.country
+                        ? getCountryLabel(form.country)
+                        : t("profile.selectCountry")}{" "}
+                    </span>
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent
-                  className="
-                 border border-teal-500/20
+                  className="z-[10000]
+                 border border-black/20 dark:border-white/20
                  bg-background
                  shadow-lg
                "
                 >
                   {countries?.map((c: any) => (
                     <SelectItem key={c.code} value={c.code}>
-                      {c.name} ({c.code})
+                      <div className="flex w-full items-center justify-between gap-2">
+                        <span className="truncate max-w-[220px]">{c.name}</span>
+                        <span className="shrink-0 text-muted-foreground">
+                          ({c.code})
+                        </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -446,25 +482,60 @@ export default function ProfileModal({
 
             {/* NATIONALITY */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.nationality")} *
               </Label>
-              <Input
-                name="nationality"
-                value={form.nationality}
-                onChange={handleChange}
-                disabled={loading}
-                className="
-          focus-visible:ring-teal-500
-          focus-visible:border-0
-          border-teal-300 dark:border-teal-600
-        "
-              />
-            </div>
 
+              <Select
+                value={form.nationality}
+                onValueChange={(v) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    nationality: v,
+                  }))
+                }
+                disabled={loading || countriesLoading}
+              >
+                <SelectTrigger
+                  className="
+      w-full overflow-hidden
+      border-black dark:border-white
+      focus:ring-0
+      focus-visible:ring-black dark:focus-visible:ring-white
+      focus-visible:border-0
+    "
+                >
+                  <SelectValue>
+                    <span className="block w-full truncate">
+                      {form.nationality
+                        ? getCountryLabel(form.nationality)
+                        : t("profile.selectCountry")}
+                    </span>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent
+                  className="z-[10000]
+                 border border-black/20 dark:border-white/20
+                 bg-background
+                 shadow-lg
+               "
+                >
+                  {countries?.map((c: any) => (
+                    <SelectItem key={c.code} value={c.code}>
+                      <div className="flex w-full items-center justify-between gap-2">
+                        <span className="truncate max-w-[220px]">{c.name}</span>
+                        <span className="shrink-0 text-muted-foreground">
+                          ({c.code})
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             {/* PHONE NUMBER */}
             <div className="grid gap-2">
-              <Label className="flex items-center gap-2 text-teal-800 dark:text-teal-200">
+              <Label className="flex items-center gap-2 text-black dark:text-white">
                 {t("profile.phone")} *
               </Label>
 
@@ -476,9 +547,9 @@ export default function ProfileModal({
                 onChange={handlePhoneChange}
                 disabled={loading}
                 className="
-      focus-visible:ring-teal-500
+      focus-visible:ring-black dark:focus-visible:ring-white
       focus-visible:border-0
-      border-teal-300 dark:border-teal-600
+      border-black dark:border-white
     "
               />
             </div>
@@ -490,10 +561,10 @@ export default function ProfileModal({
                 className="
       w-full cursor-pointer
       text-white
-      border-red-500/40
+      border-teal-500/40
       text-teal-600
       hover:bg-teal-50
-      hover:border-red-500
+      hover:border-teal-500
       dark:border-teal-500/30
       dark:text-teal-400
       dark:hover:bg-teal-900/20
@@ -532,7 +603,7 @@ export default function ProfileModal({
       </Dialog>
 
       <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md z-[9999] bg-red-50 dark:bg-black">
           <DialogHeader>
             <DialogTitle className="text-red-600">
               {t("profile.confirmDeleteTitle")}
@@ -545,7 +616,11 @@ export default function ProfileModal({
 
           <div className="mt-6 flex justify-end gap-3">
             {/* Cancel */}
-            <Button variant="ghost" className="cursor-pointer" onClick={() => setShowDeleteConfirm(false)}>
+            <Button
+              variant="ghost"
+              className="cursor-pointer"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
               {t("profile.cancel")}
             </Button>
 

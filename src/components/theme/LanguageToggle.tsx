@@ -32,55 +32,17 @@ export default function LanguageToggle() {
           : t("actions.switchToEnglish")
       }
       className="
-        relative
-        h-9 w-9
-        flex items-center justify-center
-        rounded-full
-        border border-teal-500/40
-        bg-black/80
-        backdrop-blur-md
-        shadow
-        cursor-pointer
-        transition-all
+        relative h-9 w-9 flex items-center justify-center rounded-full backdrop-blur-md shadow-sm cursor-pointer transition-all
+        
+        /* ⚪ Light Mode: White Bg + Black Icon */
+        bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 hover:shadow-md
 
-         /* 🌞 Light mode */
-          bg-white
-          border border-teal-400/40
-          text-teal-600
-          hover:shadow-[0_0_10px_rgba(20,184,166,0.35)]
-
-
-          /* 🌙 Dark mode */
-          dark:bg-black/80
-          dark:border-teal-400/40
-          dark:text-teal-300
-          dark:hover:shadow-[0_0_14px_rgba(45,212,191,0.55)]
+        /* ⚫ Dark Mode: Slate Bg + White Icon */
+        dark:bg-slate-800 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-700
       "
     >
       {/* 🌐 Icon */}
-      <Languages className="h-4 w-4 text-teal-600 dark:text-teal-300" />
-
-      {/* 🔖 TOP badge (shows NEXT language) */}
-      {/* <span
-        className="
-          absolute -top-2 -right-1
-          min-w-[18px] h-[18px]
-          px-1
-          flex items-center justify-center
-          rounded-full
-          text-[9px] font-bold
-          text-black
-          shadow
-
-          bg-white
-          border border-orange-400/40
-          hover:shadow-[0_0_10px_rgba(251,146,60,0.35)]
-
-          dark:bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400
-        "
-      >
-        {locale === "en" ? "JP" : "EN"}
-      </span> */}
+      <Languages className="h-4 w-4" />
     </button>
   );
 }
